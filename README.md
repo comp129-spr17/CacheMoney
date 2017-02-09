@@ -12,7 +12,7 @@ Eclipse should detect that this project is linked to a GitHub repo.
 What does that mean? Well, I'll show you... (flashbacks to COMP 55)
 
 1) Right click the project and go to Team.
-2) You will be able to commit, push, pull, and reset the project from within Eclipse! (for those who were fans of this!)
-*i haven't tested this on other computers yet so this might not work (as of Feb. 8, 2017)
+
+2) You will be able to commit, push, pull, and reset the project from within Eclipse! (for those who were fans of this!
 
 <a href="https://zenhub.com"><img src="https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png"></a>
