@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -51,10 +53,25 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				rollButton.setEnabled(false);
-				for(int i=0; i<2; i++){
-					result[i] = dices[i].rollDice();
+				if(rollButton.isEnabled()){
+					for(int i=0; i<2; i++){
+						dices[i].resetDice();
+					}
+					rollButton.setEnabled(false);
+					for(int i=0; i<2; i++){
+					while(!dices[i].rollDice());
+						result[i] = dices[i].getNum();
+					}
 				}
+				Timer aTimer =  new Timer();
+				aTimer.schedule(new TimerTask() {
+					
+					@Override
+					public void run() {
+						System.out.println("Sum : " + (result[0] + result[1]));
+						rollButton.setEnabled(true);
+					}
+				}, 1000);
 			}
 		});
 	}

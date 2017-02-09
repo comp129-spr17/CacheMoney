@@ -24,7 +24,7 @@ public class GameScreen extends JFrame{
 		dicePanel = new DicePanel();
 		mainPanel.add(dicePanel);
 	}
-	public static void main(String[] args) {
-		GameScreen game = new GameScreen();
-	}
+//	public static void main(String[] args) {
+//		GameScreen game = new GameScreen();
+//	}
 }

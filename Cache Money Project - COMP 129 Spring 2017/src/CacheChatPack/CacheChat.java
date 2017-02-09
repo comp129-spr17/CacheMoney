@@ -30,9 +30,9 @@ public class CacheChat{
 		}
 	}
 	
-	public static void main(String args[]) throws IOException{
-		CacheChat c = new CacheChat();
-	}
+//	public static void main(String args[]) throws IOException{
+//		CacheChat c = new CacheChat();
+//	}
 	
 	
 }
