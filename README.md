@@ -3,8 +3,8 @@
 To edit the project:
 
 1) Ensure you have the latest commmit.
-2) In Eclipse, go to File -> Import... , then select General -> Existing Projects into Workspace.
-3) Select root directory (not select archive file!) and set it to the project in the repository.
+2) In Eclipse, go to File -> Import... , then select Git -> Projects from Git
+3) Either put your url or select the folder that has the project.
 4) Save a new line of code, and make sure that there are uncommitted changes in GitHub Desktop.
 
 

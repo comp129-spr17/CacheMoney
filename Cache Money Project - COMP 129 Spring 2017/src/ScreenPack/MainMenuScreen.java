@@ -1,3 +1,4 @@
+package ScreenPack;
 import javax.swing.JOptionPane;
 
 public class MainMenuScreen {
