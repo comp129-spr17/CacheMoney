@@ -2,7 +2,7 @@ import javax.swing.JOptionPane;
 
 public class MainMenuScreen {
 	public MainMenuScreen(){
-		
+		System.out.println("Hello, World!");
 		// insert code here
 		
 	}
