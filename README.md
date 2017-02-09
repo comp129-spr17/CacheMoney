@@ -3,8 +3,11 @@
 To edit the project:
 
 1) Ensure you have the latest commmit.
+
 2) In Eclipse, go to File -> Import... , then select Git -> Projects from Git
+
 3) Either put your url or select the folder that has the project.
+
 4) Save a new line of code, and make sure that there are uncommitted changes in GitHub Desktop.
 
 
