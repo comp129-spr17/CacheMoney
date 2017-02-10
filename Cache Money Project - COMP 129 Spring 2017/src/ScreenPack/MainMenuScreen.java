@@ -1,10 +1,8 @@
 package ScreenPack;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 import javax.swing.*;
 
@@ -29,6 +27,9 @@ public class MainMenuScreen {
 		GameButton = new JButton("Game Screen");
 		ChatButton = new JButton("Chat Screen");
 		HelloThere = new JLabel("I'm Hungry.");
+		
+		
+		
 	}
 	private void addMouseListen(){
 		GameButton.addMouseListener(new MouseListener() {
@@ -71,11 +72,8 @@ public class MainMenuScreen {
 			public void mousePressed(MouseEvent e){
 				mainmenuframe.setVisible(false);
 				mainmenuframe.dispose();
-				try {
-					CacheChat c = new CacheChat();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				CacheChat c = new CacheChat();
+				
 			}
 			
 			@Override
@@ -95,22 +93,23 @@ public class MainMenuScreen {
 		});
 	}
 	public void createMenuWindow(){
-			mainPanel.setBackground(Color.gray);
-			mainmenuframe.add(mainPanel);
-			mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			mainmenuframe.setVisible(true);
-			mainmenuframe.setSize(500,500);
-			int Width = mainmenuframe.getWidth();
-			int Height = mainmenuframe.getHeight();
-			HelloThere.setFont(mainfont);
-			HelloThere.setBounds(Width/2,100,Width/2,100);
-			mainPanel.add(HelloThere);
-			GameButton.setFont(mainfont);
-			GameButton.setBounds(100,200,200,100);
-			ChatButton.setFont(mainfont);
-			ChatButton.setBounds(300,300,200,100);
-			mainPanel.add(GameButton);
-			mainPanel.add(ChatButton);
+		mainPanel.setBackground(Color.gray);
+		mainmenuframe.add(mainPanel);
+		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainmenuframe.setVisible(true);
+		mainmenuframe.setSize(500,500);
+		int Width = mainmenuframe.getWidth();
+		int Height = mainmenuframe.getHeight();
+		HelloThere.setFont(mainfont);
+		HelloThere.setBounds(Width/2,100,Width/2,100);
+		mainPanel.add(HelloThere);
+		GameButton.setFont(mainfont);
+		GameButton.setBounds(100,200,200,100);
+		ChatButton.setFont(mainfont);
+		ChatButton.setBounds(300,300,200,100);
+		mainPanel.add(GameButton);
+		mainPanel.add(ChatButton);
+			
 	}
 	
 	
