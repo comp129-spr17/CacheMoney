@@ -15,6 +15,8 @@ public class MainMenuScreen {
 	private JButton GameButton;
 	private JButton ChatButton;
 	private JLabel HelloThere;
+	private JButton ExitButton;
+	private JButton InstructionButton;
 	public MainMenuScreen(){
 		init();
 		createMenuWindow();
@@ -26,9 +28,9 @@ public class MainMenuScreen {
 		mainmenuframe = new JFrame("Main Menu");
 		GameButton = new JButton("Game Screen");
 		ChatButton = new JButton("Chat Screen");
-		HelloThere = new JLabel("I'm Hungry.");
-		
-		
+		HelloThere = new JLabel("I'm Hungry.", SwingConstants.CENTER);
+		ExitButton = new JButton("Exit Game");
+		InstructionButton = new JButton("Instructions");
 		
 	}
 	private void addMouseListen(){
@@ -41,9 +43,7 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mousePressed(MouseEvent e){
-				mainmenuframe.setVisible(false);
-				mainmenuframe.dispose();
-				GameScreen gameScreen = new GameScreen();
+
 			}
 			
 			@Override
@@ -58,7 +58,9 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				mainmenuframe.setVisible(false);
+				mainmenuframe.dispose();
+				GameScreen gameScreen = new GameScreen();
 			}
 		});
 		ChatButton.addMouseListener(new MouseListener() {
@@ -70,9 +72,6 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mousePressed(MouseEvent e){
-				mainmenuframe.setVisible(false);
-				mainmenuframe.dispose();
-				CacheChat c = new CacheChat();
 				
 			}
 			
@@ -88,9 +87,38 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				mainmenuframe.setVisible(false);
+				mainmenuframe.dispose();
+				CacheChat c = new CacheChat();
 			}
 		});
+		ExitButton.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e){
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		});
+		
 	}
 	public void createMenuWindow(){
 		mainPanel.setBackground(Color.gray);
@@ -101,15 +129,20 @@ public class MainMenuScreen {
 		int Width = mainmenuframe.getWidth();
 		int Height = mainmenuframe.getHeight();
 		HelloThere.setFont(mainfont);
-		HelloThere.setBounds(Width/2,100,Width/2,100);
+		HelloThere.setBounds(175,75,150,50);
 		mainPanel.add(HelloThere);
 		GameButton.setFont(mainfont);
-		GameButton.setBounds(100,200,200,100);
+		GameButton.setBounds(175,150,150,50);
 		ChatButton.setFont(mainfont);
-		ChatButton.setBounds(300,300,200,100);
+		ChatButton.setBounds(175,225,150,50);
 		mainPanel.add(GameButton);
 		mainPanel.add(ChatButton);
-			
+		InstructionButton.setFont(mainfont);
+		InstructionButton.setBounds(175,300,150,50);
+		mainPanel.add(InstructionButton);
+		ExitButton.setFont(mainfont);
+		ExitButton.setBounds(175,375,150,50);
+		mainPanel.add(ExitButton);
 	}
 	
 	
