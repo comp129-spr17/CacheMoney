@@ -15,6 +15,7 @@ public class DicePanel extends JPanel{
 	private JButton rollButton;
 	private Dice dices[]; 
 	private int result[];
+	private Timer diceTimer;
 	public DicePanel(){
 		init();
 	}
@@ -30,7 +31,12 @@ public class DicePanel extends JPanel{
 		dices = new Dice[2];
 		for(int i=0; i<2; i++)
 			dices[i] = new Dice(this,i);
+		initDiceTimer();
 		addListener();
+		
+	}
+	private void initDiceTimer(){
+		diceTimer = new Timer();
 	}
 	private void addListener(){
 		rollButton.addMouseListener(new MouseListener() {
@@ -41,6 +47,24 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if(rollButton.isEnabled()){
+					rollButton.setEnabled(false);
+					for(int i=0; i<2; i++){
+						dices[i].resetDice();
+					}
+					for(int i=0; i<2; i++){
+					while(!dices[i].rollDice());
+						result[i] = dices[i].getNum();
+					}
+					diceTimer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							System.out.println("Sum : " + (result[0] + result[1]));
+							rollButton.setEnabled(true);
+						}
+					}, 1200);
+				}
+				
 			}
 			
 			@Override
@@ -53,25 +77,7 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(rollButton.isEnabled()){
-					for(int i=0; i<2; i++){
-						dices[i].resetDice();
-					}
-					rollButton.setEnabled(false);
-					for(int i=0; i<2; i++){
-					while(!dices[i].rollDice());
-						result[i] = dices[i].getNum();
-					}
-				}
-				Timer aTimer =  new Timer();
-				aTimer.schedule(new TimerTask() {
-					
-					@Override
-					public void run() {
-						System.out.println("Sum : " + (result[0] + result[1]));
-						rollButton.setEnabled(true);
-					}
-				}, 1000);
+				
 			}
 		});
 	}
