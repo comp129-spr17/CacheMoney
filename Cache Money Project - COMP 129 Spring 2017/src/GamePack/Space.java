@@ -6,16 +6,39 @@ public class Space {
 		onSpace = new Piece[1];
 	}
 	
-	boolean isValidSpace() {
+	public boolean isValidSpace() {
 		return false;
 	}
 	
-	boolean isPieceOnSpace(String pieceName) {
-		for(Piece piece : onSpace) {
-			if(piece.getName().equals(pieceName)) return true;
+	public boolean isPieceOnSpace(String pieceName) {
+		for(int i = 0; i < onSpace.length; i++) {
+			if(onSpace[i] != null) {
+				if(onSpace[i].getName().equals(pieceName)) return true;
+			}
 		}
 		return false;
 	}
 	
+	public Piece removePiece(String pieceName) {
+		for(int i = 0; i < onSpace.length; i++) {
+			if(onSpace[i] != null) {
+				if(onSpace[i].getName().equals(pieceName)) {
+					Piece temp = onSpace[i];
+					onSpace[i] = null;
+					return temp;
+				}
+			}
+		}
+		return null;
+	}
 	
+	public boolean receivePiece(Piece piece) {
+		for(int i = 0; i < onSpace.length; i++) {
+			if(onSpace[i] == null) {
+				onSpace[i] = piece;
+				return true;
+			}
+		}
+		return false;
+	}
 }
