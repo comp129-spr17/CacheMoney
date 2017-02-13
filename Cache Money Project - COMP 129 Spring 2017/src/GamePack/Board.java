@@ -8,4 +8,6 @@ public class Board {
 		board = new Space[row][col];
 		numPlayers = numP;
 	}
+	
+	
 }
