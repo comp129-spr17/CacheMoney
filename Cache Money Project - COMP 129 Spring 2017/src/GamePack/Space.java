@@ -3,7 +3,7 @@ package GamePack;
 public class Space {
 	private Piece[] onSpace;
 	public Space() {
-		
+		onSpace = new Piece[1];
 	}
 	
 	boolean isValidSpace() {
