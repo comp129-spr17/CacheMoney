@@ -22,8 +22,6 @@ public class InstructionsPanel extends JPanel {
 	private final static String FILE_PATH="Images/";
 	private ImageIcon dollarGif;
 	private JLabel gifImage;
-	
-	
 	public InstructionsPanel()
 	{
 		init();
@@ -35,7 +33,7 @@ public class InstructionsPanel extends JPanel {
 		BoxLayout layoutMgr = new BoxLayout(this, BoxLayout.PAGE_AXIS);
 	    setLayout(layoutMgr);
 	    
-		setBounds(30, 30, 400, 400);
+		setBounds(100, 100, 400, 400);
 		setBackground(Color.LIGHT_GRAY);
 		
 		ClassLoader cldr = this.getClass().getClassLoader();

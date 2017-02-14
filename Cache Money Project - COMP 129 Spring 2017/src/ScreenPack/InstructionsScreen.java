@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 public class InstructionsScreen extends JFrame {
 	private JPanel mainPanel;
 	private InstructionsPanel iPanel;
-	
+	private BackButton backB;
 	public InstructionsScreen()
 	{
 		setSize(1500, 900);
@@ -23,6 +23,8 @@ public class InstructionsScreen extends JFrame {
 		mainPanel = new JPanel(null);
 		mainPanel.setBackground(Color.WHITE);
 		getContentPane().add(mainPanel);
+		backB = new BackButton(this);
+		mainPanel.add(backB);
 		iPanel = new InstructionsPanel();
 		mainPanel.add(iPanel);
 	}

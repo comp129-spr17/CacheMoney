@@ -46,7 +46,7 @@ public class BoardPanel extends JPanel{
 	
 	private void init(){
 		setBackground(new Color(202, 232, 224));
-        setBounds(10,10,START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
+        setBounds(100,10,START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
         
         setLayout(null);
         
@@ -87,7 +87,6 @@ public class BoardPanel extends JPanel{
         			add(spaces[i][j]);
         		}
         		else if(i == 10){
-        			System.out.print("lol");
         			if(j==0){
         				spaces[i][j] = new JLabel(spaceImgsCorner[2]);
         				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);

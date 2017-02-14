@@ -10,8 +10,9 @@ import GamePack.Dice;
 
 public class GameScreen extends JFrame{
 	private JPanel mainPanel;
+	private BackButton backB;
 	public GameScreen(){
-		setSize(1000, 1050);
+		setSize(1100, 1050);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init();
 		setVisible(true);
@@ -20,6 +21,8 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setBackground(Color.LIGHT_GRAY);
 		getContentPane().add(mainPanel);
+		backB = new BackButton(this);
+		mainPanel.add(backB);
 		BoardPanel boardPanel = new BoardPanel();
 		mainPanel.add(boardPanel);
 		
