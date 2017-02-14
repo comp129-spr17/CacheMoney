@@ -29,7 +29,7 @@ public class DicePanel extends JPanel{
 	}
 	private void init(){
 		setLayout(null);
-		setBounds(350, 350, 400, 400);
+		setBounds(280, 280, 400, 400);
 		setBackground(Color.gray);
 		rollButton = new JButton("Roll the die!");
 		rollButton.setBounds(150, 300, 100, 50);

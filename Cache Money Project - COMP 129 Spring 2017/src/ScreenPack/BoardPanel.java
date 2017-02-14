@@ -18,8 +18,8 @@ public class BoardPanel extends JPanel{
 	private final static int ROW_SPACE_HEIGHT = 122;
 	private final static int COL_SPACE_WIDTH = 122;
 	private final static int COL_SPACE_HEIGHT = 80;
-	private final static int START_X = 50;
-	private final static int START_Y = 10;
+	private final static int START_X = 0;
+	private final static int START_Y = 0;
 	private final static String SPACE_IMG_PATH = "src/SpaceImages/";
 	private final static String SPACE_IMG_TOP = "TopRow/";
 	private final static String SPACE_IMG_LEFT = "LeftCol/";
@@ -45,8 +45,8 @@ public class BoardPanel extends JPanel{
 	}
 	
 	private void init(){
-		setBackground(Color.LIGHT_GRAY);
-        setBounds(0,0,1500, 1050);
+		setBackground(new Color(202, 232, 224));
+        setBounds(10,10,START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
         
         setLayout(null);
         
