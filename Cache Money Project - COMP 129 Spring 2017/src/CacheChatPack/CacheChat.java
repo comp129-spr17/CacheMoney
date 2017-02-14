@@ -13,10 +13,11 @@ public class CacheChat{
 			@Override
 			public void run() {
 				try{
-					if (isHost()){
+					int select = isHost();
+					if (select == 0){
 						Server s = new Server();
 					}
-					else{
+					else if (select == 1){
 						Client c = new Client(false);
 					}
 				}
@@ -29,18 +30,18 @@ public class CacheChat{
 		
 	}
 	
-	public static boolean isHost(){
+	public static int isHost(){
 		while (true){
 			int chose = JOptionPane.showConfirmDialog(null, "Are you the host?", "Cache Chat Config", JOptionPane.YES_NO_OPTION);
 			if (chose == JOptionPane.YES_OPTION){
-				return true;
+				return 0;
 			}
 			else{
 				if (chose != JOptionPane.CLOSED_OPTION){
-					return false;
+					return 1;
 				}
 				else{
-					System.exit(0);
+					return 2;
 				}
 			}
 		}

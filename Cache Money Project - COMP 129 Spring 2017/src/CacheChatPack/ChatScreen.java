@@ -70,9 +70,6 @@ import javax.swing.JTextArea;
 						System.out.println("*** Host's client has been closed. Terminating server...");
 						isServerClosed = true;
 					}
-					else{
-						System.exit(0);
-					}
 					
 				}
 				

@@ -28,7 +28,7 @@ public class MainMenuScreen {
 		mainmenuframe = new JFrame("Main Menu");
 		GameButton = new JButton("Game Screen");
 		ChatButton = new JButton("Chat Screen");
-		HelloThere = new JLabel("I'm Hungry.", SwingConstants.CENTER);
+		HelloThere = new JLabel("I'm Hungry. Me too.", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		InstructionButton = new JButton("Instructions");
 		
@@ -87,8 +87,6 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mainmenuframe.setVisible(false);
-				mainmenuframe.dispose();
 				CacheChat c = new CacheChat();
 			}
 		});

@@ -27,7 +27,6 @@ public class ClientEntranceBox {
 		if(chosen == JOptionPane.OK_OPTION){
 			return true;
 		}
-		System.exit(0);
 		return false;
 	}
 	public String getIp(){
@@ -47,7 +46,6 @@ public class ClientEntranceBox {
 				if(!txtName.getText().isEmpty())
 					return true;
 			}else{
-				System.exit(0);
 				break;
 			}
 		}
