@@ -23,7 +23,7 @@ public class MainMenuScreen {
 		addMouseListen();
 	}
 	private void init(){
-		mainfont = new Font("Serif", Font.PLAIN, 14);
+		mainfont = new Font("Serif", Font.PLAIN, 18);
 		mainPanel = new JPanel(null);
 		mainmenuframe = new JFrame("Main Menu");
 		GameButton = new JButton("Game Screen");
@@ -156,8 +156,8 @@ public class MainMenuScreen {
 		mainmenuframe.setSize(500,500);
 		int Width = mainmenuframe.getWidth();
 		int Height = mainmenuframe.getHeight();
-		HelloThere.setFont(mainfont);
-		HelloThere.setBounds(175,75,150,50);
+		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
+		HelloThere.setBounds(100,50,300,50);
 		mainPanel.add(HelloThere);
 		GameButton.setFont(mainfont);
 		GameButton.setBounds(175,150,150,50);
