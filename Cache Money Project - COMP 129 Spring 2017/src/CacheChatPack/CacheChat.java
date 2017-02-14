@@ -1,16 +1,32 @@
 package CacheChatPack;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.JOptionPane;
 
 public class CacheChat{
 	
-	public CacheChat() throws IOException{
-		if (isHost()){
-			Server s = new Server();
-		}
-		else{
-			Client c = new Client(false);
-		}
+	public CacheChat(){
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+			@Override
+			public void run() {
+				try{
+					if (isHost()){
+						Server s = new Server();
+					}
+					else{
+						Client c = new Client(false);
+					}
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0);
+		
+		
 	}
 	
 	public static boolean isHost(){
@@ -30,9 +46,9 @@ public class CacheChat{
 		}
 	}
 	
-	public static void main(String args[]) throws IOException{
-		CacheChat c = new CacheChat();
-	}
+//	public static void main(String args[]) throws IOException{
+//		CacheChat c = new CacheChat();
+//	}
 	
 	
 }
