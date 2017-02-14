@@ -19,11 +19,14 @@ public class ChatThread extends Thread{
 	private ChatElement server;
 	private final static String CLOSING_CODE = "QOSKDJFOAOSJW";
 	private boolean serverDisconnected;
-	public ChatThread(Socket s, ArrayList<ChatElement> users, ArrayList<PrintWriter> usersWriter, ChatElement server){
+	private String hostName;
+	
+	public ChatThread(Socket s, ArrayList<ChatElement> users, ArrayList<PrintWriter> usersWriter, ChatElement server, String hostName){
 		socket = s;
 		this.users = users;
 		this.usersWriter = usersWriter;
 		this.server = server;
+		this.hostName = hostName;
 		try {
 			readFromUser = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
@@ -47,10 +50,14 @@ public class ChatThread extends Thread{
 			getNames();
 			while(true){
 				getMsg();
-				if(serverDisconnected)
+				if(serverDisconnected){
 					break;
+				}
 				if(msg.equals(CLOSING_CODE)){
 					showMsgToUsers(true, name+" has left the chatroom.");
+					if (name == hostName){
+						showMsgToUsers(true, "Server Closed.");
+					}
 					break;
 				}
 				showMsgToUsers(false,msg);

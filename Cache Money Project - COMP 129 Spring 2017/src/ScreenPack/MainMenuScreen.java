@@ -87,8 +87,6 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mainmenuframe.setVisible(false);
-				mainmenuframe.dispose();
 				CacheChat c = new CacheChat();
 			}
 		});

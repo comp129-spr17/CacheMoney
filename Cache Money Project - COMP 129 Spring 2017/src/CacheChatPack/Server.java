@@ -82,11 +82,17 @@ public class Server {
         runningClients = new ArrayList<>();
         closingServerAsking();
         
-        
+
         while(true){
-        	ChatThread aChatThread = new ChatThread(listener.accept(), users, usersWriter,server);
-            runningClients.add(aChatThread);
-            aChatThread.start();
+        	try{
+            	ChatThread aChatThread = new ChatThread(listener.accept(), users, usersWriter,server, ip);
+            	runningClients.add(aChatThread);
+                aChatThread.start();
+
+        	}
+        	catch (IOException e){
+        		break;
+        	}
         }
 	}
 	
@@ -120,7 +126,6 @@ public class Server {
 			e.printStackTrace();
 		}
     	System.out.println("Finished cleaning up.");
-        System.exit(0);
 	}
 	
 	private static void createHostClient(String ip, int port){
@@ -136,7 +141,6 @@ public class Server {
 						//nothing
 					}
 					closeServer();
-					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

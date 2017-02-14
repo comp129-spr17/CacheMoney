@@ -33,6 +33,7 @@ public class Client {
     }
 
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
+		isConnected = false;
 		String userEnteredIpAddress;
 		int userEnteredPortNum;
 		while(!isConnected){
