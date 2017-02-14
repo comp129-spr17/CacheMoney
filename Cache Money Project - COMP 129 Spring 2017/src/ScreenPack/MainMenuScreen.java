@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.*;
 
 import CacheChatPack.CacheChat;
+import InterfacePack.AudioPlayer;
 
 public class MainMenuScreen {
 	private Font mainfont;
@@ -61,6 +62,7 @@ public class MainMenuScreen {
 				mainmenuframe.setVisible(false);
 				mainmenuframe.dispose();
 				GameScreen gameScreen = new GameScreen();
+				AudioPlayer.getInstance().playSound("audio", "register.mp3");
 			}
 		});
 		ChatButton.addMouseListener(new MouseListener() {
