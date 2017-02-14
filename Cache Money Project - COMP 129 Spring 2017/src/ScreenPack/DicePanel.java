@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,13 +24,15 @@ public class DicePanel extends JPanel{
 	private Dice dices[]; 
 	private int result[];
 	private Timer diceTimer;
-	private ImageIcon handImage;
-	private JLabel hand;
+	private ImageIcon handImage[];
+	private JLabel hand[];
+	private Random rand;
 	public DicePanel(){
 		init();
 	}
 	private void init(){
 		setLayout(null);
+		rand = new Random();
 		setBounds(280, 280, 400, 400);
 		Color valentines = new Color(255, 80, 212);
 		setBackground(valentines);
@@ -44,15 +47,21 @@ public class DicePanel extends JPanel{
 		initDiceTimer();
 		addListener();
 		try {
-			handImage = new ImageIcon(ImageIO.read(new File(FILE_PATH+"hand.png")));
+			handImage = new ImageIcon[2];
+			handImage[0] = new ImageIcon(ImageIO.read(new File(FILE_PATH+"left_handed.png")));
+			handImage[1] = new ImageIcon(ImageIO.read(new File(FILE_PATH+"right_handed.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		hand = new JLabel(handImage);
-		hand.setBounds(25, 210, 200, 200);
-		add(hand);
-		hand.setVisible(false);
-		
+		hand = new JLabel[2];
+		for(int i=0; i<2; i++){
+
+			hand[i]= new JLabel(handImage[i]);
+			add(hand[i]);
+			hand[i].setVisible(false);
+		}
+		hand[0].setBounds(25, 210, 200, 200);
+		hand[1].setBounds(175, 210, 200, 200);
 	}
 	private void initDiceTimer(){
 		diceTimer = new Timer();
@@ -100,9 +109,11 @@ public class DicePanel extends JPanel{
 			@Override
 			public void run() {
 				System.out.println("Sum : " + (result[0] + result[1]));
-				hand.setVisible(false);
+				for(int i=0; i<2; i++)
+					hand[i].setVisible(false);
 				rollButton.setVisible(true);
-				hand.setLocation(25,210);
+				hand[0].setLocation(25,210);
+				hand[1].setLocation(175,210);
 				int chosen = JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
 				
 			}
@@ -110,10 +121,15 @@ public class DicePanel extends JPanel{
 	}
 	public class handMovingAnimation extends Thread{
 		public void run(){
-			hand.setVisible(true);
+			int which = rand.nextInt(2);
+			hand[which].setVisible(true);
 			try{
 				for(int i=0; i<11; i++){
-					hand.setLocation(25+i*15, hand.getY() + (i < 2 ? -3 : 3));
+					if(which == 0)
+						hand[which].setLocation(25+i*15, hand[which].getY() + (i < 2 ? -3 : 3));
+					else
+						hand[which].setLocation(175-i*15, hand[which].getY() + (i < 2 ? -3 : 3));
+						
 					Thread.sleep(60);
 				}
 			}catch(Exception e){
