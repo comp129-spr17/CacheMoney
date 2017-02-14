@@ -34,7 +34,8 @@ public class InstructionsPanel extends JPanel {
 	    setLayout(layoutMgr);
 	    
 		setBounds(100, 100, 400, 400);
-		setBackground(Color.LIGHT_GRAY);
+		Color valentines = new Color(255, 80, 212);
+		setBackground(valentines);
 		
 		ClassLoader cldr = this.getClass().getClassLoader();
 		java.net.URL imageURL   = cldr.getResource(FILE_PATH+"dollar.gif");

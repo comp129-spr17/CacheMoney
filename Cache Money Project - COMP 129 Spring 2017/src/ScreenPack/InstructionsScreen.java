@@ -21,7 +21,8 @@ public class InstructionsScreen extends JFrame {
 	
 	private void init(){
 		mainPanel = new JPanel(null);
-		mainPanel.setBackground(Color.WHITE);
+		Color valentines = new Color(255, 80, 212);
+		mainPanel.setBackground(valentines);
 		getContentPane().add(mainPanel);
 		backB = new BackButton(this);
 		mainPanel.add(backB);

@@ -148,7 +148,8 @@ public class MainMenuScreen {
 		
 	}
 	public void createMenuWindow(){
-		mainPanel.setBackground(Color.gray);
+		Color valentines = new Color(255, 80, 212);
+		mainPanel.setBackground(valentines);
 		mainmenuframe.add(mainPanel);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
