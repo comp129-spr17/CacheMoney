@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import GamePack.Space;
+
 public class BoardPanel extends JPanel{
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
@@ -32,7 +34,7 @@ public class BoardPanel extends JPanel{
 	private ImageIcon spaceImgsRight[];
 	private ImageIcon spaceImgsBot[];
 	private ImageIcon spaceImgsCorner[];
-	private JLabel[][] spaces;
+	private Space[][] spaces;
 	private Random rand;
 	private DicePanel dicePanel;
 	
@@ -60,7 +62,7 @@ public class BoardPanel extends JPanel{
         spaceImgsRight = new ImageIcon[8];
         spaceImgsBot = new ImageIcon[8];
         spaceImgsCorner = new ImageIcon[4];
-        spaces = new JLabel[NUM_ROW][NUM_COL];
+        spaces = new Space[NUM_ROW][NUM_COL];
         
         for(int i=0; i<8; i++){
         	spaceImgsTop[i] = new ImageIcon(SPACE_IMG_PATH+SPACE_IMG_TOP+i+".png");
@@ -75,37 +77,37 @@ public class BoardPanel extends JPanel{
         	for(int j=0; j<NUM_COL; j++){
         		if(i == 0){
         			if(j==0){
-        				spaces[i][j] = new JLabel(spaceImgsCorner[0]);
+        				spaces[i][j] = new Space(spaceImgsCorner[0]);
         				spaces[i][j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else if(j==10){
-        				spaces[i][j] = new JLabel(spaceImgsCorner[1]);
+        				spaces[i][j] = new Space(spaceImgsCorner[1]);
         				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else{
-            			spaces[i][j] = new JLabel(spaceImgsTop[rand.nextInt(8)]);
+            			spaces[i][j] = new Space(spaceImgsTop[rand.nextInt(8)]);
             			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}
         			add(spaces[i][j]);
         		}
         		else if(i == 10){
         			if(j==0){
-        				spaces[i][j] = new JLabel(spaceImgsCorner[2]);
+        				spaces[i][j] = new Space(spaceImgsCorner[2]);
         				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else if(j==10){
-        				spaces[i][j] = new JLabel(spaceImgsCorner[3]);
+        				spaces[i][j] = new Space(spaceImgsCorner[3]);
         				spaces[i][j].setBounds(START_X+ COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else{
-            			spaces[i][j] = new JLabel(spaceImgsBot[rand.nextInt(8)]);
+            			spaces[i][j] = new Space(spaceImgsBot[rand.nextInt(8)]);
             			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}
         			add(spaces[i][j]);
         		}
         		else if(j == 0){
-    				spaces[i][j] = new JLabel(spaceImgsLeft[rand.nextInt(8)]);
+    				spaces[i][j] = new Space(spaceImgsLeft[rand.nextInt(8)]);
     				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
     				add(spaces[i][j]);
         		}
         		else if(j == 10){
-    				spaces[i][j] = new JLabel(spaceImgsRight[rand.nextInt(8)]);
+    				spaces[i][j] = new Space(spaceImgsRight[rand.nextInt(8)]);
     				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
     				add(spaces[i][j]);
         		}

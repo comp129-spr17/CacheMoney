@@ -1,8 +1,18 @@
 package GamePack;
 
-public class Space {
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+public class Space extends JLabel{
 	private Piece[] onSpace;
 	public Space() {
+		init();
+	}
+	public Space(ImageIcon img){
+		init();
+		setIcon(img);
+	}
+	private void init(){
 		onSpace = new Piece[1];
 	}
 	
