@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class DicePanel extends JPanel{
@@ -102,6 +103,8 @@ public class DicePanel extends JPanel{
 				hand.setVisible(false);
 				rollButton.setVisible(true);
 				hand.setLocation(25,210);
+				int chosen = JOptionPane.showConfirmDialog(null, "Sum is:"+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
+				
 			}
 		}, 1200);
 	}
