@@ -92,6 +92,35 @@ public class MainMenuScreen {
 				CacheChat c = new CacheChat();
 			}
 		});
+		InstructionButton.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e){
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mainmenuframe.setVisible(false);
+				mainmenuframe.dispose();
+				InstructionsScreen iScreen = new InstructionsScreen();
+			}
+		});
 		ExitButton.addMouseListener(new MouseListener() {
 			
 			@Override
