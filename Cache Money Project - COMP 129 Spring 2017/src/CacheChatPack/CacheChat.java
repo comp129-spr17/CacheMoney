@@ -34,6 +34,7 @@ public class CacheChat{
 	
 	public static int isHost(){
 		while (true){
+			Sounds.buttonConfirm.playSound();
 			int chose = JOptionPane.showConfirmDialog(null, "Are you the host?", "Cache Chat Config", JOptionPane.YES_NO_OPTION);
 			if (chose == JOptionPane.YES_OPTION){
 				// DO NOT ADD SOUNDS HERE

@@ -94,7 +94,6 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
 				CacheChat c = new CacheChat();
 			}
 		});
