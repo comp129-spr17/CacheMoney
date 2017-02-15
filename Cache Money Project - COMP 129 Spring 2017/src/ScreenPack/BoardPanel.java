@@ -44,6 +44,8 @@ public class BoardPanel extends JPanel{
 	private final static String SPACE_IMG_CORNER = "Corners/";
 	private double screen_w;
 	private double screen_h;
+	private int max_w;
+	private int max_h;
 	private ImageIcon spaceImgsTop[];
 	private ImageIcon spaceImgsLeft[];
 	private ImageIcon spaceImgsRight[];
@@ -64,6 +66,8 @@ public class BoardPanel extends JPanel{
 	private void setSize(){
 		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = (int)(screen_h * .85 / 12);
 		COL_SPACE_WIDTH = ROW_SPACE_HEIGHT = (int)(1.5 * ROW_SPACE_WIDTH);
+		max_w = COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH;
+		max_h = ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT;
 	}
 	private void init(){
 		setBackground(new Color(202, 232, 224));
@@ -158,7 +162,7 @@ public class BoardPanel extends JPanel{
 		return null;
 	}
 	private void addDiceBoard(){
-		dicePanel = new DicePanel();
+		dicePanel = new DicePanel(max_w,max_h);
 		add(dicePanel);
 	}
 }

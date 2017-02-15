@@ -28,13 +28,17 @@ public class DicePanel extends JPanel{
 	private ImageIcon handImage[];
 	private JLabel hand[];
 	private Random rand;
-	public DicePanel(){
-		init();
+	private int s_width;
+	private int s_height;
+	public DicePanel(int width, int height){
+		init(width,height);
 	}
-	private void init(){
+	private void init(int width, int height){
 		setLayout(null);
+		s_width = width;
+		s_height = height;
 		rand = new Random();
-		setBounds(280, 280, 400, 400);
+		setBounds((int)(width*1.1/4), (int)(height*1.1/4), 400, 400);
 		rollButton = new JButton("Roll the die!");
 		rollButton.setBounds(150, 300, 100, 50);
 		rollButton.setBackground(Color.WHITE);
