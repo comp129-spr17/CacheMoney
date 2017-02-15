@@ -65,7 +65,7 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				mainmenuframe.setVisible(false);
 				mainmenuframe.dispose();
-				Sounds.buttonConfirm.playSound();
+				Sounds.passedGo.playSound();
 				GameScreen gameScreen = new GameScreen();
 				
 			}
@@ -124,7 +124,7 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				mainmenuframe.setVisible(false);
 				mainmenuframe.dispose();
-				Sounds.buttonConfirm.playSound();
+				Sounds.register.playSound();
 				InstructionsScreen iScreen = new InstructionsScreen();
 			}
 		});
@@ -151,7 +151,6 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
 				System.exit(0);
 			}
 		});

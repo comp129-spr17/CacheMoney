@@ -1,6 +1,7 @@
 package ScreenPack;
 
 import GamePack.*;
+import InterfacePack.Sounds;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,7 +35,6 @@ public class InstructionsPanel extends JPanel {
 	    setLayout(layoutMgr);
 	    
 		setBounds(100, 100, 400, 400);
-		
 		ClassLoader cldr = this.getClass().getClassLoader();
 		java.net.URL imageURL   = cldr.getResource(FILE_PATH+"dollar.gif");
 		dollarGif = new ImageIcon(imageURL);

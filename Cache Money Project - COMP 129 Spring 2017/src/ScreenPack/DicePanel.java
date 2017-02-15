@@ -1,5 +1,6 @@
 package ScreenPack;
 import GamePack.*;
+import InterfacePack.Sounds;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -73,6 +74,7 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				Sounds.randomDice.playSound();
 				rollDiceAnim();
 			}
 			
@@ -112,8 +114,9 @@ public class DicePanel extends JPanel{
 				rollButton.setVisible(true);
 				hand[0].setLocation(25,210);
 				hand[1].setLocation(175,210);
+				Sounds.buttonPress.playSound();
 				int chosen = JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
-				
+				Sounds.buttonCancel.playSound();
 			}
 		}, 1200);
 	}
