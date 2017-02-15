@@ -62,6 +62,8 @@ public class BoardPanel extends JPanel{
 		init();
 		importImgs();
 		addDiceBoard();
+		// THIS IS TO TEST PULLING CONFLICT
+		
 	}
 	private void setSize(){
 		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = (int)(screen_h * .85 / 12);
