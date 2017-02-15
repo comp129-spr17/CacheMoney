@@ -2,6 +2,10 @@ package ScreenPack;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,8 +15,14 @@ import GamePack.Dice;
 public class GameScreen extends JFrame{
 	private JPanel mainPanel;
 	private BackButton backB;
+	private int myComp_width;
+	private int myComp_height;
 	public GameScreen(){
-		setSize(1100, 1050);
+//		setAlwaysOnTop(true);
+		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		myComp_height = (int)screenSize.getDisplayMode().getHeight();
+		myComp_width = (int)screenSize.getDisplayMode().getWidth();
+		setSize(myComp_width, myComp_height);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init();
 		setVisible(true);
@@ -22,7 +32,7 @@ public class GameScreen extends JFrame{
 		getContentPane().add(mainPanel);
 		backB = new BackButton(this);
 		mainPanel.add(backB);
-		BoardPanel boardPanel = new BoardPanel();
+		BoardPanel boardPanel = new BoardPanel(myComp_width, myComp_height);
 		mainPanel.add(boardPanel);
 		
 	}
