@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import InterfacePack.Sounds;
 	public class ChatScreen extends JFrame implements KeyListener,MouseListener{
 		private final static int WINDOW_WIDTH = 700;
 		private final static int WINDOW_HEIGHT = 760;
@@ -66,6 +68,7 @@ import javax.swing.JTextArea;
 				
 				@Override
 				public void windowClosing(WindowEvent e) {
+					Sounds.buttonCancel.playSound();
 					writer.println(CLOSING_CODE);
 					if (isHost){
 						System.out.println("*** Host's client has been closed. Terminating server...");
@@ -134,6 +137,7 @@ import javax.swing.JTextArea;
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
 		}
 		public void serverDisconnected() throws SocketException{
+			Sounds.buttonCancel.playSound();
 			isServerClosed = true;
 			msgDisplayArea.append("---------------------------------------------\n");
 			msgDisplayArea.append("Connecting to the host was lost.\n");

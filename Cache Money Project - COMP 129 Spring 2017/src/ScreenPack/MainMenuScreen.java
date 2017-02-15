@@ -5,9 +5,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
-
+import java.util.Timer;
+import java.util.TimerTask;
 import CacheChatPack.CacheChat;
 import InterfacePack.AudioPlayer;
+import InterfacePack.Sounds;
 
 public class MainMenuScreen {
 	private Font mainfont;
@@ -18,6 +20,7 @@ public class MainMenuScreen {
 	private JLabel HelloThere;
 	private JButton ExitButton;
 	private JButton InstructionButton;
+	
 	public MainMenuScreen(){
 		init();
 		createMenuWindow();
@@ -34,6 +37,7 @@ public class MainMenuScreen {
 		InstructionButton = new JButton("Instructions");
 		
 	}
+	
 	private void addMouseListen(){
 		GameButton.addMouseListener(new MouseListener() {
 			
@@ -61,8 +65,9 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				mainmenuframe.setVisible(false);
 				mainmenuframe.dispose();
+				Sounds.buttonConfirm.playSound();
 				GameScreen gameScreen = new GameScreen();
-				AudioPlayer.getInstance().playSound("audio", "register.mp3");
+				
 			}
 		});
 		ChatButton.addMouseListener(new MouseListener() {
@@ -89,6 +94,7 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
 				CacheChat c = new CacheChat();
 			}
 		});
@@ -118,6 +124,7 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				mainmenuframe.setVisible(false);
 				mainmenuframe.dispose();
+				Sounds.buttonConfirm.playSound();
 				InstructionsScreen iScreen = new InstructionsScreen();
 			}
 		});
@@ -144,6 +151,7 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
 				System.exit(0);
 			}
 		});

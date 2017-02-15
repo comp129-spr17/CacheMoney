@@ -2,6 +2,8 @@ package CacheChatPack;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import InterfacePack.Sounds;
+
 public class ClientEntranceBox {
 
 	private JTextField txtIp;
@@ -27,6 +29,7 @@ public class ClientEntranceBox {
 		if(chosen == JOptionPane.OK_OPTION){
 			return true;
 		}
+		Sounds.buttonCancel.playSound();
 		return false;
 	}
 	public String getIp(){
@@ -43,13 +46,18 @@ public class ClientEntranceBox {
 		while(true){
 			int chosen = JOptionPane.showConfirmDialog(null, msgName, "Welcome!", JOptionPane.OK_CANCEL_OPTION);
 			if(chosen == JOptionPane.OK_OPTION){
-				if(!txtName.getText().isEmpty())
+				if(!txtName.getText().isEmpty()){
+					Sounds.buttonConfirm.playSound();
 					return true;
+				}
+				else{
+					return haveName();
+				}
 			}else{
-				break;
+				Sounds.buttonCancel.playSound();
+				return false;
 			}
 		}
-		return false;
 	}
 	public String getName(){
 		return txtName.getText();

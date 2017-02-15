@@ -5,6 +5,8 @@ import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
+import InterfacePack.Sounds;
+
 public class CacheChat{
 	
 	public CacheChat(){
@@ -34,13 +36,16 @@ public class CacheChat{
 		while (true){
 			int chose = JOptionPane.showConfirmDialog(null, "Are you the host?", "Cache Chat Config", JOptionPane.YES_NO_OPTION);
 			if (chose == JOptionPane.YES_OPTION){
+				Sounds.buttonPress.playSound();
 				return 0;
 			}
 			else{
 				if (chose != JOptionPane.CLOSED_OPTION){
+					Sounds.buttonPress.playSound();
 					return 1;
 				}
 				else{
+					Sounds.buttonCancel.playSound();
 					return 2;
 				}
 			}

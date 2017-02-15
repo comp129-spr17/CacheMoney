@@ -6,6 +6,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+
+import InterfacePack.Sounds;
 //test
 public class BackButton extends JButton{
 	private JFrame cur;
@@ -27,6 +29,7 @@ public class BackButton extends JButton{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
 				closeCurrentOpenMain();
 			}
 			@Override

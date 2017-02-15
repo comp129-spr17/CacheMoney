@@ -12,6 +12,8 @@ import javax.swing.*;
 
 import javax.swing.JOptionPane;
 
+import InterfacePack.Sounds;
+
 public class Client {
 	private final static String IP_ADDRESS = "10.15.154.147"; // If you do not enter an IP address in the console, this one will be used by default.
 	private static int PORT_NUM;
@@ -55,6 +57,7 @@ public class Client {
 		
 		try{
 			s = new Socket(ip, port);
+			Sounds.buttonConfirm.playSound();
 			System.out.println("Successfully connected to server at\nip: " + ip + " with port: " + port + "!\n");
 			isConnected = true;
 			if(!optionBox.haveName()){
