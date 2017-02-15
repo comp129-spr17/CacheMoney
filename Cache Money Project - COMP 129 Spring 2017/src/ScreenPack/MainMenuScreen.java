@@ -150,7 +150,18 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
+				Timer t = new Timer();
+				t.schedule(new TimerTask(){
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						System.exit(0);
+					}
+					
+				}, 1500);
+				Sounds.landedOnJail.playSound();
+				mainPanel.setVisible(false);
 			}
 		});
 		

@@ -17,7 +17,9 @@ public enum Sounds {
 	passedGo,
 	landedOnFreeParking,
 	landedOnRailroad, 
-	landedOnChanceOrCommunityChest
+	landedOnChanceOrCommunityChest,
+	landedOnUnownedProperty,
+	landedOnOwnedProperty
 	;
 	
 	private final int NUM_OF_DICE = 5;
@@ -68,6 +70,12 @@ public enum Sounds {
 			return;
 		case landedOnChanceOrCommunityChest:
 			AudioPlayer.getInstance().playSound("audio", "landedOnChanceOrCommumityChest.wav");
+			return;
+		case landedOnUnownedProperty:
+			AudioPlayer.getInstance().playSound("audio", "landedOnUnownedProperty.wav");
+			return;
+		case landedOnOwnedProperty:
+			AudioPlayer.getInstance().playSound("audio", "landedOnOwnedProperty.wav");
 			return;
 		}
 		
