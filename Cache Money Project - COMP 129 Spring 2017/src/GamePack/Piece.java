@@ -11,5 +11,5 @@ public class Piece {
 	String getName() {
 		return name;
 	}
-	//should not be passing stuff rawr
+	//Testing for blah blah blah
 }
