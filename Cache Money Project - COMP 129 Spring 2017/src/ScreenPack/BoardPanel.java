@@ -56,14 +56,13 @@ public class BoardPanel extends JPanel{
 	public BoardPanel(int screen_width, int screen_height){
 		screen_w = screen_width;
 		screen_h = screen_height;
-        
+		setSize();
 		init();
 		importImgs();
-		setSize();
 		addDiceBoard();
 	}
 	private void setSize(){
-		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = (int)(screen_h * .90 / 12);
+		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = (int)(screen_h * .85 / 12);
 		COL_SPACE_WIDTH = ROW_SPACE_HEIGHT = (int)(1.5 * ROW_SPACE_WIDTH);
 	}
 	private void init(){
