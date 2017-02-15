@@ -94,8 +94,6 @@ import InterfacePack.Sounds;
 			isServerClosed = false;
 			panel = new Panel();
 			panel.setBounds(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
-			Color valentines = new Color(255, 80, 212);
-			panel.setBackground(valentines);
 			add(panel, null);
 			msgDisplayArea = new JTextArea(30,55);
 			msgDisplayArea.setEditable(false);

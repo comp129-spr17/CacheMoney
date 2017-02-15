@@ -34,8 +34,6 @@ public class DicePanel extends JPanel{
 		setLayout(null);
 		rand = new Random();
 		setBounds(280, 280, 400, 400);
-		Color valentines = new Color(255, 80, 212);
-		setBackground(valentines);
 		rollButton = new JButton("Roll the die!");
 		rollButton.setBounds(150, 300, 100, 50);
 		rollButton.setBackground(Color.WHITE);
