@@ -38,7 +38,7 @@ public class Dice {
 		sizeRelated = SizeRelated.getInstance();
 		diceImages = new ArrayList<>();
 		dice = new JLabel();
-		dice.setBounds(sizeRelated.getDicePanelWidth()/5+whichDice*sizeRelated.getDicePanelWidth()*3/5, sizeRelated.getDicePanelHeight()*3/5, sizeRelated.getDiceWidth(), sizeRelated.getDiceWidth());
+		dice.setBounds(sizeRelated.getDicePanelWidth()/5+whichDice*sizeRelated.getDicePanelWidth()*2/5, sizeRelated.getDicePanelHeight()*3/5, sizeRelated.getDiceWidth(), sizeRelated.getDiceWidth());
 		dicePanel.add(dice);
 		rand = new Random();
 		isAnimating = true;
