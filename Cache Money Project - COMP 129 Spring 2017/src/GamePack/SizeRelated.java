@@ -62,6 +62,7 @@ public final class SizeRelated {
 					piece_x_y[i][j] = piece_h * (i<2?0:1);
 			}
 	}
+	
 	private void setDiceWidthHeight(){
 		dice_w = dice_h= SPACE_ROW_SPACE_WIDTH;
 	}

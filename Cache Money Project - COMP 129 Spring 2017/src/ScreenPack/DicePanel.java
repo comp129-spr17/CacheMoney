@@ -53,7 +53,7 @@ public class DicePanel extends JPanel{
 		rand = new Random();
 		setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		rollButton = new JButton("Roll the die!");
-		rollButton.setBounds(150, 300, 100, 50);
+		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
 		rollButton.setBackground(Color.WHITE);
 		add(rollButton);
 		result = new int[2];
