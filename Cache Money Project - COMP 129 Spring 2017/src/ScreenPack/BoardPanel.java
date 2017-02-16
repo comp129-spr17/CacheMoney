@@ -25,7 +25,7 @@ import GamePack.SizeRelated;
 import GamePack.Space;
 import GamePack.Wildcard;
 
-<<<<<<< HEAD
+
 /*
  Size Formula:
 w = 1.5h
@@ -36,10 +36,9 @@ Therefore, 3h+9h = screen_height * .95
 	w = 1.5h
  */
 public class BoardPanel extends JLayeredPane{
-=======
 
-public class BoardPanel extends JPanel{
->>>>>>> branch 'master' of https://github.com/comp129-spr17/CacheMoney.git
+
+
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
 	private int ROW_SPACE_WIDTH ;
@@ -48,7 +47,7 @@ public class BoardPanel extends JPanel{
 	private int COL_SPACE_HEIGHT;
 	private final static int START_X = 0;
 	private final static int START_Y = 0;
-<<<<<<< HEAD
+
 	private final static String IMAGE_PATH = "src/Images/";
 	private final static String CHANCE_PATH = "Chance/";
 	private final static String COMMUNITY_PATH = "CommunityChest/";
@@ -62,10 +61,10 @@ public class BoardPanel extends JPanel{
 	private double screen_h;
 	private int max_w;
 	private int max_h;
-=======
+
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
->>>>>>> branch 'master' of https://github.com/comp129-spr17/CacheMoney.git
+
 	private ImageIcon spaceImgsTop[];
 	private ImageIcon spaceImgsLeft[];
 	private ImageIcon spaceImgsRight[];
@@ -76,14 +75,14 @@ public class BoardPanel extends JPanel{
 	private Space[][] spaces;
 	private Random rand;
 	private DicePanel dicePanel;
-<<<<<<< HEAD
+
 	private Wildcard chance;
 	private Wildcard communityChest;
-=======
+
 	private ImageRelated imageRelated;
 	private Board board;
 	private Piece[] pieces;
->>>>>>> branch 'master' of https://github.com/comp129-spr17/CacheMoney.git
+
 	
 	
 	public BoardPanel(){
@@ -116,10 +115,6 @@ public class BoardPanel extends JPanel{
         
         setLayout(null);
         
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'master' of https://github.com/comp129-spr17/CacheMoney.git
         rand = new Random();
 	}
 	private void importImgs(){
@@ -218,4 +213,4 @@ public class BoardPanel extends JPanel{
 		add(communityChest);
 	}
 }
-}
+
