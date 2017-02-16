@@ -7,7 +7,7 @@ public class Piece {
 	public Piece(String n) {
 		name = n;
 	}
-	
+	//aa
 	String getName() {
 		return name;
 	}
