@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -16,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Dice {
-	private final static String FILE_PATH="src/Images/";
+	private PathRelated paths;
 	private JPanel dicePanel;
 	private int whichDice;
 	private ArrayList<ImageIcon> diceImages;
@@ -24,12 +25,17 @@ public class Dice {
 	private Random rand;
 	private int result;
 	private boolean isAnimating;
+	private ImageRelated imageRelated;
+	private SizeRelated sizeRelated;
 	public Dice(JPanel dicePanel, int whichDice){
 		this.dicePanel = dicePanel;
 		this.whichDice = whichDice;
 		init();
 	}
 	private void init(){
+		paths = PathRelated.getInstance();
+		imageRelated = ImageRelated.getInstance();
+		sizeRelated = SizeRelated.getInstance();
 		diceImages = new ArrayList<>();
 		dice = new JLabel();
 		dice.setBounds(60+whichDice*150, 180, 100, 100);
@@ -40,11 +46,7 @@ public class Dice {
 	}
 	private void getImg(){
 		for(int i=0; i<6; i++){
-			try {
-				diceImages.add(new ImageIcon(ImageIO.read(new File(FILE_PATH+(i+1)+".png"))));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			diceImages.add(imageRelated.resizeImage(paths.getDiceImgPath()+(i+1)+".png", sizeRelated.getDiceWidth(), sizeRelated.getDiceHeight()));
 		}
 	}
 	private int getRand(){
@@ -80,7 +82,7 @@ public class Dice {
 		}
 	}
 	public void resetDice(){
-		dice.setBounds(60+whichDice*150, 180, 100, 100);
+		dice.setLocation(60+whichDice*150, 180);
 	}
 	public class diceMovingAnimation extends Thread{
 		public void run(){

@@ -20,7 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class DicePanel extends JPanel{
-	private final static String FILE_PATH="src/Images/";
+	private PathRelated paths;
+	private SizeRelated sizeRelated;
 	private JButton rollButton;
 	private Dice dices[]; 
 	private int result[];
@@ -28,17 +29,15 @@ public class DicePanel extends JPanel{
 	private ImageIcon handImage[];
 	private JLabel hand[];
 	private Random rand;
-	private int s_width;
-	private int s_height;
-	public DicePanel(int width, int height){
-		init(width,height);
+	public DicePanel(){
+		init();
 	}
-	private void init(int width, int height){
+	private void init(){
+		paths = PathRelated.getInstance();
+		sizeRelated = SizeRelated.getInstance();
 		setLayout(null);
-		s_width = width;
-		s_height = height;
 		rand = new Random();
-		setBounds((int)(width*1.1/4), (int)(height*1.1/4), 400, 400);
+		setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		rollButton = new JButton("Roll the die!");
 		rollButton.setBounds(150, 300, 100, 50);
 		rollButton.setBackground(Color.WHITE);
@@ -51,8 +50,8 @@ public class DicePanel extends JPanel{
 		addListener();
 		try {
 			handImage = new ImageIcon[2];
-			handImage[0] = new ImageIcon(ImageIO.read(new File(FILE_PATH+"left_handed.png")));
-			handImage[1] = new ImageIcon(ImageIO.read(new File(FILE_PATH+"right_handed.png")));
+			handImage[0] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"left_handed.png")));
+			handImage[1] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"right_handed.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -119,7 +118,7 @@ public class DicePanel extends JPanel{
 				hand[0].setLocation(25,210);
 				hand[1].setLocation(175,210);
 				Sounds.buttonPress.playSound();
-				int chosen = JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
+				JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
 				Sounds.buttonCancel.playSound();
 			}
 		}, 1200);

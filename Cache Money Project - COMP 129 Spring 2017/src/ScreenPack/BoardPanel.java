@@ -16,36 +16,23 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import GamePack.ImageRelated;
+import GamePack.PathRelated;
+import GamePack.SizeRelated;
 import GamePack.Space;
 
-/*
- Size Formula:
-w = 1.5h
-2w + 9h = screen_height * .95
-Therefore, 3h+9h = screen_height * .95
-	12h = screen_height*.95
-	h = screen_height*.95/12
-	w = 1.5h
- */
+
 public class BoardPanel extends JPanel{
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
-	private int ROW_SPACE_WIDTH = 80;
-	private int ROW_SPACE_HEIGHT = 122;
-	private int COL_SPACE_WIDTH = 122;
-	private int COL_SPACE_HEIGHT = 80;
+	private int ROW_SPACE_WIDTH ;
+	private int ROW_SPACE_HEIGHT;
+	private int COL_SPACE_WIDTH ;
+	private int COL_SPACE_HEIGHT;
 	private final static int START_X = 0;
 	private final static int START_Y = 0;
-	private final static String SPACE_IMG_PATH = "src/SpaceImages/";
-	private final static String SPACE_IMG_TOP = "TopRow/";
-	private final static String SPACE_IMG_LEFT = "LeftCol/";
-	private final static String SPACE_IMG_RIGHT = "RightCol/";
-	private final static String SPACE_IMG_BOT = "BotRow/";
-	private final static String SPACE_IMG_CORNER = "Corners/";
-	private double screen_w;
-	private double screen_h;
-	private int max_w;
-	private int max_h;
+	private PathRelated paths;
+	private SizeRelated sizeRelated;
 	private ImageIcon spaceImgsTop[];
 	private ImageIcon spaceImgsLeft[];
 	private ImageIcon spaceImgsRight[];
@@ -54,10 +41,10 @@ public class BoardPanel extends JPanel{
 	private Space[][] spaces;
 	private Random rand;
 	private DicePanel dicePanel;
+	private ImageRelated imageRelated;
 	
-	public BoardPanel(int screen_width, int screen_height){
-		screen_w = screen_width;
-		screen_h = screen_height;
+	public BoardPanel(){
+		sizeRelated = SizeRelated.getInstance();
 		setSize();
 		init();
 		importImgs();
@@ -66,19 +53,18 @@ public class BoardPanel extends JPanel{
 		
 	}
 	private void setSize(){
-		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = (int)(screen_h * .85 / 12);
-		COL_SPACE_WIDTH = ROW_SPACE_HEIGHT = (int)(1.5 * ROW_SPACE_WIDTH);
-		max_w = COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH;
-		max_h = ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT;
+		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = sizeRelated.getSpaceRowWidth();
+		COL_SPACE_WIDTH = ROW_SPACE_HEIGHT = sizeRelated.getSpaceRowHeight();
 	}
 	private void init(){
+		
+		paths = PathRelated.getInstance();
+		imageRelated = ImageRelated.getInstance();
 		setBackground(new Color(202, 232, 224));
         setBounds(100,10,START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
         
         setLayout(null);
         
-        ImageIcon square = new ImageIcon("src/Images/square-icon.png");
-
         rand = new Random();
 	}
 	private void importImgs(){
@@ -90,13 +76,13 @@ public class BoardPanel extends JPanel{
         spaces = new Space[NUM_ROW][NUM_COL];
         
         for(int i=0; i<8; i++){
-        	spaceImgsTop[i] = resizedImgs(SPACE_IMG_PATH+SPACE_IMG_TOP+i+".png",0);
-        	spaceImgsLeft[i] = resizedImgs(SPACE_IMG_PATH+SPACE_IMG_LEFT+i+".png",1);
-        	spaceImgsRight[i] = resizedImgs(SPACE_IMG_PATH+SPACE_IMG_RIGHT+i+".png",1);
-        	spaceImgsBot[i] = resizedImgs(SPACE_IMG_PATH+SPACE_IMG_BOT+i+".png",0);
+        	spaceImgsTop[i] = resizedImgs(paths.getSpaceImgTopPath()+i+".png",0);
+        	spaceImgsLeft[i] = resizedImgs(paths.getSpaceImgLeftPath()+i+".png",1);
+        	spaceImgsRight[i] = resizedImgs(paths.getSpaceImgRightPath()+i+".png",1);
+        	spaceImgsBot[i] = resizedImgs(paths.getSpaceImgBotPath()+i+".png",0);
         }
         for(int i=0; i<4; i++){
-        	spaceImgsCorner[i] = resizedImgs(SPACE_IMG_PATH+SPACE_IMG_CORNER+i+".png",2);
+        	spaceImgsCorner[i] = resizedImgs(paths.getSpaceImgCornerPath()+i+".png",2);
         }
         for(int i=0; i<NUM_ROW;i++){
         	for(int j=0; j<NUM_COL; j++){
@@ -156,15 +142,11 @@ public class BoardPanel extends JPanel{
 			width = COL_SPACE_WIDTH;
 			height = ROW_SPACE_HEIGHT;
 		}
-		try {
-			return new ImageIcon(ImageIO.read(new File(path)).getScaledInstance(width, height, Image.SCALE_DEFAULT));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return imageRelated.resizeImage(path, width, height);
+		
 	}
 	private void addDiceBoard(){
-		dicePanel = new DicePanel(max_w,max_h);
+		dicePanel = new DicePanel();
 		add(dicePanel);
 	}
 }

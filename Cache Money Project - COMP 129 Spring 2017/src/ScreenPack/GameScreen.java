@@ -17,6 +17,7 @@ public class GameScreen extends JFrame{
 	private BackButton backB;
 	private int myComp_width;
 	private int myComp_height;
+	private SizeRelated sizeRelated;
 	public GameScreen(){
 //		setAlwaysOnTop(true);
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -32,7 +33,9 @@ public class GameScreen extends JFrame{
 		getContentPane().add(mainPanel);
 		backB = new BackButton(this);
 		mainPanel.add(backB);
-		BoardPanel boardPanel = new BoardPanel(myComp_width, myComp_height);
+		sizeRelated = SizeRelated.getInstance();
+		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
+		BoardPanel boardPanel = new BoardPanel();
 		mainPanel.add(boardPanel);
 		
 	}

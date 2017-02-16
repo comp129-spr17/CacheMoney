@@ -1,15 +1,14 @@
 package GamePack;
 
-public class Piece {
-	private String name;
-	//not sure what else to add to this class for now
-	//we've made some awesome progress on piece now!
-	public Piece(String n) {
-		name = n;
+import javax.swing.JLabel;
+
+public class Piece extends JLabel{
+	private int player;
+	public Piece(int player) {
+		this.player = player;
 	}
-	//aa
-	String getName() {
-		return name;
+	int getPlayer(){
+		return player;
 	}
-	//Testing for blah blah blah
+	
 }
