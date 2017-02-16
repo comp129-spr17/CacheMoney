@@ -24,7 +24,9 @@ public enum Sounds {
 	movingPiece
 	;
 	
+	
 	private final int NUM_OF_DICE = 5;
+	
 	
 	public void playSound(){
 		switch (this){

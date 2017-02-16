@@ -3,6 +3,8 @@ package GamePack;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import InterfacePack.Sounds;
+
 public class Board {
 	private Space[][] board;
 	private int numPlayers;
@@ -61,7 +63,29 @@ public class Board {
 		}
 	}
 	public boolean isDoneAnimating(){
+		
+		
+		
 		return isDone;
+	}
+	private void landedOnSpaceSounds(int player) {
+		switch (playerPosition[player]){
+		case HOME:
+			Sounds.passedGo.playSound();
+			break;
+		case JAIL:
+			Sounds.landedOnOwnedProperty.playSound();;
+			break;
+		case PARKING:
+			Sounds.landedOnFreeParking.playSound();
+			break;
+		case GO_TO_JAIL:
+			Sounds.landedOnJail.playSound();
+			break;
+		default:
+			Sounds.landedOnUnownedProperty.playSound();
+			break;
+		}
 	}
 	private void showMovingAnim(int player, int diceResult){
 
@@ -75,15 +99,19 @@ public class Board {
 					boardTracker[playerPosition[player]-1].removePiece(player);
 					checkIfLastSpace(player);
 					boardTracker[playerPosition[player]].receivePiece(pieces[player], player);
+					Sounds.movingPiece.playSound();
 					try {
 						
-						Thread.sleep(100);
+						Thread.sleep(200);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 					
 				}
+				Sounds.movingPiece.stopSound();
+				landedOnSpaceSounds(player);
 				isDone = true;
+				
 			}
 		}, 1200);
 	}
