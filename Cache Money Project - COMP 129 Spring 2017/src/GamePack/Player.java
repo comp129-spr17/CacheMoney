@@ -9,6 +9,7 @@ public class Player {
 	private int tens;
 	private int fives;
 	private int ones;
+	private Piece playerpiece;
 
 //------------------------------------Default Constructor
 	public Player() {
@@ -71,6 +72,10 @@ public class Player {
 	}
 	void setOnes(int newOnes) {
 		ones = newOnes;
+	}
+	public void setPlayerPiece(Piece tempPiece)
+	{
+		playerpiece = tempPiece;
 	}
 	
 	

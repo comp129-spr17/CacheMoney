@@ -21,6 +21,7 @@ import GamePack.Board;
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Piece;
+import GamePack.Player;
 import GamePack.SizeRelated;
 import GamePack.Space;
 import GamePack.Wildcard;
@@ -82,8 +83,8 @@ public class BoardPanel extends JLayeredPane{
 	private ImageRelated imageRelated;
 	private Board board;
 	private Piece[] pieces;
+	private Player[] players;
 
-	
 	
 	public BoardPanel(){
 		sizeRelated = SizeRelated.getInstance();
@@ -97,10 +98,14 @@ public class BoardPanel extends JLayeredPane{
 		addWildcards();
 	}
 	private void tempInitPiece(){
-
+		players = new Player[4];
 		pieces = new Piece[4];
 		for(int i=0; i<4; i++)
+		{
+			players[i] = new Player();
 			pieces[i] = new Piece(i);
+			players[i].setPlayerPiece(pieces[i]);
+		}
 	}
 	private void setSize(){
 		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = sizeRelated.getSpaceRowWidth();
