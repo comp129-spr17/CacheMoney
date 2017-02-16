@@ -19,7 +19,9 @@ public enum Sounds {
 	landedOnRailroad, 
 	landedOnChanceOrCommunityChest,
 	landedOnUnownedProperty,
-	landedOnOwnedProperty
+	landedOnOwnedProperty,
+	buildingHouse,
+	movingPiece
 	;
 	
 	private final int NUM_OF_DICE = 5;
@@ -77,9 +79,85 @@ public enum Sounds {
 		case landedOnOwnedProperty:
 			AudioPlayer.getInstance().playSound("audio", "landedOnOwnedProperty.wav");
 			return;
+		case buildingHouse:
+			AudioPlayer.getInstance().playSound("audio", "buildingHouse.wav");
+			return;
+		case movingPiece:
+			AudioPlayer.getInstance().playSound("audio", "movingPiece.wav");
+			return;
+		default:
+			System.out.println("Sound Error");
+			break;
 		}
 		
 	}
+	
+
+	public void stopSound(){
+		switch (this){
+		case buttonConfirm:
+			AudioPlayer.getInstance().stopSound("audio", "buttonConfirm.wav");
+			return;
+		case buttonPress:
+			AudioPlayer.getInstance().stopSound("audio", "buttonPress.wav");
+			return;
+		case register:
+			AudioPlayer.getInstance().stopSound("audio", "register.mp3");
+			return;
+		case buttonCancel:
+			AudioPlayer.getInstance().stopSound("audio", "buttonCancel.wav");
+			return;
+		case diceRoll1:
+			AudioPlayer.getInstance().stopSound("audio", "diceRoll1.wav");
+			return;
+		case diceRoll2:
+			AudioPlayer.getInstance().stopSound("audio", "diceRoll2.wav");
+			return;
+		case diceRoll3:
+			AudioPlayer.getInstance().stopSound("audio", "diceRoll3.wav");
+			return;
+		case diceRoll4:
+			AudioPlayer.getInstance().stopSound("audio", "diceRoll4.wav");
+			return;
+		case diceRoll5:
+			AudioPlayer.getInstance().stopSound("audio", "diceRoll5.wav");
+			return;
+		case landedOnJail:
+			AudioPlayer.getInstance().stopSound("audio", "landedOnJail.wav");
+			return;
+		case passedGo:
+			AudioPlayer.getInstance().stopSound("audio", "landedOnGo.wav");
+			return;
+		case landedOnFreeParking:
+			AudioPlayer.getInstance().stopSound("audio", "landedOnFreeParking.wav");
+			return;
+		case landedOnRailroad:
+			AudioPlayer.getInstance().stopSound("audio", "landedOnRailroad.wav");
+			return;
+		case landedOnChanceOrCommunityChest:
+			AudioPlayer.getInstance().stopSound("audio", "landedOnChanceOrCommumityChest.wav");
+			return;
+		case landedOnUnownedProperty:
+			AudioPlayer.getInstance().stopSound("audio", "landedOnUnownedProperty.wav");
+			return;
+		case landedOnOwnedProperty:
+			AudioPlayer.getInstance().stopSound("audio", "landedOnOwnedProperty.wav");
+			return;
+		case buildingHouse:
+			AudioPlayer.getInstance().stopSound("audio", "buildingHouse.wav");
+			return;
+		case movingPiece:
+			AudioPlayer.getInstance().stopSound("audio", "movingPiece.wav");
+			return;
+		default:
+			System.out.println("Sound Error");
+			break;
+		}
+		
+	}
+	
+	
+	
 	public String randomizeDiceFilename(){
 		Random rand = new Random();
 		return "diceRoll" + Integer.toString(rand.nextInt(NUM_OF_DICE) + 1) + ".wav";

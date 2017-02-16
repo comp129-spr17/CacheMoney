@@ -114,10 +114,10 @@ import InterfacePack.Sounds;
 			msgTypeArea.setLineWrap(true);
 		}
 		private void showWelcomeMsg(){
-			msgDisplayArea.setText("Welcome to Cache Chat!\n\nCreated by:\nDevin Lim:              d_lim10@u.pacific.edu\nJeremy Ronquillo:  j_ronquillo@u.pacific.edu\n\n\n\n-------------------------------------------------------------\n\n");
+			//msgDisplayArea.setText("Welcome to Cache Chat!\n\nCreated by:\nDevin Lim:              d_lim10@u.pacific.edu\nJeremy Ronquillo:  j_ronquillo@u.pacific.edu\n\n\n\n-------------------------------------------------------------\n\n");
 		}
 		private void showWelcomeMsg(String ip, int port ){
-			msgDisplayArea.setText("Welcome to Cache Chat!\n\nCreated by:\nDevin Lim:              d_lim10@u.pacific.edu\nJeremy Ronquillo:  j_ronquillo@u.pacific.edu\n\nOther people may connect to you by the following:\nIP Address: " + ip + "\nPort: " + port + "\n\n-------------------------------------------------------------\n\n");
+			//msgDisplayArea.setText("Welcome to Cache Chat!\n\nCreated by:\nDevin Lim:              d_lim10@u.pacific.edu\nJeremy Ronquillo:  j_ronquillo@u.pacific.edu\n\nOther people may connect to you by the following:\nIP Address: " + ip + "\nPort: " + port + "\n\n-------------------------------------------------------------\n\n");
 		}
 		private void sendMsg(){
 			if(!msgTypeArea.getText().equals("")){
