@@ -70,21 +70,29 @@ public class Board {
 	}
 	private void landedOnSpaceSounds(int player) {
 		switch (playerPosition[player]){
-		case HOME:
-			Sounds.passedGo.playSound();
-			break;
+//		case HOME:
+//			Sounds.passedGo.playSound();
+//			return;
 		case JAIL:
-			Sounds.landedOnOwnedProperty.playSound();;
-			break;
+			Sounds.landedOnOwnedProperty.playSound();
+			return;
 		case PARKING:
 			Sounds.landedOnFreeParking.playSound();
-			break;
+			return;
 		case GO_TO_JAIL:
 			Sounds.landedOnJail.playSound();
-			break;
+			return;
 		default:
-			Sounds.landedOnUnownedProperty.playSound();
-			break;
+			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
+				Sounds.landedOnRailroad.playSound();
+			}
+			else{
+				// IF PROPERTY IS UNOWNED
+				Sounds.landedOnUnownedProperty.playSound(); // THIS IS WHEN PLAYER
+				// ELSE IF PROPERTY IS OWNED
+				//Sounds.landedOnOwnedProperty.playSound();
+			}
+			return;
 		}
 	}
 	private void showMovingAnim(int player, int diceResult){
@@ -94,12 +102,19 @@ public class Board {
 			@Override
 			public void run() {
 				
+				Sounds.movingPiece.playSound();
+				
 				for(int i=1; i<diceResult+1; i++){
 					playerPosition[player]++;
 					boardTracker[playerPosition[player]-1].removePiece(player);
 					checkIfLastSpace(player);
 					boardTracker[playerPosition[player]].receivePiece(pieces[player], player);
-					Sounds.movingPiece.playSound();
+					if (playerPosition[player] == 0){
+						// PLAYER PASSED GO
+						Sounds.passedGo.playSound();
+						System.out.println("Passed Go!");
+					}
+					
 					try {
 						
 						Thread.sleep(200);
