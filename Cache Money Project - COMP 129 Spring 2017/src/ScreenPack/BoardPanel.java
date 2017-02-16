@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -24,22 +23,9 @@ import GamePack.Piece;
 import GamePack.Player;
 import GamePack.SizeRelated;
 import GamePack.Space;
-import GamePack.Wildcard;
 
 
-/*
- Size Formula:
-w = 1.5h
-2w + 9h = screen_height * .95
-Therefore, 3h+9h = screen_height * .95
-	12h = screen_height*.95
-	h = screen_height*.95/12
-	w = 1.5h
- */
-public class BoardPanel extends JLayeredPane{
-
-
-
+public class BoardPanel extends JPanel{
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
 	private int ROW_SPACE_WIDTH ;
@@ -48,43 +34,20 @@ public class BoardPanel extends JLayeredPane{
 	private int COL_SPACE_HEIGHT;
 	private final static int START_X = 0;
 	private final static int START_Y = 0;
-
-	private final static String IMAGE_PATH = "src/Images/";
-	private final static String CHANCE_PATH = "Chance/";
-	private final static String COMMUNITY_PATH = "CommunityChest/";
-	private final static String SPACE_IMG_PATH = "src/SpaceImages/";
-	private final static String SPACE_IMG_TOP = "TopRow/";
-	private final static String SPACE_IMG_LEFT = "LeftCol/";
-	private final static String SPACE_IMG_RIGHT = "RightCol/";
-	private final static String SPACE_IMG_BOT = "BotRow/";
-	private final static String SPACE_IMG_CORNER = "Corners/";
-	private double screen_w;
-	private double screen_h;
-	private int max_w;
-	private int max_h;
-
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
-
 	private ImageIcon spaceImgsTop[];
 	private ImageIcon spaceImgsLeft[];
 	private ImageIcon spaceImgsRight[];
 	private ImageIcon spaceImgsBot[];
 	private ImageIcon spaceImgsCorner[];
-	private ImageIcon communityChestImg;
-	private ImageIcon chanceImg;
 	private Space[][] spaces;
 	private Random rand;
 	private DicePanel dicePanel;
-
-	private Wildcard chance;
-	private Wildcard communityChest;
-
 	private ImageRelated imageRelated;
 	private Board board;
 	private Piece[] pieces;
 	private Player[] players;
-
 	
 	public BoardPanel(){
 		sizeRelated = SizeRelated.getInstance();
@@ -95,15 +58,15 @@ public class BoardPanel extends JLayeredPane{
 		board = new Board(spaces, pieces, 4);
 
 		addDiceBoard();
-		addWildcards();
 	}
 	private void tempInitPiece(){
-		players = new Player[4];
+
 		pieces = new Piece[4];
+		players = new Player[4];
 		for(int i=0; i<4; i++)
 		{
-			players[i] = new Player();
 			pieces[i] = new Piece(i);
+			players[i] = new Player();
 			players[i].setPlayerPiece(pieces[i]);
 		}
 	}
@@ -129,13 +92,6 @@ public class BoardPanel extends JLayeredPane{
         spaceImgsBot = new ImageIcon[8];
         spaceImgsCorner = new ImageIcon[4];
         spaces = new Space[NUM_ROW][NUM_COL];
-        
-        communityChestImg = new ImageIcon(IMAGE_PATH + CHANCE_PATH + ".png");
-        chanceImg = new ImageIcon(IMAGE_PATH + COMMUNITY_PATH + ".png");
-        
-        chance = new Wildcard(chanceImg, 100, 100);
-        communityChest = new Wildcard(communityChestImg, 200, 200);
-        
         
         for(int i=0; i<8; i++){
         	spaceImgsTop[i] = resizedImgs(paths.getSpaceImgTopPath()+i+".png",0);
@@ -186,7 +142,6 @@ public class BoardPanel extends JLayeredPane{
         		}
         	}
         }
-        
 	}
 	private ImageIcon resizedImgs(String path, int type){
 		int width,height;
@@ -212,10 +167,4 @@ public class BoardPanel extends JLayeredPane{
 		dicePanel = new DicePanel(this,board);
 		add(dicePanel);
 	}
-	
-	private void addWildcards(){
-		add(chance);
-		add(communityChest);
-	}
 }
-
