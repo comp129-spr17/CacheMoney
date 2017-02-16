@@ -116,7 +116,8 @@ public class Board {
 		}, 1200);
 	}
 	private void checkIfLastSpace(int player){
-		if(playerPosition[player] == 40)
-			playerPosition[player] = 0;
+		//if(playerPosition[player] == 40)
+		//	playerPosition[player] = 0;
+		playerPosition[player] = playerPosition[player] % 40;
 	}
 }
