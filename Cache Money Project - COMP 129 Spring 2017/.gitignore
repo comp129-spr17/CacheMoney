@@ -1,0 +1,7 @@
+bin/
+.DS_Store
+*.class
+.settings/
+.metadata
+tmp/
+local.properties

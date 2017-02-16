@@ -1,13 +1,25 @@
 package GamePack;
 
-public class Piece {
-	private String name;
-	//not sure what else to add to this class for now
-	public Piece(String n) {
-		name = n;
+import javax.swing.JLabel;
+
+public class Piece extends JLabel{
+	private int player;
+	private PathRelated pathRelated;
+	private SizeRelated sizeRelated;
+	private ImageRelated imageRelated;
+	public Piece(int player) {
+		this.player = player;
+		init();
 	}
-	
-	String getName() {
-		return name;
+	int getPlayer(){
+		return player;
+	}
+	private void init(){
+		pathRelated = PathRelated.getInstance();
+		sizeRelated = SizeRelated.getInstance();
+		imageRelated = ImageRelated.getInstance();
+		setIcon(imageRelated.resizeImage(pathRelated.getPieceImgPath()+player+".png", sizeRelated.getPieceWidth(), sizeRelated.getPieceHeight()));
+		setBounds(sizeRelated.getPieceXAndY(player, 0), sizeRelated.getPieceXAndY(player, 1), sizeRelated.getPieceWidth(), sizeRelated.getPieceHeight());
+		
 	}
 }

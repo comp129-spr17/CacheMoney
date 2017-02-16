@@ -10,19 +10,20 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import GamePack.Dice;
+import GamePack.*;
 
 public class GameScreen extends JFrame{
 	private JPanel mainPanel;
 	private BackButton backB;
 	private int myComp_width;
 	private int myComp_height;
+	private SizeRelated sizeRelated;
 	public GameScreen(){
 //		setAlwaysOnTop(true);
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		myComp_height = (int)screenSize.getDisplayMode().getHeight();
 		myComp_width = (int)screenSize.getDisplayMode().getWidth();
-		setSize(myComp_height, myComp_height);
+		setSize(myComp_height + 400, myComp_height - 100);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init();
 		setVisible(true);
@@ -32,7 +33,9 @@ public class GameScreen extends JFrame{
 		getContentPane().add(mainPanel);
 		backB = new BackButton(this);
 		mainPanel.add(backB);
-		BoardPanel boardPanel = new BoardPanel(myComp_width, myComp_height);
+		sizeRelated = SizeRelated.getInstance();
+		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
+		BoardPanel boardPanel = new BoardPanel();
 		mainPanel.add(boardPanel);
 		
 	}

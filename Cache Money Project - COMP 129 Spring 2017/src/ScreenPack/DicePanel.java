@@ -3,6 +3,7 @@ import GamePack.*;
 import InterfacePack.Sounds;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,7 +21,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class DicePanel extends JPanel{
-	private final static String FILE_PATH="src/Images/";
+	private PathRelated paths;
+	private SizeRelated sizeRelated;
 	private JButton rollButton;
 	private Dice dices[]; 
 	private int result[];
@@ -28,19 +30,30 @@ public class DicePanel extends JPanel{
 	private ImageIcon handImage[];
 	private JLabel hand[];
 	private Random rand;
-	private int s_width;
-	private int s_height;
-	public DicePanel(int width, int height){
-		init(width,height);
+	private Board board;
+	private int sum;
+	private boolean isSame;
+	private boolean isCelebrating;
+	private int previous;
+	private int current;
+	private DoubleCelebrate dCel;
+	private BoardPanel bPanel;
+
+	public DicePanel(BoardPanel bPanel, Board board){
+		init(bPanel,board);
 	}
-	private void init(int width, int height){
+	private void init(BoardPanel bPanel, Board board){
+
+		dCel = new DoubleCelebrate();
+		this.bPanel = bPanel;
+		paths = PathRelated.getInstance();
+		sizeRelated = SizeRelated.getInstance();
+		this.board = board;
 		setLayout(null);
-		s_width = width;
-		s_height = height;
 		rand = new Random();
-		setBounds((int)(width*1.1/4), (int)(height*1.1/4), 400, 400);
+		setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		rollButton = new JButton("Roll the die!");
-		rollButton.setBounds(150, 300, 100, 50);
+		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
 		rollButton.setBackground(Color.WHITE);
 		add(rollButton);
 		result = new int[2];
@@ -51,8 +64,9 @@ public class DicePanel extends JPanel{
 		addListener();
 		try {
 			handImage = new ImageIcon[2];
-			handImage[0] = new ImageIcon(ImageIO.read(new File(FILE_PATH+"left_handed.png")));
-			handImage[1] = new ImageIcon(ImageIO.read(new File(FILE_PATH+"right_handed.png")));
+			handImage[0] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"left_handed.png")));
+			handImage[1] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"right_handed.png")));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -65,6 +79,7 @@ public class DicePanel extends JPanel{
 		}
 		hand[0].setBounds(25, 210, 200, 200);
 		hand[1].setBounds(175, 210, 200, 200);
+		
 	}
 	private void initDiceTimer(){
 		diceTimer = new Timer();
@@ -115,14 +130,49 @@ public class DicePanel extends JPanel{
 				System.out.println("Sum : " + (result[0] + result[1]));
 				for(int i=0; i<2; i++)
 					hand[i].setVisible(false);
-				rollButton.setVisible(true);
 				hand[0].setLocation(25,210);
 				hand[1].setLocation(175,210);
 				Sounds.buttonPress.playSound();
-				int chosen = JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
+//				JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
 				Sounds.buttonCancel.playSound();
+				movePiece();
+				waitForDiceMoving();
 			}
 		}, 1200);
+	}
+	private void movePiece(){
+		sum = result[0] + result[1];
+		board.movePiece(isSame ? previous : current, sum);
+		previous = current;
+		System.out.println(previous+":"+current+":"+isSame);
+		if(isSame = result[0] == result[1])
+			sameNumberCelebration();
+		if(!isSame)
+			current = current == 3 ? 0 : current+1 ;
+		
+	}
+	private void sameNumberCelebration(){
+		Timer nTimer = new Timer();
+		isCelebrating = true;
+		nTimer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				bPanel.add(dCel);
+				bPanel.revalidate();
+				bPanel.repaint();
+				try {
+					Thread.sleep(2500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				bPanel.remove(dCel);
+				bPanel.revalidate();
+				bPanel.repaint();
+				isCelebrating = false;
+			}
+		}, 50);
+		
 	}
 	public class handMovingAnimation extends Thread{
 		public void run(){
@@ -141,6 +191,16 @@ public class DicePanel extends JPanel{
 				e.printStackTrace();
 			}
 		}
+	}
+	private void waitForDiceMoving(){
+		while(!board.isDoneAnimating() || isCelebrating){
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		rollButton.setVisible(true);
 	}
 	public int[] getResult(){
 		rollButton.setEnabled(true);
