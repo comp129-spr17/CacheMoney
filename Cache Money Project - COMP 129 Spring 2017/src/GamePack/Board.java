@@ -1,27 +1,94 @@
 package GamePack;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Board {
 	private Space[][] board;
 	private int numPlayers;
-	
-	public Board(int row, int col, int numP) {
-		board = new Space[row][col];
+	private final static int HOME = 0;
+	private final static int JAIL = 10;
+	private final static int PARKING = 20;
+	private final static int GO_TO_JAIL = 30;
+	private final static int NUM_ROW = 11;
+	private final static int NUM_COL = 11;
+	private Space[] boardTracker;
+	private int[] playerPosition;
+	private Timer pieceMovingAnim;
+	private Piece[] pieces;
+	private boolean isDone;
+	public Board(Space[][] board, Piece[] pieces, int numP) {
+		init(board,pieces,numP);
+		
+		
+	}
+	private void init(Space[][] board, Piece[] pieces, int numP){
+		this.pieces = pieces;
 		numPlayers = numP;
+		boardTracker = new Space[40];
+		playerPosition = new int[numPlayers];
+		pieceMovingAnim = new Timer();
+
+		setBoardTrack(board);
+		placePiecesToFirst();
+		
 	}
-	
-	public boolean movePiece(String pieceName, int startRow, int startCol, int endRow, int endCol) {
-		if(isValidCoords(startRow, startCol) && isValidCoords(endRow, endCol)) { 
-			if(board[startRow][startCol].isPieceOnSpace(pieceName) && board[endRow][endCol].isValidSpace()) {
-				Piece temp = board[startRow][startCol].removePiece(pieceName);
-				board[endRow][endCol].receivePiece(temp);
-				return true;
-			}
+	private void placePiecesToFirst(){
+		for(int i=0; i<numPlayers; i++){
+			boardTracker[0].receivePiece(pieces[i], i);
 		}
-		return false;
+	}
+	public void movePiece(int player, int diceResult) {
+		showMovingAnim(player, diceResult);
 	}
 	
-	private boolean isValidCoords(int row, int col) {
-		if(row < board[0].length && row >= 0 && col < board.length && col >= 0) return true;
-		return false;
+	private void setBoardTrack(Space[][] board){
+		//bot
+		for(int i=0; i<NUM_COL-1; i++){
+			boardTracker[i] = board[NUM_ROW-1][NUM_COL - 1 - i];
+		}
+		//left
+		for(int i=0; i<NUM_ROW-1; i++){
+			boardTracker[i+10] = board[NUM_ROW-1-i][0];
+		}
+		//top
+		for(int i=0; i<NUM_COL-1; i++){
+			boardTracker[i+20] = board[0][i];
+		}
+		//right
+		for(int i=0; i<NUM_ROW-1; i++){
+			boardTracker[i+30] = board[i][10];
+		}
+	}
+	public boolean isDoneAnimating(){
+		return isDone;
+	}
+	private void showMovingAnim(int player, int diceResult){
+
+		isDone = false;
+		pieceMovingAnim.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				
+				for(int i=1; i<diceResult+1; i++){
+					playerPosition[player]++;
+					boardTracker[playerPosition[player]-1].removePiece(player);
+					checkIfLastSpace(player);
+					boardTracker[playerPosition[player]].receivePiece(pieces[player], player);
+					try {
+						
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+				}
+				isDone = true;
+			}
+		}, 1200);
+	}
+	private void checkIfLastSpace(int player){
+		if(playerPosition[player] == 40)
+			playerPosition[player] = 0;
 	}
 }

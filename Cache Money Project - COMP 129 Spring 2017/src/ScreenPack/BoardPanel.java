@@ -16,8 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import GamePack.Board;
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
+import GamePack.Piece;
 import GamePack.SizeRelated;
 import GamePack.Space;
 
@@ -42,15 +44,25 @@ public class BoardPanel extends JPanel{
 	private Random rand;
 	private DicePanel dicePanel;
 	private ImageRelated imageRelated;
+	private Board board;
+	private Piece[] pieces;
+	
 	
 	public BoardPanel(){
 		sizeRelated = SizeRelated.getInstance();
 		setSize();
 		init();
 		importImgs();
+		tempInitPiece();
+		board = new Board(spaces, pieces, 4);
+
 		addDiceBoard();
-		// THIS IS TO TEST PULLING CONFLICT
-		
+	}
+	private void tempInitPiece(){
+
+		pieces = new Piece[4];
+		for(int i=0; i<4; i++)
+			pieces[i] = new Piece(i);
 	}
 	private void setSize(){
 		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = sizeRelated.getSpaceRowWidth();
@@ -146,7 +158,7 @@ public class BoardPanel extends JPanel{
 		
 	}
 	private void addDiceBoard(){
-		dicePanel = new DicePanel();
+		dicePanel = new DicePanel(this,board);
 		add(dicePanel);
 	}
 }

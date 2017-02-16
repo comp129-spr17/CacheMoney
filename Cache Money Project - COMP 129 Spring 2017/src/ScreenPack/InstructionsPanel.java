@@ -23,6 +23,7 @@ public class InstructionsPanel extends JPanel {
 	private final static String FILE_PATH="Images/";
 	private ImageIcon dollarGif;
 	private JLabel gifImage;
+	private ImageRelated imageRelated;
 	public InstructionsPanel()
 	{
 		init();
@@ -30,14 +31,12 @@ public class InstructionsPanel extends JPanel {
 	
 	private void init()
 	{
-		
+		imageRelated = ImageRelated.getInstance();
 		BoxLayout layoutMgr = new BoxLayout(this, BoxLayout.PAGE_AXIS);
 	    setLayout(layoutMgr);
 	    
 		setBounds(100, 100, 400, 400);
-		ClassLoader cldr = this.getClass().getClassLoader();
-		java.net.URL imageURL   = cldr.getResource(FILE_PATH+"dollar.gif");
-		dollarGif = new ImageIcon(imageURL);
+		dollarGif = imageRelated.getGIFImage(this, FILE_PATH+"dollar.gif");
 		JLabel iconLabel = new JLabel();
 		iconLabel.setIcon(dollarGif);
 		dollarGif.setImageObserver(iconLabel);
