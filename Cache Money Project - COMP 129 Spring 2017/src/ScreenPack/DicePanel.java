@@ -77,8 +77,8 @@ public class DicePanel extends JPanel{
 			add(hand[i]);
 			hand[i].setVisible(false);
 		}
-		hand[0].setBounds(25, 210, 200, 200);
-		hand[1].setBounds(175, 210, 200, 200);
+		hand[0].setBounds(sizeRelated.getDicePanelWidth()/10, sizeRelated.getDicePanelHeight()/2, 200, 200);
+		hand[1].setBounds(sizeRelated.getDicePanelWidth()/2, sizeRelated.getDicePanelHeight()/2, 200, 200);
 		
 	}
 	private void initDiceTimer(){
@@ -130,12 +130,13 @@ public class DicePanel extends JPanel{
 				System.out.println("Sum : " + (result[0] + result[1]));
 				for(int i=0; i<2; i++)
 					hand[i].setVisible(false);
-				hand[0].setLocation(25,210);
-				hand[1].setLocation(175,210);
-				Sounds.buttonPress.playSound();
+				hand[0].setLocation(sizeRelated.getDicePanelWidth()/10, sizeRelated.getDicePanelHeight()/2);
+				hand[1].setLocation(sizeRelated.getDicePanelWidth()/2, sizeRelated.getDicePanelHeight()/2);
+				
 //				JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
-				Sounds.buttonCancel.playSound();
+				
 				movePiece();
+
 				waitForDiceMoving();
 			}
 		}, 1200);
@@ -181,9 +182,9 @@ public class DicePanel extends JPanel{
 			try{
 				for(int i=0; i<11; i++){
 					if(which == 0)
-						hand[which].setLocation(25+i*15, hand[which].getY() + (i < 2 ? -3 : 3));
+						hand[which].setLocation(sizeRelated.getDicePanelWidth()/10+i*15, hand[which].getY() + (i < 2 ? -3 : 3));
 					else
-						hand[which].setLocation(175-i*15, hand[which].getY() + (i < 2 ? -3 : 3));
+						hand[which].setLocation(sizeRelated.getDicePanelWidth()/2 -i*15, hand[which].getY() + (i < 2 ? -3 : 3));
 						
 					Thread.sleep(60);
 				}
