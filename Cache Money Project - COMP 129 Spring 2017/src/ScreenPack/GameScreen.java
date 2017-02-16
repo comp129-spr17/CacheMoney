@@ -10,7 +10,7 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import GamePack.Dice;
+import GamePack.*;
 
 public class GameScreen extends JFrame{
 	private JPanel mainPanel;
