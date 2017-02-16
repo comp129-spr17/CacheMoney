@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 public class InstructionsPanel extends JPanel {
 	private final static String FILE_PATH="Images/";
 	private ImageIcon dollarGif;
-	private JLabel gifImage;
 	private ImageRelated imageRelated;
 	public InstructionsPanel()
 	{
@@ -41,15 +40,7 @@ public class InstructionsPanel extends JPanel {
 		iconLabel.setIcon(dollarGif);
 		dollarGif.setImageObserver(iconLabel);
 		
-		add(iconLabel);
-		
-		
-		//dollarGif = new ImageIcon(ImageIO.read(new File(FILE_PATH+"dollar.gif")));
-		
-		gifImage = new JLabel(dollarGif);
-		gifImage.setBounds(20, 20, 200, 200);
-		add(gifImage);
-		gifImage.setVisible(true);	    
+		add(iconLabel); 
 	}
     
 }

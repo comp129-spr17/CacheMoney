@@ -30,9 +30,5 @@ public class DoubleCelebrate extends JPanel{
 		icon.setImageObserver(celebration);
 
 		add(celebration);
-		JLabel gifCeleb = new JLabel(icon);
-		add(gifCeleb);
-		gifCeleb.setVisible(true);
-		
 	}
 }
