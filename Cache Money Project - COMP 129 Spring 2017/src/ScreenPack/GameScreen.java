@@ -24,13 +24,14 @@ public class GameScreen extends JFrame{
 	
 	public GameScreen(){
 //		setAlwaysOnTop(true);
-		players = new Player[4];
-		for(int i=0; i<4; i++)
-		{
-			pieces[i] = new Piece(i);
-			players[i] = new Player();
-			players[i].setPlayerPiece(pieces[i]);
-		}
+		pieces = new Piece[4];
+		//players = new Player[4];
+		//for(int i=0; i<4; i++)
+		//{
+			//pieces[i] = new Piece(i);
+			//players[i] = new Player();
+			//players[i].setPlayerPiece(pieces[i]);
+		//}
 		
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		myComp_height = (int)screenSize.getDisplayMode().getHeight();
