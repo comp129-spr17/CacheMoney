@@ -47,7 +47,7 @@ public class BoardPanel extends JPanel{
 	private ImageRelated imageRelated;
 	private Board board;
 	private Piece[] pieces;
-	private Player[] players;
+	private Player[] players; 
 	
 	public BoardPanel(){
 		sizeRelated = SizeRelated.getInstance();

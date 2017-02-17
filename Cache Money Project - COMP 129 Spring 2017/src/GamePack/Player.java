@@ -24,29 +24,33 @@ public class Player {
 		Piece playerpiece;            //Not sure what to do here since piece isnt really implemented yet
 	}
 //-------------------------------------Gets	
-	int getTotalMonies() {
+	public int getTotalMonies() {
 		return totalmonies;
 	}
-	int getFiveHunneds() {
+	public int getFiveHunneds() {
 		return fivehunneds;
 	}
-	int getHunneds() {
+	public int getHunneds() {
 		return hunneds;
 	}
-	int getFitties() {
+	public int getFitties() {
 		return fitties;
 	}
-	int getTwennies() {
+	public int getTwennies() {
 		return twennies;
 	}
-	int getTens() {
+	public int getTens() {
 		return tens;
 	}
-	int getFives() {
+	public int getFives() {
 		return fives;
 	}
-	int getOnes() {
+	public int getOnes() {
 		return ones;
+	}
+	public Piece getPiece()
+	{
+		return playerpiece;
 	}
 //----------------------------------------Sets
 	void setTotalMonies(int newTotalMonies) {
