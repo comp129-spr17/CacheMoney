@@ -168,7 +168,7 @@ public class DicePanel extends JPanel{
 	private void sameNumberCelebration(){
 		Timer nTimer = new Timer();
 		isCelebrating = true;
-		Sounds.landedOnJail.playSound();
+		Sounds.doublesCelebrateSound.playSound();
 		nTimer.schedule(new TimerTask() {
 			
 			@Override

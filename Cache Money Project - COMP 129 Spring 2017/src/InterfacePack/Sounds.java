@@ -23,7 +23,8 @@ public enum Sounds {
 	buildingHouse,
 	movingPiece,
 	diceRollConfirmed,
-	receivedMoney
+	receivedMoney,
+	doublesCelebrateSound
 	;
 	
 	
@@ -95,6 +96,9 @@ public enum Sounds {
 		case receivedMoney:
 			AudioPlayer.getInstance().playSound("audio", "receivedMoney.wav");
 			return;
+		case doublesCelebrateSound:
+			AudioPlayer.getInstance().playSound("audio", "doublesCelebrateSound.wav");
+			return;
 		default:
 			System.out.println("Sound Error");
 			break;
@@ -160,10 +164,13 @@ public enum Sounds {
 			AudioPlayer.getInstance().stopSound("audio", "movingPiece.wav");
 			return;
 		case diceRollConfirmed:
-			AudioPlayer.getInstance().playSound("audio", "diceRollConfirmed.wav");
+			AudioPlayer.getInstance().stopSound("audio", "diceRollConfirmed.wav");
 			return;
 		case receivedMoney:
-			AudioPlayer.getInstance().playSound("audio", "receivedMoney.wav");
+			AudioPlayer.getInstance().stopSound("audio", "receivedMoney.wav");
+			return;
+		case doublesCelebrateSound:
+			AudioPlayer.getInstance().stopSound("audio", "doublesCelebrateSound.wav");
 			return;
 		default:
 			System.out.println("Sound Error");
