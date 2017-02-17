@@ -149,12 +149,16 @@ public class DicePanel extends JPanel{
 		if(isSame = result[0] == result[1])
 			sameNumberCelebration();
 		if(!isSame)
+		{
+			Sounds.diceRollConfirmed.playSound();
 			current = current == 3 ? 0 : current+1 ;
+		}
 		
 	}
 	private void sameNumberCelebration(){
 		Timer nTimer = new Timer();
 		isCelebrating = true;
+		Sounds.landedOnJail.playSound();
 		nTimer.schedule(new TimerTask() {
 			
 			@Override

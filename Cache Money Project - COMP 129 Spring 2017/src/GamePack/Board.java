@@ -12,6 +12,8 @@ public class Board {
 	private final static int JAIL = 10;
 	private final static int PARKING = 20;
 	private final static int GO_TO_JAIL = 30;
+	private final static int INCOME_TAX = 4;
+	private final static int JEWLERY_TAX = 38;
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
 	private Space[] boardTracker;
@@ -70,9 +72,8 @@ public class Board {
 	}
 	private void landedOnSpaceSounds(int player) {
 		switch (playerPosition[player]){
-//		case HOME:
-//			Sounds.passedGo.playSound();
-//			return;
+		case HOME:
+			return;
 		case JAIL:
 			Sounds.landedOnOwnedProperty.playSound();
 			return;
@@ -82,13 +83,21 @@ public class Board {
 		case GO_TO_JAIL:
 			Sounds.landedOnJail.playSound();
 			return;
+		case INCOME_TAX:
+			Sounds.receivedMoney.stopSound();
+			Sounds.receivedMoney.playSound();
+			return;
+		case JEWLERY_TAX:
+			Sounds.receivedMoney.stopSound();
+			Sounds.receivedMoney.playSound();
+			return;
 		default:
 			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();
 			}
 			else{
 				// IF PROPERTY IS UNOWNED
-				Sounds.landedOnUnownedProperty.playSound(); // THIS IS WHEN PLAYER
+				 Sounds.landedOnUnownedProperty.playSound(); // THIS IS WHEN PLAYER
 				// ELSE IF PROPERTY IS OWNED
 				//Sounds.landedOnOwnedProperty.playSound();
 			}
@@ -112,6 +121,7 @@ public class Board {
 					if (playerPosition[player] == 0){
 						// PLAYER PASSED GO
 						Sounds.passedGo.playSound();
+						Sounds.receivedMoney.playSound();
 						System.out.println("Passed Go!");
 					}
 					
