@@ -10,12 +10,12 @@ import InterfacePack.Sounds;
 public class CacheChat{
 	
 	public CacheChat(){
+		int select = isHost();
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 			@Override
 			public void run() {
 				try{
-					int select = isHost();
 					if (select == 0){
 						Server s = new Server();
 					}
