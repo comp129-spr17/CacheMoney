@@ -56,7 +56,6 @@ public class BoardPanel extends JPanel{
 		importImgs();
 		tempInitPiece();
 		board = new Board(spaces, pieces, 4);
-
 		addDiceBoard();
 	}
 	private void tempInitPiece(){

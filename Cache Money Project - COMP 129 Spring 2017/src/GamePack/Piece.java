@@ -4,15 +4,21 @@ import javax.swing.JLabel;
 
 public class Piece extends JLabel{
 	private int player;
+	private Player playerClass;
 	private PathRelated pathRelated;
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
 	public Piece(int player) {
 		this.player = player;
+		playerClass = new Player();
 		init();
 	}
-	int getPlayer(){
+	public int getPlayer(){
 		return player;
+	}
+	public Player getPlayerClass()
+	{
+		return playerClass;
 	}
 	private void init(){
 		pathRelated = PathRelated.getInstance();
