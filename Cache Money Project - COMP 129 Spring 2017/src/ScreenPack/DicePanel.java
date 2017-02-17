@@ -38,12 +38,13 @@ public class DicePanel extends JPanel{
 	private int current;
 	private DoubleCelebrate dCel;
 	private BoardPanel bPanel;
+	private boolean isDiceButtonPressed;
 
 	public DicePanel(BoardPanel bPanel, Board board){
 		init(bPanel,board);
 	}
 	private void init(BoardPanel bPanel, Board board){
-
+		
 		dCel = new DoubleCelebrate();
 		this.bPanel = bPanel;
 		paths = PathRelated.getInstance();
@@ -51,8 +52,10 @@ public class DicePanel extends JPanel{
 		this.board = board;
 		setLayout(null);
 		rand = new Random();
+		isDiceButtonPressed = false;
+		
 		setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
-		rollButton = new JButton("Roll the die!");
+		rollButton = new JButton("Roll!");
 		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
 		rollButton.setBackground(Color.WHITE);
 		add(rollButton);
@@ -93,8 +96,14 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Sounds.randomDice.playSound();
-				rollDiceAnim();
+				if (!isDiceButtonPressed){
+					isDiceButtonPressed = true;
+					Sounds.randomDice.playSound();
+					rollDiceAnim();
+					
+					
+					
+				}
 			}
 			
 			@Override
@@ -127,6 +136,7 @@ public class DicePanel extends JPanel{
 		diceTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				isDiceButtonPressed = false;
 				System.out.println("Sum : " + (result[0] + result[1]));
 				for(int i=0; i<2; i++)
 					hand[i].setVisible(false);
