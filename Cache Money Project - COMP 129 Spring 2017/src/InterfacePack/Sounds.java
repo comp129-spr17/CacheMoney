@@ -22,15 +22,17 @@ public enum Sounds {
 	landedOnOwnedProperty,
 	buildingHouse,
 	diceRollConfirmed,
-	receivedMoney,
+	money,
 	doublesCelebrateSound,
-	movePiece
+	movePiece,
+	buyProperty,
+	gainMoney
 	;
 	
-	
+	private Random rand = new Random();
 	private final int NUM_OF_DICE_ROLL_SOUNDS = 5;
 	private final int NUM_OF_MOVING_PIECE_SOUNDS = 4;
-	private int movePieceCurrentSound = 0;
+	private int movePiecePreviousSound = 0;
 	
 	
 	public void playSound(){
@@ -92,14 +94,20 @@ public enum Sounds {
 		case diceRollConfirmed:
 			AudioPlayer.getInstance().playSound("audio", "diceRollConfirmed.wav");
 			return;
-		case receivedMoney:
-			AudioPlayer.getInstance().playSound("audio", "receivedMoney.wav");
+		case money:
+			AudioPlayer.getInstance().playSound("audio", "money.wav");
 			return;
 		case doublesCelebrateSound:
 			AudioPlayer.getInstance().playSound("audio", "doublesCelebrateSound.wav");
 			return;
 		case movePiece:
 			AudioPlayer.getInstance().playSound("audio", movePieceFilename());
+			return;
+		case buyProperty:
+			AudioPlayer.getInstance().playSound("audio", "buyProperty.wav");
+			return;
+		case gainMoney:
+			AudioPlayer.getInstance().playSound("audio", "gainMoney.wav");
 			return;
 		default:
 			System.out.println("Sound Error");
@@ -165,11 +173,17 @@ public enum Sounds {
 		case diceRollConfirmed:
 			AudioPlayer.getInstance().stopSound("audio", "diceRollConfirmed.wav");
 			return;
-		case receivedMoney:
-			AudioPlayer.getInstance().stopSound("audio", "receivedMoney.wav");
+		case money:
+			AudioPlayer.getInstance().stopSound("audio", "money.wav");
 			return;
 		case doublesCelebrateSound:
 			AudioPlayer.getInstance().stopSound("audio", "doublesCelebrateSound.wav");
+			return;
+		case buyProperty:
+			AudioPlayer.getInstance().stopSound("audio", "buyProperty.wav");
+			return;
+		case gainMoney:
+			AudioPlayer.getInstance().stopSound("audio", "gainMoney.wav");
 			return;
 		default:
 			System.out.println("Sound Error");
@@ -181,13 +195,21 @@ public enum Sounds {
 	
 	
 	public String randomizeDiceFilename(){
-		Random rand = new Random();
 		return "diceRoll" + Integer.toString(rand.nextInt(NUM_OF_DICE_ROLL_SOUNDS) + 1) + ".wav";
 	}
 	
 	public String movePieceFilename(){
-		movePieceCurrentSound = (movePieceCurrentSound % NUM_OF_MOVING_PIECE_SOUNDS) + 1;
-		return "movePiece" + Integer.toString(movePieceCurrentSound) + ".wav";
+		return "movePiece" + Integer.toString(generateIntNoRep(NUM_OF_MOVING_PIECE_SOUNDS, movePiecePreviousSound) + 1) + ".wav";
 	}
+	
+	private int generateIntNoRep(int range, int blacklistedNum){
+		int x = rand.nextInt(NUM_OF_MOVING_PIECE_SOUNDS);
+		while (x == movePiecePreviousSound){
+			x = rand.nextInt(NUM_OF_MOVING_PIECE_SOUNDS);
+		}
+		movePiecePreviousSound = x;
+		return x;
+	}
+	
 	
 }

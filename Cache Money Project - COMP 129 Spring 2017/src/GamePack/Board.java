@@ -84,12 +84,12 @@ public class Board {
 			Sounds.landedOnJail.playSound();
 			return;
 		case INCOME_TAX:
-			Sounds.receivedMoney.stopSound();
-			Sounds.receivedMoney.playSound();
+			Sounds.money.stopSound();
+			Sounds.money.playSound();
 			return;
 		case JEWLERY_TAX:
-			Sounds.receivedMoney.stopSound();
-			Sounds.receivedMoney.playSound();
+			Sounds.money.stopSound();
+			Sounds.money.playSound();
 			return;
 		default:
 			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
@@ -97,7 +97,7 @@ public class Board {
 			}
 			else{
 				// IF PROPERTY IS UNOWNED
-				 Sounds.landedOnUnownedProperty.playSound(); // THIS IS WHEN PLAYER
+				 Sounds.landedOnUnownedProperty.playSound();
 				// ELSE IF PROPERTY IS OWNED
 				//Sounds.landedOnOwnedProperty.playSound();
 			}
@@ -119,9 +119,10 @@ public class Board {
 					boardTracker[playerPosition[player]].receivePiece(pieces[player], player);
 					if (playerPosition[player] == 0){
 						// PLAYER PASSED GO
-						Sounds.passedGo.playSound();
-						Sounds.receivedMoney.playSound();
-						System.out.println("Passed Go!");
+						//Sounds.passedGo.playSound();
+						Sounds.money.playSound();
+						Sounds.gainMoney.playSound();
+						//System.out.println("Passed Go!");
 					}
 					
 					try {

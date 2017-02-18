@@ -29,8 +29,6 @@ public class BackButton extends JButton{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Sounds.buttonCancel.playSound();
-				closeCurrentOpenMain();
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -40,6 +38,8 @@ public class BackButton extends JButton{
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
+				closeCurrentOpenMain();
 			}
 		});
 	}
