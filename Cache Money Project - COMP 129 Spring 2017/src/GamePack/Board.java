@@ -111,9 +111,8 @@ public class Board {
 			@Override
 			public void run() {
 				
-				Sounds.movingPiece.playSound();
-				
 				for(int i=1; i<diceResult+1; i++){
+					Sounds.movePiece.playSound();
 					playerPosition[player]++;
 					boardTracker[playerPosition[player]-1].removePiece(player);
 					checkIfLastSpace(player);
@@ -133,7 +132,6 @@ public class Board {
 					}
 					
 				}
-				Sounds.movingPiece.stopSound();
 				landedOnSpaceSounds(player);
 				isDone = true;
 				

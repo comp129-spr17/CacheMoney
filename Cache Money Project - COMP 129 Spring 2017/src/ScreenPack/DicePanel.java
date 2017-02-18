@@ -96,14 +96,7 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (!isDiceButtonPressed){
-					isDiceButtonPressed = true;
-					Sounds.randomDice.playSound();
-					rollDiceAnim();
-					
-					
-					
-				}
+				
 			}
 			
 			@Override
@@ -116,7 +109,11 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				if (!isDiceButtonPressed){
+					isDiceButtonPressed = true;
+					Sounds.randomDice.playSound();
+					rollDiceAnim();
+				}
 			}
 		});
 	}
@@ -137,7 +134,7 @@ public class DicePanel extends JPanel{
 			@Override
 			public void run() {
 				isDiceButtonPressed = false;
-				System.out.println("Sum : " + (result[0] + result[1]));
+				//System.out.println("Sum : " + (result[0] + result[1]));
 				for(int i=0; i<2; i++)
 					hand[i].setVisible(false);
 				hand[0].setLocation(sizeRelated.getDicePanelWidth()/10, sizeRelated.getDicePanelHeight()/2);
@@ -155,7 +152,7 @@ public class DicePanel extends JPanel{
 		sum = result[0] + result[1];
 		board.movePiece(isSame ? previous : current, sum);
 		previous = current;
-		System.out.println(previous+":"+current+":"+isSame);
+		//System.out.println(previous+":"+current+":"+isSame);
 		if(isSame = result[0] == result[1])
 			sameNumberCelebration();
 		if(!isSame)

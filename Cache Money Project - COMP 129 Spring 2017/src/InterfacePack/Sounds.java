@@ -21,14 +21,16 @@ public enum Sounds {
 	landedOnUnownedProperty,
 	landedOnOwnedProperty,
 	buildingHouse,
-	movingPiece,
 	diceRollConfirmed,
 	receivedMoney,
-	doublesCelebrateSound
+	doublesCelebrateSound,
+	movePiece
 	;
 	
 	
-	private final int NUM_OF_DICE = 5;
+	private final int NUM_OF_DICE_ROLL_SOUNDS = 5;
+	private final int NUM_OF_MOVING_PIECE_SOUNDS = 4;
+	private int movePieceCurrentSound = 0;
 	
 	
 	public void playSound(){
@@ -87,9 +89,6 @@ public enum Sounds {
 		case buildingHouse:
 			AudioPlayer.getInstance().playSound("audio", "buildingHouse.wav");
 			return;
-		case movingPiece:
-			AudioPlayer.getInstance().playSound("audio", "movingPiece.wav");
-			return;
 		case diceRollConfirmed:
 			AudioPlayer.getInstance().playSound("audio", "diceRollConfirmed.wav");
 			return;
@@ -98,6 +97,9 @@ public enum Sounds {
 			return;
 		case doublesCelebrateSound:
 			AudioPlayer.getInstance().playSound("audio", "doublesCelebrateSound.wav");
+			return;
+		case movePiece:
+			AudioPlayer.getInstance().playSound("audio", movePieceFilename());
 			return;
 		default:
 			System.out.println("Sound Error");
@@ -160,9 +162,6 @@ public enum Sounds {
 		case buildingHouse:
 			AudioPlayer.getInstance().stopSound("audio", "buildingHouse.wav");
 			return;
-		case movingPiece:
-			AudioPlayer.getInstance().stopSound("audio", "movingPiece.wav");
-			return;
 		case diceRollConfirmed:
 			AudioPlayer.getInstance().stopSound("audio", "diceRollConfirmed.wav");
 			return;
@@ -183,6 +182,12 @@ public enum Sounds {
 	
 	public String randomizeDiceFilename(){
 		Random rand = new Random();
-		return "diceRoll" + Integer.toString(rand.nextInt(NUM_OF_DICE) + 1) + ".wav";
+		return "diceRoll" + Integer.toString(rand.nextInt(NUM_OF_DICE_ROLL_SOUNDS) + 1) + ".wav";
 	}
+	
+	public String movePieceFilename(){
+		movePieceCurrentSound = (movePieceCurrentSound % NUM_OF_MOVING_PIECE_SOUNDS) + 1;
+		return "movePiece" + Integer.toString(movePieceCurrentSound) + ".wav";
+	}
+	
 }
