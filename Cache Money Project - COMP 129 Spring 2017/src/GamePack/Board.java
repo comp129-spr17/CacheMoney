@@ -134,6 +134,7 @@ public class Board {
 					
 				}
 				landedOnSpaceSounds(player);
+				boardTracker[playerPosition[player]].landOnSpace(pieces[player]);
 				isDone = true;
 				
 			}

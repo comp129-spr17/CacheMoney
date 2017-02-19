@@ -44,7 +44,7 @@ public class Space extends JLabel{
 	
 	public void receivePiece(Piece piece, int n) {
 		if(onSpace[n] == null){
-			landOnSpace(piece);
+			
 			onSpace[n] = piece;
 			add(onSpace[n]);
 			Container parent = onSpace[n].getParent();
