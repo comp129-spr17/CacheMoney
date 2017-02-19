@@ -8,11 +8,15 @@ public class PropertySpace extends Space {
 	
 	public PropertySpace(int cost) {
 		super();
-		info = new Property(cost);
+		init(cost);
 	}
 	
 	public PropertySpace(ImageIcon img, int cost) {
 		super(img);
+		init(cost);
+	}
+	
+	private void init(int cost) {
 		info = new Property(cost);
 	}
 	

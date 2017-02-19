@@ -10,6 +10,7 @@ public class Player {
 	private int fives;
 	private int ones;
 	private Piece playerpiece;
+	private boolean inJail = false;
 
 //------------------------------------Default Constructor
 	public Player() {
@@ -52,6 +53,10 @@ public class Player {
 	{
 		return playerpiece;
 	}
+	public boolean isInJail() 
+	{
+		return inJail;
+	}
 //----------------------------------------Sets
 	void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
@@ -81,6 +86,7 @@ public class Player {
 	{
 		playerpiece = tempPiece;
 	}
-	
-	
+	public void setInJail(boolean jail) {
+		inJail = jail;
+	}
 }
