@@ -31,7 +31,7 @@ public class PropertySpace extends Space {
 		return info;
 	}
 	
-	public void landOnSpace(Piece piece) {
+	public int landOnSpace(Piece piece, int playerPosition) {
 		int player = piece.getPlayer();
 		if(owner == player) {
 			//Check to see if they own all other properties of same color
@@ -41,5 +41,6 @@ public class PropertySpace extends Space {
 		} else {
 			//pay rent to current owner
 		}
+		return playerPosition;
 	}
 }

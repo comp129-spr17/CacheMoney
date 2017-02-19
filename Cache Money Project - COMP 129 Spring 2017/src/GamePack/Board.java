@@ -9,7 +9,7 @@ public class Board {
 	private Space[][] board;
 	private int numPlayers;
 	private final static int HOME = 0;
-	private final static int JAIL = 10;
+	public final static int JAIL = 10;
 	private final static int PARKING = 20;
 	private final static int GO_TO_JAIL = 30;
 	private final static int INCOME_TAX = 4;
@@ -134,7 +134,7 @@ public class Board {
 					
 				}
 				landedOnSpaceSounds(player);
-				boardTracker[playerPosition[player]].landOnSpace(pieces[player]);
+				playerPosition[player] = boardTracker[playerPosition[player]].landOnSpace(pieces[player], playerPosition[player]);
 				isDone = true;
 				
 			}

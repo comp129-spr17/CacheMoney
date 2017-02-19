@@ -54,7 +54,7 @@ public class Space extends JLabel{
 		
 	}
 	
-	public void landOnSpace(Piece piece) {
-		return;
+	public int landOnSpace(Piece piece, int playerPosition) {
+		return playerPosition;
 	}
 }

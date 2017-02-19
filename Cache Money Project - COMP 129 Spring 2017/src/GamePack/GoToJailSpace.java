@@ -5,18 +5,23 @@ import javax.swing.ImageIcon;
 public class GoToJailSpace extends Space {
 	private JailSpace jailToSendBadPeopleTo;
 	
-	public GoToJailSpace(JailSpace jail) {
+	public GoToJailSpace(Space jail) {
 		super();
-		jailToSendBadPeopleTo = jail;
+		jailToSendBadPeopleTo = (JailSpace) jail;
 	}
 
-	public GoToJailSpace(JailSpace jail, ImageIcon img) {
+	public GoToJailSpace(Space jail, ImageIcon img) {
 		super(img);
-		jailToSendBadPeopleTo = jail;
+		jailToSendBadPeopleTo = (JailSpace) jail;
 	}
 	
-	public void landOnSpace(Piece piece) {
+	public int landOnSpace(Piece piece, int playerPosition) {
 		super.removePiece(piece.getPlayer());
 		jailToSendBadPeopleTo.sendToJail(piece, piece.getPlayer());
+		return Board.JAIL;
+	}
+	
+	public void setJailSpace(Space jail) {
+		jailToSendBadPeopleTo = (JailSpace) jail;
 	}
 }

@@ -17,10 +17,13 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import GamePack.Board;
+import GamePack.GoToJailSpace;
 import GamePack.ImageRelated;
+import GamePack.JailSpace;
 import GamePack.PathRelated;
 import GamePack.Piece;
 import GamePack.Player;
+import GamePack.PropertySpace;
 import GamePack.SizeRelated;
 import GamePack.Space;
 
@@ -101,41 +104,44 @@ public class BoardPanel extends JPanel{
         for(int i=0; i<4; i++){
         	spaceImgsCorner[i] = resizedImgs(paths.getSpaceImgCornerPath()+i+".png",2);
         }
+        GoToJailSpace temp = null;
         for(int i=0; i<NUM_ROW;i++){
         	for(int j=0; j<NUM_COL; j++){
         		if(i == 0){
         			if(j==0){
-        				spaces[i][j] = new Space(spaceImgsCorner[0]);
+        				spaces[i][j] = new Space(spaceImgsCorner[0]); //Free Parking
         				spaces[i][j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else if(j==10){
-        				spaces[i][j] = new Space(spaceImgsCorner[1]);
+        				temp = new GoToJailSpace(null, spaceImgsCorner[1]);
+        				spaces[i][j] = temp;
         				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else{
-            			spaces[i][j] = new Space(spaceImgsTop[rand.nextInt(8)]);
+            			spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], 300);
             			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}
         			add(spaces[i][j]);
         		}
         		else if(i == 10){
         			if(j==0){
-        				spaces[i][j] = new Space(spaceImgsCorner[2]);
+        				spaces[i][j] = new JailSpace(spaceImgsCorner[2]); //Jail
+        				temp.setJailSpace(spaces[i][j]);
         				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else if(j==10){
-        				spaces[i][j] = new Space(spaceImgsCorner[3]);
+        				spaces[i][j] = new Space(spaceImgsCorner[3]); //GO
         				spaces[i][j].setBounds(START_X+ COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else{
-            			spaces[i][j] = new Space(spaceImgsBot[rand.nextInt(8)]);
+            			spaces[i][j] = new PropertySpace(spaceImgsBot[rand.nextInt(8)],100);
             			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}
         			add(spaces[i][j]);
         		}
         		else if(j == 0){
-    				spaces[i][j] = new Space(spaceImgsLeft[rand.nextInt(8)]);
+    				spaces[i][j] = new PropertySpace(spaceImgsLeft[rand.nextInt(8)],200);
     				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
     				add(spaces[i][j]);
         		}
         		else if(j == 10){
-    				spaces[i][j] = new Space(spaceImgsRight[rand.nextInt(8)]);
+    				spaces[i][j] = new PropertySpace(spaceImgsRight[rand.nextInt(8)],400);
     				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
     				add(spaces[i][j]);
         		}

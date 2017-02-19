@@ -23,19 +23,10 @@ public class JailSpace extends Space {
 	
 	public void sendToJail(Piece piece, int n) {
 		piece.getPlayerClass().setInJail(true);
-		inJail[n] = piece;
-		add(inJail[n]);
-		Container parent = inJail[n].getParent();
-		parent.revalidate();
-		parent.repaint();
+		super.receivePiece(piece, n);
 	}
 
 	public void releaseFromJail(int n) {
 		inJail[n].getPlayerClass().setInJail(false);
-		Container parent = inJail[n].getParent();
-		remove(inJail[n]);
-		parent.revalidate();
-		parent.repaint();
-		inJail[n] = null;
 	}
 }
