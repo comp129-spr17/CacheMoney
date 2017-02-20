@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.JOptionPane;
 
 import InterfacePack.Sounds;
+import ScreenPack.*;
 
 public class MClient {
 	private final static String IP_ADDRESS = "10.15.154.147"; // If you do not enter an IP address in the console, this one will be used by default.
@@ -20,14 +21,17 @@ public class MClient {
 	private static ClientEntranceBox optionBox;
 	private static boolean isServerUp;
 	private static boolean isConnected;
+	private DicePanel d;
 	
-	public MClient(boolean isHostClient) throws IOException {
+	public MClient(boolean isHostClient, DicePanel d) throws IOException {
+		this.d = d;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		optionBox = new ClientEntranceBox();
 		manuallyEnterIPandPort(br, isHostClient);
     }
 
-	public MClient(String ip, int port, boolean isHostClient) throws IOException {
+	public MClient(String ip, int port, boolean isHostClient, DicePanel d) throws IOException {
+		this.d = d;
 		optionBox = new ClientEntranceBox(); 
 		connectToServer(ip, port, isHostClient);
     }
@@ -63,7 +67,7 @@ public class MClient {
 				return;
 			}
 			showChatScreen(s, ip, port, isHostClient, optionBox.getName());
-		}catch(Exception e){
+		}catch(UnknownHostException e){
 			//e.printStackTrace();
 			System.out.println("Unable to connect to the server. Please Check your IP and port number.");
 		}
@@ -73,10 +77,19 @@ public class MClient {
 		            new BufferedReader(new InputStreamReader(s.getInputStream()));
         PrintWriter out = new PrintWriter(s.getOutputStream(),true);
         
-        // TODO: THIS IS WHERE WE SETUP BOARD
+        // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
+        
+        d.setWriter(out);
+        out.println("Player 1");
         isServerUp = true;
         while(isServerUp){
+        	try{
+        		System.out.println(input.readLine());
+        	}
+        	catch(SocketException e){
+        		isServerUp = false;
+        	}
 //        	try{
 //	        	chat.receiveMsg(input.readLine());
 //        	}catch(SocketException e){

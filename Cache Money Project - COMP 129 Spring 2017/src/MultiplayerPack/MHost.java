@@ -15,6 +15,8 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ScreenPack.*;
+
 public class MHost {
 	private static ArrayList<MElements> users;
 	private static ArrayList<PrintWriter> usersWriter;
@@ -23,6 +25,8 @@ public class MHost {
 	private static int PORT_NUM = 1234;
 	private static ServerSocket listener;
 	private static MClient hostClient;
+	
+	private static DicePanel d;
 //	private static void displayInfo(NetworkInterface n){
 //		System.out.println("Display name: "+ n.getDisplayName());
 //		System.out.println("Name:"+n.getName());
@@ -47,7 +51,8 @@ public class MHost {
 //		}
 //	}
 	
-	public MHost() throws IOException{
+	public MHost(DicePanel d) throws IOException{
+		MHost.d = d;
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
 //		Enumeration<NetworkInterface> net = NetworkInterface.getNetworkInterfaces();
@@ -135,7 +140,7 @@ public class MHost {
 			public void run() {
 				// TODO Auto-generated method stub
 				try {
-					hostClient = new MClient(ip, port, true);
+					hostClient = new MClient(ip, port, true, d);
 					while (hostClient.getIsServerUp()){
 						//nothing
 					}

@@ -1,5 +1,6 @@
 package ScreenPack;
 
+import MultiplayerPack.*;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -8,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -60,7 +63,10 @@ public class BoardPanel extends JPanel{
 		importImgs();
 		tempInitPiece();
 		board = new Board(spaces, pieces, 4);
-		addDiceBoard();
+		
+		addHost();
+		
+		//addDiceBoard();
 	}
 	private void tempInitPiece(){
 
@@ -172,5 +178,27 @@ public class BoardPanel extends JPanel{
 	private void addDiceBoard(){
 		dicePanel = new DicePanel(this,board);
 		add(dicePanel);
+	}
+	
+	private void addHost(){
+		addDiceBoard();
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				try {
+					
+					MHost host = new MHost(dicePanel);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		}, 0);
+		
 	}
 }

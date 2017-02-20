@@ -60,7 +60,13 @@ public class MThread extends Thread{
 					}
 					break;
 				}
-				showMsgToUsers(false,msg);
+				else if (msg.substring(0, 6).equals("Server")){
+					showMsgToUsers(true,msg.substring(6));
+				}
+				else{
+					showMsgToUsers(false,msg);
+				}
+				
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -117,7 +123,7 @@ public class MThread extends Thread{
 			if(fromSever)
 				writer.println(server.getName()+"\n   "+msg);
 			else
-				writer.println(name+"\n   "+msg);
+				writer.println(name + "\n   "+msg);
 		}
 	}
 
