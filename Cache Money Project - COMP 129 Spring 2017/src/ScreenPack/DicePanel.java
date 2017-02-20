@@ -1,5 +1,6 @@
 package ScreenPack;
 import GamePack.*;
+import MultiplayerPack.*;
 import InterfacePack.Sounds;
 
 import java.awt.Color;
@@ -47,40 +48,35 @@ public class DicePanel extends JPanel{
 	}
 	private void init(BoardPanel bPanel, Board board){
 		
-		dCel = new DoubleCelebrate();
+		// FOR NOW, WE'RE CREATING A NEW HOST TO SEND STUFF TO.
+		
+		
+		
 		this.bPanel = bPanel;
 		paths = PathRelated.getInstance();
 		sizeRelated = SizeRelated.getInstance();
 		this.board = board;
+		this.setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		setLayout(null);
 		rand = new Random();
 		isDiceButtonPressed = false;
-		
-		turnLabel = new JLabel("Player 1's Turn!");
-		turnLabel.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
-		add(turnLabel);
-		
-		setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
-		rollButton = new JButton("Roll!");
-		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
-		rollButton.setBackground(Color.WHITE);
-		add(rollButton);
-		
-		endTurnButton = new JButton("End Turn");
-		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
-		endTurnButton.setBackground(Color.RED);
-		add(endTurnButton);
-		
-		endTurnButton.setVisible(false);
-		
-		
-		
+		dCel = new DoubleCelebrate();
+		addTurnLabel();
+		addRollButton();
+		addEndTurnButton();
 		result = new int[2];
+		addDice();
+		initDiceTimer();
+		addListeners();
+		addHands();
+		
+	}
+	private void addDice() {
 		dices = new Dice[2];
 		for(int i=0; i<2; i++)
 			dices[i] = new Dice(this,i);
-		initDiceTimer();
-		addListener();
+	}
+	private void addHands() {
 		try {
 			handImage = new ImageIcon[2];
 			handImage[0] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"left_handed.png")));
@@ -98,12 +94,34 @@ public class DicePanel extends JPanel{
 		}
 		hand[0].setBounds(sizeRelated.getDicePanelWidth()/10, sizeRelated.getDicePanelHeight()/2, 200, 200);
 		hand[1].setBounds(sizeRelated.getDicePanelWidth()/2, sizeRelated.getDicePanelHeight()/2, 200, 200);
-		
 	}
+	private void addTurnLabel() {
+		turnLabel = new JLabel("Player 1's Turn!");
+		turnLabel.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
+		add(turnLabel);
+	}
+	private void addRollButton() {
+		rollButton = new JButton("Roll!");
+		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
+		rollButton.setBackground(Color.WHITE);
+		add(rollButton);
+	}
+	private void addEndTurnButton() {
+		endTurnButton = new JButton("End Turn");
+		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
+		endTurnButton.setBackground(Color.RED);
+		add(endTurnButton);
+		
+		endTurnButton.setVisible(false);
+	}
+	
+	
 	private void initDiceTimer(){
 		diceTimer = new Timer();
 	}
-	private void addListener(){
+	
+	
+	private void addListeners(){
 		rollButton.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -199,6 +217,7 @@ public class DicePanel extends JPanel{
 		}
 		resetElem();
 	}
+	
 	private void resetElem(){
 		diceTimer.schedule(new TimerTask() {
 			@Override
@@ -218,6 +237,7 @@ public class DicePanel extends JPanel{
 			}
 		}, 1200);
 	}
+	
 	private void movePiece(){
 		sum = result[0] + result[1];
 		
