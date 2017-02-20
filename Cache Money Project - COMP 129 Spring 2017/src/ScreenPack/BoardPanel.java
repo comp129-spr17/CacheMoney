@@ -27,6 +27,7 @@ import GamePack.PathRelated;
 import GamePack.Piece;
 import GamePack.Player;
 import GamePack.PropertySpace;
+import GamePack.RailroadProperty;
 import GamePack.SizeRelated;
 import GamePack.Space;
 import GamePack.StandardProperty;
@@ -118,10 +119,13 @@ public class BoardPanel extends JPanel{
         			if(j==0){
         				spaces[i][j] = new Space(spaceImgsCorner[0]); //Free Parking
         				spaces[i][j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}else if(j==10){
+        			}else if(j==10){	//Jail
         				temp = new GoToJailSpace(null, spaceImgsCorner[1]);
         				spaces[i][j] = temp;
         				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+        			}else if (j == 5){	//Railroad
+        				spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new RailroadProperty(200));
+            			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else{
             			spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new StandardProperty(300));
             			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
@@ -136,6 +140,9 @@ public class BoardPanel extends JPanel{
         			}else if(j==10){
         				spaces[i][j] = new Space(spaceImgsCorner[3]); //GO
         				spaces[i][j].setBounds(START_X+ COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+        			}else if (j == 5){	//Railroad
+        				spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new RailroadProperty(200));
+            			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
         			}else{
             			spaces[i][j] = new PropertySpace(spaceImgsBot[rand.nextInt(8)],new StandardProperty(100));
             			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
@@ -143,14 +150,24 @@ public class BoardPanel extends JPanel{
         			add(spaces[i][j]);
         		}
         		else if(j == 0){
-    				spaces[i][j] = new PropertySpace(spaceImgsLeft[rand.nextInt(8)],new StandardProperty(200));
-    				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
-    				add(spaces[i][j]);
+        			if (i == 5){
+        				spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new RailroadProperty(200));
+                		spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+        			}else{
+	    				spaces[i][j] = new PropertySpace(spaceImgsLeft[rand.nextInt(8)],new StandardProperty(200));
+	    				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
+	    				add(spaces[i][j]);
+        			}
         		}
         		else if(j == 10){
-    				spaces[i][j] = new PropertySpace(spaceImgsRight[rand.nextInt(8)],new StandardProperty(400));
-    				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
-    				add(spaces[i][j]);
+        			if (i == 5){
+        				spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new RailroadProperty(200));
+                		spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+        			}else{
+	    				spaces[i][j] = new PropertySpace(spaceImgsRight[rand.nextInt(8)],new StandardProperty(400));
+	    				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
+	    				add(spaces[i][j]);
+        			}
         		}
         	}
         }
