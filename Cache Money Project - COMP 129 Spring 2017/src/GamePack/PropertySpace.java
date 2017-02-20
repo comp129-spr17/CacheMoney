@@ -6,18 +6,18 @@ public class PropertySpace extends Space {
 	private Property info;
 	private int owner = 0;
 	
-	public PropertySpace(int cost) {
+	public PropertySpace(Property p) {
 		super();
-		init(cost);
+		init(p);
 	}
 	
-	public PropertySpace(ImageIcon img, int cost) {
+	public PropertySpace(ImageIcon img, Property p) {
 		super(img);
-		init(cost);
+		init(p);
 	}
 	
-	private void init(int cost) {
-		info = new Property(cost);
+	private void init(Property p) {
+		info = p;
 	}
 	
 	public void setOwner(int player) {
