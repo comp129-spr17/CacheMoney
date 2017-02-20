@@ -14,7 +14,7 @@ public enum Sounds {
 	diceRoll4,
 	diceRoll5,
 	landedOnJail,
-	passedGo,
+	turnBegin,
 	landedOnFreeParking,
 	landedOnRailroad, 
 	landedOnChanceOrCommunityChest,
@@ -67,8 +67,8 @@ public enum Sounds {
 		case landedOnJail:
 			AudioPlayer.getInstance().playSound("audio", "landedOnJail.wav");
 			return;
-		case passedGo:
-			AudioPlayer.getInstance().playSound("audio", "landedOnGo.wav");
+		case turnBegin:
+			AudioPlayer.getInstance().playSound("audio", "turnBegin.wav");
 			return;
 		case randomDice:
 			AudioPlayer.getInstance().playSound("audio", randomizeDiceFilename());
@@ -149,8 +149,8 @@ public enum Sounds {
 		case landedOnJail:
 			AudioPlayer.getInstance().stopSound("audio", "landedOnJail.wav");
 			return;
-		case passedGo:
-			AudioPlayer.getInstance().stopSound("audio", "landedOnGo.wav");
+		case turnBegin:
+			AudioPlayer.getInstance().stopSound("audio", "turnBegin.wav");
 			return;
 		case landedOnFreeParking:
 			AudioPlayer.getInstance().stopSound("audio", "landedOnFreeParking.wav");

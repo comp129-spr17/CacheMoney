@@ -24,6 +24,8 @@ public class DicePanel extends JPanel{
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private JButton rollButton;
+	private JButton endTurnButton;
+	private JLabel turnLabel;
 	private Dice dices[]; 
 	private int result[];
 	private Timer diceTimer;
@@ -54,11 +56,25 @@ public class DicePanel extends JPanel{
 		rand = new Random();
 		isDiceButtonPressed = false;
 		
+		turnLabel = new JLabel("Player 1's Turn!");
+		turnLabel.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
+		add(turnLabel);
+		
 		setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		rollButton = new JButton("Roll!");
-		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
+		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
 		rollButton.setBackground(Color.WHITE);
 		add(rollButton);
+		
+		endTurnButton = new JButton("End Turn");
+		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
+		endTurnButton.setBackground(Color.RED);
+		add(endTurnButton);
+		
+		endTurnButton.setVisible(false);
+		
+		
+		
 		result = new int[2];
 		dices = new Dice[2];
 		for(int i=0; i<2; i++)
@@ -111,14 +127,68 @@ public class DicePanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if (!isDiceButtonPressed){
 					isDiceButtonPressed = true;
+					dices[0].showDice();
+					dices[1].showDice();
 					Sounds.randomDice.playSound();
+					
+					
+					// TODO: SEND TO CLIENTS DICE BEGAN ROLLING HERE
+					
 					rollDiceAnim();
 				}
 			}
 		});
+		endTurnButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				// TODO: SEND CLIENTS TURN ENDED HERE
+				// TODO: SEND NEXT PLAYER'S TURN BEGINS HERE
+				
+				changeTurn();
+				Sounds.turnBegin.playSound();
+				rollButton.setVisible(true);
+				turnLabel.setVisible(true);
+				endTurnButton.setVisible(false);
+				dices[0].hideDice();
+				dices[1].hideDice();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+				
+			}
+			
+		});
 	}
+	
+	private void changeTurn(){
+		turnLabel.setText("Player " + (current % 4 + 1) + "'s Turn!");
+	}
+	
 	private void rollDiceAnim(){
 		rollButton.setVisible(false);
+		turnLabel.setVisible(false);
 		(new handMovingAnimation()).start();
 		for(int i=0; i<2; i++){
 			dices[i].resetDice();
@@ -150,6 +220,9 @@ public class DicePanel extends JPanel{
 	}
 	private void movePiece(){
 		sum = result[0] + result[1];
+		
+		// TODO: SEND THE OTHER CLIENTS THE DICE ROLL RESULT HERE!!
+		
 		board.movePiece(isSame ? previous : current, sum);
 		previous = current;
 		//System.out.println(previous+":"+current+":"+isSame);
@@ -212,7 +285,13 @@ public class DicePanel extends JPanel{
 				e.printStackTrace();
 			}
 		}
-		rollButton.setVisible(true);
+		if (!isSame){
+			endTurnButton.setVisible(true);
+		}
+		else{
+			rollButton.setVisible(true);
+		}
+		
 	}
 	public int[] getResult(){
 		rollButton.setEnabled(true);

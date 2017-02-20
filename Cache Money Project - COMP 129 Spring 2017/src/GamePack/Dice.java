@@ -49,6 +49,15 @@ public class Dice {
 			diceImages.add(imageRelated.resizeImage(paths.getDiceImgPath()+(i+1)+".png", sizeRelated.getDiceWidth(), sizeRelated.getDiceHeight()));
 		}
 	}
+	
+	public void hideDice(){
+		dice.setVisible(false);
+	}
+	
+	public void showDice(){
+		dice.setVisible(true);
+	}
+	
 	private int getRand(){
 		return rand.nextInt(6);
 	}

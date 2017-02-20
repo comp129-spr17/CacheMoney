@@ -17,7 +17,6 @@ import GamePack.*;
 
 public class GameScreen extends JFrame{
 	private JPanel mainPanel;
-	private BackButton backB;
 	private int myComp_width;
 	private int myComp_height;
 	private SizeRelated sizeRelated;
@@ -210,8 +209,6 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		backB = new BackButton(this);
-		mainPanel.add(backB);
 		sizeRelated = SizeRelated.getInstance();
 		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
 		BoardPanel boardPanel = new BoardPanel();

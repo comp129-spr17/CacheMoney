@@ -65,7 +65,7 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				mainmenuframe.setVisible(false);
 				mainmenuframe.dispose();
-				Sounds.passedGo.playSound();
+				Sounds.turnBegin.playSound();
 				GameScreen gameScreen = new GameScreen();
 				
 			}
