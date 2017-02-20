@@ -201,9 +201,6 @@ public class DicePanel extends JPanel{
 			if (fromServer){
 				msg = "Server" + msg;
 			}
-			else{
-				msg = "Player" + msg;
-			}
 			writer.println(msg);
 		}
 		else{

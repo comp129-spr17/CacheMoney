@@ -59,13 +59,13 @@ public class MClient {
 		
 		try{
 			s = new Socket(ip, port);
-			Sounds.buttonConfirm.playSound();
+			//Sounds.buttonConfirm.playSound();
 			System.out.println("Successfully connected to server at\nip: " + ip + " with port: " + port + "!\n");
 			isConnected = true;
-			if(!optionBox.haveName()){
-				s.close();
-				return;
-			}
+//			if(!optionBox.haveName()){
+//				s.close();
+//				return;
+//			}
 			showChatScreen(s, ip, port, isHostClient, optionBox.getName());
 		}catch(UnknownHostException e){
 			//e.printStackTrace();
