@@ -65,45 +65,48 @@ public class Board {
 		}
 	}
 	public boolean isDoneAnimating(){
-		
-		
-		
 		return isDone;
 	}
-	private void landedOnSpaceSounds(int player) {
+	public String getSpacePlayerLandedOn(int player) {
 		switch (playerPosition[player]){
 		case HOME:
-			return;
+			return "Go";
 		case JAIL:
 			Sounds.landedOnOwnedProperty.playSound();
-			return;
+			return "Visiting Jail";
 		case PARKING:
 			Sounds.landedOnFreeParking.playSound();
-			return;
+			return "Free Parking";
 		case GO_TO_JAIL:
 			Sounds.landedOnJail.playSound();
-			return;
+			return "Go to Jail";
 		case INCOME_TAX:
 			Sounds.money.stopSound();
 			Sounds.money.playSound();
-			return;
+			return "Income Tax";
 		case JEWLERY_TAX:
 			Sounds.money.stopSound();
 			Sounds.money.playSound();
-			return;
+			return "Jewlery Tax";
 		default:
 			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();
+				return "??? Railroad";
 			}
 			else{
 				// IF PROPERTY IS UNOWNED
 				 Sounds.landedOnUnownedProperty.playSound();
-				// ELSE IF PROPERTY IS OWNED
-				//Sounds.landedOnOwnedProperty.playSound();
+				 return "??? Property";
+				 // ELSE IF PROPERTY IS OWNED
+				 // Sounds.landedOnOwnedProperty.playSound();
+				 // return "OWNED_PROPERTY";
+				
 			}
-			return;
+			
 		}
 	}
+	
+	
 	private void showMovingAnim(int player, int diceResult){
 
 		isDone = false;
@@ -133,7 +136,7 @@ public class Board {
 					}
 					
 				}
-				landedOnSpaceSounds(player);
+				//landedOnSpaceSounds(player);
 				playerPosition[player] = boardTracker[playerPosition[player]].landOnSpace(pieces[player], playerPosition[player]);
 				isDone = true;
 				

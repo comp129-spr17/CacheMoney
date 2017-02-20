@@ -156,7 +156,7 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				sendMessageToServer("Player " + (current + 1) + " ended their turn.", true);
+				sendMessageToServer("Player " + (current) + " ended their turn.", true);
 				
 				changeTurn();
 				Sounds.turnBegin.playSound();
@@ -322,14 +322,23 @@ public class DicePanel extends JPanel{
 				e.printStackTrace();
 			}
 		}
+		
+		sendSpaceLandedOn(board.getSpacePlayerLandedOn(previous));
+		
 		if (!isSame){
 			endTurnButton.setVisible(true);
 		}
 		else{
 			rollButton.setVisible(true);
 		}
-		
 	}
+	
+	private void sendSpaceLandedOn(String space){
+		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
+	}
+	
+	
+	
 	public int[] getResult(){
 		rollButton.setEnabled(true);
 		return result;
