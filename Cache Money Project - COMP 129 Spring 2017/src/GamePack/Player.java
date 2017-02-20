@@ -89,4 +89,8 @@ public class Player {
 	public void setInJail(boolean jail) {
 		inJail = jail;
 	}
+	
+	public void pay(int cost) {
+		totalmonies -= cost;
+	}
 }
