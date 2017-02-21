@@ -1,9 +1,13 @@
 package GamePack;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,12 +36,20 @@ public class Wildcard extends JLabel{
 			public void mouseClicked(MouseEvent e) {
 				if(cardType == 0){
 					windowTitle = "Chance!";
-					cardIcon = new ImageIcon("src/Images/chanceImage.png");
+					try {
+						cardIcon = new ImageIcon(ImageIO.read(new File("src/Images/chance_Icon.png")).getScaledInstance(107, 122, Image.SCALE_DEFAULT));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 					
 				}
 				else{
 					windowTitle = "Community Chest!";
-					cardIcon = new ImageIcon("src/Images/communityImage.png");
+					try {
+						cardIcon = new ImageIcon(ImageIO.read(new File("src/Images/community_Icon.png")).getScaledInstance(122, 107, Image.SCALE_DEFAULT));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 					
 				}
 				
