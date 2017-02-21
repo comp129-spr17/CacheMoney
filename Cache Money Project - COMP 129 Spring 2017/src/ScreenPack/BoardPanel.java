@@ -43,11 +43,11 @@ public class BoardPanel extends JPanel{
 	private int COL_SPACE_HEIGHT;
 	private final static int START_X = 0;
 	private final static int START_Y = 0;
-	private static int WILDCARD_SIZE_X = 124;
-	private static int WILDCARD_SIZE_Y = 201;
+	private static int WILDCARD_SIZE_X = 120;
+	private static int WILDCARD_SIZE_Y = 70;
 	private static int CHANCE_X = 95;
 	private static int CHANCE_Y = 95;
-	private static int COMMUNITY_X = 535;
+	private static int COMMUNITY_X = 300;
 	private static int COMMUNITY_Y = 460;
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -71,6 +71,10 @@ public class BoardPanel extends JPanel{
 	
 	public BoardPanel(){
 		sizeRelated = SizeRelated.getInstance();
+		COMMUNITY_X = sizeRelated.getDicePanelX()+sizeRelated.getDicePanelWidth()-30;
+		COMMUNITY_Y = sizeRelated.getDicePanelY()+sizeRelated.getDicePanelHeight()+10;
+		CHANCE_X = sizeRelated.getDicePanelX()-WILDCARD_SIZE_X+30;
+		CHANCE_Y = sizeRelated.getDicePanelY()-WILDCARD_SIZE_Y-10;
 		setSize();
 		init();
 		importImgs();
