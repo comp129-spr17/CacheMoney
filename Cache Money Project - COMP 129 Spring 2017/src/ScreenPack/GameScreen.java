@@ -90,30 +90,35 @@ public class GameScreen extends JFrame{
 		{
 			cash500[b / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
 			label500[b / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash500[b / 6].setForeground(new Color(218,165,0));
 			cash500[b/6].setVisible(true);
 		}
 		else if (b == 1 || b == 7 || b == 13 || b == 19 )
 		{
 			cash100[(b- 1) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
 			label100[(b-1) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash100[(b-1) / 6].setForeground(new Color(238,221,130));
 			cash100[(b-1)/6].setVisible(true);
 		}
 		else if (b == 2 || b == 8 || b == 14 || b == 20 )
 		{
 			cash50[(b- 2) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
 			label50[(b-2) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash50[(b-1) / 6].setForeground(new Color(135,206,250));
 			cash50[(b-2)/6].setVisible(true);
 		}
 		else if (b == 3 || b == 9 || b == 15 || b == 21 )
 		{
 			cash20[(b- 3) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
 			label20[(b-3) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash20[(b-3) / 6].setForeground(new Color(102,205,170));
 			cash20[(b-3)/6].setVisible(true);
 		}
 		else if (b == 4 || b == 10 || b == 16 || b == 22 )
 		{
 			cash5[(b- 4) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
 			label5[(b-4) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash5[(b-4) / 6].setForeground(new Color(250,128,114));
 			cash5[(b-4)%6].setVisible(true);
 		}
 		else
@@ -121,6 +126,7 @@ public class GameScreen extends JFrame{
 			cash1[(b- 5) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
 			label1[(b-5) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
 			cash1[(b-5)/6].setVisible(true);
+			cash1[(b-5) / 6].setForeground(new Color(105,105,105));
 		}
 	}
 	private void addXMarkLabel(int b) {
@@ -186,6 +192,7 @@ public class GameScreen extends JFrame{
 	}
 	private void setFontOfMoniesAndLabels(int i) {
 		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
+		totalmonnies[i].setForeground(new Color(50,220,50));
 		cash500[i].setFont(numberfont);
 		cash50[i].setFont(numberfont);
 		cash5[i].setFont(numberfont);
@@ -193,11 +200,17 @@ public class GameScreen extends JFrame{
 		cash100[i].setFont(numberfont);
 		cash1[i].setFont(numberfont);
 		label500[i].setFont(numberfont);
+		label500[i].setForeground(new Color(218,165,0));
 		label50[i].setFont(numberfont);
+		label50[i].setForeground(new Color(135,206,250));
 		label5[i].setFont(numberfont);
+		label5[i].setForeground(new Color(250,128,114));
 		label20[i].setFont(numberfont);
+		label20[i].setForeground(new Color(102,205,170));
 		label100[i].setFont(numberfont);
+		label100[i].setForeground(new Color(238,221,130));
 		label1[i].setFont(numberfont);
+		label1[i].setForeground(new Color(105,105,105));
 	}
 	private void createPlayerCashLabels(int i) {
 		label500[i] = new JLabel("500's");
