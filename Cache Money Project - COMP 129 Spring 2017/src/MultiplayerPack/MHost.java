@@ -28,39 +28,12 @@ public class MHost {
 	private static MClient hostClient;
 	
 	private static DicePanel d;
-//	private static void displayInfo(NetworkInterface n){
-//		System.out.println("Display name: "+ n.getDisplayName());
-//		System.out.println("Name:"+n.getName());
-//		Enumeration<InetAddress> inetAdress = n.getInetAddresses();
-//		for(InetAddress net : Collections.list(inetAdress)){
-//			System.out.println("Inet Addresses"+net);
-//		}
-//		System.out.println("\n");
-//	}
-//	private static String getIp(Enumeration<NetworkInterface> net){
-//		for(NetworkInterface n : Collections.list(net)){
-//			if(n.getName().equals("wlan2")){
-//				return n.getInetAddresses().nextElement().toString();
-//			}
-//		}
-//		try {
-//			return InetAddress.getLocalHost().toString().split("/")[1];
-//		} catch (UnknownHostException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return "a";
-//		}
-//	}
+	
 	
 	public MHost(DicePanel d) throws IOException{
 		MHost.d = d;
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
-//		Enumeration<NetworkInterface> net = NetworkInterface.getNetworkInterfaces();
-//		for(NetworkInterface n : Collections.list(net))
-//			displayInfo(n);
-
-		//System.out.println("Server IP Address: " + InetAddress.getByName("wlan2"));
 		
 		System.out.println("Creating the server...");
 		while (true){
@@ -72,8 +45,6 @@ public class MHost {
 				PORT_NUM = rand.nextInt(8999 + 1000);
 			}
 		}
-
-		//String ip = InetAddress.getLocalHost().toString().split("/")[1];
 		
 		String ip = getIPAddress();
 		
@@ -116,7 +87,6 @@ public class MHost {
 					return addr.getHostAddress();
 				}
 			}
-			//System.out.println(i);
 		}
 		return InetAddress.getLocalHost().getHostAddress();
 	}
@@ -137,8 +107,6 @@ public class MHost {
 				in.nextLine();
 	        	closeServer();
 			}
-
-			
 		}, 0);
 		
 	}
@@ -160,7 +128,6 @@ public class MHost {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				try {
 					hostClient = new MClient(ip, port, true, d);
 					while (hostClient.getIsServerUp()){

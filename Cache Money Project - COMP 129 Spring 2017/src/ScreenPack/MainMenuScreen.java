@@ -32,7 +32,7 @@ public class MainMenuScreen {
 		mainmenuframe = new JFrame("Main Menu");
 		GameButton = new JButton("Game Screen");
 		ChatButton = new JButton("Chat Screen");
-		HelloThere = new JLabel("I'm Hungry. Me too.", SwingConstants.CENTER);
+		HelloThere = new JLabel("I'm still hungry :(", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		InstructionButton = new JButton("Instructions");
 		
@@ -163,7 +163,6 @@ public class MainMenuScreen {
 
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						System.exit(0);
 					}
 					
@@ -175,6 +174,7 @@ public class MainMenuScreen {
 		
 	}
 	public void createMenuWindow(){
+		setMenuBackgroundColor();
 		mainmenuframe.add(mainPanel);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
@@ -196,6 +196,10 @@ public class MainMenuScreen {
 		ExitButton.setFont(mainfont);
 		ExitButton.setBounds(175,375,150,50);
 		mainPanel.add(ExitButton);
+	}
+	private void setMenuBackgroundColor() {
+		Color menuBackgroundColor = new Color(105, 177, 255); // LIGHT BLUE
+		mainPanel.setBackground(menuBackgroundColor);
 	}
 	
 	

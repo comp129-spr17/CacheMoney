@@ -54,6 +54,169 @@ public class GameScreen extends JFrame{
 	
 	public GameScreen(){
 		//setAlwaysOnTop(true);
+		createMoniesLabels();
+		createAndAssignValuesToMoniesLabels();
+		setPositionOfBalances();
+		createAndManageXMarkAndMoniesLabels();
+		scaleBoardToScreenSize();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		init();
+		setGameScreenBackgroundColor();
+		setVisible(true);
+	}
+	
+	private void setGameScreenBackgroundColor() {
+		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
+		this.setBackground(boardBackgroundColor);
+	}
+	
+	private void scaleBoardToScreenSize() {
+		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		myComp_height = (int)screenSize.getDisplayMode().getHeight();
+		myComp_width = (int)screenSize.getDisplayMode().getWidth();
+		setSize(myComp_height + 400, myComp_height - 100);
+	}
+	private void createAndManageXMarkAndMoniesLabels() {
+		for(int b=0; b < 24; b++)
+		{
+			addXMarkLabel(b);
+			setBoundsOfXMark(b);
+			setPositionOfCashLabelsBasedOnXMarkPosition(b);
+			xmark[b].setVisible(true);
+		}
+	}
+	private void setPositionOfCashLabelsBasedOnXMarkPosition(int b) {
+		if (b == 0 || b == 6 || b == 12 || b == 18 )
+		{
+			cash500[b / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
+			label500[b / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash500[b/6].setVisible(true);
+		}
+		else if (b == 1 || b == 7 || b == 13 || b == 19 )
+		{
+			cash100[(b- 1) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
+			label100[(b-1) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash100[(b-1)/6].setVisible(true);
+		}
+		else if (b == 2 || b == 8 || b == 14 || b == 20 )
+		{
+			cash50[(b- 2) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
+			label50[(b-2) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash50[(b-2)/6].setVisible(true);
+		}
+		else if (b == 3 || b == 9 || b == 15 || b == 21 )
+		{
+			cash20[(b- 3) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
+			label20[(b-3) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash20[(b-3)/6].setVisible(true);
+		}
+		else if (b == 4 || b == 10 || b == 16 || b == 22 )
+		{
+			cash5[(b- 4) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
+			label5[(b-4) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash5[(b-4)%6].setVisible(true);
+		}
+		else
+		{
+			cash1[(b- 5) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
+			label1[(b-5) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
+			cash1[(b-5)/6].setVisible(true);
+		}
+	}
+	private void addXMarkLabel(int b) {
+		xmark[b] = new JLabel("X");
+		xmark[b].setFont(new Font("Serif",Font.BOLD,20));
+	}
+	private void setBoundsOfXMark(int b) {
+		if (b > 11)
+		{
+			if(b > 17)
+			{
+				xmark[b].setBounds(1300, 150 + (50*(b-11)),100,100);
+			}
+			else
+			{
+				xmark[b].setBounds(1300, 50 + (50*(b-11)),100,100);
+			}
+		}
+		else
+		{
+			if (b > 5)
+			{
+				xmark[b].setBounds(1100, 150 + (50*(b+1)),100,100);
+			}
+			else
+			{
+				xmark[b].setBounds(1100, 50 + (50*(b + 1)),100,100);
+			}
+		}
+	}
+	private void createAndAssignValuesToMoniesLabels() {
+		for(int i=0; i<4; i++)
+		{
+			players[i] = new Player();
+			distributeCashToPlayers(i);
+			createPlayerCashLabels(i);
+			setFontOfMoniesAndLabels(i);
+			addImagesToLabels(i);
+			assignMoneyToLabels(i);
+		}
+	}
+	private void setPositionOfBalances() {
+		totalmonnies[0].setBounds(1075,40, 100, 100);
+		totalmonnies[1].setBounds(1075,440, 100, 100);
+		totalmonnies[2].setBounds(1275,40, 100, 100);
+		totalmonnies[3].setBounds(1275,440, 100, 100);
+	}
+	private void assignMoneyToLabels(int i) {
+		fivehunneds[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));
+		hunneds[i] = new JLabel(Integer.toString(players[i].getHunneds()));
+		fitties[i] = new JLabel(Integer.toString(players[i].getFitties()));
+		twennies[i] = new JLabel(Integer.toString(players[i].getTwennies()));
+		fives[i] = new JLabel(Integer.toString(players[i].getFives()));
+		ones[i] = new JLabel(Integer.toString(players[i].getOnes()));
+	}
+	private void addImagesToLabels(int i) {
+		cash500image[i] = new JLabel(new ImageIcon("MoneyImages/500.png"));
+		cash50image[i] = new JLabel(new ImageIcon("MoneyImages/50.png"));
+		cash5image[i] = new JLabel(new ImageIcon("MoneyImages/5.png"));
+		cash20image[i] = new JLabel(new ImageIcon("MoneyImages/20.png"));
+		cash100image[i] = new JLabel(new ImageIcon("MoneyImages/100.png"));
+		cash1image[i] = new JLabel(new ImageIcon("MoneyImages/1.png"));
+	}
+	private void setFontOfMoniesAndLabels(int i) {
+		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
+		cash500[i].setFont(numberfont);
+		cash50[i].setFont(numberfont);
+		cash5[i].setFont(numberfont);
+		cash20[i].setFont(numberfont);
+		cash100[i].setFont(numberfont);
+		cash1[i].setFont(numberfont);
+		label500[i].setFont(numberfont);
+		label50[i].setFont(numberfont);
+		label5[i].setFont(numberfont);
+		label20[i].setFont(numberfont);
+		label100[i].setFont(numberfont);
+		label1[i].setFont(numberfont);
+	}
+	private void createPlayerCashLabels(int i) {
+		label500[i] = new JLabel("500's");
+		label5[i] = new JLabel("5's");
+		label100[i] = new JLabel("100's");
+		label1[i] = new JLabel("1's");
+		label20[i] = new JLabel("20's");
+		label50[i] = new JLabel("50's");
+	}
+	private void distributeCashToPlayers(int i) {
+		totalmonnies[i] = new JLabel("$" + Integer.toString(players[i].getTotalMonies()));
+		cash500[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));
+		cash50[i] = new JLabel(Integer.toString(players[i].getFitties()));
+		cash5[i] = new JLabel(Integer.toString(players[i].getFives()));
+		cash20[i] = new JLabel(Integer.toString(players[i].getTwennies()));
+		cash100[i] = new JLabel(Integer.toString(players[i].getHunneds()));
+		cash1[i] = new JLabel(Integer.toString(players[i].getOnes()));
+	}
+	private void createMoniesLabels() {
 		players = new Player[4];
 		xmark = new JLabel[4];
 		cash500image = new JLabel[4];
@@ -84,127 +247,8 @@ public class GameScreen extends JFrame{
 		label20 = new JLabel[4];
 		label1 = new JLabel[4];
 		numberfont = new Font("Serif",Font.BOLD,18);
-		
-		for(int i=0; i<4; i++)
-		{
-			players[i] = new Player();
-			totalmonnies[i] = new JLabel("$" + Integer.toString(players[i].getTotalMonies()));
-			cash500[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));
-			cash50[i] = new JLabel(Integer.toString(players[i].getFitties()));
-			cash5[i] = new JLabel(Integer.toString(players[i].getFives()));
-			cash20[i] = new JLabel(Integer.toString(players[i].getTwennies()));
-			cash100[i] = new JLabel(Integer.toString(players[i].getHunneds()));
-			cash1[i] = new JLabel(Integer.toString(players[i].getOnes()));
-			label500[i] = new JLabel("500's");
-			label5[i] = new JLabel("5's");
-			label100[i] = new JLabel("100's");
-			label1[i] = new JLabel("1's");
-			label20[i] = new JLabel("20's");
-			label50[i] = new JLabel("50's");
-			totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
-			cash500[i].setFont(numberfont);
-			cash50[i].setFont(numberfont);
-			cash5[i].setFont(numberfont);
-			cash20[i].setFont(numberfont);
-			cash100[i].setFont(numberfont);
-			cash1[i].setFont(numberfont);
-			label500[i].setFont(numberfont);
-			label50[i].setFont(numberfont);
-			label5[i].setFont(numberfont);
-			label20[i].setFont(numberfont);
-			label100[i].setFont(numberfont);
-			label1[i].setFont(numberfont);
-			cash500image[i] = new JLabel(new ImageIcon("MoneyImages/500.png"));
-			cash50image[i] = new JLabel(new ImageIcon("MoneyImages/50.png"));
-			cash5image[i] = new JLabel(new ImageIcon("MoneyImages/5.png"));
-			cash20image[i] = new JLabel(new ImageIcon("MoneyImages/20.png"));
-			cash100image[i] = new JLabel(new ImageIcon("MoneyImages/100.png"));
-			cash1image[i] = new JLabel(new ImageIcon("MoneyImages/1.png"));
-			fivehunneds[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));
-			hunneds[i] = new JLabel(Integer.toString(players[i].getHunneds()));
-			fitties[i] = new JLabel(Integer.toString(players[i].getFitties()));
-			twennies[i] = new JLabel(Integer.toString(players[i].getTwennies()));
-			fives[i] = new JLabel(Integer.toString(players[i].getFives()));
-			ones[i] = new JLabel(Integer.toString(players[i].getOnes()));
-		}
-		totalmonnies[0].setBounds(1075,40, 100, 100);
-		totalmonnies[1].setBounds(1075,440, 100, 100);
-		totalmonnies[2].setBounds(1275,40, 100, 100);
-		totalmonnies[3].setBounds(1275,440, 100, 100);
-		for(int b=0; b < 24; b++)
-		{
-			xmark[b] = new JLabel("X");
-			xmark[b].setFont(new Font("Serif",Font.BOLD,20));
-			if (b > 11)
-			{
-				if(b > 17)
-				{
-					xmark[b].setBounds(1300, 150 + (50*(b-11)),100,100);
-				}
-				else
-				{
-					xmark[b].setBounds(1300, 50 + (50*(b-11)),100,100);
-				}
-			}
-			else
-			{
-				if (b > 5)
-				{
-					xmark[b].setBounds(1100, 150 + (50*(b+1)),100,100);
-				}
-				else
-				{
-					xmark[b].setBounds(1100, 50 + (50*(b + 1)),100,100);
-				}
-			}
-			if (b == 0 || b == 6 || b == 12 || b == 18 )
-			{
-				cash500[b / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
-				label500[b / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
-				cash500[b/6].setVisible(true);
-			}
-			else if (b == 1 || b == 7 || b == 13 || b == 19 )
-			{
-				cash100[(b- 1) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
-				label100[(b-1) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
-				cash100[(b-1)/6].setVisible(true);
-			}
-			else if (b == 2 || b == 8 || b == 14 || b == 20 )
-			{
-				cash50[(b- 2) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
-				label50[(b-2) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
-				cash50[(b-2)/6].setVisible(true);
-			}
-			else if (b == 3 || b == 9 || b == 15 || b == 21 )
-			{
-				cash20[(b- 3) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
-				label20[(b-3) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
-				cash20[(b-3)/6].setVisible(true);
-			}
-			else if (b == 4 || b == 10 || b == 16 || b == 22 )
-			{
-				cash5[(b- 4) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
-				label5[(b-4) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
-				cash5[(b-4)%6].setVisible(true);
-			}
-			else
-			{
-				cash1[(b- 5) / 6].setBounds(xmark[b].getX() + 50, xmark[b].getY(), 100, 100);
-				label1[(b-5) / 6].setBounds(xmark[b].getX() - 50, xmark[b].getY(), 100, 100);
-				cash1[(b-5)/6].setVisible(true);
-			}
-			xmark[b].setVisible(true);
-		}
-		
-		
-		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		myComp_height = (int)screenSize.getDisplayMode().getHeight();
-		myComp_width = (int)screenSize.getDisplayMode().getWidth();
-		setSize(myComp_height + 400, myComp_height - 100);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		init();
-		setVisible(true);
 	}
+	
 	private void init(){
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
@@ -213,10 +257,10 @@ public class GameScreen extends JFrame{
 		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
 		BoardPanel boardPanel = new BoardPanel();
 		mainPanel.add(boardPanel);
-		for (int k = 0; k < 24; k++)
-		{
-			mainPanel.add(xmark[k]);
-		}
+		addXMarkToMainPanel();
+		addLabelsToMainPanel();
+	}
+	private void addLabelsToMainPanel() {
 		for (int j = 0; j < 4; j++)
 		{
 			mainPanel.add(cash500[j]);
@@ -237,4 +281,10 @@ public class GameScreen extends JFrame{
 //	public static void main(String[] args) {
 //		GameScreen game = new GameScreen();
 //	}
+	private void addXMarkToMainPanel() {
+		for (int k = 0; k < 24; k++)
+		{
+			mainPanel.add(xmark[k]);
+		}
+	}
 }

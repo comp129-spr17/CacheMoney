@@ -71,8 +71,16 @@ public class DicePanel extends JPanel{
 		initDiceTimer();
 		addListeners();
 		addHands();
+		setDiceBackgroundColor();
 		
 	}
+	
+	private void setDiceBackgroundColor() {
+		Color boardBackgroundColor = new Color(180, 240, 255); // VERY LIGHT BLUE
+		this.setBackground(boardBackgroundColor);
+	}
+	
+	
 	private void addDice() {
 		dices = new Dice[2];
 		for(int i=0; i<2; i++)

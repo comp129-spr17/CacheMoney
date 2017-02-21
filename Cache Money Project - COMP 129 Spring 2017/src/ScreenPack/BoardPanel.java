@@ -76,11 +76,21 @@ public class BoardPanel extends JPanel{
 		importImgs();
 		tempInitPiece();
 		board = new Board(spaces, pieces, 4);
-		
+		setBoardBackgroundColor();
 		addHost();
 		
 		//addDiceBoard();
 	}
+
+
+
+	private void setBoardBackgroundColor() {
+		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
+		this.setBackground(boardBackgroundColor);
+	}
+	
+	
+	
 	private void tempInitPiece(){
 
 		pieces = new Piece[4];
