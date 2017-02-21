@@ -16,6 +16,8 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.sun.jndi.cosnaming.IiopUrl.Address;
+
 public class Server {
 	private static ArrayList<ChatElement> users;
 	private static ArrayList<PrintWriter> usersWriter;
@@ -110,10 +112,14 @@ public class Server {
 			Enumeration <InetAddress> a = e.getInetAddresses();
 			for (; a.hasMoreElements();){
 				InetAddress addr = a.nextElement();
-				//System.out.println(" " + addr.getHostAddress());
-				if (i == 19){
+				if(addr.getHostAddress().indexOf("10.")==0){
+					System.out.println(" " + addr.getHostAddress());
 					return addr.getHostAddress();
 				}
+					
+//				if (i == 19){
+//					return addr.getHostAddress();
+//				}
 			}
 			System.out.println(i);
 		}
