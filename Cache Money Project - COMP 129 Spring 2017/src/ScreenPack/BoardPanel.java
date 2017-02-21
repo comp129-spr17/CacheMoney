@@ -59,6 +59,7 @@ public class BoardPanel extends JPanel{
 	private ImageRelated chanceImg;
 	private ImageRelated communityImg;
 	private Space[][] spaces;
+	private PropertyButton propertyDialog;
 	private Random rand;
 	private DicePanel dicePanel;
 	private ImageRelated imageRelated;
@@ -192,6 +193,11 @@ public class BoardPanel extends JPanel{
         }
         add(chance);
         add(communityChest);
+
+        propertyDialog = new PropertyButton();
+		propertyDialog.setSize(100,30);
+		propertyDialog.setLocation(300, 100);
+		add(propertyDialog);
 	}
 	private ImageIcon resizedImgs(String path, int type){
 		int width,height;
