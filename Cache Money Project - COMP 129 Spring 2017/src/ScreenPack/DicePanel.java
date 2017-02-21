@@ -205,7 +205,8 @@ public class DicePanel extends JPanel{
 		}
 		else{
 			// BAD!! THERE'S A NULL POINTER EXCEPTION WITH writer!
-			throw new NullPointerException();
+			//throw new NullPointerException();
+			System.out.println("WARNING: writer == null");
 		}
 	}
 	
