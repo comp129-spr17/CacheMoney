@@ -68,7 +68,9 @@ public class Server {
 			}
 		}
 		
-		String ip = InetAddress.getLocalHost().toString().split("/")[1];
+		System.out.println(InetAddress.getLocalHost().getHostAddress());
+		
+		String ip = InetAddress.getLocalHost().getHostAddress();
 		
 		System.out.println("Server successfully created!\n\n---------\n");		
 		System.out.println("Server IP Address: " + ip);

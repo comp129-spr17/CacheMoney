@@ -71,7 +71,7 @@ public class MHost {
 				PORT_NUM = rand.nextInt(8999 + 1000);
 			}
 		}
-		
+
 		String ip = InetAddress.getLocalHost().toString().split("/")[1];
 		
 		System.out.println("Server successfully created!\n\n---------\n");		
