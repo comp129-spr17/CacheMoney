@@ -137,8 +137,25 @@ public class Board {
 					
 				}
 				//landedOnSpaceSounds(player);
-				playerPosition[player] = boardTracker[playerPosition[player]].landOnSpace(pieces[player], playerPosition[player]);
+				
+				try {
+					Thread.sleep(250);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				isDone = true;
+				
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// PLAYER IS SENT TO JAIL HERE IF THEY LAND ON THAT SPACE
+				playerPosition[player] = boardTracker[playerPosition[player]].landOnSpace(pieces[player], playerPosition[player]);
+				
 				
 			}
 		}, 1200);

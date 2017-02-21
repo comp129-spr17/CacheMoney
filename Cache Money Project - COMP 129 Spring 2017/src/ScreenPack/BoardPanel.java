@@ -76,9 +76,9 @@ public class BoardPanel extends JPanel{
 		tempInitPiece();
 		board = new Board(spaces, pieces, 4);
 		
-		//addHost();
+		addHost();
 		
-		addDiceBoard();
+		//addDiceBoard();
 	}
 	private void tempInitPiece(){
 

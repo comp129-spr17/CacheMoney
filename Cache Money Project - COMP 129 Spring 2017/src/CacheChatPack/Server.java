@@ -116,12 +116,8 @@ public class Server {
 					System.out.println(" " + addr.getHostAddress());
 					return addr.getHostAddress();
 				}
-					
-//				if (i == 19){
-//					return addr.getHostAddress();
-//				}
 			}
-			System.out.println(i);
+			//System.out.println(i);
 		}
 		return InetAddress.getLocalHost().getHostAddress();
 	}

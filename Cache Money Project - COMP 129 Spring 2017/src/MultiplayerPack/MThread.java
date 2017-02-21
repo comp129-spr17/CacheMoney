@@ -60,11 +60,13 @@ public class MThread extends Thread{
 					}
 					break;
 				}
-				else if (msg.substring(0, 6).equals("Server")){
+				else if (msg.length() > 6 && msg.substring(0, 6).equals("Server")){ // CHECKS IF IT'S A MESSAGE FROM SERVER
+					// TODO: MAKE A BETTER MESSAGE CODE OTHER THAN "Server" TO DETECT IT'S SERVER SENDING A MESSAGE.
+					// CHECK sendMessageToServer() IN DicePanel.java BEFORE CHANGING THE MESSAGE CODE 
 					showMsgToUsers(true,msg.substring(6));
 				}
-				else{
-					showMsgToUsers(false,msg);
+				else{ // ELSE, IT'S A MESSAGE BEING SENT TO ANOTHER USER
+					showMsgToUsers(false,msg); 
 				}
 				
 			}
