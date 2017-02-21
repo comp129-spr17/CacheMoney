@@ -31,6 +31,7 @@ import GamePack.RailroadProperty;
 import GamePack.SizeRelated;
 import GamePack.Space;
 import GamePack.StandardProperty;
+import GamePack.Wildcard;
 
 
 public class BoardPanel extends JPanel{
@@ -42,6 +43,12 @@ public class BoardPanel extends JPanel{
 	private int COL_SPACE_HEIGHT;
 	private final static int START_X = 0;
 	private final static int START_Y = 0;
+	private static int WILDCARD_SIZE_X = 124;
+	private static int WILDCARD_SIZE_Y = 201;
+	private static int CHANCE_X = 95;
+	private static int CHANCE_Y = 95;
+	private static int COMMUNITY_X = 535;
+	private static int COMMUNITY_Y = 460;
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private ImageIcon spaceImgsTop[];
@@ -49,6 +56,8 @@ public class BoardPanel extends JPanel{
 	private ImageIcon spaceImgsRight[];
 	private ImageIcon spaceImgsBot[];
 	private ImageIcon spaceImgsCorner[];
+	private ImageRelated chanceImg;
+	private ImageRelated communityImg;
 	private Space[][] spaces;
 	private Random rand;
 	private DicePanel dicePanel;
@@ -56,6 +65,8 @@ public class BoardPanel extends JPanel{
 	private Board board;
 	private Piece[] pieces;
 	private Player[] players; 
+	private Wildcard chance;
+	private Wildcard communityChest;
 	
 	public BoardPanel(){
 		sizeRelated = SizeRelated.getInstance();
@@ -102,6 +113,14 @@ public class BoardPanel extends JPanel{
         spaceImgsBot = new ImageIcon[8];
         spaceImgsCorner = new ImageIcon[4];
         spaces = new Space[NUM_ROW][NUM_COL];
+        
+        
+        
+        chanceImg = new ImageRelated();
+        communityImg = new ImageRelated();
+        
+        chance = new Wildcard(chanceImg.resizeImage("src/Images/chanceImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), CHANCE_X, CHANCE_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y);
+        communityChest = new Wildcard(communityImg.resizeImage("src/Images/communityImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), COMMUNITY_X, COMMUNITY_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y);
         
         for(int i=0; i<8; i++){
         	spaceImgsTop[i] = resizedImgs(paths.getSpaceImgTopPath()+i+".png",0);
@@ -171,6 +190,8 @@ public class BoardPanel extends JPanel{
         		}
         	}
         }
+        add(chance);
+        add(communityChest);
 	}
 	private ImageIcon resizedImgs(String path, int type){
 		int width,height;
