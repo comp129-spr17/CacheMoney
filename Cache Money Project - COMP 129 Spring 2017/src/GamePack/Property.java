@@ -7,6 +7,7 @@ public abstract class Property {
 	int buyingPrice;
 	int rentMultiplier;
 	boolean owned;
+	String name;
 	
 	public Property(int cost)
 	{
@@ -16,7 +17,7 @@ public abstract class Property {
 	}
 
 	protected abstract void init();
-	
+		
 	protected int roundUp(int dividend, int divisor)
 	{
 		if (dividend % divisor == 0)
@@ -48,5 +49,13 @@ public abstract class Property {
 	
 	public void incrementMultiplier(){
 		rentMultiplier++;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public ArrayList<Integer> getRentRange(){
+		return rentValues;
 	}
 }
