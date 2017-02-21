@@ -24,7 +24,6 @@ public class Client {
 	public Client(boolean isHostClient) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Welcome to Cache Chat! - By: Devin Lim & Jeremy Ronquillo");
-		//System.out.println("WARNING: Error Handling is limited!\n");
 		optionBox = new ClientEntranceBox();
 		manuallyEnterIPandPort(br, isHostClient);
     }

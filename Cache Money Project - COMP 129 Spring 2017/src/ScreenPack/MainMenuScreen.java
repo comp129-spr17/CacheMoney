@@ -94,7 +94,15 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CacheChat c = new CacheChat();
+				Timer t = new Timer();
+				t.schedule(new TimerTask(){
+
+					@Override
+					public void run() {
+						CacheChat c = new CacheChat();
+					}
+				}, 0);
+				
 			}
 		});
 		InstructionButton.addMouseListener(new MouseListener()

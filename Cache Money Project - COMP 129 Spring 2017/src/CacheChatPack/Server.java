@@ -5,6 +5,7 @@ import java.net.BindException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +15,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.sun.jndi.cosnaming.IiopUrl.Address;
 
 public class Server {
 	private static ArrayList<ChatElement> users;
@@ -68,7 +71,12 @@ public class Server {
 			}
 		}
 		
-		String ip = InetAddress.getLocalHost().toString().split("/")[1];
+//		System.out.println(InetAddress.getLocalHost().getHostAddress());
+//		
+//		String ip = InetAddress.getLocalHost().toString().split("/")[1];
+		String ip = getIPAddress();
+		
+		
 		
 		System.out.println("Server successfully created!\n\n---------\n");		
 		System.out.println("Server IP Address: " + ip);
@@ -95,6 +103,25 @@ public class Server {
         	}
         }
 	}
+	
+	
+	private String getIPAddress() throws SocketException, UnknownHostException {
+		Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+		for (int i = 0; n.hasMoreElements(); i++){
+			NetworkInterface e = n.nextElement();
+			Enumeration <InetAddress> a = e.getInetAddresses();
+			for (; a.hasMoreElements();){
+				InetAddress addr = a.nextElement();
+				if(addr.getHostAddress().indexOf("10.")==0){
+					System.out.println(" " + addr.getHostAddress());
+					return addr.getHostAddress();
+				}
+			}
+			//System.out.println(i);
+		}
+		return InetAddress.getLocalHost().getHostAddress();
+	}
+	
 	
 	private static void closeClientThreads(ArrayList<ChatThread> lists){
 		for(ChatThread list : lists){

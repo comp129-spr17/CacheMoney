@@ -11,10 +11,10 @@ public class CacheChat{
 	
 	public CacheChat(){
 		int select = isHost();
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-			@Override
-			public void run() {
+//		Timer t = new Timer();
+//		t.schedule(new TimerTask(){
+//			@Override
+//			public void run() {
 				try{
 					if (select == 0){
 						Server s = new Server();
@@ -26,8 +26,8 @@ public class CacheChat{
 				catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
-		}, 0);
+//			}
+//		}, 0);
 		
 		
 	}

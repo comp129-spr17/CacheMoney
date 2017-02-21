@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 public final class ImageRelated {
 	private final static ImageRelated IMAGE_RELATED = new ImageRelated();
-	private ImageRelated(){
+	public ImageRelated(){
 		
 	}
 	public static ImageRelated getInstance(){
