@@ -156,7 +156,7 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				sendMessageToServer("Player " + (current) + " ended their turn.", true);
+				sendMessageToServer("Player " + (previous + 1) + " ended their turn.", true);
 				
 				changeTurn();
 				Sounds.turnBegin.playSound();

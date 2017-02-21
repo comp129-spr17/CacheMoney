@@ -111,12 +111,12 @@ public class MHost {
 			Enumeration <InetAddress> a = e.getInetAddresses();
 			for (; a.hasMoreElements();){
 				InetAddress addr = a.nextElement();
-				//System.out.println(" " + addr.getHostAddress());
-				if (i == 19){
+				if(addr.getHostAddress().indexOf("10.")==0){
+					System.out.println(" " + addr.getHostAddress());
 					return addr.getHostAddress();
 				}
 			}
-			System.out.println(i);
+			//System.out.println(i);
 		}
 		return InetAddress.getLocalHost().getHostAddress();
 	}
