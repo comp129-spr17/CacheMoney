@@ -52,7 +52,7 @@ public class DicePanel extends JPanel{
 		
 		// FOR NOW, WE'RE CREATING A NEW HOST TO SEND STUFF TO.
 		
-		
+		// TODO: NEED A CHAT SCREEN IN THIS PANEL FOR EXTRA FIREWORKS AND SPARKLES
 		
 		this.bPanel = bPanel;
 		paths = PathRelated.getInstance();
@@ -257,8 +257,8 @@ public class DicePanel extends JPanel{
 	}
 	
 	private void movePiece(){
-		sum = result[0] + result[1];
-		
+		//sum = result[0] + result[1];
+		sum = 10;
 		sendMessageToServer("Player " + (current + 1) + " rolled " + result[0] + " and " + result[1] + "!" , true);
 		
 		board.movePiece(isSame ? previous : current, sum);
@@ -318,7 +318,7 @@ public class DicePanel extends JPanel{
 	private void waitForDiceMoving(){
 		while(!board.isDoneAnimating() || isCelebrating){
 			try {
-				Thread.sleep(200);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
