@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import GamePack.*;
 
 public class GameScreen extends JFrame{
+	private PropertyButton propertyDialog;
 	private JPanel mainPanel;
 	private int myComp_width;
 	private int myComp_height;
@@ -211,6 +212,10 @@ public class GameScreen extends JFrame{
 		getContentPane().add(mainPanel);
 		sizeRelated = SizeRelated.getInstance();
 		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
+		propertyDialog = new PropertyButton();
+		propertyDialog.setSize(100,30);
+		propertyDialog.setLocation(1000, 850);
+		mainPanel.add(propertyDialog);
 		BoardPanel boardPanel = new BoardPanel();
 		mainPanel.add(boardPanel);
 		for (int k = 0; k < 24; k++)
