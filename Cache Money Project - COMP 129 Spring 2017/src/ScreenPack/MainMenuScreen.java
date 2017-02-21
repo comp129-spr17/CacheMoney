@@ -101,7 +101,6 @@ public class MainMenuScreen {
 					public void run() {
 						CacheChat c = new CacheChat();
 					}
-					
 				}, 0);
 				
 			}
