@@ -257,8 +257,7 @@ public class DicePanel extends JPanel{
 	}
 	
 	private void movePiece(){
-		//sum = result[0] + result[1];
-		sum = 10;
+		sum = result[0] + result[1];
 		sendMessageToServer("Player " + (current + 1) + " rolled " + result[0] + " and " + result[1] + "!" , true);
 		
 		board.movePiece(isSame ? previous : current, sum);
