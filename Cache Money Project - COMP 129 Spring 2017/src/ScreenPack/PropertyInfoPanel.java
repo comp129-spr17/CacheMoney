@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.Board;
 import GamePack.Property;
 import GamePack.PropertySpace;
 
@@ -20,11 +21,14 @@ public class PropertyInfoPanel extends JPanel{
 	private JButton buyButton;
 	private JButton auctionButton;
 	private JButton hideButton;
+	private BoardPanel bPanel;
+	private Board board;
 	
-	
-	public PropertyInfoPanel(JPanel panelToSwitchFrom)
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, BoardPanel bPanel, Board board)
 	{
 		this.panelToSwitchFrom = panelToSwitchFrom;
+		this.bPanel = bPanel;
+		this.board = board;
 		//this.info = info;
 		init();
 	}

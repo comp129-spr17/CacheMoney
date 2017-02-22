@@ -64,7 +64,7 @@ public class DicePanel extends JPanel{
 		rand = new Random();
 		isDiceButtonPressed = false;
 		dCel = new DoubleCelebrate();
-		propertyPanel = new PropertyInfoPanel(this);
+		propertyPanel = new PropertyInfoPanel(this,bPanel,board);
 		bPanel.add(propertyPanel);
 		addTurnLabel();
 		addRollButton();
@@ -338,7 +338,8 @@ public class DicePanel extends JPanel{
 		sendSpaceLandedOn(board.getSpacePlayerLandedOn(previous));
 				
 		if (!isSame){
-			propertyPanel.executeSwitch();
+			if (board.isPlayerInPropertySpace(previous))
+				propertyPanel.executeSwitch();
 			endTurnButton.setVisible(true);
 		}
 		else{

@@ -13,7 +13,7 @@ public class Board {
 	private final static int PARKING = 20;
 	private final static int GO_TO_JAIL = 30;
 	private final static int INCOME_TAX = 4;
-	private final static int JEWLERY_TAX = 38;
+	private final static int JEWELRY_TAX = 38;
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
 	private Space[] boardTracker;
@@ -84,7 +84,7 @@ public class Board {
 			Sounds.money.stopSound();
 			Sounds.money.playSound();
 			return "Income Tax";
-		case JEWLERY_TAX:
+		case JEWELRY_TAX:
 			Sounds.money.stopSound();
 			Sounds.money.playSound();
 			return "Jewlery Tax";
@@ -164,5 +164,17 @@ public class Board {
 		//if(playerPosition[player] == 40)
 		//	playerPosition[player] = 0;
 		playerPosition[player] = playerPosition[player] % 40;
+	}
+	
+	public boolean isPlayerInPropertySpace(int player)
+	{
+		int current = playerPosition[player];
+		
+		if (current == HOME || current == JAIL || current == PARKING || 
+				current == GO_TO_JAIL || current == INCOME_TAX || current == JEWELRY_TAX )
+			return false;
+		
+		
+		return true;
 	}
 }
