@@ -337,10 +337,10 @@ public class DicePanel extends JPanel{
 		
 		String curSpaceName = board.getSpacePlayerLandedOn(previous);
 		sendSpaceLandedOn(curSpaceName);
+		if (board.isPlayerInPropertySpace(previous))
+			propertyPanel.executeSwitch(curSpaceName);
 				
 		if (!isSame){
-			if (board.isPlayerInPropertySpace(previous))
-				propertyPanel.executeSwitch(curSpaceName);
 			endTurnButton.setVisible(true);
 		}
 		else{
