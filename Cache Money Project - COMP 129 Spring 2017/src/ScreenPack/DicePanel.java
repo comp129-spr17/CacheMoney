@@ -41,6 +41,7 @@ public class DicePanel extends JPanel{
 	private int previous;
 	private int current;
 	private DoubleCelebrate dCel;
+	private PropertyInfoPanel propertyPanel;
 	private BoardPanel bPanel;
 	private boolean isDiceButtonPressed;
 	private PrintWriter writer;
@@ -63,6 +64,8 @@ public class DicePanel extends JPanel{
 		rand = new Random();
 		isDiceButtonPressed = false;
 		dCel = new DoubleCelebrate();
+		propertyPanel = new PropertyInfoPanel(this);
+		bPanel.add(propertyPanel);
 		addTurnLabel();
 		addRollButton();
 		addEndTurnButton();
@@ -278,8 +281,9 @@ public class DicePanel extends JPanel{
 			Sounds.diceRollConfirmed.playSound();
 			current = current == 3 ? 0 : current+1 ;
 		}
-		
+				
 	}
+	
 	private void sameNumberCelebration(){
 		Timer nTimer = new Timer();
 		isCelebrating = true;
@@ -332,6 +336,8 @@ public class DicePanel extends JPanel{
 		}
 		
 		sendSpaceLandedOn(board.getSpacePlayerLandedOn(previous));
+		
+		propertyPanel.executeSwitch();
 		
 		if (!isSame){
 			endTurnButton.setVisible(true);
