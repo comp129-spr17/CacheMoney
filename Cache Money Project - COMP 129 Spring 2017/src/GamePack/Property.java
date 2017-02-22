@@ -9,9 +9,10 @@ public abstract class Property {
 	boolean owned;
 	String name;
 	
-	public Property(int cost)
+	public Property(int cost, String name)
 	{
 		this.buyingPrice = cost;
+		this.name = name;
 		rentValues = new ArrayList<Integer>();
 		init();
 	}

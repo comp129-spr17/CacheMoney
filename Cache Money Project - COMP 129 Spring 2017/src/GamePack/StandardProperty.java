@@ -5,8 +5,8 @@ public class StandardProperty extends Property{
 	private int hotelPrice;
 	private int mortgageValue;
 	
-	public StandardProperty(int cost) {
-		super(cost);		
+	public StandardProperty(int cost, String name) {
+		super(cost, name);		
 		init();
 	}
 	

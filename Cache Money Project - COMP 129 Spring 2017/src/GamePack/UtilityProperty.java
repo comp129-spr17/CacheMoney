@@ -2,8 +2,8 @@ package GamePack;
 
 public class UtilityProperty extends Property {
 
-	public UtilityProperty(int cost) {
-		super(cost);
+	public UtilityProperty(int cost, String name) {
+		super(cost, name);
 		init();
 	}
 	

@@ -12,7 +12,7 @@ public class PropertySpace extends Space {
 	}
 	
 	public PropertySpace(ImageIcon img, Property p) {
-		super(img);
+		super(img, p.getName());
 		init(p);
 	}
 	

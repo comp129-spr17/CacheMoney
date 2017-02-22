@@ -6,8 +6,12 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +35,7 @@ import GamePack.RailroadProperty;
 import GamePack.SizeRelated;
 import GamePack.Space;
 import GamePack.StandardProperty;
+import GamePack.UtilityProperty;
 import GamePack.Wildcard;
 
 
@@ -59,7 +64,7 @@ public class BoardPanel extends JPanel{
 	private ImageRelated chanceImg;
 	private ImageRelated communityImg;
 	private Space[][] spaces;
-	private PropertyButton propertyDialog;
+	private HashMap<String,PropertySpace> propertyInfo;
 	private Random rand;
 	private DicePanel dicePanel;
 	private ImageRelated imageRelated;
@@ -68,7 +73,7 @@ public class BoardPanel extends JPanel{
 	private Player[] players; 
 	private Wildcard chance;
 	private Wildcard communityChest;
-	
+
 	public BoardPanel(){
 		sizeRelated = SizeRelated.getInstance();
 		COMMUNITY_X = sizeRelated.getDicePanelX()+sizeRelated.getDicePanelWidth()-30;
@@ -82,7 +87,7 @@ public class BoardPanel extends JPanel{
 		board = new Board(spaces, pieces, 4);
 		setBoardBackgroundColor();
 		addHost();
-		
+
 		//addDiceBoard();
 	}
 
@@ -92,9 +97,9 @@ public class BoardPanel extends JPanel{
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
 		this.setBackground(boardBackgroundColor);
 	}
-	
-	
-	
+
+
+
 	private void tempInitPiece(){
 
 		pieces = new Piece[4];
@@ -111,107 +116,142 @@ public class BoardPanel extends JPanel{
 		COL_SPACE_WIDTH = ROW_SPACE_HEIGHT = sizeRelated.getSpaceRowHeight();
 	}
 	private void init(){
-		
+
 		paths = PathRelated.getInstance();
 		imageRelated = ImageRelated.getInstance();
 		setBackground(new Color(202, 232, 224));
-        setBounds(100,10,START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
-        
-        setLayout(null);
-        
-        rand = new Random();
+		setBounds(100,10,START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
+
+		setLayout(null);
+
+		propertyInfo = new HashMap<String,PropertySpace>();
+		rand = new Random();
 	}
 	private void importImgs(){
 		spaceImgsTop = new ImageIcon[8];
-        spaceImgsLeft = new ImageIcon[8];
-        spaceImgsRight = new ImageIcon[8];
-        spaceImgsBot = new ImageIcon[8];
-        spaceImgsCorner = new ImageIcon[4];
-        spaces = new Space[NUM_ROW][NUM_COL];
-        
-        
-        
-        chanceImg = new ImageRelated();
-        communityImg = new ImageRelated();
-        
-        chance = new Wildcard(chanceImg.resizeImage("src/Images/chanceImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), CHANCE_X, CHANCE_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 0, this);
-        communityChest = new Wildcard(communityImg.resizeImage("src/Images/communityImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), COMMUNITY_X, COMMUNITY_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 1, this);
-        
-        for(int i=0; i<8; i++){
-        	spaceImgsTop[i] = resizedImgs(paths.getSpaceImgTopPath()+i+".png",0);
-        	spaceImgsLeft[i] = resizedImgs(paths.getSpaceImgLeftPath()+i+".png",1);
-        	spaceImgsRight[i] = resizedImgs(paths.getSpaceImgRightPath()+i+".png",1);
-        	spaceImgsBot[i] = resizedImgs(paths.getSpaceImgBotPath()+i+".png",0);
-        }
-        for(int i=0; i<4; i++){
-        	spaceImgsCorner[i] = resizedImgs(paths.getSpaceImgCornerPath()+i+".png",2);
-        }
-        GoToJailSpace temp = null;
-        for(int i=0; i<NUM_ROW;i++){
-        	for(int j=0; j<NUM_COL; j++){
-        		if(i == 0){
-        			if(j==0){
-        				spaces[i][j] = new Space(spaceImgsCorner[0]); //Free Parking
-        				spaces[i][j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}else if(j==10){	//Jail
-        				temp = new GoToJailSpace(null, spaceImgsCorner[1]);
-        				spaces[i][j] = temp;
-        				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}else if (j == 5){	//Railroad
-        				spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new RailroadProperty(200));
-            			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}else{
-            			spaces[i][j] = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new StandardProperty(300));
-            			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}
-        			add(spaces[i][j]);
-        		}
-        		else if(i == 10){
-        			if(j==0){
-        				spaces[i][j] = new JailSpace(spaceImgsCorner[2]); //Jail
-        				temp.setJailSpace(spaces[i][j]);
-        				spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}else if(j==10){
-        				spaces[i][j] = new Space(spaceImgsCorner[3]); //GO
-        				spaces[i][j].setBounds(START_X+ COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}else if (j == 5){	//Railroad
-        				spaces[i][j] = new PropertySpace(spaceImgsBot[rand.nextInt(8)], new RailroadProperty(200));
-        				spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}else{
-            			spaces[i][j] = new PropertySpace(spaceImgsBot[rand.nextInt(8)],new StandardProperty(100));
-            			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-        			}
-        			add(spaces[i][j]);
-        		}
-        		else if(j == 0){
-        			if (i == 5){
-        				spaces[i][j] = new PropertySpace(spaceImgsLeft[rand.nextInt(8)], new RailroadProperty(200));
-        			}else{
-	    				spaces[i][j] = new PropertySpace(spaceImgsLeft[rand.nextInt(8)],new StandardProperty(200));
-        			}
-        			
-        			spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
-        			add(spaces[i][j]);
-        		}
-        		else if(j == 10){
-        			if (i == 5){
-        				spaces[i][j] = new PropertySpace(spaceImgsRight[rand.nextInt(8)], new RailroadProperty(200));
-        			}else{
-	    				spaces[i][j] = new PropertySpace(spaceImgsRight[rand.nextInt(8)],new StandardProperty(400));
-        			}
-        			
-        			spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
-    				add(spaces[i][j]);
-        		}
-        	}
-        }
-        add(chance);
-        add(communityChest);
+		spaceImgsLeft = new ImageIcon[8];
+		spaceImgsRight = new ImageIcon[8];
+		spaceImgsBot = new ImageIcon[8];
+		spaceImgsCorner = new ImageIcon[4];
+		spaces = new Space[NUM_ROW][NUM_COL];
 
-        propertyDialog = new PropertyButton();
-		propertyDialog.setSize(100,30);
-		propertyDialog.setLocation(300, 100);
-		add(propertyDialog);
+		BufferedReader standard = null;
+		BufferedReader railroad = null;
+		
+		try{   
+			File fileSP = new File("src/TextFiles/PropertyNames.txt");
+			File fileRR = new File("src/TextFiles/RailroadNames.txt");
+
+			standard = new BufferedReader(new FileReader(fileSP));
+			railroad = new BufferedReader(new FileReader(fileRR));
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+		chanceImg = new ImageRelated();
+		communityImg = new ImageRelated();
+
+		chance = new Wildcard(chanceImg.resizeImage("src/Images/chanceImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), CHANCE_X, CHANCE_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 0, this);
+		communityChest = new Wildcard(communityImg.resizeImage("src/Images/communityImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), COMMUNITY_X, COMMUNITY_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 1, this);
+
+		for(int i=0; i<8; i++){
+			spaceImgsTop[i] = resizedImgs(paths.getSpaceImgTopPath()+i+".png",0);
+			spaceImgsLeft[i] = resizedImgs(paths.getSpaceImgLeftPath()+i+".png",1);
+			spaceImgsRight[i] = resizedImgs(paths.getSpaceImgRightPath()+i+".png",1);
+			spaceImgsBot[i] = resizedImgs(paths.getSpaceImgBotPath()+i+".png",0);
+		}
+		for(int i=0; i<4; i++){
+			spaceImgsCorner[i] = resizedImgs(paths.getSpaceImgCornerPath()+i+".png",2);
+		}
+		
+		GoToJailSpace GTJ = null;
+		PropertySpace temp = null;
+		try{
+			for(int i=0; i<NUM_ROW;i++){
+				for(int j=0; j<NUM_COL; j++){
+					if(i == 0){
+						if(j==0){
+							spaces[i][j] = new Space(spaceImgsCorner[0]); //Free Parking
+							spaces[i][j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}else if(j == 8){
+							temp = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new UtilityProperty(200, "Water Works"));
+							spaces[i][j] = temp;
+							spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+							
+						}else if(j==10){	//Jail
+							GTJ = new GoToJailSpace(null, spaceImgsCorner[1]);
+							spaces[i][j] = GTJ;
+							spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}else if (j == 5){	//Railroad
+							temp = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new RailroadProperty(200, railroad.readLine()));
+							spaces[i][j] = temp;
+							spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}else{
+							temp = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new StandardProperty(300, standard.readLine()));
+							spaces[i][j] = temp;
+							spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}
+						propertyInfo.put(spaces[i][j].getName(), temp);
+						add(spaces[i][j]);
+					}
+					else if(i == 10){
+						if(j==0){
+							spaces[i][j] = new JailSpace(spaceImgsCorner[2]); //Jail
+							GTJ.setJailSpace(spaces[i][j]);
+							spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}else if(j==10){
+							spaces[i][j] = new Space(spaceImgsCorner[3]); //GO
+							spaces[i][j].setBounds(START_X+ COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}else if (j == 5){	//Railroad
+							temp = new PropertySpace(spaceImgsBot[rand.nextInt(8)], new RailroadProperty(200, railroad.readLine())); 
+							spaces[i][j] = temp;
+							spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}else{
+							temp = new PropertySpace(spaceImgsBot[rand.nextInt(8)],new StandardProperty(100, standard.readLine()));
+							spaces[i][j] = temp;
+							spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						}
+						propertyInfo.put(spaces[i][j].getName(), temp);
+						add(spaces[i][j]);
+					}
+					else if(j == 0){
+						if(i == 8){
+							temp = new PropertySpace(spaceImgsLeft[rand.nextInt(8)], new UtilityProperty(200, "Electric Company"));
+							spaces[i][j] = temp;
+						}else if (i == 5){
+							temp = new PropertySpace(spaceImgsLeft[rand.nextInt(8)], new RailroadProperty(200, railroad.readLine()));
+							spaces[i][j] = temp;
+						}else{
+							temp = new PropertySpace(spaceImgsLeft[rand.nextInt(8)],new StandardProperty(200, standard.readLine()));
+							spaces[i][j] = temp;
+						}
+
+						spaces[i][j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
+						propertyInfo.put(spaces[i][j].getName(), temp);
+						add(spaces[i][j]);
+					}
+					else if(j == 10){
+						if (i == 5){
+							temp  = new PropertySpace(spaceImgsRight[rand.nextInt(8)], new RailroadProperty(200, railroad.readLine()));
+							spaces[i][j] = temp;
+						}else{
+							temp = new PropertySpace(spaceImgsRight[rand.nextInt(8)],new StandardProperty(400,standard.readLine()));
+							spaces[i][j] = temp;
+						}
+
+						spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (i-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
+						propertyInfo.put(spaces[i][j].getName(), temp);
+						add(spaces[i][j]);
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.out.println("BufferedReader failed to read from file");
+			e.printStackTrace();
+		}
+		add(chance);
+		add(communityChest);
 	}
 	private ImageIcon resizedImgs(String path, int type){
 		int width,height;
@@ -231,13 +271,13 @@ public class BoardPanel extends JPanel{
 			height = ROW_SPACE_HEIGHT;
 		}
 		return imageRelated.resizeImage(path, width, height);
-		
+
 	}
 	private void addDiceBoard(){
 		dicePanel = new DicePanel(this,board);
 		add(dicePanel);
 	}
-	
+
 	private void addHost(){
 		addDiceBoard();
 		Timer t = new Timer();
@@ -246,17 +286,17 @@ public class BoardPanel extends JPanel{
 			@Override
 			public void run() {
 				try {
-					
+
 					MHost host = new MHost(dicePanel);
-					
+
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
-			
+
 		}, 0);
-		
+
 	}
 }

@@ -9,12 +9,21 @@ import javax.swing.JLabel;
 public class Space extends JLabel{
 	private Piece[] onSpace;
 	private SizeRelated s;
+	private String name;
+	
 	public Space() {
 		init();
 	}
+	
 	public Space(ImageIcon img){
 		init();
 		setIcon(img);
+	}
+	
+	public Space(ImageIcon img, String name){
+		init();
+		setIcon(img);
+		this.name = name;
 	}
 	private void init(){
 		onSpace = new Piece[4];
@@ -23,6 +32,14 @@ public class Space extends JLabel{
 	
 	public boolean isValidSpace() {
 		return false;
+	}
+	
+	public String getName()
+	{
+		if (name != null)
+			return name;
+		
+		return "No Name Associated";
 	}
 	
 //	public boolean isPieceOnSpace(String pieceName) {
