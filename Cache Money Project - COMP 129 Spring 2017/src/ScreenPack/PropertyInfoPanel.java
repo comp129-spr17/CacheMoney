@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import GamePack.Board;
 import GamePack.Property;
 import GamePack.PropertySpace;
+import GamePack.Space;
 
 public class PropertyInfoPanel extends JPanel{
 	private JPanel panelToSwitchFrom;
@@ -21,15 +23,12 @@ public class PropertyInfoPanel extends JPanel{
 	private JButton buyButton;
 	private JButton auctionButton;
 	private JButton hideButton;
-	private BoardPanel bPanel;
-	private Board board;
+	private HashMap<String,PropertySpace> propertyInfo;
 	
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, BoardPanel bPanel, Board board)
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo)
 	{
 		this.panelToSwitchFrom = panelToSwitchFrom;
-		this.bPanel = bPanel;
-		this.board = board;
-		//this.info = info;
+		this.propertyInfo = propertyInfo;
 		init();
 	}
 			
@@ -41,7 +40,6 @@ public class PropertyInfoPanel extends JPanel{
 		auctionButton = new JButton();
 		hideButton = new JButton();
 		hideButton.setBounds(50,50, 100, 50);
-		//loadPropertyInfo(info.getPropertyInfo());
 		this.setSize(panelToSwitchFrom.getSize());
 		this.setLocation(panelToSwitchFrom.getLocation());
 		this.setVisible(false);
@@ -58,9 +56,10 @@ public class PropertyInfoPanel extends JPanel{
 		name.setText(info.getName());
 	}
 	
-	public void executeSwitch()
+	public void executeSwitch(String name)
 	{
-		add(name);
+		loadPropertyInfo(propertyInfo.get(name).getPropertyInfo());
+		add(this.name);
 		add(hideButton);
 		this.setBackground(Color.white);
 		hidePreviousPanel();

@@ -91,17 +91,15 @@ public class Board {
 		default:
 			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();
-				return "??? Railroad";
 			}
 			else{
 				// IF PROPERTY IS UNOWNED
 				 Sounds.landedOnUnownedProperty.playSound();
-				 return "??? Property";
 				 // ELSE IF PROPERTY IS OWNED
 				 // Sounds.landedOnOwnedProperty.playSound();
 				 // return "OWNED_PROPERTY";
-				
 			}
+			return boardTracker[playerPosition[player]].getName();
 			
 		}
 	}

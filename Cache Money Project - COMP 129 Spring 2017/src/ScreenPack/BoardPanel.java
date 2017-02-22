@@ -278,6 +278,11 @@ public class BoardPanel extends JPanel{
 		add(dicePanel);
 	}
 
+	public HashMap<String,PropertySpace> getMappings()
+	{
+		return propertyInfo;
+	}
+	
 	private void addHost(){
 		addDiceBoard();
 		Timer t = new Timer();
