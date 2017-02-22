@@ -336,10 +336,9 @@ public class DicePanel extends JPanel{
 		}
 		
 		sendSpaceLandedOn(board.getSpacePlayerLandedOn(previous));
-		
-		propertyPanel.executeSwitch();
-		
+				
 		if (!isSame){
+			propertyPanel.executeSwitch();
 			endTurnButton.setVisible(true);
 		}
 		else{
