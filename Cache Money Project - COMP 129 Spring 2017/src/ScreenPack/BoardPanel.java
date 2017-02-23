@@ -75,8 +75,8 @@ public class BoardPanel extends JPanel{
 	private Wildcard chance;
 	private Wildcard communityChest;
 
-	public BoardPanel(Player[] player){
-
+	public BoardPanel(Player[] player, DicePanel diceP){
+		dicePanel = diceP;
 		players = player;
 		sizeRelated = SizeRelated.getInstance();
 		COMMUNITY_X = sizeRelated.getDicePanelX()+sizeRelated.getDicePanelWidth()-30;
@@ -298,7 +298,7 @@ public class BoardPanel extends JPanel{
 
 	}
 	private void addDiceBoard(){
-		dicePanel = new DicePanel(this,board);
+		dicePanel.setBoard(this,board);
 		add(dicePanel);
 	}
 

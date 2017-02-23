@@ -20,6 +20,7 @@ public class GameScreen extends JFrame{
 	private int myComp_width;
 	private int myComp_height;
 	private SizeRelated sizeRelated;
+	private DicePanel dicePanel;
 	private Player[] players;
 	private JLabel[] cash500image;
 	private JLabel[] cash50image;
@@ -272,7 +273,9 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		BoardPanel boardPanel = new BoardPanel(players);
+		dicePanel = new DicePanel();
+		BoardPanel boardPanel = new BoardPanel(players,dicePanel);
+		
 		mainPanel.add(boardPanel);
 		addXMarkToMainPanel();
 		addLabelsToMainPanel();

@@ -51,20 +51,19 @@ public class DicePanel extends JPanel{
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 
-	public DicePanel(BoardPanel bPanel, Board board){
-		init(bPanel,board);
+	public DicePanel(){
+		init();
 	}
-	private void init(BoardPanel bPanel, Board board){
+	private void init(){
 		
 		// FOR NOW, WE'RE CREATING A NEW HOST TO SEND STUFF TO.
 		
 		// TODO: NEED A CHAT SCREEN IN THIS PANEL FOR EXTRA FIREWORKS AND SPARKLES
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
-		this.bPanel = bPanel;
+		//
 		paths = PathRelated.getInstance();
 		sizeRelated = SizeRelated.getInstance();
-		this.board = board;
 		this.setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		setLayout(null);
 		rand = new Random();
@@ -73,7 +72,7 @@ public class DicePanel extends JPanel{
 		dCel.setSize(this.getSize());
 		dCel.setLocation(this.getLocation().x, this.getLocation().y-5);
 		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings());
-		bPanel.add(propertyPanel);
+		
 		addTurnLabel();
 		addRollButton();
 		addEndTurnButton();
@@ -86,7 +85,11 @@ public class DicePanel extends JPanel{
 		setDiceBackgroundColor();
 		
 	}
-	
+	public void setBoard(BoardPanel boardP, Board board){
+		this.bPanel = boardP;
+		bPanel.add(propertyPanel);
+		this.board = board;
+	}
 	private void setDiceBackgroundColor() {
 		Color boardBackgroundColor = new Color(180, 240, 255); // VERY LIGHT BLUE
 		this.setBackground(boardBackgroundColor);
