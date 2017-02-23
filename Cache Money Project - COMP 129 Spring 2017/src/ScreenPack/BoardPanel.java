@@ -70,7 +70,6 @@ public class BoardPanel extends JPanel{
 	private DicePanel dicePanel;
 	private ImageRelated imageRelated;
 	private Board board;
-	private Piece[] pieces;
 	private Player[] players; 
 	private Wildcard chance;
 	private Wildcard communityChest;
@@ -85,7 +84,7 @@ public class BoardPanel extends JPanel{
 		init();
 		importImgs();
 		tempInitPiece();
-		board = new Board(spaces, pieces, 4);
+		board = new Board(spaces, players, 4);
 		setBoardBackgroundColor();
 		addHost();
 
@@ -103,13 +102,10 @@ public class BoardPanel extends JPanel{
 
 	private void tempInitPiece(){
 
-		pieces = new Piece[4];
 		players = new Player[4];
 		for(int i=0; i<4; i++)
 		{
-			pieces[i] = new Piece(i);
-			players[i] = new Player();
-			players[i].setPlayerPiece(pieces[i]);
+			players[i] = new Player(i);
 		}
 	}
 	private void setSize(){

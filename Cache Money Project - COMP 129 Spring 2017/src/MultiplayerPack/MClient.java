@@ -22,7 +22,7 @@ public class MClient {
 	private static boolean isServerUp;
 	private static boolean isConnected;
 	private DicePanel d;
-	
+	private Socket socket;
 	public MClient(boolean isHostClient, DicePanel d) throws IOException {
 		this.d = d;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -54,11 +54,11 @@ public class MClient {
 
 	private void connectToServer(String ip, int port, boolean isHostClient)
 			throws UnknownHostException, IOException {
-		Socket s = null;
+		socket = null;
 		System.out.println("Connecting to the server...");
 		
 		try{
-			s = new Socket(ip, port);
+			socket = new Socket(ip, port);
 			//Sounds.buttonConfirm.playSound();
 			System.out.println("Successfully connected to server at\nip: " + ip + " with port: " + port + "!\n");
 			isConnected = true;
@@ -66,7 +66,7 @@ public class MClient {
 //				s.close();
 //				return;
 //			}
-			showChatScreen(s, ip, port, isHostClient, optionBox.getName());
+			showChatScreen(socket, ip, port, isHostClient, optionBox.getName());
 		}catch(UnknownHostException e){
 			//e.printStackTrace();
 			System.out.println("Unable to connect to the server. Please Check your IP and port number.");
@@ -99,6 +99,9 @@ public class MClient {
 //	        	isServerUp = false;
 //	        }
         }
+	}
+	private void sendDiceResult(int fDice, int sDice){
+		
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;

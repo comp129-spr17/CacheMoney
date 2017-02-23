@@ -54,11 +54,13 @@ public class GameScreen extends JFrame{
 	
 	public GameScreen(){
 		//setAlwaysOnTop(true);
+
+		scaleBoardToScreenSize();
+		
 		createMoniesLabels();
 		createAndAssignValuesToMoniesLabels();
 		setPositionOfBalances();
 		createAndManageXMarkAndMoniesLabels();
-		scaleBoardToScreenSize();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init();
 		setGameScreenBackgroundColor();
@@ -75,6 +77,8 @@ public class GameScreen extends JFrame{
 		myComp_height = (int)screenSize.getDisplayMode().getHeight();
 		myComp_width = (int)screenSize.getDisplayMode().getWidth();
 		setSize(myComp_height + 400, myComp_height - 100);
+		sizeRelated = SizeRelated.getInstance();
+		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
 	}
 	private void createAndManageXMarkAndMoniesLabels() {
 		for(int b=0; b < 24; b++)
@@ -158,9 +162,10 @@ public class GameScreen extends JFrame{
 		}
 	}
 	private void createAndAssignValuesToMoniesLabels() {
+		players = new Player[4];
 		for(int i=0; i<4; i++)
 		{
-			players[i] = new Player();
+			players[i] = new Player(i);
 			distributeCashToPlayers(i);
 			createPlayerCashLabels(i);
 			setFontOfMoniesAndLabels(i);
@@ -263,11 +268,10 @@ public class GameScreen extends JFrame{
 	}
 	
 	private void init(){
+
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		sizeRelated = SizeRelated.getInstance();
-		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
 		BoardPanel boardPanel = new BoardPanel();
 		mainPanel.add(boardPanel);
 		addXMarkToMainPanel();

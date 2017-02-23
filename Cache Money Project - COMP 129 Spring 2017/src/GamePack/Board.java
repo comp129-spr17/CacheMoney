@@ -24,27 +24,37 @@ public class Board {
 	private Space[] boardTracker;
 	private int[] playerPosition;
 	private Timer pieceMovingAnim;
-	private Piece[] pieces;
+	private Player[] players;
 	private boolean isDone;
-	public Board(Space[][] board, Piece[] pieces, int numP) {
-		init(board,pieces,numP);
+	private boolean[] propertyCheck;
+	public Board(Space[][] board, Player[] players, int numP) {
+		init(board,players,numP);
 		
 		
 	}
-	private void init(Space[][] board, Piece[] pieces, int numP){
-		this.pieces = pieces;
+	private void init(Space[][] board, Player[] pieces, int numP){
+		this.players = pieces;
 		numPlayers = numP;
 		boardTracker = new Space[40];
 		playerPosition = new int[numPlayers];
 		pieceMovingAnim = new Timer();
-
+		propertyCheck = new boolean[40];
+		initPropertyCheck();
 		setBoardTrack(board);
 		placePiecesToFirst();
 		
 	}
+	private void initPropertyCheck(){
+		for(int i=0; i<40; i++)
+			propertyCheck[i] = true;
+		propertyCheck[HOME] = propertyCheck[JAIL] = propertyCheck[PARKING] = propertyCheck[GO_TO_JAIL] = 
+				propertyCheck[INCOME_TAX] =	propertyCheck[JEWELRY_TAX] = propertyCheck[CHANCE_BOT] = 
+					propertyCheck[CHANCE_TOP] = propertyCheck[CHANCE_RIGHT] = propertyCheck[COMCHEST_LEFT] = 
+					propertyCheck[COMCHEST_RIGHT] = false;
+	}
 	private void placePiecesToFirst(){
 		for(int i=0; i<numPlayers; i++){
-			boardTracker[0].receivePiece(pieces[i], i);
+			boardTracker[0].receivePiece(players[i].getPiece(), i);
 		}
 	}
 	public void movePiece(int player, int diceResult) {
@@ -105,7 +115,6 @@ public class Board {
 				 // return "OWNED_PROPERTY";
 			}
 			return boardTracker[playerPosition[player]].getName();
-			
 		}
 	}
 	
@@ -122,7 +131,7 @@ public class Board {
 					playerPosition[player]++;
 					boardTracker[playerPosition[player]-1].removePiece(player);
 					checkIfLastSpace(player);
-					boardTracker[playerPosition[player]].receivePiece(pieces[player], player);
+					boardTracker[playerPosition[player]].receivePiece(players[player].getPiece(), player);
 					if (playerPosition[player] == 0){
 						// PLAYER PASSED GO
 						//Sounds.passedGo.playSound();
@@ -157,29 +166,18 @@ public class Board {
 					e.printStackTrace();
 				}
 				// PLAYER IS SENT TO JAIL HERE IF THEY LAND ON THAT SPACE
-				playerPosition[player] = boardTracker[playerPosition[player]].landOnSpace(pieces[player], playerPosition[player]);
+				playerPosition[player] = boardTracker[playerPosition[player]].landOnSpace(players[player].getPiece(), playerPosition[player]);
 				
 				
 			}
 		}, 1200);
 	}
 	private void checkIfLastSpace(int player){
-		//if(playerPosition[player] == 40)
-		//	playerPosition[player] = 0;
 		playerPosition[player] = playerPosition[player] % 40;
 	}
 	
 	public boolean isPlayerInPropertySpace(int player)
 	{
-		int current = playerPosition[player];
-		
-		if (current == HOME || current == JAIL || current == PARKING || 
-				current == GO_TO_JAIL || current == INCOME_TAX || current == JEWELRY_TAX ||
-				current == CHANCE_BOT || current == CHANCE_TOP || current == CHANCE_RIGHT ||
-				current == COMCHEST_LEFT || current == COMCHEST_RIGHT)
-			return false;
-		
-		
-		return true;
+		return propertyCheck[playerPosition[player]];
 	}
 }

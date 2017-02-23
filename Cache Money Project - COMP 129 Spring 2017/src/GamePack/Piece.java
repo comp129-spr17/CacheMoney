@@ -10,7 +10,6 @@ public class Piece extends JLabel{
 	private ImageRelated imageRelated;
 	public Piece(int player) {
 		this.player = player;
-		playerClass = new Player();
 		init();
 	}
 	public int getPlayer(){
