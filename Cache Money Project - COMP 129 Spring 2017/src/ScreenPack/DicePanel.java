@@ -16,6 +16,8 @@ import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -23,11 +25,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class DicePanel extends JPanel{
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private JButton rollButton;
+	private JTextField overrideDiceRoll;
 	private JButton endTurnButton;
 	private JLabel turnLabel;
 	private Dice dices[]; 
@@ -76,6 +80,7 @@ public class DicePanel extends JPanel{
 		bPanel.add(propertyPanel);
 		addTurnLabel();
 		addRollButton();
+		addOverrideDiceRoll();
 		addEndTurnButton();
 		result = new int[2];
 		diceRes = new int[2];
@@ -128,6 +133,12 @@ public class DicePanel extends JPanel{
 		rollButton.setBackground(Color.WHITE);
 		add(rollButton);
 	}
+	private void addOverrideDiceRoll() {
+		this.overrideDiceRoll = new JTextField();
+		overrideDiceRoll.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*2/5, 100, 50);
+		add(overrideDiceRoll);
+	}
+	
 	private void addEndTurnButton() {
 		endTurnButton = new JButton("End Turn");
 		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
@@ -214,6 +225,7 @@ public class DicePanel extends JPanel{
 		changeTurn();
 		Sounds.turnBegin.playSound();
 		rollButton.setVisible(true);
+		overrideDiceRoll.setVisible(true);
 		turnLabel.setVisible(true);
 		endTurnButton.setVisible(false);
 		dices[0].hideDice();
@@ -250,6 +262,7 @@ public class DicePanel extends JPanel{
 		dices[1].showDice();
 		Sounds.randomDice.playSound();
 		rollButton.setVisible(false);
+		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
 		rollDiceAnim(diceRes1,diceRes2);
 	}
@@ -286,6 +299,12 @@ public class DicePanel extends JPanel{
 	
 	private void movePiece(){
 		sum = result[0] + result[1];
+		
+		if (!overrideDiceRoll.getText().isEmpty()){
+			sum = Integer.parseInt(overrideDiceRoll.getText());
+
+		}
+		
 //		sendMessageToServer("Player " + (current + 1) + " rolled " + result[0] + " and " + result[1] + "!" , true);
 		
 		board.movePiece(isSame ? previous : current, sum);
@@ -367,6 +386,7 @@ public class DicePanel extends JPanel{
 		}
 		else{
 			rollButton.setVisible(true);
+			overrideDiceRoll.setVisible(true);
 		}
 	}
 	
@@ -378,6 +398,7 @@ public class DicePanel extends JPanel{
 	
 	public int[] getResult(){
 		rollButton.setEnabled(true);
+		overrideDiceRoll.setEnabled(true);
 		return result;
 	}
 	public OutputStream getOutputStream() {
