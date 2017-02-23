@@ -22,6 +22,8 @@ public class PropertyInfoPanel extends JPanel{
 	//private PropertySpace info;
 	private ArrayList<JLabel> rentValues;
 	private JLabel name;
+	private JLabel buyingPrice;
+	private JLabel mortgagePrice;
 	private JButton buyButton;
 	private JButton auctionButton;
 	private JButton hideButton;
@@ -46,18 +48,20 @@ public class PropertyInfoPanel extends JPanel{
 	
 	private void loadPropertyInfo(Property info)
 	{
+		rentValues = new ArrayList<JLabel>();
 		for(Integer a:info.getRentRange())
 		{
 			rentValues.add(new JLabel(a.toString()));
 		}
-		name.setText(info.getName());
+		
+		name = new JLabel(info.getName());		
+		buyingPrice = new JLabel(Integer.toString(property.getBuyingPrice()));
+		mortgagePrice = new JLabel(Integer.toString(property.getMortgageValue()));
 	}
 	
 	public void executeSwitch(String name)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
-		rentValues = new ArrayList<JLabel>();
-		this.name = new JLabel();
 		loadPropertyInfo(property);
 		renderPropertyInfo();
 		hidePreviousPanel();
@@ -81,6 +85,12 @@ public class PropertyInfoPanel extends JPanel{
 		addHideButton();
 		addListeners();
 		
+	
+		add(buyingPrice);
+		for(JLabel a:rentValues){
+			add(a);
+		}
+		add(mortgagePrice);
 		
 	}
 	
