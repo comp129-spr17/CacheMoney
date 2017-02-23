@@ -78,7 +78,6 @@ public class GameScreen extends JFrame{
 		myComp_width = (int)screenSize.getDisplayMode().getWidth();
 		setSize(myComp_height + 400, myComp_height - 100);
 		sizeRelated = SizeRelated.getInstance();
-		sizeRelated.setScreen_Width_Height(myComp_width, myComp_height);
 	}
 	private void createAndManageXMarkAndMoniesLabels() {
 		for(int b=0; b < 24; b++)

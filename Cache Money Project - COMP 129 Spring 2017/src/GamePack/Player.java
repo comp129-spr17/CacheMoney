@@ -94,6 +94,103 @@ public class Player {
 	}
 	
 	public void pay(int cost) {
-		totalmonies -= cost;
+		int modMoney = 0;
+		if (totalmonies >= cost)
+		{
+			if (cost >= 500)
+			{
+				modMoney = cost % 500;
+				for (int i = 0; i < modMoney; i++)
+				{
+					if(fivehunneds > 0)
+					{
+						setHunneds(fivehunneds-1);
+						totalmonies -= 500;
+						cost = cost - 500;
+					}
+				}
+			}
+			if (cost < 500 && cost >= 100)
+			{
+				modMoney = cost % 100;
+				for (int i = 0; i < modMoney; i++)
+				{
+					if (hunneds > 0)
+					{
+						setHunneds(hunneds-1);
+						totalmonies -= 100;
+						cost = cost - 100;
+					}
+				}
+			}
+			if (cost < 100 && cost >= 50)
+			{
+				modMoney = cost % 50;
+				for (int i = 0; i < modMoney; i++)
+				{
+					if (fitties > 0)
+					{
+						setHunneds(fitties-1);
+						totalmonies -= 50;
+						cost = cost - 50;
+					}
+				}
+			}
+			if (cost < 50 && cost >= 20)
+			{
+				modMoney = cost % 20;
+				for (int i = 0; i < modMoney; i++)
+				{
+					if (twennies > 0)
+					{
+						setHunneds(twennies-1);
+						totalmonies -= 20;
+						cost = cost - 20;
+					}
+				}
+			}
+			if (cost < 20 && cost >= 10)
+			{
+				modMoney = cost % 10;
+				for (int i = 0; i < modMoney; i++)
+				{
+					if (tens > 0)
+					{
+						setHunneds(tens-1);
+						totalmonies -= 10;
+						cost = cost - 10;
+					}
+				}
+			}
+			if (cost < 10 && cost >= 5)
+			{
+				modMoney = cost % 5;
+				for (int i = 0; i < modMoney; i++)
+				{
+					if (fives > 0)
+					{
+						setHunneds(fives-1);
+						totalmonies -= 5;
+						cost = cost - 5;
+					}
+				}
+			}
+			if (cost < 5 && cost >= 1)
+			{
+				for (int i = 0; i < 1; i++)
+				{
+					if (ones > 0)
+					{
+						setHunneds(ones-1);
+						totalmonies -= 1;
+						cost = cost - 1;
+					}
+				}
+			}
+		}
+		else
+		{
+			System.out.print("You owe more money than you have!"); //Need to implement mortage backup stuff
+		}
 	}
 }

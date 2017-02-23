@@ -1,5 +1,7 @@
 package MultiplayerPack;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.BindException;
 import java.net.InetAddress;
@@ -19,8 +21,7 @@ import java.util.TimerTask;
 import ScreenPack.*;
 
 public class MHost {
-	private static ArrayList<MElements> users;
-	private static ArrayList<PrintWriter> usersWriter;
+	private static ArrayList<OutputStream> usersOutput;
 	private static ArrayList<MThread> runningClients;
 	private static MElements server;
 	private static int PORT_NUM = 1234;
@@ -54,8 +55,7 @@ public class MHost {
 		createHostClient(ip, listener.getLocalPort());
 		
 		
-        users = new ArrayList<>();
-        usersWriter = new ArrayList<>();
+        usersOutput = new ArrayList<>();
         server = new MElements("Server", "");
         runningClients = new ArrayList<>();
         closingServerAsking();
@@ -63,7 +63,7 @@ public class MHost {
 
         while(true){
         	try{
-            	MThread aChatThread = new MThread(listener.accept(), users, usersWriter,server, ip);
+            	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip);
             	runningClients.add(aChatThread);
                 aChatThread.start();
 
@@ -133,7 +133,7 @@ public class MHost {
 					while (hostClient.getIsServerUp()){
 						//nothing
 					}
-					closeServer();
+//					closeServer();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

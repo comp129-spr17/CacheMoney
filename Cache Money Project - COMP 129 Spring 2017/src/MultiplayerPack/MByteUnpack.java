@@ -14,6 +14,7 @@ public final class MByteUnpack {
 	private ArrayList<Object> resultList;
 	private HashMap<String, GetResult> GetResults;
 	private UnicodeForServer UNI;
+	private String receivedCode;
 	private MByteUnpack(){
 		init();
 	}
@@ -29,7 +30,7 @@ public final class MByteUnpack {
 	private void initUnicodeToMethod(){
 		GetResults.put(UNI.DICE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackDiceResult(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackDiceReplyResult(result);
+		GetResults.put(UNI.PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyResult(result);
 		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
@@ -48,14 +49,14 @@ public final class MByteUnpack {
 	}
 	public void unpackDiceResult(byte[] result){
 		try {
-			resultList.add(dInputStream.readInt());
+//			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	public void unpackDiceReplyResult(byte[] result){
+	public void unpackPropertyResult(byte[] result){
 		try {
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readChar());
@@ -65,9 +66,16 @@ public final class MByteUnpack {
 		}
 		
 	}
-	public ArrayList<Object> getResult(byte[] result, String Unicode){
+	public ArrayList<Object> getResult(byte[] result){
 		resetAndReceive(result);
-		return GetResults.get(Unicode).getResult(result);
+		try {
+			receivedCode = dInputStream.readUTF();
+			resultList.add(receivedCode);
+			return GetResults.get(receivedCode).getResult(result);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

@@ -1,7 +1,12 @@
 package MultiplayerPack;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -11,28 +16,32 @@ import java.util.TimerTask;
 public class MThread extends Thread{
 	private Socket socket;
 	private String name;
-	private ArrayList<MElements> users;
-	private ArrayList<PrintWriter> usersWriter;
-	private BufferedReader readFromUser;
+	private ArrayList<OutputStream> usersOutput;
+	private InputStream readFromUser;
 	private int pos;
-	private String msg;
-	private MElements server;
+	private byte[] msg;
 	private final static String CLOSING_CODE = "QOSKDJFOAOSJW";
 	private boolean serverDisconnected;
 	private String hostName;
+	private MByteUnpack mUnpack;
 	
-	public MThread(Socket s, ArrayList<MElements> users, ArrayList<PrintWriter> usersWriter, MElements server, String hostName){
+	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName){
 		socket = s;
-		this.users = users;
-		this.usersWriter = usersWriter;
-		this.server = server;
+		this.usersOutput = usersOutput;
 		this.hostName = hostName;
+		mUnpack = MByteUnpack.getInstance();
 		try {
-			readFromUser = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			readFromUser = s.getInputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		msg=null;
+		try {
+			usersOutput.add(s.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		msg=new byte[8192];
 		/*
 		try {
 			System.out.println("Connection from : " + s.getOutputStream());
@@ -46,86 +55,34 @@ public class MThread extends Thread{
 	}
 	public void run(){
 		try{
-			disconnectedCheck();
-			getNames();
 			while(true){
 				getMsg();
-				if(serverDisconnected){
-					break;
-				}
-				if(msg.equals(CLOSING_CODE)){
-					showMsgToUsers(true, name+" has left the chatroom.");
-					if (name == hostName){
-						showMsgToUsers(true, "Server Closed.");
-					}
-					break;
-				}
-				else if (msg.length() > 6 && msg.substring(0, 6).equals("Server")){ // CHECKS IF IT'S A MESSAGE FROM SERVER
-					// TODO: MAKE A BETTER MESSAGE CODE OTHER THAN "Server" TO DETECT IT'S SERVER SENDING A MESSAGE.
-					// CHECK sendMessageToServer() IN DicePanel.java BEFORE CHANGING THE MESSAGE CODE 
-					showMsgToUsers(true,msg.substring(6));
-				}
-				else{ // ELSE, IT'S A MESSAGE BEING SENT TO ANOTHER USER
-					showMsgToUsers(false,msg); 
-				}
-				
+				showMsgToUsers(msg);
+//				ArrayList<Object> result = mUnpack.getResult(msg);
+//	    		System.out.println((String)result.get(0));
+//	    		for(int i=1; i<result.size(); i++)
+//	    			System.out.println((Integer)result.get(i));
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-//			users.remove(pos);
-//			usersWriter.remove(pos);
-			//System.out.println(name+" has left the chatroom.");
-		}
-	}
-	private void disconnectedCheck(){
-		Timer aTimer = new Timer();
-		aTimer.schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				if(serverDisconnected){
-					//showMsgToUsers(true, "Server is disconnected.");
-					try {
-						socket.close();
-					} catch (IOException e) {
-						System.out.println("UNABLE TO CLOSE THE SOCKET.");
-						e.printStackTrace();
-					}
-				}
-			}
-		}, 0, 1000);
-	}
-	private void getNames(){
-		try {
-			name = readFromUser.readLine();
-			users.add(new MElements(name,""));
-			usersWriter.add(new PrintWriter(socket.getOutputStream(),true));
-			pos = users.size()-1;
-			showMsgToUsers(true,name+" has entered.");
-		} catch (IOException e) {
-//			e.printStackTrace();
 		}
 	}
 	private void getMsg(){
 		try {
-			msg = readFromUser.readLine();
+			readFromUser.read(msg);
+			
 		} catch (IOException e) {
 //			e.printStackTrace();
-			
 		}
 	}
-	private void showMsgToUsers(Boolean fromSever, String msg){
-		msg += "\n";
-		if(fromSever)
-			server.setMsg(msg);
-		else
-			users.get(pos).setMsg(msg);
-		for(PrintWriter writer:usersWriter){
-			if(fromSever)
-				writer.println(server.getName()+"\n   "+msg);
-			else
-				writer.println(name + "\n   "+msg);
+	private void showMsgToUsers(byte[] msg){
+		for(OutputStream output:usersOutput){
+			try {
+				output.write(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
