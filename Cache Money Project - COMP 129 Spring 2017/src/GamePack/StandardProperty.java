@@ -7,7 +7,6 @@ public class StandardProperty extends Property{
 	
 	public StandardProperty(int cost, String name) {
 		super(cost, name);		
-		init();
 	}
 	
 	@Override

@@ -13,7 +13,7 @@ public abstract class Property {
 	{
 		this.buyingPrice = cost;
 		this.name = name;
-		rentValues = new ArrayList<Integer>();
+		rentValues = new ArrayList<Integer>(5);
 		init();
 	}
 

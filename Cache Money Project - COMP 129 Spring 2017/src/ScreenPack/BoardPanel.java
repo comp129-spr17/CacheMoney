@@ -35,6 +35,7 @@ import GamePack.RailroadProperty;
 import GamePack.SizeRelated;
 import GamePack.Space;
 import GamePack.StandardProperty;
+import GamePack.TaxSpace;
 import GamePack.UtilityProperty;
 import GamePack.WildSpace;
 import GamePack.Wildcard;
@@ -174,7 +175,7 @@ public class BoardPanel extends JPanel{
 					temp = null;
 					if(i == 0){
 						if(j==0){
-							spaces[i][j] = new Space(spaceImgsCorner[0]); //Free Parking
+							spaces[i][j] = new Space(spaceImgsCorner[0],"Free Parking"); //Free Parking
 							spaces[i][j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
 							add(spaces[i][j]);
 							continue;
@@ -212,11 +213,17 @@ public class BoardPanel extends JPanel{
 						}else if (j == 3){
 							WildSpace ws = new WildSpace(spaceImgsBot[rand.nextInt(8)], "Chance");
 							spaces[i][j] = ws;
+						}else if(j==6){
+							TaxSpace ts = new TaxSpace(spaceImgsBot[rand.nextInt(8)], "Income Tax");
+							spaces[i][j] = ts;
 						}else if(j==10){
 							spaces[i][j] = new Space(spaceImgsCorner[3]); //GO
 						}else if (j == 5){	//Railroad
 							temp = new PropertySpace(spaceImgsBot[rand.nextInt(8)], new RailroadProperty(200, railroad.readLine())); 
 							spaces[i][j] = temp;
+						}else if(j == 8){
+							WildSpace ws = new WildSpace(spaceImgsBot[rand.nextInt(8)], "Community Chest");
+							spaces[i][j] = ws;
 						}else{
 							temp = new PropertySpace(spaceImgsBot[rand.nextInt(8)],new StandardProperty(100, standard.readLine()));
 							spaces[i][j] = temp;
@@ -259,6 +266,9 @@ public class BoardPanel extends JPanel{
 						}else if (i == 6){
 							WildSpace ws = new WildSpace(spaceImgsRight[rand.nextInt(8)], "Chance");
 							spaces[i][j] = ws;
+						}else if(i == 8){
+							TaxSpace ts = new TaxSpace(spaceImgsRight[rand.nextInt(8)],"Luxurt Tax");
+							spaces[i][j] = ts;							
 						}else{
 							temp = new PropertySpace(spaceImgsRight[rand.nextInt(8)],new StandardProperty(400,standard.readLine()));
 							spaces[i][j] = temp;

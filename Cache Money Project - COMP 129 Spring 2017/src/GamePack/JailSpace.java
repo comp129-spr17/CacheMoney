@@ -13,7 +13,7 @@ public class JailSpace extends Space {
 	}
 
 	public JailSpace(ImageIcon img) {
-		super(img);
+		super(img, "Jail");
 		init();
 	}
 	

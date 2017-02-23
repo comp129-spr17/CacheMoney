@@ -92,7 +92,7 @@ public class Board {
 		case JEWELRY_TAX:
 			Sounds.money.stopSound();
 			Sounds.money.playSound();
-			return "Jewlery Tax";
+			return "Jewelry Tax";
 		default:
 			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();
