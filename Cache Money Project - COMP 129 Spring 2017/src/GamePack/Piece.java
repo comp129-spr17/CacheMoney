@@ -8,8 +8,9 @@ public class Piece extends JLabel{
 	private PathRelated pathRelated;
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
-	public Piece(int player) {
+	public Piece(int player, Player playerClass) {
 		this.player = player;
+		this.playerClass = playerClass;
 		init();
 	}
 	public int getPlayer(){

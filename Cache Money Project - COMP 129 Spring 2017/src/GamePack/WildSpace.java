@@ -7,7 +7,7 @@ public class WildSpace extends Space {
 	private String prompt;
 
 	public WildSpace(ImageIcon img, String name) {
-		super(img);
+		super(img, name);
 		this.name = name;
 	}
 	

@@ -24,7 +24,7 @@ public class Player {
 		fives = 5;
 		ones = 5;
 		inJail = false;
-		playerpiece = new Piece(playerNum);
+		playerpiece = new Piece(playerNum, this);
 		this.playerNum = playerNum;
 	}
 //-------------------------------------Gets	

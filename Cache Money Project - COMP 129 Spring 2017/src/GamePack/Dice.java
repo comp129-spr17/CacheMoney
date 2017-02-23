@@ -59,7 +59,7 @@ public class Dice {
 	}
 	
 	private int getRand(){
-		return rand.nextInt(6);
+		return 1;
 	}
 	public boolean rollDice(){
 		result = getRand();
