@@ -86,11 +86,9 @@ public class Board {
 			Sounds.landedOnJail.playSound();
 			return "Go to Jail";
 		case INCOME_TAX:
-			Sounds.money.stopSound();
 			Sounds.money.playSound();
 			return "Income Tax";
 		case JEWELRY_TAX:
-			Sounds.money.stopSound();
 			Sounds.money.playSound();
 			return "Jewelry Tax";
 		default:
