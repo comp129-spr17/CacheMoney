@@ -14,6 +14,11 @@ public class Board {
 	private final static int GO_TO_JAIL = 30;
 	private final static int INCOME_TAX = 4;
 	private final static int JEWELRY_TAX = 38;
+	private final static int CHANCE_BOT = 7;
+	private final static int COMCHEST_LEFT = 17;
+	private final static int CHANCE_TOP = 22;
+	private final static int COMCHEST_RIGHT = 33;
+	private final static int CHANCE_RIGHT = 36;
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
 	private Space[] boardTracker;
@@ -169,7 +174,9 @@ public class Board {
 		int current = playerPosition[player];
 		
 		if (current == HOME || current == JAIL || current == PARKING || 
-				current == GO_TO_JAIL || current == INCOME_TAX || current == JEWELRY_TAX )
+				current == GO_TO_JAIL || current == INCOME_TAX || current == JEWELRY_TAX ||
+				current == CHANCE_BOT || current == CHANCE_TOP || current == CHANCE_RIGHT ||
+				current == COMCHEST_LEFT || current == COMCHEST_RIGHT)
 			return false;
 		
 		
