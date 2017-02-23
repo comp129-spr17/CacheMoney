@@ -10,10 +10,11 @@ public class Player {
 	private int fives;
 	private int ones;
 	private Piece playerpiece;
-	private boolean inJail = false;
+	private boolean inJail;
+	private int playerNum;
 
 //------------------------------------Default Constructor
-	public Player() {
+	public Player(int playerNum) {
 		totalmonies = 1500;
 		fivehunneds = 2;
 		hunneds = 2;
@@ -22,7 +23,9 @@ public class Player {
 		tens = 5;
 		fives = 5;
 		ones = 5;
-		Piece playerpiece;            //Not sure what to do here since piece isnt really implemented yet
+		inJail = false;
+		playerpiece = new Piece(playerNum);
+		this.playerNum = playerNum;
 	}
 //-------------------------------------Gets	
 	public int getTotalMonies() {
