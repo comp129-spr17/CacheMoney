@@ -10,6 +10,8 @@ public class Board {
 	private int numPlayers;
 	private final static int HOME = 0;
 	public final static int JAIL = 10;
+	
+	// TODO: IMPLEMENT SPACE VALUES BETTER THAN THIS (FROM FILE PROBABLY)
 	private final static int PARKING = 20;
 	private final static int GO_TO_JAIL = 30;
 	private final static int INCOME_TAX = 4;
@@ -82,7 +84,7 @@ public class Board {
 	public boolean isDoneAnimating(){
 		return isDone;
 	}
-	public String getSpacePlayerLandedOn(int player) {
+	public String getSpacePlayerLandedOn(int player) { // TODO: MOVE THIS TO PROPERTYINFOPANEL SOON!
 		switch (playerPosition[player]){
 		case HOME:
 			return "Go";
@@ -105,13 +107,14 @@ public class Board {
 			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();
 			}
-			else{
+			//else{
 				// IF PROPERTY IS UNOWNED
-				 Sounds.landedOnUnownedProperty.playSound();
+				 //Sounds.landedOnUnownedProperty.playSound();
 				 // ELSE IF PROPERTY IS OWNED
 				 // Sounds.landedOnOwnedProperty.playSound();
 				 // return "OWNED_PROPERTY";
-			}
+			//}
+			System.out.println(boardTracker[playerPosition[player]].getName());
 			return boardTracker[playerPosition[player]].getName();
 		}
 	}

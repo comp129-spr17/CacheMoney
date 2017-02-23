@@ -146,7 +146,7 @@ public class PropertyInfoPanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonCancel.playSound();
+				Sounds.money.playSound();
 				//TODO Add buying functionality
 			}
 		});
@@ -171,7 +171,7 @@ public class PropertyInfoPanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonCancel.playSound();
+				Sounds.landedOnOwnedProperty.playSound();
 				//TODO Add buying functionality
 			}
 		});

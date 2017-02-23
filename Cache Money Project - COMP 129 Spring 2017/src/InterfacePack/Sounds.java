@@ -82,7 +82,7 @@ public enum Sounds {
 			AudioPlayer.getInstance().playSound("audio", "landedOnRailroad.wav");
 			return;
 		case landedOnChanceOrCommunityChest:
-			AudioPlayer.getInstance().playSound("audio", "landedOnChanceOrCommumityChest.wav");
+			AudioPlayer.getInstance().playSound("audio", "landedOnChanceOrCommunityChest.wav");
 			return;
 		case landedOnUnownedProperty:
 			AudioPlayer.getInstance().playSound("audio", "landedOnUnownedProperty.wav");
