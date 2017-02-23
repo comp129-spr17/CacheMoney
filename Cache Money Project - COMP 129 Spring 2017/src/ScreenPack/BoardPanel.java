@@ -187,6 +187,9 @@ public class BoardPanel extends JPanel{
 						}else if(j==10){	//Jail
 							GTJ = new GoToJailSpace(null, spaceImgsCorner[1]);
 							spaces[i][j] = GTJ;
+							spaces[i][j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y,  COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+							add(spaces[i][j]);
+							continue;
 						}else if (j == 5){	//Railroad
 							temp = new PropertySpace(spaceImgsTop[rand.nextInt(8)], new RailroadProperty(200, railroad.readLine()));
 							spaces[i][j] = temp;
