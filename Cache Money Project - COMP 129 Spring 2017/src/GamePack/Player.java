@@ -1,6 +1,6 @@
 package GamePack;
 
-public class Player {
+public final class Player {
 	private int totalmonies;
 	private int fivehunneds;
 	private int hunneds;
@@ -12,9 +12,10 @@ public class Player {
 	private Piece playerpiece;
 	private boolean inJail;
 	private int playerNum;
-
+	private static final Player GlobalPlayer = new Player();
 //------------------------------------Default Constructor
-	public Player(int playerNum) {
+	
+	private Player() {
 		totalmonies = 1500;
 		fivehunneds = 2;
 		hunneds = 2;
@@ -24,8 +25,11 @@ public class Player {
 		fives = 5;
 		ones = 5;
 		inJail = false;
-		playerpiece = new Piece(playerNum, this);
 		this.playerNum = playerNum;
+	}
+	public static Player getInstance()
+	{
+		return GlobalPlayer;
 	}
 //-------------------------------------Gets	
 	public int getTotalMonies() {
@@ -60,6 +64,10 @@ public class Player {
 	{
 		return inJail;
 	}
+	public int getPlayerNum()
+	{
+		return playerNum;
+	}
 //----------------------------------------Sets
 	void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
@@ -91,6 +99,12 @@ public class Player {
 	}
 	public void setInJail(boolean jail) {
 		inJail = jail;
+	}
+	
+	public void setplayerNum(int i)
+	{
+		playerNum = i;
+		playerpiece = new Piece(playerNum, this);
 	}
 	
 	public void pay(int cost) {

@@ -75,7 +75,9 @@ public class BoardPanel extends JPanel{
 	private Wildcard chance;
 	private Wildcard communityChest;
 
-	public BoardPanel(){
+	public BoardPanel(Player[] player){
+
+		players = player;
 		sizeRelated = SizeRelated.getInstance();
 		COMMUNITY_X = sizeRelated.getDicePanelX()+sizeRelated.getDicePanelWidth()-30;
 		COMMUNITY_Y = sizeRelated.getDicePanelY()+sizeRelated.getDicePanelHeight()+10;
@@ -84,10 +86,8 @@ public class BoardPanel extends JPanel{
 		setSize();
 		init();
 		importImgs();
-		tempInitPiece();
 		board = new Board(spaces, players, 4);
 		setBoardBackgroundColor();
-		
 		addHost();
 
 		//addDiceBoard();
@@ -101,15 +101,6 @@ public class BoardPanel extends JPanel{
 	}
 
 
-
-	private void tempInitPiece(){
-
-		players = new Player[4];
-		for(int i=0; i<4; i++)
-		{
-			players[i] = new Player(i);
-		}
-	}
 	private void setSize(){
 		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = sizeRelated.getSpaceRowWidth();
 		COL_SPACE_WIDTH = ROW_SPACE_HEIGHT = sizeRelated.getSpaceRowHeight();

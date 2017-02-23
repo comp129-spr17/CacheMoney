@@ -164,7 +164,8 @@ public class GameScreen extends JFrame{
 		players = new Player[4];
 		for(int i=0; i<4; i++)
 		{
-			players[i] = new Player(i);
+			players[i] = Player.getInstance();
+			players[i].setplayerNum(i);
 			distributeCashToPlayers(i);
 			createPlayerCashLabels(i);
 			setFontOfMoniesAndLabels(i);
@@ -271,7 +272,7 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		BoardPanel boardPanel = new BoardPanel();
+		BoardPanel boardPanel = new BoardPanel(players);
 		mainPanel.add(boardPanel);
 		addXMarkToMainPanel();
 		addLabelsToMainPanel();
