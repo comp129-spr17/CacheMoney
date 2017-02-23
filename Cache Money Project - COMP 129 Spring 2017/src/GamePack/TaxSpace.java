@@ -10,8 +10,9 @@ public class TaxSpace extends Space {
 		tax=cost;
 	}
 
-	public TaxSpace(ImageIcon img, String name) {
+	public TaxSpace(ImageIcon img, String name, int cost) {
 		super(img, name);
+		tax = cost;
 	}
 	
 	@Override

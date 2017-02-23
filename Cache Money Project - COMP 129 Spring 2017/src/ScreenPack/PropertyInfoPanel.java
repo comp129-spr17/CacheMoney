@@ -10,11 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GamePack.Board;
 import GamePack.Property;
 import GamePack.PropertySpace;
 import GamePack.SizeRelated;
-import GamePack.Space;
 import InterfacePack.Sounds;
 
 public class PropertyInfoPanel extends JPanel{
@@ -51,12 +49,12 @@ public class PropertyInfoPanel extends JPanel{
 		rentValues = new ArrayList<JLabel>();
 		for(Integer a:info.getRentRange())
 		{
-			rentValues.add(new JLabel(a.toString()));
+			rentValues.add(new JLabel("Rent Value:"  + a.toString()));
 		}
 		
 		name = new JLabel(info.getName());		
-		buyingPrice = new JLabel(Integer.toString(property.getBuyingPrice()));
-		mortgagePrice = new JLabel(Integer.toString(property.getMortgageValue()));
+		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
+		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
 	}
 	
 	public void executeSwitch(String name)
@@ -193,8 +191,8 @@ public class PropertyInfoPanel extends JPanel{
 		buyButton.setText("BUY"); 
 		buyButton.setSize(100, 80);
 		buyButton.setBackground(Color.GREEN); 
-		buyButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
-		//buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
+		//buyButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
+		buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
 		add(buyButton); 
 	}
 	

@@ -70,6 +70,8 @@ public class DicePanel extends JPanel{
 		rand = new Random();
 		isDiceButtonPressed = false;
 		dCel = new DoubleCelebrate();
+		dCel.setSize(this.getSize());
+		dCel.setLocation(this.getLocation().x, this.getLocation().y-5);
 		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings());
 		bPanel.add(propertyPanel);
 		addTurnLabel();
