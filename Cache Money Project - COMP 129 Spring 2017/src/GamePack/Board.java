@@ -17,6 +17,7 @@ public class Board {
 	private final static int INCOME_TAX = 4;
 	private final static int JEWELRY_TAX = 38;
 	private final static int CHANCE_BOT = 7;
+	private final static int COMCHEST_BOT = 2;
 	private final static int COMCHEST_LEFT = 17;
 	private final static int CHANCE_TOP = 22;
 	private final static int COMCHEST_RIGHT = 33;
@@ -52,7 +53,7 @@ public class Board {
 		propertyCheck[HOME] = propertyCheck[JAIL] = propertyCheck[PARKING] = propertyCheck[GO_TO_JAIL] = 
 				propertyCheck[INCOME_TAX] =	propertyCheck[JEWELRY_TAX] = propertyCheck[CHANCE_BOT] = 
 					propertyCheck[CHANCE_TOP] = propertyCheck[CHANCE_RIGHT] = propertyCheck[COMCHEST_LEFT] = 
-					propertyCheck[COMCHEST_RIGHT] = false;
+					propertyCheck[COMCHEST_RIGHT] = propertyCheck[COMCHEST_BOT] = false;
 	}
 	private void placePiecesToFirst(){
 		for(int i=0; i<numPlayers; i++){
