@@ -164,7 +164,7 @@ public class GameScreen extends JFrame{
 		players = new Player[4];
 		for(int i=0; i<4; i++)
 		{
-			players[i] = Player.getInstance();
+			players[i] = Player.getInstance(i);
 			players[i].setplayerNum(i);
 			distributeCashToPlayers(i);
 			createPlayerCashLabels(i);

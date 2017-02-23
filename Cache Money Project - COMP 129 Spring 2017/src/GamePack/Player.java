@@ -12,7 +12,10 @@ public final class Player {
 	private Piece playerpiece;
 	private boolean inJail;
 	private int playerNum;
-	private static final Player GlobalPlayer = new Player();
+	private static final Player GlobalPlayer0 = new Player();
+	private static final Player GlobalPlayer1 = new Player();
+	private static final Player GlobalPlayer2 = new Player();
+	private static final Player GlobalPlayer3 = new Player();
 //------------------------------------Default Constructor
 	
 	private Player() {
@@ -25,11 +28,16 @@ public final class Player {
 		fives = 5;
 		ones = 5;
 		inJail = false;
-		this.playerNum = playerNum;
 	}
-	public static Player getInstance()
+	public static Player getInstance(int i)
 	{
-		return GlobalPlayer;
+		switch(i){
+		case 0:return GlobalPlayer0;
+		case 1:return GlobalPlayer1;
+		case 2:return GlobalPlayer2;
+		case 3:return GlobalPlayer3;
+		}
+		return null;
 	}
 //-------------------------------------Gets	
 	public int getTotalMonies() {
