@@ -49,12 +49,12 @@ public class PropertyInfoPanel extends JPanel{
 		rentValues = new ArrayList<JLabel>();
 		for(Integer a:info.getRentRange())
 		{
-			rentValues.add(new JLabel(a.toString()));
+			rentValues.add(new JLabel("Rent Value:"  + a.toString()));
 		}
 		
 		name = new JLabel(info.getName());		
-		buyingPrice = new JLabel(Integer.toString(property.getBuyingPrice()));
-		mortgagePrice = new JLabel(Integer.toString(property.getMortgageValue()));
+		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
+		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
 	}
 	
 	public void executeSwitch(String name)

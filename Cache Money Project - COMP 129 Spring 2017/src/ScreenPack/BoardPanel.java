@@ -210,7 +210,7 @@ public class BoardPanel extends JPanel{
 							WildSpace ws = new WildSpace(spaceImgsBot[rand.nextInt(8)], "Chance");
 							spaces[i][j] = ws;
 						}else if(j==6){
-							TaxSpace ts = new TaxSpace(spaceImgsBot[rand.nextInt(8)], "Income Tax");
+							TaxSpace ts = new TaxSpace(spaceImgsBot[rand.nextInt(8)], "Income Tax", 200);
 							spaces[i][j] = ts;
 						}else if(j==10){
 							spaces[i][j] = new Space(spaceImgsCorner[3]); //GO
@@ -263,7 +263,7 @@ public class BoardPanel extends JPanel{
 							WildSpace ws = new WildSpace(spaceImgsRight[rand.nextInt(8)], "Chance");
 							spaces[i][j] = ws;
 						}else if(i == 8){
-							TaxSpace ts = new TaxSpace(spaceImgsRight[rand.nextInt(8)],"Luxury Tax");
+							TaxSpace ts = new TaxSpace(spaceImgsRight[rand.nextInt(8)],"Luxury Tax",100);
 							spaces[i][j] = ts;							
 						}else{
 							temp = new PropertySpace(spaceImgsRight[rand.nextInt(8)],new StandardProperty(400,standard.readLine()));
