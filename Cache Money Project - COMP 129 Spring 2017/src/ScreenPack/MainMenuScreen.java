@@ -257,11 +257,13 @@ public class MainMenuScreen {
 			break;
 		case 1:
 			mwr.askUserForIPAndPort();
+			
 			// TRY TO CONNECT TO HOST
 			// IF IT WORKS, BRING USER TO HOST WAITING ROOM
 			// IF NOT, RUN mwr.askUserForIPAndPort(); AGAIN
 			hideAndDisposeMainMenuScreen();
 			gameScreen = new GameScreen();
+			
 			System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
 			break;
 		case 2:
