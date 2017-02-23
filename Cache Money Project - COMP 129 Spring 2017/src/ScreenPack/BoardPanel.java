@@ -267,7 +267,7 @@ public class BoardPanel extends JPanel{
 							WildSpace ws = new WildSpace(spaceImgsRight[rand.nextInt(8)], "Chance");
 							spaces[i][j] = ws;
 						}else if(i == 8){
-							TaxSpace ts = new TaxSpace(spaceImgsRight[rand.nextInt(8)],"Luxurt Tax");
+							TaxSpace ts = new TaxSpace(spaceImgsRight[rand.nextInt(8)],"Luxury Tax");
 							spaces[i][j] = ts;							
 						}else{
 							temp = new PropertySpace(spaceImgsRight[rand.nextInt(8)],new StandardProperty(400,standard.readLine()));

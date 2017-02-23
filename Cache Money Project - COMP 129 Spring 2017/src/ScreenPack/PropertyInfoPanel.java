@@ -10,11 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GamePack.Board;
 import GamePack.Property;
 import GamePack.PropertySpace;
 import GamePack.SizeRelated;
-import GamePack.Space;
 import InterfacePack.Sounds;
 
 public class PropertyInfoPanel extends JPanel{
@@ -193,8 +191,8 @@ public class PropertyInfoPanel extends JPanel{
 		buyButton.setText("BUY"); 
 		buyButton.setSize(100, 80);
 		buyButton.setBackground(Color.GREEN); 
-		buyButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
-		//buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
+		//buyButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
+		buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
 		add(buyButton); 
 	}
 	
