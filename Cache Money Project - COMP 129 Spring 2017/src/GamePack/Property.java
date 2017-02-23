@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public abstract class Property {
 	ArrayList<Integer> rentValues;
+	private int mortgageValue;
 	int buyingPrice;
 	int rentMultiplier;
 	boolean owned;
@@ -13,7 +14,8 @@ public abstract class Property {
 	{
 		this.buyingPrice = cost;
 		this.name = name;
-		rentValues = new ArrayList<Integer>();
+		mortgageValue = roundUp(buyingPrice,2);
+		rentValues = new ArrayList<Integer>(5);
 		init();
 	}
 
@@ -25,7 +27,7 @@ public abstract class Property {
 			return dividend/divisor;
 				
 		//If the division is imperfect, round to the nearest 10
-		return (int)Math.ceil(((double)dividend/10)*10);
+		return (int)Math.ceil(((double)dividend/10));
 	}
 	
 	public int getRent() {
@@ -58,5 +60,9 @@ public abstract class Property {
 	
 	public ArrayList<Integer> getRentRange(){
 		return rentValues;
+	}
+	
+	public int getMortgageValue() {
+		return mortgageValue;
 	}
 }

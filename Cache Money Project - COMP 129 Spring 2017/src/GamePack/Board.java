@@ -96,13 +96,11 @@ public class Board {
 			Sounds.landedOnJail.playSound();
 			return "Go to Jail";
 		case INCOME_TAX:
-			Sounds.money.stopSound();
 			Sounds.money.playSound();
 			return "Income Tax";
 		case JEWELRY_TAX:
-			Sounds.money.stopSound();
 			Sounds.money.playSound();
-			return "Jewlery Tax";
+			return "Jewelry Tax";
 		default:
 			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();

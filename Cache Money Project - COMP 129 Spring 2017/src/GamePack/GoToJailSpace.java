@@ -11,7 +11,7 @@ public class GoToJailSpace extends Space {
 	}
 
 	public GoToJailSpace(Space jail, ImageIcon img) {
-		super(img);
+		super(img, "Go To Jail");
 		jailToSendBadPeopleTo = (JailSpace) jail;
 	}
 	

@@ -4,7 +4,6 @@ public class RailroadProperty extends Property{
 	
 	public RailroadProperty(int cost, String name) {
 		super(cost, name);
-		init();
 	}
 	
 	@Override

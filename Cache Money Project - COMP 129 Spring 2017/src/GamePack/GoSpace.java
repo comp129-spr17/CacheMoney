@@ -11,7 +11,7 @@ public class GoSpace extends Space {
 	}
 
 	public GoSpace(ImageIcon img) {
-		super(img);
+		super(img, "Go");
 	}
 
 	@Override
