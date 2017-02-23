@@ -52,6 +52,7 @@ public class Dice {
 	
 	public void hideDice(){
 		dice.setVisible(false);
+		resetDice();
 	}
 	
 	public void showDice(){
