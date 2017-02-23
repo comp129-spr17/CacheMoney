@@ -14,6 +14,7 @@ import GamePack.Board;
 import GamePack.Property;
 import GamePack.PropertySpace;
 import GamePack.Space;
+import InterfacePack.Sounds;
 
 public class PropertyInfoPanel extends JPanel{
 	private JPanel panelToSwitchFrom;
@@ -99,6 +100,7 @@ public class PropertyInfoPanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
 				endPropertyPanel();
 			}
 		});
