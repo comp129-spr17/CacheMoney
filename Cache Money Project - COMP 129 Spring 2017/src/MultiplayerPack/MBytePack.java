@@ -28,9 +28,10 @@ public final class MBytePack {
 		
 		return result;
 	}
-	public byte[] packDiceResult(int curPos, int fDice, int sDice){
+	public byte[] packDiceResult(String requestCode, int fDice, int sDice){
 		try {
-			dOutputStream.writeInt(curPos);
+			dOutputStream.writeUTF(requestCode);
+//			dOutputStream.writeInt(curPos);
 			dOutputStream.writeInt(fDice);
 			dOutputStream.writeInt(sDice);
 			return packResult();
@@ -40,8 +41,9 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packDiceReplyResult(int curPos, char fDice, boolean sDice){
+	public byte[] packPropertyResult(String requestCode,int curPos, char fDice, boolean sDice){
 		try {
+			dOutputStream.writeUTF(requestCode);
 			dOutputStream.writeInt(curPos);
 			dOutputStream.writeChar(fDice);
 			dOutputStream.writeBoolean(sDice);
@@ -57,16 +59,19 @@ public final class MBytePack {
 
 		UnicodeForServer UNICODE = UnicodeForServer.getInstance();
 		MBytePack mPack = MBytePack.getInstance();
-		byte[] result = mPack.packDiceResult(0, 1, 2);
+		byte[] result = mPack.packDiceResult(UNICODE.DICE, 1, 2);
 		MByteUnpack mUnpack = MByteUnpack.getInstance();
-		ArrayList<Object> res = mUnpack.getResult(result, UNICODE.DICE);
-		for(int i=0; i<res.size(); i++)
+		ArrayList<Object> res = mUnpack.getResult(result);
+		System.out.println((String)res.get(0));
+		for(int i=1; i<res.size(); i++)
 			System.out.println((Integer)res.get(i));
-		result = mPack.packDiceReplyResult(3, '7', true);
+		result = mPack.packPropertyResult(UNICODE.PROPERTY,3, '7', true);
 		res.clear();
-		res = mUnpack.getResult(result, UNICODE.PROPERTY);
-		System.out.println((Integer)res.get(0));
-		System.out.println((Character)res.get(1));
-		System.out.println((Boolean)res.get(2));
+		res = mUnpack.getResult(result);
+
+		System.out.println((String)res.get(0));
+		System.out.println((Integer)res.get(1));
+		System.out.println((Character)res.get(2));
+		System.out.println((Boolean)res.get(3));
 	}
 }

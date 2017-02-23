@@ -87,6 +87,7 @@ public class BoardPanel extends JPanel{
 		tempInitPiece();
 		board = new Board(spaces, players, 4);
 		setBoardBackgroundColor();
+		
 		addHost();
 
 		//addDiceBoard();
@@ -325,7 +326,7 @@ public class BoardPanel extends JPanel{
 				try {
 
 					MHost host = new MHost(dicePanel);
-
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

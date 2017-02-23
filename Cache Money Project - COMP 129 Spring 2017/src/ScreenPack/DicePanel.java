@@ -8,8 +8,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Timer;
@@ -30,6 +32,7 @@ public class DicePanel extends JPanel{
 	private JLabel turnLabel;
 	private Dice dices[]; 
 	private int result[];
+	private int diceRes[];
 	private Timer diceTimer;
 	private ImageIcon handImage[];
 	private JLabel hand[];
@@ -44,7 +47,9 @@ public class DicePanel extends JPanel{
 	private PropertyInfoPanel propertyPanel;
 	private BoardPanel bPanel;
 	private boolean isDiceButtonPressed;
-	private PrintWriter writer;
+	private OutputStream outputStream;
+	private MBytePack mPack;
+	private UnicodeForServer unicode;
 
 	public DicePanel(BoardPanel bPanel, Board board){
 		init(bPanel,board);
@@ -54,7 +59,8 @@ public class DicePanel extends JPanel{
 		// FOR NOW, WE'RE CREATING A NEW HOST TO SEND STUFF TO.
 		
 		// TODO: NEED A CHAT SCREEN IN THIS PANEL FOR EXTRA FIREWORKS AND SPARKLES
-		
+		mPack = MBytePack.getInstance();
+		unicode = UnicodeForServer.getInstance();
 		this.bPanel = bPanel;
 		paths = PathRelated.getInstance();
 		sizeRelated = SizeRelated.getInstance();
@@ -70,6 +76,7 @@ public class DicePanel extends JPanel{
 		addRollButton();
 		addEndTurnButton();
 		result = new int[2];
+		diceRes = new int[2];
 		addDice();
 		initDiceTimer();
 		addListeners();
@@ -156,10 +163,11 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (!isDiceButtonPressed){
-					sendMessageToServer("Player " + (current + 1) + " rolled the dice...", true);
-					rollDice();
+				for(int i=0; i<2; i++){
+					diceRes[i] = dices[i].getDiceResult();
 				}
+				sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]));
+				//actionForDiceRoll();
 			}
 		});
 		endTurnButton.addMouseListener(new MouseListener(){
@@ -167,17 +175,10 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				sendMessageToServer("Player " + (previous + 1) + " ended their turn.", true);
 				
-				changeTurn();
-				Sounds.turnBegin.playSound();
-				rollButton.setVisible(true);
-				turnLabel.setVisible(true);
-				endTurnButton.setVisible(false);
-				dices[0].hideDice();
-				dices[1].hideDice();
+				actionForDiceEnd();
 				
-				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
+//				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
 			}
 
 			@Override
@@ -206,13 +207,29 @@ public class DicePanel extends JPanel{
 			
 		});
 	}
-	
-	private void sendMessageToServer(String msg, boolean fromServer){
-		if (writer != null){
-			if (fromServer){
-				msg = "Server" + msg;
+	// In board, run thread to determine which function to perform.
+	public void actionForDiceEnd(){
+		changeTurn();
+		Sounds.turnBegin.playSound();
+		rollButton.setVisible(true);
+		turnLabel.setVisible(true);
+		endTurnButton.setVisible(false);
+		dices[0].hideDice();
+		dices[1].hideDice();
+	}
+	public void actionForDiceRoll(int diceRes1, int diceRes2){
+		if (!isDiceButtonPressed){
+			rollDice(diceRes1, diceRes2);
+		}
+		
+	}
+	private void sendMessageToServer(byte[] msg){
+		if (outputStream != null){
+			try {
+				outputStream.write(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			writer.println(msg);
 		}
 		else{
 			// BAD!! THERE'S A NULL POINTER EXCEPTION WITH writer!
@@ -225,23 +242,24 @@ public class DicePanel extends JPanel{
 		turnLabel.setText("Player " + (current % 4 + 1) + "'s Turn!");
 	}
 	
-	public void rollDice(){
+	public void rollDice(int diceRes1, int diceRes2){
 		isDiceButtonPressed = true;
 		dices[0].showDice();
 		dices[1].showDice();
 		Sounds.randomDice.playSound();
 		rollButton.setVisible(false);
 		turnLabel.setVisible(false);
-		rollDiceAnim();
+		rollDiceAnim(diceRes1,diceRes2);
 	}
 	
-	public void rollDiceAnim(){
+	public void rollDiceAnim(int diceRes1, int diceRes2){
 		(new handMovingAnimation()).start();
 		for(int i=0; i<2; i++){
 			dices[i].resetDice();
 		}
 		for(int i=0; i<2; i++){
-		while(!dices[i].rollDice());
+			dices[i].rollDice(diceRes[i]);
+//			while(!dices[i].rollDice(res));
 			result[i] = dices[i].getNum();
 		}
 		resetElem();
@@ -257,9 +275,6 @@ public class DicePanel extends JPanel{
 					hand[i].setVisible(false);
 				hand[0].setLocation(sizeRelated.getDicePanelWidth()/10, sizeRelated.getDicePanelHeight()/2);
 				hand[1].setLocation(sizeRelated.getDicePanelWidth()/2, sizeRelated.getDicePanelHeight()/2);
-				
-//				JOptionPane.showConfirmDialog(null, "You Rolled: "+(result[0] + result[1]), "Result", JOptionPane.DEFAULT_OPTION);
-				
 				movePiece();
 
 				waitForDiceMoving();
@@ -269,7 +284,7 @@ public class DicePanel extends JPanel{
 	
 	private void movePiece(){
 		sum = result[0] + result[1];
-		sendMessageToServer("Player " + (current + 1) + " rolled " + result[0] + " and " + result[1] + "!" , true);
+//		sendMessageToServer("Player " + (current + 1) + " rolled " + result[0] + " and " + result[1] + "!" , true);
 		
 		board.movePiece(isSame ? previous : current, sum);
 		previous = current;
@@ -349,7 +364,7 @@ public class DicePanel extends JPanel{
 	}
 	
 	private void sendSpaceLandedOn(String space){
-		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
+//		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
 	}
 	
 	
@@ -358,10 +373,10 @@ public class DicePanel extends JPanel{
 		rollButton.setEnabled(true);
 		return result;
 	}
-	public PrintWriter getWriter() {
-		return writer;
+	public OutputStream getOutputStream() {
+		return outputStream;
 	}
-	public void setWriter(PrintWriter writer) {
-		this.writer = writer;
+	public void setOutputStream(OutputStream outputStream) {
+		this.outputStream = outputStream;
 	}
 }

@@ -61,8 +61,11 @@ public class Dice {
 	private int getRand(){
 		return rand.nextInt(6);
 	}
-	public boolean rollDice(){
-		result = getRand();
+	public int getDiceResult(){
+		return getRand();
+	}
+	public boolean rollDice(int result){
+		this.result = result;
 		isAnimating = true;
 
 		diceMovingAnimation mAnimation = new diceMovingAnimation();
