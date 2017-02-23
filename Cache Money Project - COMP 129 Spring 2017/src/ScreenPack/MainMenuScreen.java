@@ -10,6 +10,7 @@ import java.util.TimerTask;
 import CacheChatPack.CacheChat;
 import InterfacePack.AudioPlayer;
 import InterfacePack.Sounds;
+import MultiplayerPack.*;
 
 public class MainMenuScreen {
 	private Font mainfont;
@@ -24,8 +25,12 @@ public class MainMenuScreen {
 	public MainMenuScreen(){
 		init();
 		createMenuWindow();
+		Sounds.register.playSound();
 		addMouseListen();
+		
 	}
+	
+
 	private void init(){
 		mainfont = new Font("Serif", Font.PLAIN, 18);
 		mainPanel = new JPanel(null);
@@ -37,6 +42,7 @@ public class MainMenuScreen {
 		InstructionButton = new JButton("Instructions");
 		
 	}
+	
 	
 	private void addMouseListen(){
 		GameButton.addMouseListener(new MouseListener() {
@@ -63,12 +69,12 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mainmenuframe.setVisible(false);
-				mainmenuframe.dispose();
-				Sounds.turnBegin.playSound();
-				GameScreen gameScreen = new GameScreen();
+				//Sounds.turnBegin.playSound();
+				//GameScreen gameScreen = new GameScreen();
+				displaySingleMultiplayerDialogBox();
 				
 			}
+
 		});
 		ChatButton.addMouseListener(new MouseListener() {
 			
@@ -129,8 +135,7 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				mainmenuframe.setVisible(false);
-				mainmenuframe.dispose();
+				hideAndDisposeMainMenuScreen();
 				Sounds.register.playSound();
 				InstructionsScreen iScreen = new InstructionsScreen();
 			}
@@ -168,11 +173,13 @@ public class MainMenuScreen {
 					
 				}, 1500);
 				Sounds.landedOnJail.playSound();
-				mainPanel.setVisible(false);
+				hideAndDisposeMainMenuScreen();
 			}
 		});
 		
 	}
+	
+
 	public void createMenuWindow(){
 		setMenuBackgroundColor();
 		mainmenuframe.add(mainPanel);
@@ -197,11 +204,61 @@ public class MainMenuScreen {
 		ExitButton.setBounds(175,375,150,50);
 		mainPanel.add(ExitButton);
 	}
+	
+
 	private void setMenuBackgroundColor() {
 		Color menuBackgroundColor = new Color(105, 177, 255); // LIGHT BLUE
 		mainPanel.setBackground(menuBackgroundColor);
 	}
 	
+	
+	private void displaySingleMultiplayerDialogBox() {
+		AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+		switch (mwr.askUserSingleMultiPlayer()){
+		case 0: // USER WANTED MULTIPLAYER
+			displayHostOrClientDialogBox(mwr);
+			break;
+		case 1: // USER WANTED SINGLEPLAYER
+			hideAndDisposeMainMenuScreen();
+			GameScreen gameScreen = new GameScreen();
+			break;
+		case 2:
+			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
+			break;
+		default:
+			System.out.println("***** THERE'S SOMETHING WRONG INSIDE OF GAMEBUTTON MOUSE CLICKED ASKING USER SINGLE/MULTI PLAYER");
+			break;	
+		}
+	}
+	
+	
+	private void hideAndDisposeMainMenuScreen() {
+		mainmenuframe.setVisible(false);
+		mainmenuframe.dispose();
+	}
+	
+	
+	private void displayHostOrClientDialogBox(AskUserMultiplayerDialogBox mwr) {
+		switch (mwr.askUserHostOrClient()){
+		case 0:
+			// BRING THE USER TO THE HOST WAITING ROOM
+			System.out.println("THIS IS WHERE THE WAITING ROOM IS. IT'S NOT IMPLEMENTED YET.");
+			break;
+		case 1:
+			mwr.askUserForIPAndPort();
+			// TRY TO CONNECT TO HOST
+			// IF IT WORKS, BRING USER TO HOST WAITING ROOM
+			// IF NOT, RUN mwr.askUserForIPAndPort(); AGAIN
+			System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
+			break;
+		case 2:
+			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
+			break;
+		default:
+			System.out.println("***** THERE'S SOMETHING WRONG INSIDE OF GAMEBUTTON MOUSE CLICKED ASKING USER HOST/CLIENT");
+			break;
+		}
+	}
 	
 	
 	public static void main(String[] args){
