@@ -52,6 +52,7 @@ public class Dice {
 	
 	public void hideDice(){
 		dice.setVisible(false);
+		resetDice();
 	}
 	
 	public void showDice(){
@@ -59,7 +60,7 @@ public class Dice {
 	}
 	
 	private int getRand(){
-		return 1;
+		return rand.nextInt(6);
 	}
 	public int getDiceResult(){
 		return getRand();

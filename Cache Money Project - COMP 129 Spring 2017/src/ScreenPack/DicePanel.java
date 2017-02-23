@@ -353,10 +353,15 @@ public class DicePanel extends JPanel{
 		}
 		
 		String curSpaceName = board.getSpacePlayerLandedOn(previous);
-		sendSpaceLandedOn(curSpaceName);
-		if (board.isPlayerInPropertySpace(previous))
+		//sendSpaceLandedOn(curSpaceName);
+		if (board.isPlayerInPropertySpace(previous)){
+			Sounds.landedOnUnownedProperty.playSound();
 			propertyPanel.executeSwitch(curSpaceName);
-				
+		}
+		else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
+			Sounds.landedOnChanceOrCommunityChest.playSound();
+			// TODO: CHANCE OR COMMUNITY CHEST EVENT HAPPEN HERE PLS
+		}
 		if (!isSame){
 			endTurnButton.setVisible(true);
 		}
@@ -365,9 +370,9 @@ public class DicePanel extends JPanel{
 		}
 	}
 	
-	private void sendSpaceLandedOn(String space){
-//		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
-	}
+//	private void sendSpaceLandedOn(String space){
+////		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
+//	}
 	
 	
 	
