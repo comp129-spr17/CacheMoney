@@ -269,13 +269,9 @@ public class MainMenuScreen {
 
 	private void setupClient(AskUserMultiplayerDialogBox mwr) {
 		GameScreen gameScreen = null;
-		if (!mwr.askUserForIPAndPort() && (mwr.getIPAddress() == "" || mwr.getPortNumber() == 0)){
+		if (!mwr.askUserForIPAndPort()){
 			return;
 		}
-		
-		
-		
-		
 		try {
 			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
 			hideAndDisposeMainMenuScreen();
