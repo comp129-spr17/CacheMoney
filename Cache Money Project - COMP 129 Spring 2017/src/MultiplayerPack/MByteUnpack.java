@@ -40,6 +40,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.END_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 			return cleanUpAndReturn();}});
+		GetResults.put(UNI.DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+			return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);

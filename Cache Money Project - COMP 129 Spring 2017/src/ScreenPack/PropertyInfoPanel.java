@@ -198,7 +198,7 @@ public class PropertyInfoPanel extends JPanel{
 	
 	private void addHideButton()
 	{
-		hideButton = new JButton();
+		hideButton = new JButton("Back");
 		hideButton.setBounds(50,50, 100, 50);
 		add(hideButton); 
 	}

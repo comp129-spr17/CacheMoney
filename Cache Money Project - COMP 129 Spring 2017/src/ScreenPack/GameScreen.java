@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Timer;
@@ -16,6 +17,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.sun.glass.events.WindowEvent;
 
 import GamePack.*;
 import MultiplayerPack.MClient;
@@ -82,6 +85,7 @@ public class GameScreen extends JFrame{
 		setPositionOfBalances();
 		createAndManageXMarkAndMoniesLabels();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addActionListenerForExit();
 		init();
 		setGameScreenBackgroundColor();
 		setVisible(true);
@@ -90,7 +94,14 @@ public class GameScreen extends JFrame{
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
 		this.setBackground(boardBackgroundColor);
 	}
-	
+	// Todo: need to find the way to send exit meesage to server when closing windows.
+	private void addActionListenerForExit(){
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e){
+				
+			}
+		});
+	}
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		myComp_height = (int)screenSize.getDisplayMode().getHeight();
