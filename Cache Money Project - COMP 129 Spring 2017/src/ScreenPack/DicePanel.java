@@ -25,6 +25,7 @@ public class DicePanel extends JPanel{
 	private SizeRelated sizeRelated;
 	private JButton rollButton;
 	private JTextField overrideDiceRoll;
+	private JButton startGameButton;
 	private JButton endTurnButton;
 	private JLabel turnLabel;
 	private Dice dices[]; 
@@ -63,6 +64,7 @@ public class DicePanel extends JPanel{
 		sizeRelated = SizeRelated.getInstance();
 		this.setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		setLayout(null);
+		addStartGameButton();
 		rand = new Random();
 		isDiceButtonPressed = false;
 		dCel = new DoubleCelebrate();
@@ -71,6 +73,7 @@ public class DicePanel extends JPanel{
 		
 		
 		addTurnLabel();
+		
 		addRollButton();
 		addOverrideDiceRoll();
 		addEndTurnButton();
@@ -93,6 +96,7 @@ public class DicePanel extends JPanel{
 		Color boardBackgroundColor = new Color(180, 240, 255); // VERY LIGHT BLUE
 		this.setBackground(boardBackgroundColor);
 	}
+	
 	
 	
 	private void addDice() {
@@ -136,6 +140,18 @@ public class DicePanel extends JPanel{
 		add(overrideDiceRoll);
 	}
 	
+	private void addStartGameButton(){
+		this.startGameButton = new JButton("START GAME");
+		startGameButton.setBounds(0, 0, sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
+		add(startGameButton);
+	}
+	
+	
+	public void setStartGameButtonEnabled(boolean enabled){
+		this.startGameButton.setEnabled(enabled);
+	}
+	
+	
 	private void addEndTurnButton() {
 		endTurnButton = new JButton("End Turn");
 		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
@@ -152,6 +168,37 @@ public class DicePanel extends JPanel{
 	
 	
 	private void addListeners(){
+		startGameButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				startGameButton.setVisible(false);
+				Sounds.winGame.playSound();
+				// TODO: SET START GAME BUTTON TO BE INVISIBLE FOR EVERYONE ELSE TOO!
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+		});
 		rollButton.addMouseListener(new MouseListener() {
 			
 			@Override
