@@ -13,7 +13,6 @@ import java.util.TimerTask;
 import CacheChatPack.CacheChat;
 import GamePack.SizeRelated;
 import InterfacePack.AudioPlayer;
-import WaitingRoomPack.*;
 import InterfacePack.Sounds;
 import MultiplayerPack.*;
 
@@ -252,60 +251,60 @@ public class MainMenuScreen {
 		GameScreen gameScreen;
 		switch (mwr.askUserHostOrClient()){
 		case 0:
-			// BRING THE USER TO THE HOST WAITING ROOM
-			hideAndDisposeMainMenuScreen();
-			Timer t = new Timer();
-			t.schedule(new TimerTask(){
-
-				@Override
-				public void run() {
-					try {
-						WRServer wrs = new WRServer(); 
-						
-						try {
-							Thread.sleep(2500);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						new GameScreen(false, wrs.listener);
-						
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-			}, 0);
+//			// BRING THE USER TO THE HOST WAITING ROOM
+//			hideAndDisposeMainMenuScreen();
+//			Timer t = new Timer();
+//			t.schedule(new TimerTask(){
+//
+//				@Override
+//				public void run() {
+//					try {
+//						WRServer wrs = new WRServer(); 
+//						
+//						try {
+//							Thread.sleep(2500);
+//						} catch (InterruptedException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//						
+//						new GameScreen(false, wrs.listener);
+//						
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//				
+//			}, 0);
 			break;
 		case 1:
-			mwr.askUserForIPAndPort();
-			Timer x = new Timer();
-			hideAndDisposeMainMenuScreen();
-			x.schedule(new TimerTask(){
-
-				@Override
-				public void run() {
-						try {
-							WRClient wrc = new WRClient(mwr.getIPAddress(), mwr.getPortNumber(), false);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						try {
-							Thread.sleep(5000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
-				}
-			}, 0);
-			
-			
-			//System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
-			
+//			mwr.askUserForIPAndPort();
+//			Timer x = new Timer();
+//			hideAndDisposeMainMenuScreen();
+//			x.schedule(new TimerTask(){
+//
+//				@Override
+//				public void run() {
+//						try {
+//							WRClient wrc = new WRClient(mwr.getIPAddress(), mwr.getPortNumber(), false);
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//						try {
+//							Thread.sleep(5000);
+//						} catch (InterruptedException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//						new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
+//				}
+//			}, 0);
+//			
+//			
+//			//System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
+//			
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
