@@ -302,7 +302,7 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		dicePanel = new DicePanel(isSingle);
+		dicePanel = new DicePanel(isSingle, players);
 		BoardPanel boardPanel = new BoardPanel(players,dicePanel);
 		
 		mainPanel.add(boardPanel);

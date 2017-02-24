@@ -127,6 +127,7 @@ public final class Player {
 	public void addProperty(String propertyName)
 	{
 		ownedProperties.add(propertyName);
+		//Subtract the cost of the property using the pay function right below.
 	}
 	
 	public void pay(int cost) {
@@ -226,7 +227,7 @@ public final class Player {
 		}
 		else
 		{
-			System.out.print("You owe more money than you have!"); //Need to implement mortage backup stuff
+			System.out.print("You owe more money than you have!"); //Need to implement mortgage backup stuff
 		}
 	}
 }
