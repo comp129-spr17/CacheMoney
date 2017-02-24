@@ -74,6 +74,7 @@ public class MClient {
 	private void initDoActions(){
 		doActions.put(unicode.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
 		doActions.put(unicode.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
+		doActions.put(unicode.START_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame();}});
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 		isConnected = false;
@@ -167,6 +168,9 @@ public class MClient {
 	}
 	private void doEndTurn(){
 		diceP.actionForDiceEnd();
+	}
+	private void doStartGame(){
+		diceP.actionForStart();
 	}
 	private void setPlayer(int i){
 		thisPlayer = pList[i];

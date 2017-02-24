@@ -66,7 +66,7 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packEndTurn(String requestCode){
+	public byte[] packSimpleRequest(String requestCode){
 		try{
 			dOutputStream.writeUTF(requestCode);
 			return packResult();
