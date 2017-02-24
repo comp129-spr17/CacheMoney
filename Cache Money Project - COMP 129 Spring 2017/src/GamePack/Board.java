@@ -115,7 +115,7 @@ public class Board {
 				 // Sounds.landedOnOwnedProperty.playSound();
 				 // return "OWNED_PROPERTY";
 			//}
-			System.out.println(boardTracker[playerPosition[player]].getName());
+			//System.out.println(boardTracker[playerPosition[player]].getName());
 			return boardTracker[playerPosition[player]].getName();
 		}
 	}

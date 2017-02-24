@@ -157,6 +157,13 @@ public class DicePanel extends JPanel{
 	
 	public void setStartGameButtonEnabled(boolean enabled){
 		this.startGameButton.setEnabled(enabled);
+		if (enabled){
+			startGameButton.setText(startGameButton.getText() + "" + "</html>");
+		}
+		else{
+			startGameButton.setText(startGameButton.getText() + "<br />Waiting for host to begin game..." + "</html>");
+		}
+		
 	}
 	
 	
@@ -502,9 +509,8 @@ public class DicePanel extends JPanel{
 	}
 	public void setPort(int port) {
 		this.port = port;
-		String startGameButtonText = "<html>START GAME<br /><br />IP: " + this.ip + "<br />Port: " + this.port + "</html>";
+		String startGameButtonText = "<html>START GAME<br /><br />IP: " + this.ip + "<br />Port: " + this.port + "<br />";
 		
-		this.startGameButton.setText(startGameButtonText);
-		
+		this.startGameButton.setText(startGameButtonText);	
 	}
 }
