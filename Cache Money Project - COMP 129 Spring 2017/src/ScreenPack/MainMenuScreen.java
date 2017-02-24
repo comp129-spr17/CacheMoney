@@ -5,6 +5,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.*;
 import java.util.Timer;
@@ -12,6 +13,7 @@ import java.util.TimerTask;
 import CacheChatPack.CacheChat;
 import GamePack.SizeRelated;
 import InterfacePack.AudioPlayer;
+import WaitingRoomPack.*;
 import InterfacePack.Sounds;
 import MultiplayerPack.*;
 
@@ -253,18 +255,45 @@ public class MainMenuScreen {
 			// BRING THE USER TO THE HOST WAITING ROOM
 			System.out.println("THIS IS WHERE THE WAITING ROOM IS. IT'S NOT IMPLEMENTED YET.");
 			hideAndDisposeMainMenuScreen();
+			Timer t = new Timer();
+			t.schedule(new TimerTask(){
+
+				@Override
+				public void run() {
+					try {
+						new WRServer();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}, 0);
 			gameScreen = new GameScreen(false);
 			break;
 		case 1:
 			mwr.askUserForIPAndPort();
-			
+			Timer x = new Timer();
+			x.schedule(new TimerTask(){
+
+				@Override
+				public void run() {
+					try {
+						new WRClient(mwr.getIPAddress(), mwr.getPortNumber(), false);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}, 0);
 			// TRY TO CONNECT TO HOST
 			// IF IT WORKS, BRING USER TO HOST WAITING ROOM
 			// IF NOT, RUN mwr.askUserForIPAndPort(); AGAIN
 			hideAndDisposeMainMenuScreen();
 			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
 			
-			System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
+			//System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
+			
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
