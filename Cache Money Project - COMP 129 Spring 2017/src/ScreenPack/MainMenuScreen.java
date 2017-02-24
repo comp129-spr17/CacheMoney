@@ -250,21 +250,13 @@ public class MainMenuScreen {
 		GameScreen gameScreen;
 		switch (mwr.askUserHostOrClient()){
 		case 0:
-			// BRING THE USER TO THE HOST WAITING ROOM
-			System.out.println("THIS IS WHERE THE WAITING ROOM IS. IT'S NOT IMPLEMENTED YET.");
 			hideAndDisposeMainMenuScreen();
 			gameScreen = new GameScreen(false);
 			break;
 		case 1:
 			mwr.askUserForIPAndPort();
-			
-			// TRY TO CONNECT TO HOST
-			// IF IT WORKS, BRING USER TO HOST WAITING ROOM
-			// IF NOT, RUN mwr.askUserForIPAndPort(); AGAIN
 			hideAndDisposeMainMenuScreen();
 			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
-			
-			System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
