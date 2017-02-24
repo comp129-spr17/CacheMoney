@@ -24,12 +24,16 @@ public class MThread extends Thread{
 	private boolean serverDisconnected;
 	private String hostName;
 	private MByteUnpack mUnpack;
+	private MBytePack mPack;
+	private UnicodeForServer ufs;
 	
 	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName){
 		socket = s;
 		this.usersOutput = usersOutput;
 		this.hostName = hostName;
+		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
+		ufs = UnicodeForServer.getInstance();
 		try {
 			readFromUser = s.getInputStream();
 		} catch (IOException e) {
@@ -55,6 +59,8 @@ public class MThread extends Thread{
 	}
 	public void run(){
 		try{
+			// WARNING: HARDCODED TO 2
+			showMsgToUsers(mPack.packPlayerNumber(ufs.PLAYER_NUM, 2));
 			while(true){
 				getMsg();
 				showMsgToUsers(msg);

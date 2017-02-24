@@ -46,9 +46,9 @@ public class MClient {
 		manuallyEnterIPandPort(br, isHostClient);
     }
 
-	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player p) throws IOException {
+	public MClient(String ip, int port, boolean isHostClient, DicePanel d) throws IOException {
 		this.diceP = d;
-		this.thisPlayer = p;
+		//this.thisPlayer = p;
 		init();
 		optionBox = new ClientEntranceBox(); 
 		connectToServer(ip, port, isHostClient);
@@ -113,7 +113,10 @@ public class MClient {
         		if(((String)result.get(0)).equals(unicode.DICE)){
         			doRollingDice((Integer)result.get(1),(Integer)result.get(2));
         		}
-        		
+        		else if (((String)result.get(0)).equals(unicode.PLAYER_NUM)){
+        			// SETS THE PLAYER NUM HERE
+        			System.out.println((Integer)result.get(1));
+        		}
         		
         		
         	}

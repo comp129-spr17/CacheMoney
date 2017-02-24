@@ -346,7 +346,8 @@ public class GameScreen extends JFrame{
 	}
 	private void addClient(String ip, int port){
 		try {
-			MClient client = new MClient(ip,port,false,dicePanel,players[host.getCurPlayer()]);
+			// WARNING: HOST ISN'T INITIALIZED
+			MClient client = new MClient(ip,port,false,dicePanel);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

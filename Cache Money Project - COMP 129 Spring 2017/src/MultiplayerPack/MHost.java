@@ -132,7 +132,7 @@ public class MHost {
 			@Override
 			public void run() {
 				try {
-					hostClient = new MClient(ip, port, true, diceP, player);
+					hostClient = new MClient(ip, port, true, diceP);
 					while (hostClient.getIsServerUp()){
 						//nothing
 					}

@@ -55,6 +55,18 @@ public final class MBytePack {
 		return null;
 	}
 	
+	public byte[] packPlayerNumber(String requestCode, int playerNum){
+		try{
+			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(playerNum);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static void main(String[] args){
 
 		UnicodeForServer UNICODE = UnicodeForServer.getInstance();
