@@ -49,6 +49,8 @@ public class DicePanel extends JPanel{
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 	private boolean isSingle;
+	private String ip;
+	private int port;
 	public DicePanel(boolean isSingle){
 		this.isSingle = isSingle;
 		init();
@@ -482,5 +484,21 @@ public class DicePanel extends JPanel{
 	public void setOutputStream(OutputStream outputStream) {
 		this.outputStream = outputStream;
 		propertyPanel.setOutputStream(outputStream);
+	}
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	public int getPort() {
+		return port;
+	}
+	public void setPort(int port) {
+		this.port = port;
+		String startGameButtonText = "<html>START GAME<br /><br />IP: " + this.ip + "<br />Port: " + this.port + "</html>";
+		
+		this.startGameButton.setText(startGameButtonText);
+		
 	}
 }
