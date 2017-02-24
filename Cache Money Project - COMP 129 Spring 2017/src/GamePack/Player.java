@@ -1,5 +1,8 @@
 package GamePack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class Player {
 	private int totalmonies;
 	private int fivehunneds;
@@ -16,6 +19,7 @@ public final class Player {
 	private static final Player GlobalPlayer1 = new Player();
 	private static final Player GlobalPlayer2 = new Player();
 	private static final Player GlobalPlayer3 = new Player();
+	private List<String> ownedProperties;
 //------------------------------------Default Constructor
 	
 	private Player() {
@@ -28,6 +32,7 @@ public final class Player {
 		fives = 5;
 		ones = 5;
 		inJail = false;
+		ownedProperties = new ArrayList<String>();
 	}
 	public static Player getInstance(int i)
 	{
@@ -76,6 +81,10 @@ public final class Player {
 	{
 		return playerNum;
 	}
+	public List<String> getOwnedProperties()
+	{
+		return ownedProperties;
+	}
 //----------------------------------------Sets
 	void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
@@ -115,6 +124,11 @@ public final class Player {
 		playerpiece = new Piece(playerNum, this);
 	}
 	
+	public void addProperty(String propertyName)
+	{
+		ownedProperties.add(propertyName);
+	}
+	
 	public void pay(int cost) {
 		int modMoney = 0;
 		if (totalmonies >= cost)
@@ -126,7 +140,7 @@ public final class Player {
 				{
 					if(fivehunneds > 0)
 					{
-						setHunneds(fivehunneds-1);
+						setFiveHunneds(fivehunneds-1);
 						totalmonies -= 500;
 						cost = cost - 500;
 					}
@@ -152,7 +166,7 @@ public final class Player {
 				{
 					if (fitties > 0)
 					{
-						setHunneds(fitties-1);
+						setFitties(fitties-1);
 						totalmonies -= 50;
 						cost = cost - 50;
 					}
@@ -165,7 +179,7 @@ public final class Player {
 				{
 					if (twennies > 0)
 					{
-						setHunneds(twennies-1);
+						setTwennies(twennies-1);
 						totalmonies -= 20;
 						cost = cost - 20;
 					}
@@ -178,7 +192,7 @@ public final class Player {
 				{
 					if (tens > 0)
 					{
-						setHunneds(tens-1);
+						setTens(tens-1);
 						totalmonies -= 10;
 						cost = cost - 10;
 					}
@@ -191,7 +205,7 @@ public final class Player {
 				{
 					if (fives > 0)
 					{
-						setHunneds(fives-1);
+						setFives(fives-1);
 						totalmonies -= 5;
 						cost = cost - 5;
 					}
@@ -203,7 +217,7 @@ public final class Player {
 				{
 					if (ones > 0)
 					{
-						setHunneds(ones-1);
+						setOnes(ones-1);
 						totalmonies -= 1;
 						cost = cost - 1;
 					}
