@@ -27,6 +27,7 @@ public class DicePanel extends JPanel{
 	private JTextField overrideDiceRoll;
 	private JButton startGameButton;
 	private JButton endTurnButton;
+	private Player[] players;
 	private JLabel turnLabel;
 	private Dice dices[]; 
 	private int result[];
@@ -51,7 +52,8 @@ public class DicePanel extends JPanel{
 	private boolean isSingle;
 	private String ip;
 	private int port;
-	public DicePanel(boolean isSingle){
+	public DicePanel(boolean isSingle, Player[] player){
+		players = player;
 		this.isSingle = isSingle;
 		init();
 	}
@@ -94,7 +96,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle);
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players);
 		bPanel.add(propertyPanel);
 		this.board = board;
 	}

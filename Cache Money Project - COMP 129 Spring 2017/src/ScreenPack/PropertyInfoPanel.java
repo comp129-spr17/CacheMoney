@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
 import GamePack.SizeRelated;
@@ -36,8 +37,10 @@ public class PropertyInfoPanel extends JPanel{
 	private boolean isSingle;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle)
+	private Player[] players;
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player)
 	{
+		players = player;
 		this.isSingle = isSingle;
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.propertyInfo = propertyInfo;
