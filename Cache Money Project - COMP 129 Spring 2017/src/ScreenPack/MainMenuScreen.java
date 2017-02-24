@@ -78,7 +78,7 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//Sounds.turnBegin.playSound();
+				Sounds.buttonConfirm.playSound();
 				//GameScreen gameScreen = new GameScreen();
 				displaySingleMultiplayerDialogBox();
 				

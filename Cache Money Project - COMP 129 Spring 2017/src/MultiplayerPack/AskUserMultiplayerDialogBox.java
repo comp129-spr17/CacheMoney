@@ -11,7 +11,6 @@ public class AskUserMultiplayerDialogBox {
 	private JTextField txtPort;
 	
 	public AskUserMultiplayerDialogBox() {
-		Sounds.buttonPress.playSound();
 		txtIp = new JTextField();
 		txtPort = new JTextField();
 		message = new Object[4];
@@ -28,7 +27,7 @@ public class AskUserMultiplayerDialogBox {
 			return 0;
 		}
 		else if (chosen == JOptionPane.NO_OPTION){
-			Sounds.turnBegin.playSound();
+			Sounds.waitingRoomJoin.playSound();
 			return 1;
 		}
 		Sounds.buttonCancel.playSound();
@@ -38,7 +37,7 @@ public class AskUserMultiplayerDialogBox {
 	public int askUserHostOrClient(){
 		int chosen = JOptionPane.showConfirmDialog(null, "Would you like to host the game?", "Select Multiplayer Settings...", JOptionPane.YES_NO_OPTION);
 		if (chosen == JOptionPane.YES_OPTION){
-			Sounds.buttonPress.playSound();
+			Sounds.buttonConfirm.playSound();
 			return 0;
 		}
 		else if (chosen == JOptionPane.NO_OPTION){
@@ -52,6 +51,7 @@ public class AskUserMultiplayerDialogBox {
 	public boolean askUserForIPAndPort(){
 		int chosen = JOptionPane.showConfirmDialog(null, message, "Connect to Host...", JOptionPane.OK_CANCEL_OPTION);
 		if(chosen == JOptionPane.OK_OPTION){
+			Sounds.buttonConfirm.playSound();
 			return true;
 		}
 		Sounds.buttonCancel.playSound();

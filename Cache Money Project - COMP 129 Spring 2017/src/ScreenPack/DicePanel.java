@@ -149,7 +149,7 @@ public class DicePanel extends JPanel{
 	}
 	
 	private void addStartGameButton(){
-		this.startGameButton = new JButton("START GAME");
+		this.startGameButton = new JButton("Click here to begin game...");
 		startGameButton.setBounds(0, 0, sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		add(startGameButton);
 	}
@@ -291,6 +291,7 @@ public class DicePanel extends JPanel{
 		overrideDiceRoll.setVisible(true);
 		turnLabel.setVisible(true);
 		Sounds.winGame.playSound();
+		Sounds.turnBegin.playSound();
 	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
