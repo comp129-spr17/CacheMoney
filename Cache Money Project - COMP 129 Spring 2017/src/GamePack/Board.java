@@ -25,7 +25,6 @@ public class Board {
 	private final static int NUM_ROW = 11;
 	private final static int NUM_COL = 11;
 	private Space[] boardTracker;
-	private int[] playerPosition;
 	private Timer pieceMovingAnim;
 	private Player[] players;
 	private boolean isDone;
@@ -39,7 +38,6 @@ public class Board {
 		this.players = pieces;
 		numPlayers = numP;
 		boardTracker = new Space[40];
-		playerPosition = new int[numPlayers];
 		pieceMovingAnim = new Timer();
 		propertyCheck = new boolean[40];
 		initPropertyCheck();
@@ -86,7 +84,7 @@ public class Board {
 		return isDone;
 	}
 	public String getSpacePlayerLandedOn(int player) { // TODO: MOVE THIS TO PROPERTYINFOPANEL SOON!
-		switch (playerPosition[player]){
+		switch (players[player].getPositionNumber()){
 		case HOME:
 			return "Go";
 		case JAIL:
@@ -105,7 +103,7 @@ public class Board {
 			Sounds.money.playSound();
 			return "Jewelry Tax";
 		default:
-			if (playerPosition[player] % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
+			if (players[player].getPositionNumber() % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();
 			}
 			//else{
@@ -116,7 +114,7 @@ public class Board {
 				 // return "OWNED_PROPERTY";
 			//}
 			//System.out.println(boardTracker[playerPosition[player]].getName());
-			return boardTracker[playerPosition[player]].getName();
+			return boardTracker[players[player].getPositionNumber()].getName();
 		}
 	}
 	
@@ -130,11 +128,18 @@ public class Board {
 				
 				for(int i=1; i<diceResult+1; i++){
 					Sounds.movePiece.playSound();
-					playerPosition[player]++;
-					boardTracker[playerPosition[player]-1].removePiece(player);
+					players[player].movePosition();
 					checkIfLastSpace(player);
-					boardTracker[playerPosition[player]].receivePiece(players[player].getPiece(), player);
-					if (playerPosition[player] == 0){
+					if(players[player].getPositionNumber() - 1 < 0)
+					{
+						boardTracker[39].removePiece(player);
+					}
+					else
+					{
+						boardTracker[players[player].getPositionNumber() - 1].removePiece(player);
+					}
+					boardTracker[players[player].getPositionNumber()].receivePiece(players[player].getPiece(), player);
+					if (players[player].getPositionNumber() == 0){
 						// PLAYER PASSED GO
 						//Sounds.passedGo.playSound();
 						Sounds.money.playSound();
@@ -149,6 +154,10 @@ public class Board {
 						e.printStackTrace();
 					}
 					
+				}
+				for (int j = 0; j < 4; j++)
+				{
+					players[j].checkGo();
 				}
 				//landedOnSpaceSounds(player);
 				
@@ -168,18 +177,18 @@ public class Board {
 					e.printStackTrace();
 				}
 				// PLAYER IS SENT TO JAIL HERE IF THEY LAND ON THAT SPACE
-				playerPosition[player] = boardTracker[playerPosition[player]].landOnSpace(players[player].getPiece(), playerPosition[player]);
+				players[player].setPositionNumber(boardTracker[players[player].getPositionNumber()].landOnSpace(players[player].getPiece(), players[player].getPositionNumber()));
 				
 				
 			}
 		}, 1200);
 	}
 	private void checkIfLastSpace(int player){
-		playerPosition[player] = playerPosition[player] % 40;
+		players[player].setPositionNumber(players[player].getPositionNumber() % 40);
 	}
 	
 	public boolean isPlayerInPropertySpace(int player)
 	{
-		return propertyCheck[playerPosition[player]];
+		return propertyCheck[players[player].getPositionNumber()];
 	}
 }

@@ -15,6 +15,7 @@ public final class Player {
 	private Piece playerpiece;
 	private boolean inJail;
 	private int playerNum;
+	private int playerPositionNumber;
 	private static final Player GlobalPlayer0 = new Player();
 	private static final Player GlobalPlayer1 = new Player();
 	private static final Player GlobalPlayer2 = new Player();
@@ -23,6 +24,7 @@ public final class Player {
 //------------------------------------Default Constructor
 	
 	private Player() {
+		playerPositionNumber = 0;
 		totalmonies = 1500;
 		fivehunneds = 2;
 		hunneds = 2;
@@ -85,6 +87,10 @@ public final class Player {
 	{
 		return ownedProperties;
 	}
+	public int getPositionNumber()
+	{
+		return playerPositionNumber;
+	}
 //----------------------------------------Sets
 	void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
@@ -117,7 +123,20 @@ public final class Player {
 	public void setInJail(boolean jail) {
 		inJail = jail;
 	}
-	
+	public void movePosition()
+	{
+		playerPositionNumber++; 
+	}
+	public void checkGo()
+	{
+		if (playerPositionNumber >= 40)
+		{
+			hunneds += 2;
+			totalmonies += 200;
+			playerPositionNumber -= playerPositionNumber - 40;
+			System.out.println("yes");
+		}
+	}
 	public void setplayerNum(int i)
 	{
 		playerNum = i;
@@ -129,7 +148,10 @@ public final class Player {
 		ownedProperties.add(propertyName);
 		//Subtract the cost of the property using the pay function right below.
 	}
-	
+	public void setPositionNumber(int newPosition)
+	{
+		playerPositionNumber = newPosition;
+	}
 	public void pay(int cost) {
 		int modMoney = 0;
 		if (totalmonies >= cost)
