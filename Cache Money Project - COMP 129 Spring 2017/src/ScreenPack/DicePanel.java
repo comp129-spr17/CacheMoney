@@ -4,26 +4,19 @@ import MultiplayerPack.*;
 import InterfacePack.Sounds;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -54,8 +47,9 @@ public class DicePanel extends JPanel{
 	private OutputStream outputStream;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
-
-	public DicePanel(){
+	private boolean isSingle;
+	public DicePanel(boolean isSingle){
+		this.isSingle = isSingle;
 		init();
 	}
 	private void init(){
@@ -183,7 +177,10 @@ public class DicePanel extends JPanel{
 				for(int i=0; i<2; i++){
 					diceRes[i] = dices[i].getDiceResult();
 				}
-				sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]));
+				if(isSingle)
+					actionForDiceRoll(diceRes[0], diceRes[1]);
+				else
+					sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]));
 				//actionForDiceRoll();
 			}
 		});
@@ -250,8 +247,6 @@ public class DicePanel extends JPanel{
 			}
 		}
 		else{
-			// BAD!! THERE'S A NULL POINTER EXCEPTION WITH writer!
-			//throw new NullPointerException();
 			System.out.println("WARNING: writer == null");
 		}
 	}
@@ -259,8 +254,12 @@ public class DicePanel extends JPanel{
 	private void changeTurn(){
 		turnLabel.setText("Player " + (current % 4 + 1) + "'s Turn!");
 	}
-	
+	private void setDiceResult(int diceRes1, int diceRes2){
+		diceRes[0] = diceRes1;
+		diceRes[1] = diceRes2;
+	}
 	public void rollDice(int diceRes1, int diceRes2){
+		setDiceResult(diceRes1, diceRes2);
 		isDiceButtonPressed = true;
 		dices[0].showDice();
 		dices[1].showDice();

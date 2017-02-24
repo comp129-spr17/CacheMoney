@@ -30,12 +30,13 @@ public class MHost {
 	private static MClient hostClient;
 	private int playerJoined;
 	private static DicePanel diceP;
+	private Integer playerNum;
 	
-	public MHost(DicePanel d, Player p) throws IOException{
+	public MHost(DicePanel d, Player[] p) throws IOException{
 		MHost.diceP = d;
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
-		
+		playerNum = new Integer(0);
 		System.out.println("Creating the server...");
 		while (true){
 			try{
@@ -63,7 +64,9 @@ public class MHost {
 
         while(true){
         	try{
-            	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip);
+            	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum);
+
+    			System.out.println(playerNum);
             	playerJoined++;
             	runningClients.add(aChatThread);
                 aChatThread.start();
@@ -125,14 +128,14 @@ public class MHost {
 	public int getCurPlayer(){
 		return playerJoined;
 	}
-	private static void createHostClient(String ip, int port, Player player){
+	private static void createHostClient(String ip, int port, Player[] player){
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 
 			@Override
 			public void run() {
 				try {
-					hostClient = new MClient(ip, port, true, diceP);
+					hostClient = new MClient(ip, port, true, diceP, player);
 					while (hostClient.getIsServerUp()){
 						//nothing
 					}
