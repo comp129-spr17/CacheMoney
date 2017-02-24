@@ -230,7 +230,7 @@ public class MainMenuScreen {
 			break;
 		case 1: // USER WANTED SINGLEPLAYER
 			hideAndDisposeMainMenuScreen();
-			GameScreen gameScreen = new GameScreen(true);
+			GameScreen gameScreen = new GameScreen(true, null);
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -253,7 +253,6 @@ public class MainMenuScreen {
 		switch (mwr.askUserHostOrClient()){
 		case 0:
 			// BRING THE USER TO THE HOST WAITING ROOM
-			System.out.println("THIS IS WHERE THE WAITING ROOM IS. IT'S NOT IMPLEMENTED YET.");
 			hideAndDisposeMainMenuScreen();
 			Timer t = new Timer();
 			t.schedule(new TimerTask(){
@@ -261,7 +260,9 @@ public class MainMenuScreen {
 				@Override
 				public void run() {
 					try {
-						new WRServer();
+						WRServer wrs = new WRServer(); 
+						new GameScreen(false, wrs.listener);
+						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -269,28 +270,31 @@ public class MainMenuScreen {
 				}
 				
 			}, 0);
-			gameScreen = new GameScreen(false);
 			break;
 		case 1:
 			mwr.askUserForIPAndPort();
 			Timer x = new Timer();
+			hideAndDisposeMainMenuScreen();
 			x.schedule(new TimerTask(){
 
 				@Override
 				public void run() {
-					try {
-						new WRClient(mwr.getIPAddress(), mwr.getPortNumber(), false);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						try {
+							WRClient wrc = new WRClient(mwr.getIPAddress(), mwr.getPortNumber(), false);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
 				}
 			}, 0);
-			// TRY TO CONNECT TO HOST
-			// IF IT WORKS, BRING USER TO HOST WAITING ROOM
-			// IF NOT, RUN mwr.askUserForIPAndPort(); AGAIN
-			hideAndDisposeMainMenuScreen();
-			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
+			
 			
 			//System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
 			

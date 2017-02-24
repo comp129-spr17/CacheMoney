@@ -26,27 +26,19 @@ public class MHost {
 	private static ArrayList<MThread> runningClients;
 	private static MElements server;
 	private static int PORT_NUM = 1234;
-	private static ServerSocket listener;
+	private ServerSocket listener;
 	private static MClient hostClient;
 	private int playerJoined;
 	private static DicePanel diceP;
 	private Integer playerNum;
 	
-	public MHost(DicePanel d, Player[] p) throws IOException{
+	public MHost(DicePanel d, Player[] p, ServerSocket listener) throws IOException{
 		MHost.diceP = d;
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
 		playerNum = new Integer(0);
 		System.out.println("Creating the server...");
-		while (true){
-			try{
-				listener = new ServerSocket(PORT_NUM);
-				break;
-			}
-			catch (BindException e){
-				PORT_NUM = rand.nextInt(8999 + 1000);
-			}
-		}
+		this.listener = listener;
 		
 		String ip = getIPAddress();
 		

@@ -8,6 +8,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,12 +61,12 @@ public class GameScreen extends JFrame{
 	private Font numberfont;
 	private boolean isSingle;
 	// called if user is the host
-	public GameScreen(boolean isSingle){
+	public GameScreen(boolean isSingle, ServerSocket listener){
 		//setAlwaysOnTop(true);
 		this.isSingle = isSingle;
 		initEverything();
 		if(!isSingle)
-			addHost();
+			addHost(listener);
 		
 	}
 	// called if user is the client
@@ -325,7 +326,7 @@ public class GameScreen extends JFrame{
 			mainPanel.add(xmark[k]);
 		}
 	}
-	private void addHost(){
+	private void addHost(ServerSocket listener){
 		
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
@@ -334,7 +335,7 @@ public class GameScreen extends JFrame{
 			public void run() {
 				try {
 
-					host = new MHost(dicePanel,players);
+					host = new MHost(dicePanel,players, listener);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

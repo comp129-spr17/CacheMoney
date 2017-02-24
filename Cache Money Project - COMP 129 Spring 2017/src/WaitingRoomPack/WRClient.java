@@ -48,17 +48,48 @@ public class WRClient {
         rm = new WaitingRoom(isHostClient);
 
         
-        String x = "";
+        
         isServerUp = true;
-        while(isServerUp){
-        	try{
-        		x = input.readLine();
-	        	rm.receivedData(x);
-	        	System.out.println(x);
-        	}catch(SocketException e){
-        		isServerUp = false;
-        	}
-        }
+        
+        
+        Timer t = new Timer();
+        t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				
+				while(isServerUp){
+		        	try{
+			        	rm.receivedData(input.readLine());
+		        	}catch(SocketException e){
+		        		isServerUp = false;
+		        	} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	catch (NullPointerException e){
+		        		System.out.println("Server finished.");
+		        		isServerUp = false;
+		        		rm.setServerUp(false);
+		        		break;
+		        	}
+		        }
+	        		
+			}
+        	
+        }, 0);
+        
+        
+        while (true){
+			System.out.print("");
+			if (!rm.isServerUp()){
+				isServerUp = false;
+				break;
+			}
+		}
+        rm.setVisible(false);
+        rm.dispose();
+        
 	}
 
 

@@ -23,11 +23,13 @@ public class WRServer {
 	private static ArrayList<PrintWriter> usersWriter;
 	private static ArrayList<WRThread> runningClients;
 	private static WRElement server;
-	private static int PORT_NUM = 1234;
-	private static ServerSocket listener;
+	public int PORT_NUM = 1234;
+	public ServerSocket listener;
 	private static WRClient hostClient;
+	private static boolean isServerUp;
 	
 	public WRServer() throws IOException{
+		
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
 		
@@ -46,6 +48,7 @@ public class WRServer {
 		
 		
 		System.out.println("Server successfully created!\n\n---------\n");		
+		isServerUp = true;
 		System.out.println("Server IP Address: " + ip);
 		System.out.println("Server Port: " + listener.getLocalPort());
 		createHostClient(ip, listener.getLocalPort());
@@ -55,18 +58,31 @@ public class WRServer {
         usersWriter = new ArrayList<>();
         server = new WRElement("Server", "");
         runningClients = new ArrayList<>();
-        closingServerAsking();
+        //closingServerAsking();
         
+        Timer t = new Timer();
+        t.schedule(new TimerTask(){
 
-        while(true){
-        	try{
-            	WRThread aChatThread = new WRThread(listener.accept(), users, usersWriter,server, ip);
-            	runningClients.add(aChatThread);
-                aChatThread.start();
-        	}
-        	catch (IOException e){
-        		break;
-        	}
+			@Override
+			public void run() {
+				while(true){
+		        	try{
+		            	WRThread aChatThread = new WRThread(listener.accept(), users, usersWriter,server, ip);
+		            	runningClients.add(aChatThread);
+		                aChatThread.start();
+		        	}
+		        	catch (IOException e){
+		        		isServerUp = false;
+		        		break;
+		        	}
+		        }
+			}
+        	
+        }, 0);
+        
+        
+        while (isServerUp){
+        	System.out.print("");
         }
 	}
 	
@@ -94,21 +110,21 @@ public class WRServer {
 			list.disconnectServer();
 		}
 	}
-	private static void closingServerAsking(){
-		Timer aTimer = new Timer();
-		Scanner in = new Scanner(System.in);
-		aTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				System.out.println("Press enter or close client to close the \nserver and terminate program:\n");
-				in.nextLine();
-	        	closeServer();
-			}
-
-			
-		}, 0);
-		
-	}
+//	private static void closingServerAsking(){
+//		Timer aTimer = new Timer();
+//		Scanner in = new Scanner(System.in);
+//		aTimer.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//				System.out.println("Press enter or close client to close the \nserver and terminate program:\n");
+//				in.nextLine();
+//	        	closeServer();
+//			}
+//
+//			
+//		}, 0);
+//		
+//	}
 	
 	private static void closeServer() {
     	System.out.println("Closing the server.....");
@@ -133,6 +149,7 @@ public class WRServer {
 					while (hostClient.getIsServerUp()){
 						//nothing
 					}
+					isServerUp = false;
 					closeServer();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -141,5 +158,15 @@ public class WRServer {
 			
 		}, 0);
 		
+	}
+
+
+	public boolean isServerUp() {
+		return isServerUp;
+	}
+
+
+	public void setServerUp(boolean isServerUp) {
+		this.isServerUp = isServerUp;
 	}
 }

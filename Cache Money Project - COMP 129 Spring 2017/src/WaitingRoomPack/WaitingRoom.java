@@ -2,6 +2,8 @@ package WaitingRoomPack;
 
 import java.awt.Font;
 import java.awt.Panel;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.Timer;
@@ -14,7 +16,7 @@ import javax.swing.JTextArea;
 
 import InterfacePack.Sounds;
 
-public class WaitingRoom extends JFrame {
+public class WaitingRoom extends JFrame{
 	
 	private final static int WINDOW_WIDTH = 700;
 	private final static int WINDOW_HEIGHT = 760;
@@ -23,6 +25,7 @@ public class WaitingRoom extends JFrame {
 	private Object[] message;
 	private int numPeopleJoined;
 	private JTextArea msgDisplayArea;
+	private boolean isServerUp;
 
 	
 	public WaitingRoom(boolean isHostClient){
@@ -38,7 +41,7 @@ public class WaitingRoom extends JFrame {
 	
 	private void init(){
 		numPeopleJoined = 0;
-		
+		setServerUp(true);
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		
 		panel = new Panel();
@@ -54,6 +57,53 @@ public class WaitingRoom extends JFrame {
 		this.setVisible(true);
 		panel.setVisible(true);
 		msgDisplayArea.setVisible(true);
+		
+		addWindowListener(new WindowListener(){
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				setServerUp(false);
+				
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
 	}
 	
@@ -83,6 +133,14 @@ public class WaitingRoom extends JFrame {
 			System.out.println(msg);
 		}
 		
+	}
+
+	public boolean isServerUp() {
+		return isServerUp;
+	}
+
+	public void setServerUp(boolean isServerUp) {
+		this.isServerUp = isServerUp;
 	}
 	
 	
