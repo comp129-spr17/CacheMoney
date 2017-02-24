@@ -85,6 +85,10 @@ public class DicePanel extends JPanel{
 		addHands();
 		setDiceBackgroundColor();
 		
+		rollButton.setVisible(false);
+		overrideDiceRoll.setVisible(false);
+		turnLabel.setVisible(false);
+		
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
@@ -172,8 +176,13 @@ public class DicePanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				startGameButton.setVisible(false);
-				Sounds.winGame.playSound();
+				if (startGameButton.isEnabled()){
+					startGameButton.setVisible(false);
+					rollButton.setVisible(true);
+					overrideDiceRoll.setVisible(true);
+					turnLabel.setVisible(true);
+					Sounds.winGame.playSound();
+				}
 				// TODO: SET START GAME BUTTON TO BE INVISIBLE FOR EVERYONE ELSE TOO!
 				
 			}

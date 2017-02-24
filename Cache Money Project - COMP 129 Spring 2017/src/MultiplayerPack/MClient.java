@@ -117,7 +117,8 @@ public class MClient {
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
         diceP.setOutputStream(outputStream);
-      
+        diceP.setStartGameButtonEnabled(isHostClient);
+        
 //        d.setWriter(out);
 //        out.println("Player 1");
         
