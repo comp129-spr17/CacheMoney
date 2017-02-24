@@ -92,7 +92,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings());
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle);
 		bPanel.add(propertyPanel);
 		this.board = board;
 	}
@@ -302,7 +302,11 @@ public class DicePanel extends JPanel{
 		if(playerNum != current){
 			rollButton.setVisible(false);
 			endTurnButton.setVisible(false);
+			propertyPanel.disableButtons();
 		}
+	}
+	public void actionForRemovePropertyPanel(){
+		propertyPanel.endPropertyPanel();
 	}
 	private void sendMessageToServer(byte[] msg){
 		if (outputStream != null){
@@ -477,5 +481,6 @@ public class DicePanel extends JPanel{
 	}
 	public void setOutputStream(OutputStream outputStream) {
 		this.outputStream = outputStream;
+		propertyPanel.setOutputStream(outputStream);
 	}
 }

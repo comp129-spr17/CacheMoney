@@ -7,7 +7,7 @@ public final class UnicodeForServer {
 	public static final String PLAYER_NUM = "A!()FASNV)@$(@3";
 	public static final String END_TURN = "A!()FASNV)@$(@4";
 	public static final String START_GAME = "A!()FASNV)@$(@5";
-	
+	public static final String END_PROPERTY = "A!()FASNV)@$(@6";
 	private UnicodeForServer(){
 		
 	}

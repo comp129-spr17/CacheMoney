@@ -3,6 +3,8 @@ package ScreenPack;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,6 +16,8 @@ import GamePack.Property;
 import GamePack.PropertySpace;
 import GamePack.SizeRelated;
 import InterfacePack.Sounds;
+import MultiplayerPack.MBytePack;
+import MultiplayerPack.UnicodeForServer;
 
 public class PropertyInfoPanel extends JPanel{
 	private JPanel panelToSwitchFrom;
@@ -28,11 +32,17 @@ public class PropertyInfoPanel extends JPanel{
 	private Property property;
 	private SizeRelated sizeRelated;
 	private HashMap<String,PropertySpace> propertyInfo;
-	
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo)
+	private OutputStream outputStream;
+	private boolean isSingle;
+	private MBytePack mPack;
+	private UnicodeForServer unicode;
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle)
 	{
+		this.isSingle = isSingle;
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.propertyInfo = propertyInfo;
+		mPack = MBytePack.getInstance();
+		unicode = UnicodeForServer.getInstance();
 		init();
 	}
 			
@@ -92,7 +102,7 @@ public class PropertyInfoPanel extends JPanel{
 		
 	}
 	
-	private void endPropertyPanel()
+	public void endPropertyPanel()
 	{
 		this.removeAll();
 		this.setVisible(false);
@@ -121,8 +131,14 @@ public class PropertyInfoPanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonCancel.playSound();
-				endPropertyPanel();
+				if(hideButton.isEnabled()){
+					Sounds.buttonCancel.playSound();
+					if(isSingle)
+						endPropertyPanel();
+					else
+						sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+				}
+				
 			}
 		});
 		buyButton.addMouseListener(new MouseListener() {
@@ -146,7 +162,8 @@ public class PropertyInfoPanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.money.playSound();
+				if(buyButton.isEnabled())
+					Sounds.money.playSound();
 				//TODO Add buying functionality
 			}
 		});
@@ -171,7 +188,8 @@ public class PropertyInfoPanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.landedOnOwnedProperty.playSound();
+				if(auctionButton.isEnabled())
+					Sounds.landedOnOwnedProperty.playSound();
 				//TODO Add buying functionality
 			}
 		});
@@ -206,13 +224,31 @@ public class PropertyInfoPanel extends JPanel{
 		add(auctionButton);
 	}
 	public void disableButtons(){
-		hideButton.setEnabled(false);
-		buyButton.setEnabled(false);
-		auctionButton.setEnabled(false);
+		if(hideButton!=null){
+			hideButton.setEnabled(false);
+			buyButton.setEnabled(false);
+			auctionButton.setEnabled(false);
+		}
+		
 	}
 	public void enableButtons(){
 		hideButton.setEnabled(true);
 		buyButton.setEnabled(true);
 		auctionButton.setEnabled(true);
+	}
+	public void setOutputStream(OutputStream outputStream){
+		this.outputStream = outputStream;
+	}
+	private void sendMessageToServer(byte[] msg){
+		if (outputStream != null){
+			try {
+				outputStream.write(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else{
+			System.out.println("WARNING: writer == null");
+		}
 	}
 }
