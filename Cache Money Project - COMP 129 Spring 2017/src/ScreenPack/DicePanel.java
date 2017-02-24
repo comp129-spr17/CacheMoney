@@ -75,7 +75,7 @@ public class DicePanel extends JPanel{
 		dCel = new DoubleCelebrate();
 		dCel.setSize(this.getSize());
 		dCel.setLocation(this.getLocation().x, this.getLocation().y-5);
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings());
+		
 		
 		addTurnLabel();
 		addRollButton();
@@ -92,6 +92,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings());
 		bPanel.add(propertyPanel);
 		this.board = board;
 	}
