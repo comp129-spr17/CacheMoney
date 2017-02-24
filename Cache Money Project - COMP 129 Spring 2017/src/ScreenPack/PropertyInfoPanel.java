@@ -205,4 +205,14 @@ public class PropertyInfoPanel extends JPanel{
 		auctionButton.setBackground(Color.RED);
 		add(auctionButton);
 	}
+	public void disableButtons(){
+		hideButton.setEnabled(false);
+		buyButton.setEnabled(false);
+		auctionButton.setEnabled(false);
+	}
+	public void enableButtons(){
+		hideButton.setEnabled(true);
+		buyButton.setEnabled(true);
+		auctionButton.setEnabled(true);
+	}
 }
