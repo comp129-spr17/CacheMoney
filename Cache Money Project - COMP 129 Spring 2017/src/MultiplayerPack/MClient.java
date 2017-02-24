@@ -147,7 +147,7 @@ public class MClient {
 		        	try{
 		        		inputStream.read(msgs);
 		    			result = mUnpack.getResult(msgs);
-		    			System.out.println("Received From Server.");
+		    			//System.out.println("Received From Server.");
 		        		doAction(result);
 		        	}
 		        	catch(SocketException e){
