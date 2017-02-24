@@ -20,6 +20,7 @@ import javax.swing.*;
 
 import javax.swing.JOptionPane;
 
+import GamePack.Player;
 import InterfacePack.Sounds;
 import ScreenPack.*;
 
@@ -29,22 +30,25 @@ public class MClient {
 	private static ClientEntranceBox optionBox;
 	private static boolean isServerUp;
 	private static boolean isConnected;
-	private DicePanel d;
+	private DicePanel diceP;
 	private Socket socket;
 	private byte[] msgs;
 	private MByteUnpack mUnpack;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
-	public MClient(boolean isHostClient, DicePanel d) throws IOException {
-		this.d = d;
+	private Player thisPlayer;
+	public MClient(boolean isHostClient, DicePanel d, Player p) throws IOException {
+		this.diceP = d;
+		this.thisPlayer = p;
 		init();
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		optionBox = new ClientEntranceBox();
 		manuallyEnterIPandPort(br, isHostClient);
     }
 
-	public MClient(String ip, int port, boolean isHostClient, DicePanel d) throws IOException {
-		this.d = d;
+	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player p) throws IOException {
+		this.diceP = d;
+		this.thisPlayer = p;
 		init();
 		optionBox = new ClientEntranceBox(); 
 		connectToServer(ip, port, isHostClient);
@@ -96,7 +100,7 @@ public class MClient {
         InputStream inputStream = s.getInputStream();
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
-        d.setOutputStream(outputStream);
+        diceP.setOutputStream(outputStream);
       
 //        d.setWriter(out);
 //        out.println("Player 1");
@@ -120,7 +124,7 @@ public class MClient {
         }
 	}
 	private void doRollingDice(int a, int b){
-		d.actionForDiceRoll(a,b);
+		diceP.actionForDiceRoll(a,b);
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;

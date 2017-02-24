@@ -18,6 +18,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import GamePack.Player;
 import ScreenPack.*;
 
 public class MHost {
@@ -27,12 +28,11 @@ public class MHost {
 	private static int PORT_NUM = 1234;
 	private static ServerSocket listener;
 	private static MClient hostClient;
+	private int playerJoined;
+	private static DicePanel diceP;
 	
-	private static DicePanel d;
-	
-	
-	public MHost(DicePanel d) throws IOException{
-		MHost.d = d;
+	public MHost(DicePanel d, Player p) throws IOException{
+		MHost.diceP = d;
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
 		
@@ -52,7 +52,7 @@ public class MHost {
 		System.out.println("Server successfully created!\n\n---------\n");		
 		System.out.println("Server IP Address: " + ip);
 		System.out.println("Server Port: " + listener.getLocalPort());
-		createHostClient(ip, listener.getLocalPort());
+		createHostClient(ip, listener.getLocalPort(),p);
 		
 		
         usersOutput = new ArrayList<>();
@@ -64,6 +64,7 @@ public class MHost {
         while(true){
         	try{
             	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip);
+            	playerJoined++;
             	runningClients.add(aChatThread);
                 aChatThread.start();
 
@@ -121,15 +122,17 @@ public class MHost {
 		}
     	System.out.println("Finished cleaning up.");
 	}
-	
-	private static void createHostClient(String ip, int port){
+	public int getCurPlayer(){
+		return playerJoined;
+	}
+	private static void createHostClient(String ip, int port, Player player){
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 
 			@Override
 			public void run() {
 				try {
-					hostClient = new MClient(ip, port, true, d);
+					hostClient = new MClient(ip, port, true, diceP, player);
 					while (hostClient.getIsServerUp()){
 						//nothing
 					}

@@ -88,7 +88,7 @@ public class BoardPanel extends JPanel{
 		importImgs();
 		board = new Board(spaces, players, 4);
 		setBoardBackgroundColor();
-		addHost();
+		addDiceBoard();
 
 		//addDiceBoard();
 	}
@@ -307,25 +307,4 @@ public class BoardPanel extends JPanel{
 		return propertyInfo;
 	}
 	
-	private void addHost(){
-		addDiceBoard();
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				try {
-
-					MHost host = new MHost(dicePanel);
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-
-		}, 0);
-
-	}
 }

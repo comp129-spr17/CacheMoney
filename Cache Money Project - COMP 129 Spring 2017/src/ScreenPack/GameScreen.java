@@ -7,6 +7,10 @@ import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,12 +18,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GamePack.*;
+import MultiplayerPack.MClient;
+import MultiplayerPack.MHost;
 
 public class GameScreen extends JFrame{
 	private JPanel mainPanel;
 	private int myComp_width;
 	private int myComp_height;
 	private SizeRelated sizeRelated;
+	private MHost host;
 	private DicePanel dicePanel;
 	private Player[] players;
 	private JLabel[] cash500image;
@@ -52,10 +59,20 @@ public class GameScreen extends JFrame{
 	
 	private Font numberfont;
 	
-	
+	// called if user is the host
 	public GameScreen(){
 		//setAlwaysOnTop(true);
 
+		initEverything();
+		addHost();
+		
+	}
+	// called if user is the client
+	public GameScreen(String ip, int port){
+		initEverything();
+		addClient(ip,port);
+	}
+	private void initEverything(){
 		scaleBoardToScreenSize();
 		
 		createMoniesLabels();
@@ -67,7 +84,6 @@ public class GameScreen extends JFrame{
 		setGameScreenBackgroundColor();
 		setVisible(true);
 	}
-	
 	private void setGameScreenBackgroundColor() {
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
 		this.setBackground(boardBackgroundColor);
@@ -305,6 +321,34 @@ public class GameScreen extends JFrame{
 		for (int k = 0; k < 24; k++)
 		{
 			mainPanel.add(xmark[k]);
+		}
+	}
+	private void addHost(){
+		
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				try {
+
+					host = new MHost(dicePanel,players[0]);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		}, 0);
+
+	}
+	private void addClient(String ip, int port){
+		try {
+			MClient client = new MClient(ip,port,false,dicePanel,players[host.getCurPlayer()]);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
