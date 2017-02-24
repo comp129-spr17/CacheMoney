@@ -25,6 +25,7 @@ public class DicePanel extends JPanel{
 	private SizeRelated sizeRelated;
 	private JButton rollButton;
 	private JTextField overrideDiceRoll;
+	private JButton startGameButton;
 	private JButton endTurnButton;
 	private JLabel turnLabel;
 	private Dice dices[]; 
@@ -48,6 +49,8 @@ public class DicePanel extends JPanel{
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 	private boolean isSingle;
+	private String ip;
+	private int port;
 	public DicePanel(boolean isSingle){
 		this.isSingle = isSingle;
 		init();
@@ -63,6 +66,7 @@ public class DicePanel extends JPanel{
 		sizeRelated = SizeRelated.getInstance();
 		this.setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		setLayout(null);
+		addStartGameButton();
 		rand = new Random();
 		isDiceButtonPressed = false;
 		dCel = new DoubleCelebrate();
@@ -71,6 +75,7 @@ public class DicePanel extends JPanel{
 		
 		
 		addTurnLabel();
+		
 		addRollButton();
 		addOverrideDiceRoll();
 		addEndTurnButton();
@@ -82,10 +87,14 @@ public class DicePanel extends JPanel{
 		addHands();
 		setDiceBackgroundColor();
 		
+		rollButton.setVisible(false);
+		overrideDiceRoll.setVisible(false);
+		turnLabel.setVisible(false);
+		
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings());
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle);
 		bPanel.add(propertyPanel);
 		this.board = board;
 	}
@@ -93,6 +102,7 @@ public class DicePanel extends JPanel{
 		Color boardBackgroundColor = new Color(180, 240, 255); // VERY LIGHT BLUE
 		this.setBackground(boardBackgroundColor);
 	}
+	
 	
 	
 	private void addDice() {
@@ -136,6 +146,18 @@ public class DicePanel extends JPanel{
 		add(overrideDiceRoll);
 	}
 	
+	private void addStartGameButton(){
+		this.startGameButton = new JButton("START GAME");
+		startGameButton.setBounds(0, 0, sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
+		add(startGameButton);
+	}
+	
+	
+	public void setStartGameButtonEnabled(boolean enabled){
+		this.startGameButton.setEnabled(enabled);
+	}
+	
+	
 	private void addEndTurnButton() {
 		endTurnButton = new JButton("End Turn");
 		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
@@ -152,6 +174,41 @@ public class DicePanel extends JPanel{
 	
 	
 	private void addListeners(){
+		startGameButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (startGameButton.isEnabled()){
+					if(isSingle)
+						actionForStart();
+					else
+						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME));
+				}
+				// TODO: SET START GAME BUTTON TO BE INVISIBLE FOR EVERYONE ELSE TOO!
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+		});
 		rollButton.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -191,7 +248,7 @@ public class DicePanel extends JPanel{
 				if(isSingle)
 					actionForDiceEnd();
 				else
-					sendMessageToServer(mPack.packEndTurn(unicode.END_TURN));
+					sendMessageToServer(mPack.packSimpleRequest(unicode.END_TURN));
 //				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
 			}
 
@@ -221,6 +278,13 @@ public class DicePanel extends JPanel{
 			
 		});
 	}
+	public void actionForStart(){
+		startGameButton.setVisible(false);
+		rollButton.setVisible(true);
+		overrideDiceRoll.setVisible(true);
+		turnLabel.setVisible(true);
+		Sounds.winGame.playSound();
+	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
 		changePlayerTurn();
@@ -244,7 +308,11 @@ public class DicePanel extends JPanel{
 		if(playerNum != current){
 			rollButton.setVisible(false);
 			endTurnButton.setVisible(false);
+			propertyPanel.disableButtons();
 		}
+	}
+	public void actionForRemovePropertyPanel(){
+		propertyPanel.endPropertyPanel();
 	}
 	private void sendMessageToServer(byte[] msg){
 		if (outputStream != null){
@@ -419,5 +487,22 @@ public class DicePanel extends JPanel{
 	}
 	public void setOutputStream(OutputStream outputStream) {
 		this.outputStream = outputStream;
+		propertyPanel.setOutputStream(outputStream);
+	}
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	public int getPort() {
+		return port;
+	}
+	public void setPort(int port) {
+		this.port = port;
+		String startGameButtonText = "<html>START GAME<br /><br />IP: " + this.ip + "<br />Port: " + this.port + "</html>";
+		
+		this.startGameButton.setText(startGameButtonText);
+		
 	}
 }

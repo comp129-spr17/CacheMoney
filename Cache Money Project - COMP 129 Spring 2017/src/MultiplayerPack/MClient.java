@@ -74,6 +74,8 @@ public class MClient {
 	private void initDoActions(){
 		doActions.put(unicode.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
 		doActions.put(unicode.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
+		doActions.put(unicode.START_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame();}});
+		doActions.put(unicode.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 		isConnected = false;
@@ -117,7 +119,9 @@ public class MClient {
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
         diceP.setOutputStream(outputStream);
-      
+        diceP.setStartGameButtonEnabled(isHostClient);
+        diceP.setIp(ip);	// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
+        diceP.setPort(port);// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
 //        d.setWriter(out);
 //        out.println("Player 1");
         
@@ -147,7 +151,7 @@ public class MClient {
 		        	try{
 		        		inputStream.read(msgs);
 		    			result = mUnpack.getResult(msgs);
-		    			System.out.println("Received From Server.");
+		    			//System.out.println("Received From Server.");
 		        		doAction(result);
 		        	}
 		        	catch(SocketException e){
@@ -166,6 +170,12 @@ public class MClient {
 	}
 	private void doEndTurn(){
 		diceP.actionForDiceEnd();
+	}
+	private void doStartGame(){
+		diceP.actionForStart();
+	}
+	private void doRemoveProperty(){
+		diceP.actionForRemovePropertyPanel();
 	}
 	private void setPlayer(int i){
 		thisPlayer = pList[i];

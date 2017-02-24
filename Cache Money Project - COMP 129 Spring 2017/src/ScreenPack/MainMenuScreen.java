@@ -5,7 +5,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 import javax.swing.*;
 import java.util.Timer;
@@ -229,7 +228,7 @@ public class MainMenuScreen {
 			break;
 		case 1: // USER WANTED SINGLEPLAYER
 			hideAndDisposeMainMenuScreen();
-			GameScreen gameScreen = new GameScreen(true, null);
+			GameScreen gameScreen = new GameScreen(true);
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -251,60 +250,21 @@ public class MainMenuScreen {
 		GameScreen gameScreen;
 		switch (mwr.askUserHostOrClient()){
 		case 0:
-//			// BRING THE USER TO THE HOST WAITING ROOM
-//			hideAndDisposeMainMenuScreen();
-//			Timer t = new Timer();
-//			t.schedule(new TimerTask(){
-//
-//				@Override
-//				public void run() {
-//					try {
-//						WRServer wrs = new WRServer(); 
-//						
-//						try {
-//							Thread.sleep(2500);
-//						} catch (InterruptedException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//						
-//						new GameScreen(false, wrs.listener);
-//						
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//				
-//			}, 0);
+			// BRING THE USER TO THE HOST WAITING ROOM
+			System.out.println("THIS IS WHERE THE WAITING ROOM IS. IT'S NOT IMPLEMENTED YET.");
+			hideAndDisposeMainMenuScreen();
+			gameScreen = new GameScreen(false);
 			break;
 		case 1:
-//			mwr.askUserForIPAndPort();
-//			Timer x = new Timer();
-//			hideAndDisposeMainMenuScreen();
-//			x.schedule(new TimerTask(){
-//
-//				@Override
-//				public void run() {
-//						try {
-//							WRClient wrc = new WRClient(mwr.getIPAddress(), mwr.getPortNumber(), false);
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//						try {
-//							Thread.sleep(5000);
-//						} catch (InterruptedException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//						new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
-//				}
-//			}, 0);
-//			
-//			
-//			//System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
-//			
+			mwr.askUserForIPAndPort();
+			
+			// TRY TO CONNECT TO HOST
+			// IF IT WORKS, BRING USER TO HOST WAITING ROOM
+			// IF NOT, RUN mwr.askUserForIPAndPort(); AGAIN
+			hideAndDisposeMainMenuScreen();
+			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
+			
+			System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -321,5 +281,4 @@ public class MainMenuScreen {
 	}
 	
 }
-
 
