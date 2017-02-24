@@ -172,20 +172,17 @@ public class DicePanel extends JPanel{
 		diceTimer = new Timer();
 	}
 	
-	public void actionForStart(){
-		startGameButton.setVisible(false);
-		rollButton.setVisible(true);
-		overrideDiceRoll.setVisible(true);
-		turnLabel.setVisible(true);
-		Sounds.winGame.playSound();
-	}
+	
 	private void addListeners(){
 		startGameButton.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (startGameButton.isEnabled()){
-					sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME));
+					if(isSingle)
+						actionForStart();
+					else
+						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME));
 				}
 				// TODO: SET START GAME BUTTON TO BE INVISIBLE FOR EVERYONE ELSE TOO!
 				
@@ -280,6 +277,13 @@ public class DicePanel extends JPanel{
 			}
 			
 		});
+	}
+	public void actionForStart(){
+		startGameButton.setVisible(false);
+		rollButton.setVisible(true);
+		overrideDiceRoll.setVisible(true);
+		turnLabel.setVisible(true);
+		Sounds.winGame.playSound();
 	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
