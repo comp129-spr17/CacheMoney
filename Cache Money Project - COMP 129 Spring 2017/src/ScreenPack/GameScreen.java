@@ -58,17 +58,19 @@ public class GameScreen extends JFrame{
 	private JLabel[] label1;
 	
 	private Font numberfont;
-	
+	private boolean isSingle;
 	// called if user is the host
-	public GameScreen(){
+	public GameScreen(boolean isSingle){
 		//setAlwaysOnTop(true);
-
+		this.isSingle = isSingle;
 		initEverything();
-		addHost();
+		if(!isSingle)
+			addHost();
 		
 	}
 	// called if user is the client
-	public GameScreen(String ip, int port){
+	public GameScreen(boolean isSingle, String ip, int port){
+		this.isSingle = isSingle;
 		initEverything();
 		addClient(ip,port);
 	}
@@ -289,7 +291,7 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		dicePanel = new DicePanel();
+		dicePanel = new DicePanel(isSingle);
 		BoardPanel boardPanel = new BoardPanel(players,dicePanel);
 		
 		mainPanel.add(boardPanel);
@@ -332,7 +334,7 @@ public class GameScreen extends JFrame{
 			public void run() {
 				try {
 
-					host = new MHost(dicePanel,players[0]);
+					host = new MHost(dicePanel,players);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -347,7 +349,7 @@ public class GameScreen extends JFrame{
 	private void addClient(String ip, int port){
 		try {
 			// WARNING: HOST ISN'T INITIALIZED
-			MClient client = new MClient(ip,port,false,dicePanel);
+			MClient client = new MClient(ip,port,false,dicePanel,players);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

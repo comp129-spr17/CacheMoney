@@ -230,7 +230,7 @@ public class MainMenuScreen {
 			break;
 		case 1: // USER WANTED SINGLEPLAYER
 			hideAndDisposeMainMenuScreen();
-			GameScreen gameScreen = new GameScreen();
+			GameScreen gameScreen = new GameScreen(true);
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -269,9 +269,7 @@ public class MainMenuScreen {
 				}
 				
 			}, 0);
-			
-			
-			//gameScreen = new GameScreen();
+			gameScreen = new GameScreen(false);
 			break;
 		case 1:
 			mwr.askUserForIPAndPort();
@@ -292,7 +290,7 @@ public class MainMenuScreen {
 			// IF IT WORKS, BRING USER TO HOST WAITING ROOM
 			// IF NOT, RUN mwr.askUserForIPAndPort(); AGAIN
 			hideAndDisposeMainMenuScreen();
-			//gameScreen = new GameScreen(mwr.getIPAddress(),mwr.getPortNumber());
+			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
 			
 			//System.out.println("THIS IS WHERE THE WAITING ROOM IS (IF CONNECTION WAS SUCCESSFUL). IT'S NOT IMPLEMENTED YET.");
 			

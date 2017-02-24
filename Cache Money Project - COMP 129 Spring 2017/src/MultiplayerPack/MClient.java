@@ -39,18 +39,19 @@ public class MClient {
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 	private Player thisPlayer;
-	public MClient(boolean isHostClient, DicePanel d, Player p) throws IOException {
+	private Player[] pList;
+	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
-		this.thisPlayer = p;
+		this.pList = pList;
 		init();
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		optionBox = new ClientEntranceBox();
 		manuallyEnterIPandPort(br, isHostClient);
     }
 
-	public MClient(String ip, int port, boolean isHostClient, DicePanel d) throws IOException {
+	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
-		//this.thisPlayer = p;
+		this.pList = pList;
 		init();
 		optionBox = new ClientEntranceBox(); 
 		connectToServer(ip, port, isHostClient);
@@ -108,23 +109,33 @@ public class MClient {
 //        out.println("Player 1");
         
         isServerUp = true;
+        System.out.println("Created.");
         Timer t = new Timer();
         t.schedule(new TimerTask(){
 
 			@Override
 			public void run() {
+				ArrayList<Object> result;
+				int count;
+				try {
+					inputStream.read(msgs);
+					result = mUnpack.getResult(msgs);
+					System.out.println("Received From Server.");
+					System.out.println((Integer)result.get(1));
+					setPlayer((Integer)result.get(1));
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
 				// TODO Auto-generated method stub
 				while(isServerUp){
 		        	try{
 		        		inputStream.read(msgs);
-		    			ArrayList<Object> result = mUnpack.getResult(msgs);
+		    			result = mUnpack.getResult(msgs);
 		    			System.out.println("Received From Server.");
 		        		if(((String)result.get(0)).equals(unicode.DICE)){
 		        			doRollingDice((Integer)result.get(1),(Integer)result.get(2));
-		        		}
-		        		else if (((String)result.get(0)).equals(unicode.PLAYER_NUM)){
-		        			// SETS THE PLAYER NUM HERE
-		        			System.out.println((Integer)result.get(1));
 		        		}
 		        		
 		        		
@@ -145,8 +156,12 @@ public class MClient {
 	private void doRollingDice(int a, int b){
 		diceP.actionForDiceRoll(a,b);
 	}
+	private void setPlayer(int i){
+		thisPlayer = pList[i];
+	}
 	public boolean getIsServerUp(){
 		return isServerUp;
 	}
-
+	
+	
 }

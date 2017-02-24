@@ -26,9 +26,10 @@ public class MThread extends Thread{
 	private MByteUnpack mUnpack;
 	private MBytePack mPack;
 	private UnicodeForServer ufs;
-	
-	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName){
+	private Integer playerNum;
+	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName, Integer playerNum){
 		socket = s;
+		this.playerNum = playerNum;
 		this.usersOutput = usersOutput;
 		this.hostName = hostName;
 		mPack = MBytePack.getInstance();
@@ -60,14 +61,12 @@ public class MThread extends Thread{
 	public void run(){
 		try{
 			// WARNING: HARDCODED TO 2
-			showMsgToUsers(mPack.packPlayerNumber(ufs.PLAYER_NUM, 2));
+//			showMsgToUsers(mPack.packPlayerNumber(ufs.PLAYER_NUM, 2));
+			sendPlayerNum(mPack.packPlayerNumber(ufs.PLAYER_NUM, usersOutput.size()-1));
+			playerNum = playerNum.intValue()+1;
 			while(true){
 				getMsg();
 				showMsgToUsers(msg);
-//				ArrayList<Object> result = mUnpack.getResult(msg);
-//	    		System.out.println((String)result.get(0));
-//	    		for(int i=1; i<result.size(); i++)
-//	    			System.out.println((Integer)result.get(i));
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -89,6 +88,13 @@ public class MThread extends Thread{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	private void sendPlayerNum(byte[] msg){
+		try {
+			usersOutput.get(usersOutput.size()-1).write(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
