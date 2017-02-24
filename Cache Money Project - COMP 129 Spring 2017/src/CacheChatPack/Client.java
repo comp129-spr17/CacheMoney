@@ -64,7 +64,10 @@ public class Client {
 				return;
 			}
 			showChatScreen(s, ip, port, isHostClient, optionBox.getName());
-		}catch(Exception e){
+		}catch(UnknownHostException e){
+			//e.printStackTrace();
+			System.out.println("Unable to connect to the server. Please Check your IP and port number.");
+		} catch(IOException e){
 			//e.printStackTrace();
 			System.out.println("Unable to connect to the server. Please Check your IP and port number.");
 		}

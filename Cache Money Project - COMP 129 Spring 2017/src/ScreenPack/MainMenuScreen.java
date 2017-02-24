@@ -5,6 +5,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.*;
 import java.util.Timer;
@@ -254,9 +255,7 @@ public class MainMenuScreen {
 			gameScreen = new GameScreen(false);
 			break;
 		case 1:
-			mwr.askUserForIPAndPort();
-			hideAndDisposeMainMenuScreen();
-			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
+			setupClient(mwr);
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -264,6 +263,26 @@ public class MainMenuScreen {
 		default:
 			System.out.println("***** THERE'S SOMETHING WRONG INSIDE OF GAMEBUTTON MOUSE CLICKED ASKING USER HOST/CLIENT");
 			break;
+		}
+	}
+
+
+	private void setupClient(AskUserMultiplayerDialogBox mwr) {
+		GameScreen gameScreen = null;
+		if (!mwr.askUserForIPAndPort() && (mwr.getIPAddress() == "" || mwr.getPortNumber() == 0)){
+			return;
+		}
+		
+		
+		
+		
+		try {
+			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
+			hideAndDisposeMainMenuScreen();
+		} catch (IOException e) { // TODO: DOESN'T EXACTLY WORK YET
+			//gameScreen.setVisible(false);
+			//gameScreen.dispose();
+			setupClient(mwr);
 		}
 	}
 	

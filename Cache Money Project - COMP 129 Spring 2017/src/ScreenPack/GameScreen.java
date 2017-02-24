@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,14 +70,32 @@ public class GameScreen extends JFrame{
 		initEverything();
 		if(!isSingle)
 			addHost();
-		
+		setWindowVisible();
 	}
 	// called if user is the client
-	public GameScreen(boolean isSingle, String ip, int port){
+	public GameScreen(boolean isSingle, String ip, int port) throws UnknownHostException, IOException{
 		this.isSingle = isSingle;
 		initEverything();
-		addClient(ip,port);
+		try{
+			addClient(ip,port);
+		}
+		catch (IOException e){
+			mainPanel.setVisible(false);
+			this.dispose();
+			throw new IOException();
+		}
+		setWindowVisible();
 	}
+	
+	private void setWindowVisible(){
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.setVisible(true);
+	}
+	
 	private void initEverything(){
 		scaleBoardToScreenSize();
 		
@@ -88,7 +107,7 @@ public class GameScreen extends JFrame{
 		addActionListenerForExit();
 		init();
 		setGameScreenBackgroundColor();
-		setVisible(true);
+		
 	}
 	private void setGameScreenBackgroundColor() {
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
@@ -357,12 +376,7 @@ public class GameScreen extends JFrame{
 		}, 0);
 
 	}
-	private void addClient(String ip, int port){
-		try {
-			// WARNING: HOST ISN'T INITIALIZED
+	private void addClient(String ip, int port) throws UnknownHostException, IOException{
 			MClient client = new MClient(ip,port,false,dicePanel,players);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

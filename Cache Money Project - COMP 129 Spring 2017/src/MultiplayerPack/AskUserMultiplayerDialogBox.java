@@ -19,7 +19,6 @@ public class AskUserMultiplayerDialogBox {
 		message[1] = txtIp;
 		message[2] = "Enter Host's Port Number:";
 		message[3] = txtPort;
-		
 	}
 	
 	public int askUserSingleMultiPlayer(){

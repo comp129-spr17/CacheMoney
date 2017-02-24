@@ -56,7 +56,7 @@ public class MClient {
 	public void doAction(ArrayList<Object> result){
 		doActions.get((String)result.get(0)).doAction(result);
 	}
-	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
+	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException, UnknownHostException {
 		this.diceP = d;
 		this.pList = pList;
 		init();
@@ -99,21 +99,15 @@ public class MClient {
 			throws UnknownHostException, IOException {
 		socket = null;
 		System.out.println("Connecting to the server...");
-		
-		try{
-			socket = new Socket(ip, port);
+		socket = new Socket(ip, port);
 			//Sounds.buttonConfirm.playSound();
-			System.out.println("Successfully connected to server at\nip: " + ip + " with port: " + port + "!\n");
-			isConnected = true;
+		System.out.println("Successfully connected to server at\nip: " + ip + " with port: " + port + "!\n");
+		isConnected = true;
 //			if(!optionBox.haveName()){
 //				s.close();
 //				return;
 //			}
-			getMsg(socket, ip, port, isHostClient, optionBox.getName());
-		}catch(UnknownHostException e){
-			//e.printStackTrace();
-			System.out.println("Unable to connect to the server. Please Check your IP and port number.");
-		}
+		getMsg(socket, ip, port, isHostClient, optionBox.getName());
 	}
 	private void getMsg(Socket s, String ip, int port, boolean isHostClient, String name) throws IOException{
 		OutputStream outputStream = s.getOutputStream();
