@@ -158,7 +158,7 @@ public class DicePanel extends JPanel{
 	public void setStartGameButtonEnabled(boolean enabled){
 		this.startGameButton.setEnabled(enabled);
 		if (enabled){
-			startGameButton.setText(startGameButton.getText() + "" + "</html>");
+			startGameButton.setText(startGameButton.getText() + "<br />Click to begin game once all players have joined..." + "</html>");
 		}
 		else{
 			startGameButton.setText(startGameButton.getText() + "<br />Waiting for host to begin game..." + "</html>");
@@ -193,8 +193,6 @@ public class DicePanel extends JPanel{
 					else
 						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME));
 				}
-				// TODO: SET START GAME BUTTON TO BE INVISIBLE FOR EVERYONE ELSE TOO!
-				
 			}
 
 			@Override
@@ -509,7 +507,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setPort(int port) {
 		this.port = port;
-		String startGameButtonText = "<html>START GAME<br /><br />IP: " + this.ip + "<br />Port: " + this.port + "<br />";
+		String startGameButtonText = "<html>" + "Welcome to Monopoly Waiting Room! <br /><br />" + "Other players may connect to this game by the following:<br /><br />" + "IP: " + this.ip + "<br />Port: " + this.port + "<br />";
 		
 		this.startGameButton.setText(startGameButtonText);	
 	}

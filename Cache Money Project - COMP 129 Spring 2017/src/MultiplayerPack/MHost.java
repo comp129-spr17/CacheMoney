@@ -19,6 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import GamePack.Player;
+import InterfacePack.Sounds;
 import ScreenPack.*;
 
 public class MHost {
@@ -59,14 +60,16 @@ public class MHost {
         usersOutput = new ArrayList<>();
         server = new MElements("Server", "");
         runningClients = new ArrayList<>();
+        playerJoined = 0;
         closingServerAsking();
         
 
         while(true){
         	try{
             	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum);
-
-    			System.out.println(playerNum);
+            	if (playerJoined > 0){
+            		Sounds.waitingRoomJoin.playSound();
+            	}
             	playerJoined++;
             	runningClients.add(aChatThread);
                 aChatThread.start();

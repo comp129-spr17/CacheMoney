@@ -120,7 +120,7 @@ public class MClient {
         diceP.setStartGameButtonEnabled(isHostClient);
         
         isServerUp = true;
-        System.out.println("Created.");
+        //System.out.println("Created.");
         Timer t = new Timer();
         
         t.schedule(new TimerTask(){
@@ -133,9 +133,10 @@ public class MClient {
 					inputStream.read(msgs);
 					result = mUnpack.getResult(msgs);
 //					System.out.println("Received From Server.");
-					System.out.println((Integer)result.get(1));
+					//System.out.println((Integer)result.get(1));
 					setPlayer((Integer)result.get(1));
 					(new CheckingPlayerTurn()).start();
+					Sounds.waitingRoomJoin.playSound();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
