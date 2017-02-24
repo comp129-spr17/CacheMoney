@@ -17,6 +17,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
@@ -104,27 +106,41 @@ public class MClient {
       
 //        d.setWriter(out);
 //        out.println("Player 1");
+        
         isServerUp = true;
-        while(isServerUp){
-        	try{
-        		inputStream.read(msgs);
-    			ArrayList<Object> result = mUnpack.getResult(msgs);
-    			System.out.println("Received From Server.");
-        		if(((String)result.get(0)).equals(unicode.DICE)){
-        			doRollingDice((Integer)result.get(1),(Integer)result.get(2));
-        		}
-        		else if (((String)result.get(0)).equals(unicode.PLAYER_NUM)){
-        			// SETS THE PLAYER NUM HERE
-        			System.out.println((Integer)result.get(1));
-        		}
-        		
-        		
-        	}
-        	catch(SocketException e){
-        		System.out.println("aaa");
-        		isServerUp = false;
-        	}
-        }
+        Timer t = new Timer();
+        t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while(isServerUp){
+		        	try{
+		        		inputStream.read(msgs);
+		    			ArrayList<Object> result = mUnpack.getResult(msgs);
+		    			System.out.println("Received From Server.");
+		        		if(((String)result.get(0)).equals(unicode.DICE)){
+		        			doRollingDice((Integer)result.get(1),(Integer)result.get(2));
+		        		}
+		        		else if (((String)result.get(0)).equals(unicode.PLAYER_NUM)){
+		        			// SETS THE PLAYER NUM HERE
+		        			System.out.println((Integer)result.get(1));
+		        		}
+		        		
+		        		
+		        	}
+		        	catch(SocketException e){
+		        		System.out.println("aaa");
+		        		isServerUp = false;
+		        	} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
+			}
+        	
+        }, 0);
+        
 	}
 	private void doRollingDice(int a, int b){
 		diceP.actionForDiceRoll(a,b);
