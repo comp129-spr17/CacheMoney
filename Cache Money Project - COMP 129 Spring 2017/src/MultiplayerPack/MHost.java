@@ -26,19 +26,27 @@ public class MHost {
 	private static ArrayList<MThread> runningClients;
 	private static MElements server;
 	private static int PORT_NUM = 1234;
-	private ServerSocket listener;
+	private static ServerSocket listener;
 	private static MClient hostClient;
 	private int playerJoined;
 	private static DicePanel diceP;
 	private Integer playerNum;
 	
-	public MHost(DicePanel d, Player[] p, ServerSocket listener) throws IOException{
+	public MHost(DicePanel d, Player[] p) throws IOException{
 		MHost.diceP = d;
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
 		playerNum = new Integer(0);
 		System.out.println("Creating the server...");
-		this.listener = listener;
+		while (true){
+			try{
+				listener = new ServerSocket(PORT_NUM);
+				break;
+			}
+			catch (BindException e){
+				PORT_NUM = rand.nextInt(8999 + 1000);
+			}
+		}
 		
 		String ip = getIPAddress();
 		
@@ -53,8 +61,8 @@ public class MHost {
         runningClients = new ArrayList<>();
         closingServerAsking();
         
-        // takes maximum 4 players.
-        while(playerJoined < 4){
+
+        while(true){
         	try{
             	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum);
 
