@@ -261,6 +261,14 @@ public class MainMenuScreen {
 				public void run() {
 					try {
 						WRServer wrs = new WRServer(); 
+						
+						try {
+							Thread.sleep(2500);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 						new GameScreen(false, wrs.listener);
 						
 					} catch (IOException e) {
