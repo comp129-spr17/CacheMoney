@@ -119,7 +119,8 @@ public class MClient {
         
         diceP.setOutputStream(outputStream);
         diceP.setStartGameButtonEnabled(isHostClient);
-        
+        diceP.setIp(ip);	// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
+        diceP.setPort(port);// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
 //        d.setWriter(out);
 //        out.println("Player 1");
         
