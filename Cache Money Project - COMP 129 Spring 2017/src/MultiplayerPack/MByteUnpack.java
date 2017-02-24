@@ -34,6 +34,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.PLAYER_NUM, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPlayerNumberResult(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UNI.END_TURN, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
@@ -68,7 +70,6 @@ public final class MByteUnpack {
 		}
 		
 	}
-	
 	public void unpackPlayerNumberResult(byte[] result){
 		try{
 			resultList.add(dInputStream.readInt());
@@ -77,8 +78,6 @@ public final class MByteUnpack {
 			e.printStackTrace();
 		}
 	}
-	
-	
 	
 	public ArrayList<Object> getResult(byte[] result){
 		resetAndReceive(result);

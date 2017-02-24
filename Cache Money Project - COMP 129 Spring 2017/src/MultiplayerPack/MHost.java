@@ -61,8 +61,8 @@ public class MHost {
         runningClients = new ArrayList<>();
         closingServerAsking();
         
-
-        while(true){
+        // takes maximum 4 players.
+        while(playerJoined < 4){
         	try{
             	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum);
 

@@ -66,24 +66,35 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	
-	public static void main(String[] args){
-
-		UnicodeForServer UNICODE = UnicodeForServer.getInstance();
-		MBytePack mPack = MBytePack.getInstance();
-		byte[] result = mPack.packDiceResult(UNICODE.DICE, 1, 2);
-		MByteUnpack mUnpack = MByteUnpack.getInstance();
-		ArrayList<Object> res = mUnpack.getResult(result);
-		System.out.println((String)res.get(0));
-		for(int i=1; i<res.size(); i++)
-			System.out.println((Integer)res.get(i));
-		result = mPack.packPropertyResult(UNICODE.PROPERTY,3, '7', true);
-		res.clear();
-		res = mUnpack.getResult(result);
-
-		System.out.println((String)res.get(0));
-		System.out.println((Integer)res.get(1));
-		System.out.println((Character)res.get(2));
-		System.out.println((Boolean)res.get(3));
+	public byte[] packEndTurn(String requestCode){
+		try{
+			dOutputStream.writeUTF(requestCode);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
 	}
+	
+	
+//	public static void main(String[] args){
+//
+//		UnicodeForServer UNICODE = UnicodeForServer.getInstance();
+//		MBytePack mPack = MBytePack.getInstance();
+//		byte[] result = mPack.packDiceResult(UNICODE.DICE, 1, 2);
+//		MByteUnpack mUnpack = MByteUnpack.getInstance();
+//		ArrayList<Object> res = mUnpack.getResult(result);
+//		System.out.println((String)res.get(0));
+//		for(int i=1; i<res.size(); i++)
+//			System.out.println((Integer)res.get(i));
+//		result = mPack.packPropertyResult(UNICODE.PROPERTY,3, '7', true);
+//		res.clear();
+//		res = mUnpack.getResult(result);
+//
+//		System.out.println((String)res.get(0));
+//		System.out.println((Integer)res.get(1));
+//		System.out.println((Character)res.get(2));
+//		System.out.println((Boolean)res.get(3));
+//	}
 }

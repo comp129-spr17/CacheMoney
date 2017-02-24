@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import javax.swing.*;
 import java.util.Timer;
@@ -40,6 +41,7 @@ public class MClient {
 	private UnicodeForServer unicode;
 	private Player thisPlayer;
 	private Player[] pList;
+	private HashMap<String, DoAction> doActions;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
 		this.pList = pList;
@@ -48,7 +50,12 @@ public class MClient {
 		optionBox = new ClientEntranceBox();
 		manuallyEnterIPandPort(br, isHostClient);
     }
-
+	interface DoAction{
+		void doAction(ArrayList<Object> result);
+	}
+	public void doAction(ArrayList<Object> result){
+		doActions.get((String)result.get(0)).doAction(result);
+	}
 	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
 		this.pList = pList;
@@ -57,10 +64,16 @@ public class MClient {
 		connectToServer(ip, port, isHostClient);
     }
 	private void init(){
+		doActions = new HashMap<>();
 		mUnpack = MByteUnpack.getInstance();
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		msgs = new byte[8192];
+		initDoActions();
+	}
+	private void initDoActions(){
+		doActions.put(unicode.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
+		doActions.put(unicode.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 		isConnected = false;
@@ -111,6 +124,7 @@ public class MClient {
         isServerUp = true;
         System.out.println("Created.");
         Timer t = new Timer();
+        
         t.schedule(new TimerTask(){
 
 			@Override
@@ -120,10 +134,10 @@ public class MClient {
 				try {
 					inputStream.read(msgs);
 					result = mUnpack.getResult(msgs);
-					System.out.println("Received From Server.");
+//					System.out.println("Received From Server.");
 					System.out.println((Integer)result.get(1));
 					setPlayer((Integer)result.get(1));
-					
+					(new CheckingPlayerTurn()).start();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -134,17 +148,11 @@ public class MClient {
 		        		inputStream.read(msgs);
 		    			result = mUnpack.getResult(msgs);
 		    			System.out.println("Received From Server.");
-		        		if(((String)result.get(0)).equals(unicode.DICE)){
-		        			doRollingDice((Integer)result.get(1),(Integer)result.get(2));
-		        		}
-		        		
-		        		
+		        		doAction(result);
 		        	}
 		        	catch(SocketException e){
-		        		System.out.println("aaa");
 		        		isServerUp = false;
 		        	} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 		        }
@@ -153,8 +161,11 @@ public class MClient {
         }, 0);
         
 	}
-	private void doRollingDice(int a, int b){
-		diceP.actionForDiceRoll(a,b);
+	private void doRollingDice(ArrayList<Object> result){
+		diceP.actionForDiceRoll((Integer)result.get(1),(Integer)result.get(2));
+	}
+	private void doEndTurn(){
+		diceP.actionForDiceEnd();
 	}
 	private void setPlayer(int i){
 		thisPlayer = pList[i];
@@ -162,6 +173,17 @@ public class MClient {
 	public boolean getIsServerUp(){
 		return isServerUp;
 	}
-	
+	class CheckingPlayerTurn extends Thread{
+		public void run(){
+			while(true){
+				diceP.actionForNotCurrentPlayer(thisPlayer.getPlayerNum());
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 }

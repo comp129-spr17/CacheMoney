@@ -59,7 +59,6 @@ public class DicePanel extends JPanel{
 		// TODO: NEED A CHAT SCREEN IN THIS PANEL FOR EXTRA FIREWORKS AND SPARKLES
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
-		//
 		paths = PathRelated.getInstance();
 		sizeRelated = SizeRelated.getInstance();
 		this.setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
@@ -189,9 +188,10 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				
-				actionForDiceEnd();
-				
+				if(isSingle)
+					actionForDiceEnd();
+				else
+					sendMessageToServer(mPack.packEndTurn(unicode.END_TURN));
 //				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
 			}
 
@@ -223,6 +223,7 @@ public class DicePanel extends JPanel{
 	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
+		changePlayerTurn();
 		changeTurn();
 		Sounds.turnBegin.playSound();
 		rollButton.setVisible(true);
@@ -231,12 +232,19 @@ public class DicePanel extends JPanel{
 		endTurnButton.setVisible(false);
 		dices[0].hideDice();
 		dices[1].hideDice();
+		
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
 		if (!isDiceButtonPressed){
 			rollDice(diceRes1, diceRes2);
 		}
 		
+	}
+	public void actionForNotCurrentPlayer(int playerNum){
+		if(playerNum != current){
+			rollButton.setVisible(false);
+			endTurnButton.setVisible(false);
+		}
 	}
 	private void sendMessageToServer(byte[] msg){
 		if (outputStream != null){
@@ -277,7 +285,6 @@ public class DicePanel extends JPanel{
 		}
 		for(int i=0; i<2; i++){
 			dices[i].rollDice(diceRes[i]);
-//			while(!dices[i].rollDice(res));
 			result[i] = dices[i].getNum();
 		}
 		resetElem();
@@ -318,7 +325,8 @@ public class DicePanel extends JPanel{
 		if(!isSame)
 		{
 			Sounds.diceRollConfirmed.playSound();
-			current = current == 3 ? 0 : current+1 ;
+//			current = current == 3 ? 0 : current+1 ;
+			
 		}
 				
 	}
@@ -397,7 +405,9 @@ public class DicePanel extends JPanel{
 ////		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
 //	}
 	
-	
+	private void changePlayerTurn(){
+		current = (current+1)%4;
+	}
 	
 	public int[] getResult(){
 		rollButton.setEnabled(true);
