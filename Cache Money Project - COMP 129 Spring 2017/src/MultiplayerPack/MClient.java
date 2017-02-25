@@ -131,12 +131,14 @@ public class MClient {
 				int count;
 				try {
 					inputStream.read(msgs);
-					result = mUnpack.getResult(msgs);
-//					System.out.println("Received From Server.");
-					//System.out.println((Integer)result.get(1));
-					setPlayer((Integer)result.get(1));
-					(new CheckingPlayerTurn()).start();
-					Sounds.waitingRoomJoin.playSound();
+					if(!isNullByte(msgs)){
+						result = mUnpack.getResult(msgs);
+//						System.out.println("Received From Server.");
+						//System.out.println((Integer)result.get(1));
+						setPlayer((Integer)result.get(1));
+						(new CheckingPlayerTurn()).start();
+						Sounds.waitingRoomJoin.playSound();
+					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -180,6 +182,13 @@ public class MClient {
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;
+	}
+	private boolean isNullByte(byte[] msg){
+		for(int i=1; i<4; i++)
+			if(msg[i]!=0)
+				return false;
+		System.out.println("Null byte received");
+		return true;
 	}
 	class CheckingPlayerTurn extends Thread{
 		public void run(){
