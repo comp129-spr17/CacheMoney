@@ -129,16 +129,10 @@ public class Board {
 				for(int i=1; i<diceResult+1; i++){
 					Sounds.movePiece.playSound();
 					players[player].movePosition();
+					boardTracker[players[player].getPositionNumber()-1].removePiece(player);
 					checkIfLastSpace(player);
-					if(players[player].getPositionNumber() - 1 < 0)
-					{
-						boardTracker[39].removePiece(player);
-					}
-					else
-					{
-						boardTracker[players[player].getPositionNumber() - 1].removePiece(player);
-					}
 					boardTracker[players[player].getPositionNumber()].receivePiece(players[player].getPiece(), player);
+					
 					if (players[player].getPositionNumber() == 0){
 						// PLAYER PASSED GO
 						//Sounds.passedGo.playSound();

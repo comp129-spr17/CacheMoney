@@ -86,6 +86,8 @@ public final class MByteUnpack {
 	}
 	
 	public ArrayList<Object> getResult(byte[] result){
+	
+		System.out.println(result[0]+""+result[1]+""+result[2]+""+result[3]);
 		resetAndReceive(result);
 		try {
 			receivedCode = dInputStream.readUTF();
