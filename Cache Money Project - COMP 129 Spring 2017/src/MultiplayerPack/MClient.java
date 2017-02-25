@@ -134,12 +134,7 @@ public class MClient {
 				try {
 					
 					byteCount = inputStream.read(msgs);
-//					System.out.println("Received" + Arrays.toString(msgs));
-//					System.out.println(Arrays.toString(msgs));
 					result = mUnpack.getResult(msgs);
-
-//						System.out.println("Received From Server.");
-					//System.out.println((Integer)result.get(1));
 					setPlayer((Integer)result.get(1));
 					(new CheckingPlayerTurn()).start();
 					Sounds.waitingRoomJoin.playSound();
@@ -147,12 +142,10 @@ public class MClient {
 					e1.printStackTrace();
 				}
 				
-				// TODO Auto-generated method stub
 				while(isServerUp){
 		        	try{
 		        		inputStream.read(msgs);
 		    			result = mUnpack.getResult(msgs);
-		    			//System.out.println("Received From Server.");
 		        		doAction(result);
 		        	}
 		        	catch(SocketException e){
@@ -187,13 +180,7 @@ public class MClient {
 	public boolean getIsServerUp(){
 		return isServerUp;
 	}
-	private boolean isNullByte(byte[] msg){
-		for(int i=1; i<5; i++)
-			if(msg[i]!=(byte)0x00)
-				return false;
-		System.out.println("Null byte received");
-		return true;
-	}
+	
 	class CheckingPlayerTurn extends Thread{
 		public void run(){
 			while(true){

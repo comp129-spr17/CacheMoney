@@ -25,7 +25,6 @@ public final class MBytePack {
 	private byte[] packResult(){
 		byte[] result = bOutputStream.toByteArray();
 		byteSize = result.length;
-		System.out.println("Length : " + result.length + "Packed" + Arrays.toString(result));
 		dOutputStream = null;
 		bOutputStream = null;
 		init();

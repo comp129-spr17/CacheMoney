@@ -62,8 +62,6 @@ public class MThread extends Thread{
 	}
 	public void run(){
 		try{
-			// WARNING: HARDCODED TO 2
-//			showMsgToUsers(mPack.packPlayerNumber(ufs.PLAYER_NUM, 2));
 			sendPlayerNum(mPack.packPlayerNumber(ufs.PLAYER_NUM, usersOutput.size()-1));
 			playerNum = playerNum.intValue()+1;
 			while(true){
@@ -79,15 +77,12 @@ public class MThread extends Thread{
 		try {
 			
 			byteCount = readFromUser.read(msg);
-			System.out.println("Received" + Arrays.toString(msg));
 		} catch (IOException e) {
-//			e.printStackTrace();
 		}
 	}
 	private void showMsgToUsers(byte[] msg){
 		for(OutputStream output:usersOutput){
 			try {
-//				System.out.println("Sending" + Arrays.toString(msg));
 				output.write(msg, 0, byteCount);
 			} catch (IOException e) {
 				e.printStackTrace();
