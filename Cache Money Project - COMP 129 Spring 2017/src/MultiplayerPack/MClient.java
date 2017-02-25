@@ -43,6 +43,7 @@ public class MClient {
 	private Player thisPlayer;
 	private Player[] pList;
 	private int byteCount;
+	private OutputStream outputStream;
 	private HashMap<String, DoAction> doActions;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
@@ -78,7 +79,8 @@ public class MClient {
 		doActions.put(unicode.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
 		doActions.put(unicode.START_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame();}});
 		doActions.put(unicode.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
-		doActions.put(unicode.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect();}});
+		doActions.put(unicode.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
+		doActions.put(unicode.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
 		
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -112,7 +114,7 @@ public class MClient {
 		getMsg(socket, ip, port, isHostClient, optionBox.getName());
 	}
 	private void getMsg(Socket s, String ip, int port, boolean isHostClient, String name) throws IOException{
-		OutputStream outputStream = s.getOutputStream();
+		outputStream = s.getOutputStream();
         InputStream inputStream = s.getInputStream();
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
@@ -171,16 +173,34 @@ public class MClient {
 	private void doRemoveProperty(){
 		diceP.actionForRemovePropertyPanel();
 	}
-	private void doDisconnect(){
+	private void doDisconnect(ArrayList<Object> result){
+		int playerNo = (Integer)result.get(1);
+		pList[playerNo].setIsOn(false);
+		diceP.actionForRemovePlayer(playerNo);
+	}
+	private void doHostDisconnect(){
 		isServerUp = false;
 	}
 	private void setPlayer(int i){
 		thisPlayer = pList[i];
+		thisPlayer.setIsOn(true);
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;
 	}
-	
+	public OutputStream getOutputStream(){
+		return outputStream;
+	}
+	public void writeToServer(byte[] b, int len){
+		try {
+			outputStream.write(b, 0, len);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public int getPlayerNum(){
+		return thisPlayer.getPlayerNum();
+	}
 	class CheckingPlayerTurn extends Thread{
 		public void run(){
 			while(true){

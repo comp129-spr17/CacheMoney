@@ -37,7 +37,6 @@ public final class MBytePack {
 	public byte[] packDiceResult(String requestCode, int fDice, int sDice){
 		try {
 			dOutputStream.writeUTF(requestCode);
-//			dOutputStream.writeInt(curPos);
 			dOutputStream.writeInt(fDice);
 			dOutputStream.writeInt(sDice);
 			return packResult();

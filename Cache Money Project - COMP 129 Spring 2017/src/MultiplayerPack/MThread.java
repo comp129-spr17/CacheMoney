@@ -21,14 +21,14 @@ public class MThread extends Thread{
 	private InputStream readFromUser;
 	private int pos;
 	private byte[] msg;
-	private final static String CLOSING_CODE = "QOSKDJFOAOSJW";
 	private boolean serverDisconnected;
 	private String hostName;
 	private MByteUnpack mUnpack;
 	private MBytePack mPack;
 	private UnicodeForServer ufs;
 	private Integer playerNum;
-	private int byteCount;
+	private int disconnectPlayer;
+	private int myNum;
 	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName, Integer playerNum){
 		socket = s;
 		this.playerNum = playerNum;
@@ -62,10 +62,26 @@ public class MThread extends Thread{
 	}
 	public void run(){
 		try{
+			int disconnectedCode;
 			sendPlayerNum(mPack.packPlayerNumber(ufs.PLAYER_NUM, usersOutput.size()-1));
+			myNum = playerNum;
 			playerNum = playerNum.intValue()+1;
 			while(true){
 				getMsg();
+				disconnectedCode = mUnpack.isDisconnectedCode(msg);
+				if(disconnectedCode == 1){
+					disconnectPlayer = (Integer)mUnpack.getResult(msg).get(1);
+					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
+					usersOutput.set(disconnectPlayer,null);
+					showMsgToUsers(mPack.packPlayerNumber(ufs.DISCONNECTED, disconnectPlayer));
+					break;
+				}else if(disconnectedCode == 2){
+					System.out.println("Server is disconnected");
+					usersOutput.set(playerNum,null);
+					showMsgToUsers(mPack.packSimpleRequest(ufs.HOST_DISCONNECTED));
+					break;
+				}
+					
 				showMsgToUsers(msg);
 			}
 		}catch(Exception e){
@@ -76,14 +92,15 @@ public class MThread extends Thread{
 	private void getMsg(){
 		try {
 			
-			byteCount = readFromUser.read(msg);
+			readFromUser.read(msg);
 		} catch (IOException e) {
 		}
 	}
 	private void showMsgToUsers(byte[] msg){
 		for(OutputStream output:usersOutput){
 			try {
-				output.write(msg, 0, byteCount);
+				if(output != null)
+					output.write(msg);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

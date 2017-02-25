@@ -9,6 +9,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Timer;
@@ -22,8 +23,10 @@ import javax.swing.JPanel;
 import com.sun.glass.events.WindowEvent;
 
 import GamePack.*;
+import MultiplayerPack.MBytePack;
 import MultiplayerPack.MClient;
 import MultiplayerPack.MHost;
+import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
 	private JPanel mainPanel;
@@ -32,6 +35,10 @@ public class GameScreen extends JFrame{
 	private Player[] players;
 	private boolean isSingle;
 	private MoneyLabels mLabels;
+	private MClient client;
+	private MHost host;
+	private MBytePack mPack;
+	private UnicodeForServer unicode;
 	// called if user is the host
 	public GameScreen(boolean isSingle){
 		//setAlwaysOnTop(true);
@@ -40,6 +47,7 @@ public class GameScreen extends JFrame{
 		if(!isSingle)
 			addHost();
 		setWindowVisible();
+		exitSetting(true);
 	}
 	// called if user is the client
 	public GameScreen(boolean isSingle, String ip, int port) throws UnknownHostException, IOException{
@@ -54,6 +62,7 @@ public class GameScreen extends JFrame{
 			throw new IOException();
 		}
 		setWindowVisible();
+		exitSetting(false);
 	}
 	
 	private void setWindowVisible(){
@@ -66,26 +75,58 @@ public class GameScreen extends JFrame{
 	}
 	
 	private void initEverything(){
+		mPack = MBytePack.getInstance();
+		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
 		createPlayers();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		addActionListenerForExit();
 		init();
 		setGameScreenBackgroundColor();
 		mLabels = new MoneyLabels(mainPanel, players);
+	}
+	private void exitSetting(boolean isHost){
+		if(isSingle)
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		else
+			addActionListenerForExit(isHost);
 	}
 	private void setGameScreenBackgroundColor() {
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
 		this.setBackground(boardBackgroundColor);
 	}
 	// Todo: need to find the way to send exit meesage to server when closing windows.
-	private void addActionListenerForExit(){
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e){
-				
-			}
-		});
+	private void addActionListenerForExit(boolean isHost){
+		addWindowListener( new WindowAdapter() {
+			@Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+            	super.windowClosing(e);
+            	if(isHost){
+            		// need to figure out the problem
+//            		while(host == null || host.getOutputStream() == null){
+//                		try {
+//    						Thread.sleep(1);
+//    					} catch (InterruptedException e1) {
+//    						e1.printStackTrace();
+//    					}
+//                	}
+//                	host.writeToServer(mPack.packSimpleRequest(unicode.HOST_DISCONNECTED), mPack.getByteSize());
+                    System.exit(1);
+            		
+            	}else{
+            		while(client.getOutputStream() == null){
+                		try {
+    						Thread.sleep(1);
+    					} catch (InterruptedException e1) {
+    						e1.printStackTrace();
+    					}
+                	}
+                	client.writeToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,client.getPlayerNum()), mPack.getByteSize());
+                    System.exit(1);
+            	}
+            	
+            }
+        } );
 	}
+	
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		myComp_height = (int)screenSize.getDisplayMode().getHeight();
@@ -129,7 +170,7 @@ public class GameScreen extends JFrame{
 			public void run() {
 				try {
 
-					MHost host = new MHost(dicePanel,players);
+					host = new MHost(dicePanel,players);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -142,6 +183,6 @@ public class GameScreen extends JFrame{
 
 	}
 	private void addClient(String ip, int port) throws UnknownHostException, IOException{
-			MClient client = new MClient(ip,port,false,dicePanel,players);
+			client = new MClient(ip,port,false,dicePanel,players);
 	}
 }

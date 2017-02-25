@@ -15,6 +15,7 @@ public final class MByteUnpack {
 	private HashMap<String, GetResult> GetResults;
 	private UnicodeForServer UNI;
 	private String receivedCode;
+	private String code;
 	private MByteUnpack(){
 		init();
 	}
@@ -39,9 +40,11 @@ public final class MByteUnpack {
 		GetResults.put(UNI.START_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.END_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
-			return cleanUpAndReturn();}});
-		GetResults.put(UNI.DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){
-			return cleanUpAndReturn();}});
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPlayerNumberResult(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.HOST_DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
@@ -59,7 +62,6 @@ public final class MByteUnpack {
 	}
 	public void unpackDiceResult(byte[] result){
 		try {
-//			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
 		} catch (IOException e) {
@@ -96,6 +98,28 @@ public final class MByteUnpack {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	/**
+	 * 0 - Not disconnected
+	 * 1 - client disconnected
+	 * 2 - host disconnected.
+	 * @param result
+	 * @return 0,1,2
+	 */
+	public int isDisconnectedCode(byte[] result){
+		resetAndReceive(result);
+		try {
+			code = dInputStream.readUTF();
+			if(UNI.DISCONNECTED.equals(code))
+				return 1;
+			else if(UNI.HOST_DISCONNECTED.equals(code))
+				return 2;
+			return 0;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 }

@@ -185,4 +185,11 @@ public class Board {
 	{
 		return propertyCheck[players[player].getPositionNumber()];
 	}
+	public void removePlayer(int player){
+		players[player].getPiece().setVisible(false);
+		numPlayers--;
+	}
+	public int getNumPlayer(){
+		return numPlayers;
+	}
 }

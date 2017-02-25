@@ -324,6 +324,10 @@ public class DicePanel extends JPanel{
 	public void actionForRemovePropertyPanel(){
 		propertyPanel.endPropertyPanel();
 	}
+	public void actionForRemovePlayer(int i){
+		board.removePlayer(i);
+		
+	}
 	private void sendMessageToServer(byte[] msg, int byteSize){
 		if (outputStream != null){
 			try {
@@ -338,7 +342,7 @@ public class DicePanel extends JPanel{
 	}
 	
 	private void changeTurn(){
-		turnLabel.setText("Player " + (current % 4 + 1) + "'s Turn!");
+		turnLabel.setText("Player " + (current+1) + "'s Turn!");
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){
 		diceRes[0] = diceRes1;
@@ -484,9 +488,14 @@ public class DicePanel extends JPanel{
 //	}
 	
 	private void changePlayerTurn(){
+		checkPlayerAvailabilty();
+	}
+	// ToDo: need to track the missing player.
+	private void checkPlayerAvailabilty(){
+		
+//		while(!players[(++current)%4].isOn());
 		current = (current+1)%4;
 	}
-	
 	public int[] getResult(){
 		rollButton.setEnabled(true);
 		overrideDiceRoll.setEnabled(true);

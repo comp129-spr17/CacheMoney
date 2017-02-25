@@ -16,6 +16,7 @@ public final class Player {
 	private boolean inJail;
 	private int playerNum;
 	private int playerPositionNumber;
+	private boolean isOn;
 	private static final Player GlobalPlayer0 = new Player();
 	private static final Player GlobalPlayer1 = new Player();
 	private static final Player GlobalPlayer2 = new Player();
@@ -91,6 +92,9 @@ public final class Player {
 	{
 		return playerPositionNumber;
 	}
+	public boolean isOn(){
+		return isOn;
+	}
 //----------------------------------------Sets
 	void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
@@ -126,6 +130,9 @@ public final class Player {
 	public void movePosition()
 	{
 		playerPositionNumber++; 
+	}
+	public void setIsOn(boolean o){
+		isOn = o;
 	}
 	public void checkGo()
 	{
