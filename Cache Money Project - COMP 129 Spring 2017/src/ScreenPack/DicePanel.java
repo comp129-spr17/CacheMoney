@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.omg.CORBA.SystemException;
+
 public class DicePanel extends JPanel{
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -191,7 +193,7 @@ public class DicePanel extends JPanel{
 					if(isSingle)
 						actionForStart();
 					else
-						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME));
+						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME),mPack.getByteSize());
 				}
 			}
 
@@ -243,7 +245,7 @@ public class DicePanel extends JPanel{
 				if(isSingle)
 					actionForDiceRoll(diceRes[0], diceRes[1]);
 				else
-					sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]));
+					sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]),mPack.getByteSize());
 				//actionForDiceRoll();
 			}
 		});
@@ -255,7 +257,7 @@ public class DicePanel extends JPanel{
 				if(isSingle)
 					actionForDiceEnd();
 				else
-					sendMessageToServer(mPack.packSimpleRequest(unicode.END_TURN));
+					sendMessageToServer(mPack.packSimpleRequest(unicode.END_TURN),mPack.getByteSize());
 //				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
 			}
 
@@ -322,10 +324,10 @@ public class DicePanel extends JPanel{
 	public void actionForRemovePropertyPanel(){
 		propertyPanel.endPropertyPanel();
 	}
-	private void sendMessageToServer(byte[] msg){
+	private void sendMessageToServer(byte[] msg, int byteSize){
 		if (outputStream != null){
 			try {
-				outputStream.write(msg);
+				outputStream.write(msg,0,byteSize);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

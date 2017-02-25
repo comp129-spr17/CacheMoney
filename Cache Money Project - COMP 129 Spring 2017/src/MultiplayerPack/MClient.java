@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import javax.swing.*;
@@ -41,6 +42,7 @@ public class MClient {
 	private UnicodeForServer unicode;
 	private Player thisPlayer;
 	private Player[] pList;
+	private int byteCount;
 	private HashMap<String, DoAction> doActions;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
@@ -68,7 +70,7 @@ public class MClient {
 		mUnpack = MByteUnpack.getInstance();
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
-		msgs = new byte[8192];
+		msgs = new byte[512];
 		initDoActions();
 	}
 	private void initDoActions(){
@@ -130,15 +132,17 @@ public class MClient {
 				ArrayList<Object> result;
 				int count;
 				try {
-					inputStream.read(msgs);
-					if(!isNullByte(msgs)){
-						result = mUnpack.getResult(msgs);
+					
+					byteCount = inputStream.read(msgs);
+//					System.out.println("Received" + Arrays.toString(msgs));
+//					System.out.println(Arrays.toString(msgs));
+					result = mUnpack.getResult(msgs);
+
 //						System.out.println("Received From Server.");
-						//System.out.println((Integer)result.get(1));
-						setPlayer((Integer)result.get(1));
-						(new CheckingPlayerTurn()).start();
-						Sounds.waitingRoomJoin.playSound();
-					}
+					//System.out.println((Integer)result.get(1));
+					setPlayer((Integer)result.get(1));
+					(new CheckingPlayerTurn()).start();
+					Sounds.waitingRoomJoin.playSound();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -184,8 +188,8 @@ public class MClient {
 		return isServerUp;
 	}
 	private boolean isNullByte(byte[] msg){
-		for(int i=1; i<4; i++)
-			if(msg[i]!=0)
+		for(int i=1; i<5; i++)
+			if(msg[i]!=(byte)0x00)
 				return false;
 		System.out.println("Null byte received");
 		return true;

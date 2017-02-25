@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +28,7 @@ public class MThread extends Thread{
 	private MBytePack mPack;
 	private UnicodeForServer ufs;
 	private Integer playerNum;
+	private int byteCount;
 	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName, Integer playerNum){
 		socket = s;
 		this.playerNum = playerNum;
@@ -46,7 +48,7 @@ public class MThread extends Thread{
 			e.printStackTrace();
 		}
 		
-		msg=new byte[8192];
+		msg=new byte[512];
 		/*
 		try {
 			System.out.println("Connection from : " + s.getOutputStream());
@@ -75,8 +77,9 @@ public class MThread extends Thread{
 	}
 	private void getMsg(){
 		try {
-			readFromUser.read(msg);
 			
+			byteCount = readFromUser.read(msg);
+			System.out.println("Received" + Arrays.toString(msg));
 		} catch (IOException e) {
 //			e.printStackTrace();
 		}
@@ -84,7 +87,8 @@ public class MThread extends Thread{
 	private void showMsgToUsers(byte[] msg){
 		for(OutputStream output:usersOutput){
 			try {
-				output.write(msg);
+//				System.out.println("Sending" + Arrays.toString(msg));
+				output.write(msg, 0, byteCount);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

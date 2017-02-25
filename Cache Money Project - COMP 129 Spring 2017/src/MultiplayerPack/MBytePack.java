@@ -4,11 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public final class MBytePack {
 	private ByteArrayOutputStream bOutputStream;
 	private DataOutputStream dOutputStream;
+	private int byteSize;
 	private static final MBytePack MPACK= new MBytePack(); 
 	private MBytePack(){
 		init();
@@ -22,11 +24,16 @@ public final class MBytePack {
 	}
 	private byte[] packResult(){
 		byte[] result = bOutputStream.toByteArray();
+		byteSize = result.length;
+		System.out.println("Length : " + result.length + "Packed" + Arrays.toString(result));
 		dOutputStream = null;
 		bOutputStream = null;
 		init();
 		
 		return result;
+	}
+	public int getByteSize(){
+		return byteSize;
 	}
 	public byte[] packDiceResult(String requestCode, int fDice, int sDice){
 		try {
