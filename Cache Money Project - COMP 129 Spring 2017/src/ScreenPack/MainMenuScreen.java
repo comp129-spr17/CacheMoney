@@ -235,19 +235,21 @@ public class MainMenuScreen {
 			break;
 		case 1: // USER WANTED SINGLEPLAYER
 			while(getNumPlayers()){
+				Sounds.buttonConfirm.playSound();
 				gNumP = txtNumP.getText();
 				if(isValidNum(gNumP)){
 					hideAndDisposeMainMenuScreen();
 					GameScreen gameScreen = new GameScreen(true);
 					gameScreen.setNumPlayer(Integer.parseInt(gNumP));
-					break;
+					return;
 				}else{
-					JOptionPane.showMessageDialog(null, "The number of players has to be more than 1 and less than 5.", "Invalid number of players", JOptionPane.OK_OPTION);
+					JOptionPane.showMessageDialog(null, "The number of players must be between 2 and 4 inclusive.", "Invalid Number of Players!", JOptionPane.OK_OPTION);
+					Sounds.buttonCancel.playSound();
 				}
 				
 				
 			}
-			
+			Sounds.buttonCancel.playSound();
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -267,7 +269,7 @@ public class MainMenuScreen {
 	}
 	
 	private boolean getNumPlayers(){
-		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of player", JOptionPane.YES_NO_OPTION);
+		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of players:", JOptionPane.YES_NO_OPTION);
 		return res == JOptionPane.YES_OPTION ? true : false;
 	}
 	private void hideAndDisposeMainMenuScreen() {

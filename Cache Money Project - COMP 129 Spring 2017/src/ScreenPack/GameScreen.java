@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import com.sun.glass.events.WindowEvent;
 
 import GamePack.*;
+import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.MClient;
 import MultiplayerPack.MHost;
@@ -79,6 +80,10 @@ public class GameScreen extends JFrame{
 			e.printStackTrace();
 		}
 		this.setVisible(true);
+		if (isSingle){
+			Sounds.waitingRoomJoin.playSound();
+		}
+		
 	}
 	
 	private void initEverything(){
