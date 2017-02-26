@@ -89,10 +89,9 @@ public class PropertyInfoPanel extends JPanel{
 
 	public void executeSwitch(String name)
 	{
-		if (this.name == null){
-			property = propertyInfo.get(name).getPropertyInfo();
-			loadPropertyInfo(property);
-		}
+		property = propertyInfo.get(name).getPropertyInfo();
+		loadPropertyInfo(property);
+		infoPanel.removeAll();
 		renderPropertyInfo();
 		hidePreviousPanel();
 	}
@@ -106,7 +105,7 @@ public class PropertyInfoPanel extends JPanel{
 	private void renderPropertyInfo()
 	{
 
-		add(this.name);
+		infoPanel.add(this.name);
 		this.setBackground(Color.white);
 
 		//Set up them buttons
