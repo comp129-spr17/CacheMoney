@@ -1,6 +1,7 @@
 package ScreenPack;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,8 +43,10 @@ public class PropertyInfoPanel extends JPanel{
 	private Player[] players;
 	private DicePanel dicePanel;
 	private Board board;
+	private JPanel infoPanel;
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, Board b)
 	{
+		infoPanel = new JPanel();
 		players = player;
 		this.isSingle = isSingle;
 		this.panelToSwitchFrom = panelToSwitchFrom;
@@ -60,7 +64,9 @@ public class PropertyInfoPanel extends JPanel{
 		this.setSize(panelToSwitchFrom.getSize());
 		this.setLocation(panelToSwitchFrom.getLocation());
 		this.setVisible(false);	
-		hideButton = new JButton();
+		infoPanel.setBounds(0, 0, getWidth()-75, getHeight()/4*3-30);
+		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+		hideButton = new JButton("Back");
 		buyButton = new JButton();
 		auctionButton = new JButton();
 		payButton = new JButton();
@@ -111,13 +117,16 @@ public class PropertyInfoPanel extends JPanel{
 			addAuctionButton();
 		}
 		addHideButton();
-
-		add(buyingPrice);
+		buyingPrice.setHorizontalAlignment(JLabel.CENTER);
+		infoPanel.add(buyingPrice);
 		for(JLabel a:rentValues){
-			add(a);
+			a.setHorizontalAlignment(JLabel.CENTER);
+			infoPanel.add(a);
 		}
-		add(mortgagePrice);
-
+		
+		infoPanel.add(mortgagePrice);
+		mortgagePrice.setHorizontalAlignment(JLabel.CENTER);
+		add(infoPanel);
 	}
 
 	public void endPropertyPanel()
@@ -146,7 +155,6 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(hideButton.isEnabled()){
@@ -155,6 +163,8 @@ public class PropertyInfoPanel extends JPanel{
 						endPropertyPanel();
 					else
 						sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+				}else{
+					System.out.println("aaa");
 				}
 
 			}
@@ -248,8 +258,7 @@ public class PropertyInfoPanel extends JPanel{
 
 	private void addHideButton()
 	{
-		hideButton = new JButton("Back");
-		hideButton.setBounds(this.getWidth()-70,0, 70, 30);
+		hideButton.setBounds(this.getWidth()-75,10, 70, 30);
 		add(hideButton); 
 	}
 
