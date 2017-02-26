@@ -27,7 +27,7 @@ public class AskUserMultiplayerDialogBox {
 			return 0;
 		}
 		else if (chosen == JOptionPane.NO_OPTION){
-			Sounds.waitingRoomJoin.playSound();
+			Sounds.buttonPress.playSound();
 			return 1;
 		}
 		Sounds.buttonCancel.playSound();
