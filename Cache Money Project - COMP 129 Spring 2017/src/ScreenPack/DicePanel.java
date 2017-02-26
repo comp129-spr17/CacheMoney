@@ -313,6 +313,7 @@ public class DicePanel extends JPanel{
 		endTurnButton.setVisible(false);
 		dices[0].hideDice();
 		dices[1].hideDice();
+		propertyPanel.enableButtons();
 		
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
