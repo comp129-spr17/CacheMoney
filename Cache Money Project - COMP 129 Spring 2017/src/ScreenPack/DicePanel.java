@@ -489,6 +489,7 @@ public class DicePanel extends JPanel{
 			endTurnButton.setVisible(true);
 		}
 		else{
+			mLabel.reinitializeMoneyLabels();
 			rollButton.setVisible(true);
 			overrideDiceRoll.setVisible(true);
 		}
