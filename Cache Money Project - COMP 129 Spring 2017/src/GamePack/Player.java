@@ -138,7 +138,7 @@ public final class Player {
 	}
 	public void checkGo()
 	{
-		if (pastPositionNumber > playerPositionNumber)
+		if (inJail == false && pastPositionNumber > playerPositionNumber)
 		{
 			hunneds += 2;
 			totalmonies += 200;
