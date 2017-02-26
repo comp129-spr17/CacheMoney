@@ -183,7 +183,9 @@ public class DicePanel extends JPanel{
 		diceTimer = new Timer();
 	}
 	
-	
+	public void placePlayerToBoard(int i){
+		board.placePieceToFirst(i);
+	}
 	private void addListeners(){
 		startGameButton.addMouseListener(new MouseListener(){
 
@@ -497,8 +499,8 @@ public class DicePanel extends JPanel{
 	// ToDo: need to track the missing player.
 	private void checkPlayerAvailabilty(){
 		
-//		while(!players[(++current)%4].isOn());
-		current = (current+1)%4;
+		while(!players[(++current)%4].isOn());
+		current = (current)%4;
 	}
 	public int[] getResult(){
 		rollButton.setEnabled(true);

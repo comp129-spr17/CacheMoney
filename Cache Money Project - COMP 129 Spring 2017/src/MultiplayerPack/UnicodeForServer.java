@@ -10,7 +10,7 @@ public final class UnicodeForServer {
 	public static final String END_PROPERTY = "A!()FASNV)@$(@6";
 	public static final String DISCONNECTED = "A!()FASNV)@$(@7";
 	public static final String HOST_DISCONNECTED = "A!()FASNV)@$(@8";
-	
+	public static final String START_GAME_REPLY = "A!()FASNV)@$(@9";
 	
 	private UnicodeForServer(){
 		

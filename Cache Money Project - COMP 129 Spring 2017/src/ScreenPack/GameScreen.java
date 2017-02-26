@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.TextField;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.sun.glass.events.WindowEvent;
 
@@ -39,6 +41,8 @@ public class GameScreen extends JFrame{
 	private MHost host;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
+	private int numPlayer;
+	private BoardPanel boardPanel;
 	// called if user is the host
 	public GameScreen(boolean isSingle){
 		//setAlwaysOnTop(true);
@@ -64,7 +68,10 @@ public class GameScreen extends JFrame{
 		setWindowVisible();
 		exitSetting(false);
 	}
-	
+	public void setNumPlayer(int numPlayer){
+		this.numPlayer = numPlayer;
+		boardPanel.PlacePiecesToBaord(numPlayer);
+	}
 	private void setWindowVisible(){
 		try {
 			Thread.sleep(100);
@@ -151,7 +158,7 @@ public class GameScreen extends JFrame{
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
 		dicePanel = new DicePanel(isSingle, players);
-		BoardPanel boardPanel = new BoardPanel(players,dicePanel);
+		boardPanel = new BoardPanel(players,dicePanel);
 		
 		mainPanel.add(boardPanel);
 		

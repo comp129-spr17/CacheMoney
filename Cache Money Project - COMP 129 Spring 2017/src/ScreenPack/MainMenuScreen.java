@@ -25,7 +25,9 @@ public class MainMenuScreen {
 	private JLabel HelloThere;
 	private JButton ExitButton;
 	private JButton InstructionButton;
-	
+	private int numPlayer;
+	private JTextField txtNumP;
+	private Object[] messages;
 	public MainMenuScreen(){
 		init();
 		createMenuWindow();
@@ -45,7 +47,10 @@ public class MainMenuScreen {
 		HelloThere = new JLabel("I'm still hungry :(", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		InstructionButton = new JButton("Instructions");
-		
+		txtNumP = new JTextField();
+		messages = new Object[2];
+		messages[0] = "How many players would you like to play with:";
+		messages[1] = txtNumP;
 	}
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -223,13 +228,26 @@ public class MainMenuScreen {
 	
 	private void displaySingleMultiplayerDialogBox() {
 		AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+		String gNumP;
 		switch (mwr.askUserSingleMultiPlayer()){
 		case 0: // USER WANTED MULTIPLAYER
 			displayHostOrClientDialogBox(mwr);
 			break;
 		case 1: // USER WANTED SINGLEPLAYER
-			hideAndDisposeMainMenuScreen();
-			GameScreen gameScreen = new GameScreen(true);
+			while(getNumPlayers()){
+				gNumP = txtNumP.getText();
+				if(isValidNum(gNumP)){
+					hideAndDisposeMainMenuScreen();
+					GameScreen gameScreen = new GameScreen(true);
+					gameScreen.setNumPlayer(Integer.parseInt(gNumP));
+					break;
+				}else{
+					JOptionPane.showMessageDialog(null, "The number of players has to be more than 1 and less than 5.", "Invalid number of players", JOptionPane.OK_OPTION);
+				}
+				
+				
+			}
+			
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -239,8 +257,19 @@ public class MainMenuScreen {
 			break;	
 		}
 	}
+	private boolean isValidNum(String numP){
+		if(numP.length() != 1)
+			return false;
+		char num = numP.charAt(0);
+		if(num < '2' || num > '4')
+			return false;
+		return true;
+	}
 	
-	
+	private boolean getNumPlayers(){
+		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of player", JOptionPane.YES_NO_OPTION);
+		return res == JOptionPane.YES_OPTION ? true : false;
+	}
 	private void hideAndDisposeMainMenuScreen() {
 		mainmenuframe.setVisible(false);
 		mainmenuframe.dispose();

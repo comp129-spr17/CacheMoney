@@ -86,7 +86,7 @@ public class BoardPanel extends JPanel{
 		setSize();
 		init();
 		importImgs();
-		board = new Board(spaces, players, 4);
+		board = new Board(spaces, players);
 		setBoardBackgroundColor();
 		addDiceBoard();
 
@@ -305,6 +305,12 @@ public class BoardPanel extends JPanel{
 	public HashMap<String,PropertySpace> getMappings()
 	{
 		return propertyInfo;
+	}
+	public void placePieceToBoard(int i){
+		board.placePieceToFirst(i);
+	}
+	public void PlacePiecesToBaord(int numPlayer){
+		board.placePiecesToFirst(numPlayer);
 	}
 	
 }
