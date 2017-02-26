@@ -261,7 +261,7 @@ public class DicePanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				endTurnButton.setVisible(false);
 				if(isSingle)
 					actionForDiceEnd();
 				else
@@ -303,20 +303,44 @@ public class DicePanel extends JPanel{
 		turnLabel.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		Music.music1.playMusic();
+		switch (rand.nextInt(1)){
+		case 0:
+			Music.music1.playMusic();
+			break;
+		case 1:
+			Music.music2.playMusic();
+			break;
+		}
+		
 	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
+		endTurnButton.setVisible(false);
+		mLabel.reinitializeMoneyLabels();
+		Sounds.turnBegin.playSound();
+		turnLabel.setVisible(true);
 		changePlayerTurn();
 		changeTurn();
-		Sounds.turnBegin.playSound();
-		rollButton.setVisible(true);
-		overrideDiceRoll.setVisible(true);
-		turnLabel.setVisible(true);
-		endTurnButton.setVisible(false);
 		dices[0].hideDice();
 		dices[1].hideDice();
 		propertyPanel.enableButtons();
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				rollButton.setVisible(true);
+				overrideDiceRoll.setVisible(true);
+				t.cancel();
+				t.purge();
+			}
+			
+		}, 500);
+		
+		
+		
+		
+		
 		
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
