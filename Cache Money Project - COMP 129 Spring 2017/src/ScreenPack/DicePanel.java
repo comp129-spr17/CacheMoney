@@ -55,8 +55,10 @@ public class DicePanel extends JPanel{
 	private boolean isSingle;
 	private String ip;
 	private int port;
-	public DicePanel(boolean isSingle, Player[] player){
+	private MoneyLabels mLabel;
+	public DicePanel(boolean isSingle, Player[] player, MoneyLabels MLabels){
 		players = player;
+		mLabel = MLabels;
 		this.isSingle = isSingle;
 		init();
 	}
@@ -264,6 +266,7 @@ public class DicePanel extends JPanel{
 					actionForDiceEnd();
 				else
 					sendMessageToServer(mPack.packSimpleRequest(unicode.END_TURN),mPack.getByteSize());
+				mLabel.reinitializeMoneyLabels();
 //				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
 			}
 
@@ -418,7 +421,7 @@ public class DicePanel extends JPanel{
 //			current = current == 3 ? 0 : current+1 ;
 			
 		}
-				
+			
 	}
 	
 	private void sameNumberCelebration(){

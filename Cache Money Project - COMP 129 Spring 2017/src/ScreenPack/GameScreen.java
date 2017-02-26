@@ -92,8 +92,6 @@ public class GameScreen extends JFrame{
 		scaleBoardToScreenSize();
 		createPlayers();
 		init();
-		mLabels = MoneyLabels.getInstance();
-		mLabels.initLabels(mainPanel, players);
 		setGameScreenBackgroundColor();
 		
 	}
@@ -164,7 +162,9 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		dicePanel = new DicePanel(isSingle, players);
+		mLabels = MoneyLabels.getInstance();
+		mLabels.initLabels(mainPanel, players);
+		dicePanel = new DicePanel(isSingle, players, mLabels);
 		boardPanel = new BoardPanel(players,dicePanel);
 		
 		mainPanel.add(boardPanel);

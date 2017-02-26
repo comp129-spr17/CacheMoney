@@ -15,6 +15,7 @@ public final class Player {
 	private Piece playerpiece;
 	private boolean inJail;
 	private int playerNum;
+	private int pastPositionNumber;
 	private int playerPositionNumber;
 	private boolean isOn;
 	private static final Player GlobalPlayer0 = new Player();
@@ -25,6 +26,7 @@ public final class Player {
 //------------------------------------Default Constructor
 	
 	private Player() {
+		pastPositionNumber = 0;
 		playerPositionNumber = 0;
 		totalmonies = 1500;
 		fivehunneds = 2;
@@ -136,13 +138,12 @@ public final class Player {
 	}
 	public void checkGo()
 	{
-		if (playerPositionNumber >= 40)
+		if (pastPositionNumber > playerPositionNumber)
 		{
-			//hunneds += 2;
-			//totalmonies += 200;
-			playerPositionNumber -= playerPositionNumber - 40;
-			System.out.println("yes");
+			hunneds += 2;
+			totalmonies += 200;
 		}
+		pastPositionNumber = playerPositionNumber;
 	}
 	public void setplayerNum(int i)
 	{

@@ -216,6 +216,7 @@ public final class MoneyLabels {
 	{
 		for(int i = 0; i < 4; i++)
 		{
+			players[i].checkGo();
 			totalmonnies[i].setText("$" + Integer.toString(players[i].getTotalMonies()));
 			cash500[i].setText(Integer.toString(players[i].getFiveHunneds()));
 			cash50[i].setText(Integer.toString(players[i].getFitties()));
@@ -224,6 +225,7 @@ public final class MoneyLabels {
 			cash100[i].setText(Integer.toString(players[i].getHunneds()));
 			cash1[i].setText(Integer.toString(players[i].getOnes()));
 		}
+		System.out.println(totalmonnies[0].getText());
 	}
 	private void createMoniesLabels() {
 		xmark = new JLabel[4];
