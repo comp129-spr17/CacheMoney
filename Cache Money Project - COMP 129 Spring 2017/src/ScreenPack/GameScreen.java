@@ -92,8 +92,10 @@ public class GameScreen extends JFrame{
 		scaleBoardToScreenSize();
 		createPlayers();
 		init();
+		mLabels = MoneyLabels.getInstance();
+		mLabels.initLabels(mainPanel, players);
 		setGameScreenBackgroundColor();
-		mLabels = new MoneyLabels(mainPanel, players);
+		
 	}
 	private void exitSetting(boolean isHost){
 		if(isSingle)

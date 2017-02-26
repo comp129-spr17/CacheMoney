@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import GamePack.Player;
 
-public class MoneyLabels {
+public final class MoneyLabels {
 	private JPanel mainPanel;
 	private Player[] players;
 	private JLabel[] cash500image;
@@ -40,7 +40,14 @@ public class MoneyLabels {
 	private JLabel[] label100;
 	private JLabel[] label1;
 	private Font numberfont;
-	public MoneyLabels(JPanel mainPanel, Player[] players){
+	private final static MoneyLabels MONEY_LABELS = new MoneyLabels();
+	private MoneyLabels(){
+		
+	}
+	public static MoneyLabels getInstance(){
+		return MONEY_LABELS;
+	}
+	public void initLabels(JPanel mainPanel, Player[] players){
 		this.mainPanel = mainPanel;
 		this.players = players;
 		init();
