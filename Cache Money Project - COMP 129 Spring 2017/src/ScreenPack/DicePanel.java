@@ -194,12 +194,13 @@ public class DicePanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				
 				if (startGameButton.isEnabled()){
-					if(isSingle)
+					if(isSingle){
 						actionForStart();
+					}
 					else
 						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME),mPack.getByteSize());
 				}
-				Music.music1.playMusic();
+				
 			}
 
 			@Override
@@ -299,6 +300,7 @@ public class DicePanel extends JPanel{
 		turnLabel.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
+		Music.music1.playMusic();
 	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
