@@ -32,7 +32,6 @@ public class PropertyInfoPanel extends JPanel{
 	private JButton auctionButton;
 	private JButton hideButton;
 	private Property property;
-	private SizeRelated sizeRelated;
 	private HashMap<String,PropertySpace> propertyInfo;
 	private OutputStream outputStream;
 	private boolean isSingle;
@@ -56,7 +55,6 @@ public class PropertyInfoPanel extends JPanel{
 			
 	private void init()
 	{		
-		sizeRelated = SizeRelated.getInstance();
 		this.setSize(panelToSwitchFrom.getSize());
 		this.setLocation(panelToSwitchFrom.getLocation());
 		this.setVisible(false);	
@@ -224,7 +222,6 @@ public class PropertyInfoPanel extends JPanel{
 		buyButton.setText("BUY"); 
 		buyButton.setSize(100, 80);
 		buyButton.setBackground(Color.GREEN); 
-		//buyButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
 		buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
 		add(buyButton); 
 	}
