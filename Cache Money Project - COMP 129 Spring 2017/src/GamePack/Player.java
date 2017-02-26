@@ -167,7 +167,7 @@ public final class Player {
 		{
 			if (cost >= 500)
 			{
-				modMoney = cost % 500;
+				modMoney = cost / 500;
 				for (int i = 0; i < modMoney; i++)
 				{
 					if(fivehunneds > 0)
@@ -180,7 +180,7 @@ public final class Player {
 			}
 			if (cost < 500 && cost >= 100)
 			{
-				modMoney = cost % 100;
+				modMoney = cost / 100;
 				for (int i = 0; i < modMoney; i++)
 				{
 					if (hunneds > 0)
@@ -193,7 +193,7 @@ public final class Player {
 			}
 			if (cost < 100 && cost >= 50)
 			{
-				modMoney = cost % 50;
+				modMoney = cost / 50;
 				for (int i = 0; i < modMoney; i++)
 				{
 					if (fitties > 0)
@@ -206,7 +206,7 @@ public final class Player {
 			}
 			if (cost < 50 && cost >= 20)
 			{
-				modMoney = cost % 20;
+				modMoney = cost / 20;
 				for (int i = 0; i < modMoney; i++)
 				{
 					if (twennies > 0)
@@ -219,7 +219,7 @@ public final class Player {
 			}
 			if (cost < 20 && cost >= 10)
 			{
-				modMoney = cost % 10;
+				modMoney = cost / 10;
 				for (int i = 0; i < modMoney; i++)
 				{
 					if (tens > 0)
@@ -232,7 +232,7 @@ public final class Player {
 			}
 			if (cost < 10 && cost >= 5)
 			{
-				modMoney = cost % 5;
+				modMoney = cost / 5;
 				for (int i = 0; i < modMoney; i++)
 				{
 					if (fives > 0)
@@ -245,7 +245,7 @@ public final class Player {
 			}
 			if (cost < 5 && cost >= 1)
 			{
-				for (int i = 0; i < 1; i++)
+				for (int i = 0; i < cost; i++)
 				{
 					if (ones > 0)
 					{
