@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 public abstract class Property {
 	ArrayList<Integer> rentValues;
-	private int mortgageValue;
-	int buyingPrice;
-	int rentMultiplier;
-	boolean owned;
-	String name;
+	protected int mortgageValue;
+	protected int buyingPrice;
+	protected int rentMultiplier;
+	protected boolean owned;
+	protected int owner = -1;
+	protected String name;
 	
 	public Property(int cost, String name)
 	{
@@ -64,5 +65,14 @@ public abstract class Property {
 	
 	public int getMortgageValue() {
 		return mortgageValue;
+	}
+	
+
+	public void setOwner(int player) {
+		owner = player;
+	}
+	
+	public int getOwner() {
+		return owner;
 	}
 }
