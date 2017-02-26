@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import InterfacePack.Music;
+
 public class InstructionsScreen extends JFrame {
 	private JPanel mainPanel;
 	private InstructionsPanel iPanel;
@@ -26,6 +28,7 @@ public class InstructionsScreen extends JFrame {
 		mainPanel.add(backB);
 		iPanel = new InstructionsPanel();
 		mainPanel.add(iPanel);
+		Music.music1.playMusic();
 	}
 	
 	

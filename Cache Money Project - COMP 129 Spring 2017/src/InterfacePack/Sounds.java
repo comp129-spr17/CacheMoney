@@ -40,82 +40,82 @@ public enum Sounds {
 	public void playSound(){
 		switch (this){
 		case buttonConfirm:
-			AudioPlayer.getInstance().playSound("audio", "buttonConfirm.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "buttonConfirm.wav");
 			return;
 		case buttonPress:
-			AudioPlayer.getInstance().playSound("audio", "buttonPress.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "buttonPress.wav");
 			return;
 		case register:
-			AudioPlayer.getInstance().playSound("audio", "register.mp3");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "register.mp3");
 			return;
 		case buttonCancel:
-			AudioPlayer.getInstance().playSound("audio", "buttonCancel.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "buttonCancel.wav");
 			return;
 		case diceRoll1:
-			AudioPlayer.getInstance().playSound("audio", "diceRoll1.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll1.wav");
 			return;
 		case diceRoll2:
-			AudioPlayer.getInstance().playSound("audio", "diceRoll2.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll2.wav");
 			return;
 		case diceRoll3:
-			AudioPlayer.getInstance().playSound("audio", "diceRoll3.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll3.wav");
 			return;
 		case diceRoll4:
-			AudioPlayer.getInstance().playSound("audio", "diceRoll4.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll4.wav");
 			return;
 		case diceRoll5:
-			AudioPlayer.getInstance().playSound("audio", "diceRoll5.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll5.wav");
 			return;
 		case landedOnJail:
-			AudioPlayer.getInstance().playSound("audio", "landedOnJail.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnJail.wav");
 			return;
 		case turnBegin:
-			AudioPlayer.getInstance().playSound("audio", "turnBegin.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "turnBegin.wav");
 			return;
 		case randomDice:
-			AudioPlayer.getInstance().playSound("audio", randomizeDiceFilename());
+			SoundAndMusicPlayer.getInstance().playSound("audio", randomizeDiceFilename());
 			return;
 		case landedOnFreeParking:
-			AudioPlayer.getInstance().playSound("audio", "landedOnFreeParking.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnFreeParking.wav");
 			return;
 		case landedOnRailroad:
-			AudioPlayer.getInstance().playSound("audio", "landedOnRailroad.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnRailroad.wav");
 			return;
 		case landedOnChanceOrCommunityChest:
-			AudioPlayer.getInstance().playSound("audio", "landedOnChanceOrCommunityChest.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnChanceOrCommunityChest.wav");
 			return;
 		case landedOnUnownedProperty:
-			AudioPlayer.getInstance().playSound("audio", "landedOnUnownedProperty.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnUnownedProperty.wav");
 			return;
 		case landedOnOwnedProperty:
-			AudioPlayer.getInstance().playSound("audio", "landedOnOwnedProperty.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnOwnedProperty.wav");
 			return;
 		case buildingHouse:
-			AudioPlayer.getInstance().playSound("audio", "buildingHouse.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "buildingHouse.wav");
 			return;
 		case diceRollConfirmed:
-			AudioPlayer.getInstance().playSound("audio", "diceRollConfirmed.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRollConfirmed.wav");
 			return;
 		case money:
-			AudioPlayer.getInstance().playSound("audio", "money.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "money.wav");
 			return;
 		case doublesCelebrateSound:
-			AudioPlayer.getInstance().playSound("audio", "doublesCelebrateSound.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "doublesCelebrateSound.wav");
 			return;
 		case movePiece:
-			AudioPlayer.getInstance().playSound("audio", movePieceFilename());
+			SoundAndMusicPlayer.getInstance().playSound("audio", movePieceFilename());
 			return;
 		case buyProperty:
-			AudioPlayer.getInstance().playSound("audio", "buyProperty.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "buyProperty.wav");
 			return;
 		case gainMoney:
-			AudioPlayer.getInstance().playSound("audio", "gainMoney.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "gainMoney.wav");
 			return;
 		case waitingRoomJoin:
-			AudioPlayer.getInstance().playSound("audio", "waitingRoomJoin.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "waitingRoomJoin.wav");
 			return;
 		case winGame:
-			AudioPlayer.getInstance().playSound("audio", "winGame.wav");
+			SoundAndMusicPlayer.getInstance().playSound("audio", "winGame.wav");
 			return;
 		default:
 			System.out.println("Sound Error");

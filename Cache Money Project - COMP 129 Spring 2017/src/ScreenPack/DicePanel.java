@@ -1,6 +1,7 @@
 package ScreenPack;
 import GamePack.*;
 import MultiplayerPack.*;
+import InterfacePack.Music;
 import InterfacePack.Sounds;
 
 import java.awt.Color;
@@ -188,15 +189,17 @@ public class DicePanel extends JPanel{
 	}
 	private void addListeners(){
 		startGameButton.addMouseListener(new MouseListener(){
-
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				if (startGameButton.isEnabled()){
 					if(isSingle)
 						actionForStart();
 					else
 						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME),mPack.getByteSize());
 				}
+				Music.music1.playMusic();
 			}
 
 			@Override

@@ -12,7 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import CacheChatPack.CacheChat;
 import GamePack.SizeRelated;
-import InterfacePack.AudioPlayer;
+import InterfacePack.SoundAndMusicPlayer;
 import InterfacePack.Sounds;
 import MultiplayerPack.*;
 
