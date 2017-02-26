@@ -31,6 +31,7 @@ public class PropertyInfoPanel extends JPanel{
 	private JButton buyButton;
 	private JButton auctionButton;
 	private JButton hideButton;
+	private JButton payButton;
 	private Property property;
 	private HashMap<String,PropertySpace> propertyInfo;
 	private OutputStream outputStream;
@@ -52,14 +53,19 @@ public class PropertyInfoPanel extends JPanel{
 		board = b;
 		init();
 	}
-			
+
 	private void init()
 	{		
 		this.setSize(panelToSwitchFrom.getSize());
 		this.setLocation(panelToSwitchFrom.getLocation());
 		this.setVisible(false);	
+		hideButton = new JButton();
+		buyButton = new JButton();
+		auctionButton = new JButton();
+		payButton = new JButton();
+		addListeners();
 	}
-	
+
 	private void loadPropertyInfo(Property info)
 	{
 		rentValues = new ArrayList<JLabel>();
@@ -67,47 +73,51 @@ public class PropertyInfoPanel extends JPanel{
 		{
 			rentValues.add(new JLabel("Rent Value:"  + a.toString()));
 		}
-		
+
 		name = new JLabel(info.getName());		
 		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
 		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
 	}
-	
+
 	public void executeSwitch(String name)
 	{
-		property = propertyInfo.get(name).getPropertyInfo();
-		loadPropertyInfo(property);
+		if (this.name == null){
+			property = propertyInfo.get(name).getPropertyInfo();
+			loadPropertyInfo(property);
+		}
 		renderPropertyInfo();
 		hidePreviousPanel();
 	}
-	
+
 	private void hidePreviousPanel()
 	{
 		panelToSwitchFrom.setVisible(false);
 		this.setVisible(true);
 	}
-	
+
 	private void renderPropertyInfo()
 	{
-		
+
 		add(this.name);
 		this.setBackground(Color.white);
-		
+
 		//Set up them buttons
-		addBuyButton();
-		addAuctionButton();
+		if(property.isOwned()){
+			addPayButton();
+		}else{
+			addBuyButton();
+			addAuctionButton();
+		}
 		addHideButton();
-		addListeners();
-		
-	
+
 		add(buyingPrice);
 		for(JLabel a:rentValues){
 			add(a);
 		}
 		add(mortgagePrice);
-		
+
 	}
-	
+
 	public void endPropertyPanel()
 	{
 		this.removeAll();
@@ -117,24 +127,24 @@ public class PropertyInfoPanel extends JPanel{
 
 	private void addListeners(){
 		hideButton.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {				
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(hideButton.isEnabled()){
@@ -144,7 +154,7 @@ public class PropertyInfoPanel extends JPanel{
 					else
 						sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
 				}
-				
+
 			}
 		});
 		buyButton.addMouseListener(new MouseListener() {
@@ -152,20 +162,20 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseReleased(MouseEvent e) {				
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(buyButton.isEnabled()) {
@@ -176,7 +186,7 @@ public class PropertyInfoPanel extends JPanel{
 						curPlayer.purchaseProperty(property.getName(), property.getBuyingPrice());
 						property.setOwned(true);
 					}
-					
+
 				}
 			}
 		});
@@ -185,20 +195,20 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseReleased(MouseEvent e) {				
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled())
@@ -206,47 +216,82 @@ public class PropertyInfoPanel extends JPanel{
 				//TODO Add auction functionality
 			}
 		});
+		payButton.addMouseListener(new MouseListener() {
 
+			@Override
+			public void mouseReleased(MouseEvent e) {				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(auctionButton.isEnabled())
+					Sounds.landedOnOwnedProperty.playSound();
+				//TODO Add auction functionality
+			}
+		});
 	}
-	
+
 	private void addHideButton()
 	{
-		hideButton = new JButton("Back");
+		hideButton.setText("BACK");
 		hideButton.setBounds(50,50, 100, 50);
 		add(hideButton); 
 	}
-	
+
 	private void addBuyButton()
 	{
-		buyButton = new JButton();
 		buyButton.setText("BUY"); 
 		buyButton.setSize(100, 80);
 		buyButton.setBackground(Color.GREEN); 
 		buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
 		add(buyButton); 
 	}
-	
+
 	private void addAuctionButton()
 	{
-		auctionButton = new JButton();
 		auctionButton.setText("AUCTION"); 
 		auctionButton.setSize(100, 80);
 		auctionButton.setLocation(this.getWidth()/3*2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
 		auctionButton.setBackground(Color.RED);
 		add(auctionButton);
 	}
+
+	private void addPayButton()
+	{
+		payButton.setText("PAY"); 
+		payButton.setSize(100, 80);
+		payButton.setLocation(this.getWidth()/3*2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
+		payButton.setBackground(Color.RED);
+		add(payButton);
+	}
+
 	public void disableButtons(){
 		if(hideButton!=null){
 			hideButton.setEnabled(false);
 			buyButton.setEnabled(false);
 			auctionButton.setEnabled(false);
+			payButton.setEnabled(false);
 		}
-		
+
 	}
 	public void enableButtons(){
 		hideButton.setEnabled(true);
 		buyButton.setEnabled(true);
 		auctionButton.setEnabled(true);
+		payButton.setEnabled(true);
 	}
 	public void setOutputStream(OutputStream outputStream){
 		this.outputStream = outputStream;
