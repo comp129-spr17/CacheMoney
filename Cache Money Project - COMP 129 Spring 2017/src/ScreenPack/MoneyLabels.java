@@ -205,6 +205,19 @@ public class MoneyLabels {
 		cash100[i] = new JLabel(Integer.toString(players[i].getHunneds()));
 		cash1[i] = new JLabel(Integer.toString(players[i].getOnes()));
 	}
+	public void reinitializeMoneyLabels()
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			totalmonnies[i].setText("$" + Integer.toString(players[i].getTotalMonies()));
+			cash500[i].setText(Integer.toString(players[i].getFiveHunneds()));
+			cash50[i].setText(Integer.toString(players[i].getFitties()));
+			cash5[i].setText(Integer.toString(players[i].getFives()));
+			cash20[i].setText(Integer.toString(players[i].getTwennies()));
+			cash100[i].setText(Integer.toString(players[i].getHunneds()));
+			cash1[i].setText(Integer.toString(players[i].getOnes()));
+		}
+	}
 	private void createMoniesLabels() {
 		xmark = new JLabel[4];
 		cash500image = new JLabel[4];
