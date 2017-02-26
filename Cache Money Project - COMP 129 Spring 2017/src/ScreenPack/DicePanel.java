@@ -303,7 +303,7 @@ public class DicePanel extends JPanel{
 		turnLabel.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		switch (rand.nextInt(1)){
+		switch (rand.nextInt(2)){
 		case 0:
 			Music.music1.playMusic();
 			break;
