@@ -32,12 +32,13 @@ public class MHost {
 	private int playerJoined;
 	private static DicePanel diceP;
 	private Integer playerNum;
-	
+	private ArrayList<Integer> startPlayers;
 	public MHost(DicePanel d, Player[] p) throws IOException{
 		MHost.diceP = d;
 		Random rand = new Random();
 		PORT_NUM = rand.nextInt(8999 + 1000);
 		playerNum = new Integer(0);
+		startPlayers = new ArrayList<>();
 		System.out.println("Creating the server...");
 		while (true){
 			try{
@@ -66,7 +67,7 @@ public class MHost {
 
         while(true){
         	try{
-            	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum);
+            	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum, startPlayers);
             	if (playerJoined > 0){
             		Sounds.waitingRoomJoin.playSound();
             	}

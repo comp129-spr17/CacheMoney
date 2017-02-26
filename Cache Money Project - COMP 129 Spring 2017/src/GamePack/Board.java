@@ -29,20 +29,18 @@ public class Board {
 	private Player[] players;
 	private boolean isDone;
 	private boolean[] propertyCheck;
-	public Board(Space[][] board, Player[] players, int numP) {
-		init(board,players,numP);
+	public Board(Space[][] board, Player[] players) {
+		init(board,players);
 		
 		
 	}
-	private void init(Space[][] board, Player[] pieces, int numP){
+	private void init(Space[][] board, Player[] pieces){
 		this.players = pieces;
-		numPlayers = numP;
 		boardTracker = new Space[40];
 		pieceMovingAnim = new Timer();
 		propertyCheck = new boolean[40];
 		initPropertyCheck();
 		setBoardTrack(board);
-		placePiecesToFirst();
 		
 	}
 	private void initPropertyCheck(){
@@ -53,9 +51,14 @@ public class Board {
 					propertyCheck[CHANCE_TOP] = propertyCheck[CHANCE_RIGHT] = propertyCheck[COMCHEST_LEFT] = 
 					propertyCheck[COMCHEST_RIGHT] = propertyCheck[COMCHEST_BOT] = false;
 	}
-	private void placePiecesToFirst(){
+	public void placePieceToFirst(int i){
+		boardTracker[0].receivePiece(players[i].getPiece(), i);
+	}
+	public void placePiecesToFirst(int numPlayer){
+		this.numPlayers = numPlayer;
 		for(int i=0; i<numPlayers; i++){
-			boardTracker[0].receivePiece(players[i].getPiece(), i);
+			players[i].setIsOn(true);
+			placePieceToFirst(i);
 		}
 	}
 	public void movePiece(int player, int diceResult) {

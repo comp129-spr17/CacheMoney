@@ -29,11 +29,13 @@ public class MThread extends Thread{
 	private Integer playerNum;
 	private int disconnectPlayer;
 	private int myNum;
-	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName, Integer playerNum){
+	private ArrayList<Integer> startPlayers;
+	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName, Integer playerNum, ArrayList<Integer> startPlayers){
 		socket = s;
 		this.playerNum = playerNum;
 		this.usersOutput = usersOutput;
 		this.hostName = hostName;
+		this.startPlayers = startPlayers;
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
 		ufs = UnicodeForServer.getInstance();
@@ -62,27 +64,38 @@ public class MThread extends Thread{
 	}
 	public void run(){
 		try{
-			int disconnectedCode;
+			int specialCode;
 			sendPlayerNum(mPack.packPlayerNumber(ufs.PLAYER_NUM, usersOutput.size()-1));
 			myNum = playerNum;
+			startPlayers.add(usersOutput.size()-1);
+			
 			playerNum = playerNum.intValue()+1;
 			while(true){
 				getMsg();
-				disconnectedCode = mUnpack.isDisconnectedCode(msg);
-				if(disconnectedCode == 1){
+				specialCode = mUnpack.isSpecalCode(msg);
+				
+				if(specialCode == 0){
+					showMsgToUsers(msg);
+				}
+				else if(specialCode == 1){
 					disconnectPlayer = (Integer)mUnpack.getResult(msg).get(1);
 					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
 					usersOutput.set(disconnectPlayer,null);
+					disconnectedUser();
 					showMsgToUsers(mPack.packPlayerNumber(ufs.DISCONNECTED, disconnectPlayer));
 					break;
-				}else if(disconnectedCode == 2){
+				}else if(specialCode == 2){
 					System.out.println("Server is disconnected");
-					usersOutput.set(playerNum,null);
+					usersOutput.set(myNum,null);
+					startPlayers.set(myNum, null);
 					showMsgToUsers(mPack.packSimpleRequest(ufs.HOST_DISCONNECTED));
 					break;
+				}else {
+//					System.out.println("Called");
+					showMsgToUsers(mPack.packTotalPlayerPlaying(ufs.START_GAME_REPLY, startPlayers));
 				}
 					
-				showMsgToUsers(msg);
+				
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -106,6 +119,10 @@ public class MThread extends Thread{
 			}
 		}
 	}
+	private void disconnectedUser(){
+		;
+		startPlayers.remove(startPlayers.indexOf(disconnectPlayer));
+	}
 	private void sendPlayerNum(byte[] msg){
 		try {
 			usersOutput.get(usersOutput.size()-1).write(msg);
@@ -113,5 +130,4 @@ public class MThread extends Thread{
 			e.printStackTrace();
 		}
 	}
-
 }

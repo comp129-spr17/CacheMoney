@@ -44,6 +44,7 @@ public class MClient {
 	private Player[] pList;
 	private int byteCount;
 	private OutputStream outputStream;
+	private int thisPlayNum;
 	private HashMap<String, DoAction> doActions;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
@@ -77,7 +78,7 @@ public class MClient {
 	private void initDoActions(){
 		doActions.put(unicode.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
 		doActions.put(unicode.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
-		doActions.put(unicode.START_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame();}});
+		doActions.put(unicode.START_GAME_REPLY, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame(result);}});
 		doActions.put(unicode.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
 		doActions.put(unicode.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
 		doActions.put(unicode.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
@@ -167,7 +168,14 @@ public class MClient {
 	private void doEndTurn(){
 		diceP.actionForDiceEnd();
 	}
-	private void doStartGame(){
+	private void doStartGame(ArrayList<Object> result){
+		int k;
+		
+		for(int i=1; i<result.size(); i++){
+			k = (Integer)result.get(i);
+			pList[k].setIsOn(true);
+			diceP.placePlayerToBoard(k);
+		}
 		diceP.actionForStart();
 	}
 	private void doRemoveProperty(){
@@ -182,8 +190,8 @@ public class MClient {
 		isServerUp = false;
 	}
 	private void setPlayer(int i){
+		thisPlayNum = i;
 		thisPlayer = pList[i];
-		thisPlayer.setIsOn(true);
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;
