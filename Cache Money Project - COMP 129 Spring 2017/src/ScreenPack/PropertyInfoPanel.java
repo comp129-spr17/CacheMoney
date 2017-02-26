@@ -55,11 +55,12 @@ public class PropertyInfoPanel extends JPanel{
 			
 	private void init()
 	{		
+		setLayout(null);
 		this.setSize(panelToSwitchFrom.getSize());
 		this.setLocation(panelToSwitchFrom.getLocation());
 		this.setVisible(false);	
 	}
-	
+	// ADD LOCATIONS/SIZE TO THEM
 	private void loadPropertyInfo(Property info)
 	{
 		rentValues = new ArrayList<JLabel>();
@@ -68,7 +69,7 @@ public class PropertyInfoPanel extends JPanel{
 			rentValues.add(new JLabel("Rent Value:"  + a.toString()));
 		}
 		
-		name = new JLabel(info.getName());		
+		name = new JLabel(info.getName());
 		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
 		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
 	}
@@ -212,7 +213,7 @@ public class PropertyInfoPanel extends JPanel{
 	private void addHideButton()
 	{
 		hideButton = new JButton("Back");
-		hideButton.setBounds(50,50, 100, 50);
+		hideButton.setBounds(this.getWidth()-70,0, 70, 30);
 		add(hideButton); 
 	}
 	
@@ -220,7 +221,7 @@ public class PropertyInfoPanel extends JPanel{
 	{
 		buyButton = new JButton();
 		buyButton.setText("BUY"); 
-		buyButton.setSize(100, 80);
+		buyButton.setSize(100, 30);
 		buyButton.setBackground(Color.GREEN); 
 		buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
 		add(buyButton); 
@@ -230,7 +231,7 @@ public class PropertyInfoPanel extends JPanel{
 	{
 		auctionButton = new JButton();
 		auctionButton.setText("AUCTION"); 
-		auctionButton.setSize(100, 80);
+		auctionButton.setSize(100, 30);
 		auctionButton.setLocation(this.getWidth()/3*2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
 		auctionButton.setBackground(Color.RED);
 		add(auctionButton);
