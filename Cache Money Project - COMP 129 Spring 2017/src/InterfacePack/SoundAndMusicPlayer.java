@@ -141,7 +141,7 @@ public class SoundAndMusicPlayer {
 				Clip clip = null;
 				clip = initializeClip(inputStream);
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
-			    musicOpeningPlayer.stop();
+			    //musicOpeningPlayer.stop();
 			    stopWhenMusicStopsPlaying(clip);
 			    clip.drain();
 			    try {

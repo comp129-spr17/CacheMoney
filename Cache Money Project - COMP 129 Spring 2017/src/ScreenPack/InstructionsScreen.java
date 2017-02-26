@@ -28,7 +28,7 @@ public class InstructionsScreen extends JFrame {
 		mainPanel.add(backB);
 		iPanel = new InstructionsPanel();
 		mainPanel.add(iPanel);
-		Music.music1.playMusic();
+		Music.music2.playMusic();
 	}
 	
 	
