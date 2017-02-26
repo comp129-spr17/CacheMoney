@@ -16,9 +16,11 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 import sun.audio.AudioData;
 import sun.audio.AudioPlayer;
@@ -28,11 +30,16 @@ import sun.audio.ContinuousAudioDataStream;
 public class SoundAndMusicPlayer {
 	private ArrayList<MediaPlayer> players;
 	private static SoundAndMusicPlayer somePlayer;
+	private boolean isMusicPlaying;
+	private MediaPlayer musicOpeningPlayer;
+	private int musicCount;
 	
 	
 	private SoundAndMusicPlayer() {
 		JFXPanel fxPanel = new JFXPanel();
 		players = new ArrayList<MediaPlayer>();
+		isMusicPlaying = false;
+		musicCount = 0;
 	}
 	
 	public static SoundAndMusicPlayer getInstance() {
@@ -95,23 +102,84 @@ public class SoundAndMusicPlayer {
 	}
 	
 	
-	public void loopMusic(String folder, String filename){
+	public void loopMusic(String folder, String filename, int delayUntilLoopBegins){
 		Timer t = new Timer();
-		MediaPlayer mPlayer = findSound(folder, filename + "_opening.wav");
-		if(mPlayer == null) {
-			mPlayer = createMediaPlayer(folder, filename + "_opening.wav");
+		musicOpeningPlayer = null;
+		musicOpeningPlayer = findSound(folder, filename + "_opening.wav");
+		if(musicOpeningPlayer == null) {
+			musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.wav");
 		}
-		if(mPlayer.getCycleDuration().lessThanOrEqualTo(mPlayer.getCurrentTime())) {
-			mPlayer.seek(Duration.ZERO);
+		if(musicOpeningPlayer.getCycleDuration().lessThanOrEqualTo(musicOpeningPlayer.getCurrentTime())) {
+			musicOpeningPlayer.seek(Duration.ZERO);
 		}
-		mPlayer.play();
+		musicOpeningPlayer.play();
+		isMusicPlaying = true;
 		
 		t.schedule(new TimerTask(){
 
 			@Override
 			public void run() {
-				//System.out.println("oh no");
+				int currentMusicCount = musicCount;
+				waitForOpeningToFinish(delayUntilLoopBegins);
+				if (currentMusicCount == musicCount){
+					playLoop(folder, filename);
+				}
+			}
+			
+			private void waitForOpeningToFinish(int delayUntilLoopBegins) {
+				try {
+					Thread.sleep(delayUntilLoopBegins);
+				} catch (InterruptedException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+			}
+
+			private void playLoop(String folder, String filename) {
 				AudioInputStream inputStream = null;
+				inputStream = initializeInputStream(folder, filename, inputStream);
+				Clip clip = null;
+				clip = initializeClip(inputStream);
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
+			    musicOpeningPlayer.stop();
+			    stopWhenMusicStopsPlaying(clip);
+			    clip.drain();
+			    try {
+					inputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    t.cancel();
+			}
+
+			private Clip initializeClip(AudioInputStream inputStream){
+				Clip clip;
+				try {
+					clip = AudioSystem.getClip();
+					clip.open(inputStream);
+					return clip;
+				} catch (LineUnavailableException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			private void stopWhenMusicStopsPlaying(Clip clip){
+				try {
+					while (isMusicPlaying){
+						Thread.sleep(1);
+					}
+					clip.stop();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
+			private AudioInputStream initializeInputStream(String folder, String filename,
+					AudioInputStream inputStream) {
 				try {
 					inputStream = AudioSystem.getAudioInputStream(new File("src/" + folder + "/" + filename + "_loop.wav"));
 				} catch (UnsupportedAudioFileException e1) {
@@ -121,27 +189,19 @@ public class SoundAndMusicPlayer {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-		        Clip clip = null;
-				try {
-					clip = AudioSystem.getClip();
-					clip.open(inputStream);
-			        clip.loop(Clip.LOOP_CONTINUOUSLY);
-			        Thread.sleep((long) Double.POSITIVE_INFINITY);
-				} catch (LineUnavailableException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				return inputStream;
 			}
 			
-		}, 4680);
-		
-        
-		
+		}, 0);
 		
 	}
+	
+	public void stopMusic(){
+		isMusicPlaying = false;
+		musicCount += 1;
+		musicOpeningPlayer.stop();
+	}
+	
 	
 	
 	public void pauseSound(String folder, String filename) {

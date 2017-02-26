@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import InterfacePack.Music;
 import InterfacePack.Sounds;
 //test
 public class BackButton extends JButton{
@@ -44,6 +45,7 @@ public class BackButton extends JButton{
 		});
 	}
 	private void closeCurrentOpenMain(){
+		Music.music1.stopMusic();
 		cur.setVisible(false);
 		cur.dispose();
 		new MainMenuScreen();
