@@ -98,7 +98,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players);
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players, this, board);
 		bPanel.add(propertyPanel);
 		this.board = board;
 	}
@@ -486,6 +486,10 @@ public class DicePanel extends JPanel{
 //	private void sendSpaceLandedOn(String space){
 ////		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
 //	}
+	
+	public int getCurrentPlayerNumber() {
+		return current;
+	}
 	
 	private void changePlayerTurn(){
 		checkPlayerAvailabilty();

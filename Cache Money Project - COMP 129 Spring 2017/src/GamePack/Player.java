@@ -138,8 +138,8 @@ public final class Player {
 	{
 		if (playerPositionNumber >= 40)
 		{
-			hunneds += 2;
-			totalmonies += 200;
+			//hunneds += 2;
+			//totalmonies += 200;
 			playerPositionNumber -= playerPositionNumber - 40;
 			System.out.println("yes");
 		}
@@ -150,9 +150,10 @@ public final class Player {
 		playerpiece = new Piece(playerNum, this);
 	}
 	
-	public void addProperty(String propertyName)
+	public void purchaseProperty(String propertyName, int cost)
 	{
 		ownedProperties.add(propertyName);
+		pay(cost);
 		//Subtract the cost of the property using the pay function right below.
 	}
 	public void setPositionNumber(int newPosition)

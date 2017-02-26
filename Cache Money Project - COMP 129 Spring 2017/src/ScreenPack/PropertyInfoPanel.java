@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.Board;
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
@@ -38,7 +39,9 @@ public class PropertyInfoPanel extends JPanel{
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 	private Player[] players;
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player)
+	private DicePanel dicePanel;
+	private Board board;
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, Board b)
 	{
 		players = player;
 		this.isSingle = isSingle;
@@ -46,6 +49,8 @@ public class PropertyInfoPanel extends JPanel{
 		this.propertyInfo = propertyInfo;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
+		dicePanel = diceP;
+		board = b;
 		init();
 	}
 			
@@ -165,9 +170,16 @@ public class PropertyInfoPanel extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(buyButton.isEnabled())
+				if(buyButton.isEnabled()) {
 					Sounds.money.playSound();
-				//TODO Add buying functionality
+					//TODO Add buying functionality
+					Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
+					if(curPlayer.getTotalMonies() >= property.getBuyingPrice()) {
+						curPlayer.purchaseProperty(property.getName(), property.getBuyingPrice());
+						property.setOwned(true);
+					}
+					
+				}
 			}
 		});
 		auctionButton.addMouseListener(new MouseListener() {
@@ -193,7 +205,7 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled())
 					Sounds.landedOnOwnedProperty.playSound();
-				//TODO Add buying functionality
+				//TODO Add auction functionality
 			}
 		});
 
