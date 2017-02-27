@@ -56,9 +56,11 @@ public class DicePanel extends JPanel{
 	private String ip;
 	private int port;
 	private MoneyLabels mLabel;
+	private int numOfDoublesInRow;
 	public DicePanel(boolean isSingle, Player[] player, MoneyLabels MLabels){
 		players = player;
 		mLabel = MLabels;
+		numOfDoublesInRow = 0;
 		this.isSingle = isSingle;
 		init();
 	}
@@ -250,10 +252,19 @@ public class DicePanel extends JPanel{
 				for(int i=0; i<2; i++){
 					diceRes[i] = dices[i].getDiceResult();
 				}
-				if(isSingle)
-					actionForDiceRoll(diceRes[0], diceRes[1]);
-				else
-					sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]),mPack.getByteSize());
+				if(isSingle) {
+					if(numOfDoublesInRow >= 3)
+						actionForDiceRoll(0, 0);
+					else
+						actionForDiceRoll(diceRes[0], diceRes[1]);
+				}
+				else {
+					if(numOfDoublesInRow >= 3)
+						sendMessageToServer(mPack.packDiceResult(unicode.DICE, 0, 0),mPack.getByteSize());
+					else
+						sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]),mPack.getByteSize());
+					
+				}
 				//actionForDiceRoll();
 			}
 		});
@@ -429,7 +440,14 @@ public class DicePanel extends JPanel{
 	
 	private void movePiece(){
 		sum = result[0] + result[1];
-		
+		if(result[0] == result[1]) {
+			sameNumberCelebration();
+			numOfDoublesInRow++;
+			if(numOfDoublesInRow >= 3)
+				sum = 0;
+		} else {
+			numOfDoublesInRow = 0;
+		}
 		if (!overrideDiceRoll.getText().isEmpty()){
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
@@ -440,8 +458,7 @@ public class DicePanel extends JPanel{
 		board.movePiece(isSame ? previous : current, sum);
 		previous = current;
 		//System.out.println(previous+":"+current+":"+isSame);
-		if(isSame = result[0] == result[1])
-			sameNumberCelebration();
+		isSame = result[0] == result[1];
 		if(!isSame)
 		{
 			Sounds.diceRollConfirmed.playSound();
@@ -501,18 +518,26 @@ public class DicePanel extends JPanel{
 				e.printStackTrace();
 			}
 		}
-		
-		String curSpaceName = board.getSpacePlayerLandedOn(previous);
-		//sendSpaceLandedOn(curSpaceName);
-		if (board.isPlayerInPropertySpace(previous)){
-			Sounds.landedOnUnownedProperty.playSound();
-			propertyPanel.executeSwitch(curSpaceName);
+		if(numOfDoublesInRow >= 3) {
+			Space[] boardTracker = board.getBoardTracker();
+			Player curPlayer = players[current];
+			JailSpace jail = (JailSpace) boardTracker[board.JAIL];
+			boardTracker[curPlayer.getPositionNumber()].removePiece(current);
+			curPlayer.setPositionNumber(board.JAIL);
+			jail.sendToJail(curPlayer.getPiece(), current);
+		} else {
+			String curSpaceName = board.getSpacePlayerLandedOn(previous);
+			//sendSpaceLandedOn(curSpaceName);
+			if (board.isPlayerInPropertySpace(previous)){
+				Sounds.landedOnUnownedProperty.playSound();
+				propertyPanel.executeSwitch(curSpaceName);
+			}
+			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
+				Sounds.landedOnChanceOrCommunityChest.playSound();
+				// TODO: CHANCE OR COMMUNITY CHEST EVENT HAPPEN HERE PLS
+			}
 		}
-		else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
-			Sounds.landedOnChanceOrCommunityChest.playSound();
-			// TODO: CHANCE OR COMMUNITY CHEST EVENT HAPPEN HERE PLS
-		}
-		if (!isSame){
+		if (!isSame || numOfDoublesInRow >= 3){
 			endTurnButton.setVisible(true);
 		}
 		else{

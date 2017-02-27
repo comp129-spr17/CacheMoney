@@ -191,4 +191,7 @@ public class Board {
 	public int getNumPlayer(){
 		return numPlayers;
 	}
+	public Space[] getBoardTracker() {
+		return boardTracker;
+	}
 }
