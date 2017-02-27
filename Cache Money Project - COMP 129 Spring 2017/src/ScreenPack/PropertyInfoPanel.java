@@ -111,9 +111,11 @@ public class PropertyInfoPanel extends JPanel{
 		//Set up them buttons
 		if(property.isOwned()){
 			addPayButton();
+			Sounds.landedOnOwnedProperty.playSound();
 		}else{
 			addBuyButton();
 			addAuctionButton();
+			Sounds.landedOnUnownedProperty.playSound();
 		}
 		addHideButton();
 		buyingPrice.setHorizontalAlignment(JLabel.CENTER);
@@ -221,7 +223,7 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled()){
-					Sounds.money.playSound();
+					Sounds.landedOnOwnedProperty.playSound();
 					
 					//TODO Add auction functionality
 				}
@@ -250,7 +252,7 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled()){
-					Sounds.landedOnOwnedProperty.playSound();
+					Sounds.money.playSound();
 					dismissPropertyPanel();
 				}
 				//TODO Add auction functionality

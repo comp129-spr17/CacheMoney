@@ -556,7 +556,7 @@ public class DicePanel extends JPanel{
 			String curSpaceName = board.getSpacePlayerLandedOn(previous);
 			//sendSpaceLandedOn(curSpaceName);
 			if (board.isPlayerInPropertySpace(previous)){
-				Sounds.landedOnUnownedProperty.playSound();
+				//Sounds.landedOnUnownedProperty.playSound();
 				propertyPanel.executeSwitch(curSpaceName);
 			}
 			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
