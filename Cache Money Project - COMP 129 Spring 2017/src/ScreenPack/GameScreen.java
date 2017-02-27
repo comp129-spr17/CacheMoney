@@ -1,13 +1,18 @@
 package ScreenPack;
 
+import java.awt.Dialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.awt.TextField;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,10 +22,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JWindow;
 
 import com.sun.glass.events.WindowEvent;
 
@@ -44,6 +52,9 @@ public class GameScreen extends JFrame{
 	private UnicodeForServer unicode;
 	private int numPlayer;
 	private BoardPanel boardPanel;
+	private JDialog playerInfo;
+	private JButton showInfo;
+	private Insets insets;
 	// called if user is the host
 	public GameScreen(boolean isSingle){
 		//setAlwaysOnTop(true);
@@ -155,25 +166,72 @@ public class GameScreen extends JFrame{
 			players[i].setplayerNum(i);
 		}
 	}
-	
+	private void addButtonListeners()
+	{
+		showInfo.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+					playerInfo.setVisible(true);
+					playerInfo.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {	
+				
+			}
+		});
+	}
 	
 	private void init(){
 
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
+		initUserInfoWindow();
 		mLabels = MoneyLabels.getInstance();
-		mLabels.initLabels(mainPanel, players);
+		mLabels.initLabels(playerInfo, insets, players);
 		dicePanel = new DicePanel(isSingle, players, mLabels);
 		boardPanel = new BoardPanel(players,dicePanel);
-		
+		addShowMoneyButton();
+		addButtonListeners();
+		mainPanel.add(showInfo);
 		mainPanel.add(boardPanel);
-		
+	}
+	public void initUserInfoWindow()
+	{
+		playerInfo = new JDialog();
+		playerInfo.setLayout(null);
+		playerInfo.setSize(1000,1000);
+        playerInfo.setTitle("Player Info!");
+        insets = playerInfo.getInsets();
+	}
+	public void addShowMoneyButton()
+	{
+		showInfo = new JButton("SHOW ME THE $$$");
+		showInfo.setBounds(1100, 450, 200, 50);
+		showInfo.setVisible(true);
 	}
 	
 //	public static void main(String[] args) {
 //		GameScreen game = new GameScreen();
 //	}
+
 	
 	private void addHost(){
 		
