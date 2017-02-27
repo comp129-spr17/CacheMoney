@@ -222,7 +222,7 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled()){
 					Sounds.money.playSound();
-					dismissPropertyPanel();
+					
 					//TODO Add auction functionality
 				}
 				
@@ -249,8 +249,10 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(auctionButton.isEnabled())
+				if(auctionButton.isEnabled()){
 					Sounds.landedOnOwnedProperty.playSound();
+					dismissPropertyPanel();
+				}
 				//TODO Add auction functionality
 			}
 		});
