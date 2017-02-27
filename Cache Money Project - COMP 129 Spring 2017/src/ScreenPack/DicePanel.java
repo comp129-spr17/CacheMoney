@@ -17,17 +17,18 @@ import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import org.omg.CORBA.SystemException;
 
 public class DicePanel extends JPanel{
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private JButton rollButton;
-	private JTextField overrideDiceRoll;
+	private JTextField overrideDiceRoll; // DEBUG
+	private JCheckBox toggleDoubles; // DEBUG
+	
 	private JButton startGameButton;
 	private JButton endTurnButton;
 	private Player[] players;
@@ -87,6 +88,7 @@ public class DicePanel extends JPanel{
 		
 		addRollButton();
 		addOverrideDiceRoll();
+		addToggleDoubles();
 		addEndTurnButton();
 		result = new int[2];
 		diceRes = new int[2];
@@ -99,6 +101,7 @@ public class DicePanel extends JPanel{
 		rollButton.setVisible(false);
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
+		toggleDoubles.setVisible(false);
 		
 	}
 	public void setBoard(BoardPanel boardP, Board board){
@@ -112,7 +115,11 @@ public class DicePanel extends JPanel{
 		this.setBackground(boardBackgroundColor);
 	}
 	
-	
+	private void addToggleDoubles(){
+		toggleDoubles = new JCheckBox();
+		toggleDoubles.setBounds(sizeRelated.getDicePanelWidth()/4, sizeRelated.getDicePanelHeight()*2/5, 100, 50);
+		add(toggleDoubles);
+	}
 	
 	private void addDice() {
 		dices = new Dice[2];
@@ -252,6 +259,13 @@ public class DicePanel extends JPanel{
 				for(int i=0; i<2; i++){
 					diceRes[i] = dices[i].getDiceResult();
 				}
+				
+				if (toggleDoubles.isSelected()){ // DEBUG ONLY
+					diceRes[0] = diceRes[1];
+				}
+				
+				
+				
 				if(isSingle) {
 					if(numOfDoublesInRow >= 3)
 						actionForDiceRoll(0, 0);
@@ -312,6 +326,7 @@ public class DicePanel extends JPanel{
 		rollButton.setVisible(true);
 		overrideDiceRoll.setVisible(true);
 		turnLabel.setVisible(true);
+		toggleDoubles.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
 		switch (rand.nextInt(3)){
@@ -345,6 +360,7 @@ public class DicePanel extends JPanel{
 			public void run() {
 				rollButton.setVisible(true);
 				overrideDiceRoll.setVisible(true);
+				toggleDoubles.setVisible(true);
 				t.cancel();
 				t.purge();
 			}
@@ -406,6 +422,7 @@ public class DicePanel extends JPanel{
 		rollButton.setVisible(false);
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
+		toggleDoubles.setVisible(false);
 		rollDiceAnim(diceRes1,diceRes2);
 	}
 	
@@ -441,14 +458,22 @@ public class DicePanel extends JPanel{
 	private void movePiece(){
 		sum = result[0] + result[1];
 		if(result[0] == result[1]) {
-			sameNumberCelebration();
+			
 			numOfDoublesInRow++;
-			if(numOfDoublesInRow >= 3)
+			if(numOfDoublesInRow >= 3){
 				sum = 0;
+				Sounds.landedOnJail.playSound();
+				Sounds.doublesCelebrateSound.playSound();
+			}
+			else{
+				sameNumberCelebration();
+			}
 		} else {
 			numOfDoublesInRow = 0;
 		}
-		if (!overrideDiceRoll.getText().isEmpty()){
+		
+		
+		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
 		}
@@ -546,6 +571,7 @@ public class DicePanel extends JPanel{
 			mLabel.reinitializeMoneyLabels();
 			rollButton.setVisible(true);
 			overrideDiceRoll.setVisible(true);
+			toggleDoubles.setVisible(true);
 		}
 	}
 	

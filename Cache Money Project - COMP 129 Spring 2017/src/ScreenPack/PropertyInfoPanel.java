@@ -158,10 +158,7 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if(hideButton.isEnabled()){
 					Sounds.buttonCancel.playSound();
-					if(isSingle)
-						endPropertyPanel();
-					else
-						sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+					dismissPropertyPanel();
 				}else{
 					System.out.println("aaa");
 				}
@@ -197,6 +194,7 @@ public class PropertyInfoPanel extends JPanel{
 						curPlayer.purchaseProperty(property.getName(), property.getBuyingPrice());
 						property.setOwned(true);
 					}
+					dismissPropertyPanel();
 
 				}
 			}
@@ -222,9 +220,12 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(auctionButton.isEnabled())
-					Sounds.landedOnOwnedProperty.playSound();
-				//TODO Add auction functionality
+				if(auctionButton.isEnabled()){
+					Sounds.money.playSound();
+					dismissPropertyPanel();
+					//TODO Add auction functionality
+				}
+				
 			}
 		});
 		payButton.addMouseListener(new MouseListener() {
@@ -258,7 +259,7 @@ public class PropertyInfoPanel extends JPanel{
 	private void addHideButton()
 	{
 		hideButton.setBounds(this.getWidth()-75,10, 70, 30);
-		add(hideButton); 
+		//add(hideButton); 
 	}
 
 	private void addBuyButton()
@@ -317,5 +318,12 @@ public class PropertyInfoPanel extends JPanel{
 		else{
 			System.out.println("WARNING: writer == null");
 		}
+	}
+
+	private void dismissPropertyPanel() {
+		if(isSingle)
+			endPropertyPanel();
+		else
+			sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
 	}
 }
