@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import GamePack.Board;
+import GamePack.GoSpace;
 import GamePack.GoToJailSpace;
 import GamePack.ImageRelated;
 import GamePack.JailSpace;
@@ -205,7 +206,7 @@ public class BoardPanel extends JPanel{
 							TaxSpace ts = new TaxSpace(spaceImgsBot[rand.nextInt(8)], "Income Tax", 200);
 							spaces[i][j] = ts;
 						}else if(j==10){
-							spaces[i][j] = new Space(spaceImgsCorner[3]); //GO
+							spaces[i][j] = new GoSpace(spaceImgsCorner[3]); //GO
 						}else if (j == 5){	//Railroad
 							temp = new PropertySpace(spaceImgsBot[rand.nextInt(8)], new RailroadProperty(200, railroad.readLine())); 
 							spaces[i][j] = temp;

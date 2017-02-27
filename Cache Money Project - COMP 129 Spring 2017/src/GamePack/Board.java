@@ -152,10 +152,6 @@ public class Board {
 					}
 					
 				}
-				for (int j = 0; j < 4; j++)
-				{
-					players[j].checkGo();
-				}
 				//landedOnSpaceSounds(player);
 				
 				try {
