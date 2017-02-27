@@ -216,7 +216,6 @@ public final class MoneyLabels {
 	{
 		for(int i = 0; i < 4; i++)
 		{
-			players[i].checkGo();
 			totalmonnies[i].setText("$" + Integer.toString(players[i].getTotalMonies()));
 			cash500[i].setText(Integer.toString(players[i].getFiveHunneds()));
 			cash50[i].setText(Integer.toString(players[i].getFitties()));

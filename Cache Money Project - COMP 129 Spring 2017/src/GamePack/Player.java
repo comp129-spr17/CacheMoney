@@ -1,4 +1,5 @@
 package GamePack;
+import ScreenPack.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public final class Player {
 //------------------------------------Default Constructor
 	
 	private Player() {
-		pastPositionNumber = 0;
+		pastPositionNumber = -1;
 		playerPositionNumber = 0;
 		totalmonies = 1500;
 		fivehunneds = 2;
@@ -138,10 +139,11 @@ public final class Player {
 	}
 	public void checkGo()
 	{
-		if (inJail == false && pastPositionNumber > playerPositionNumber)
+		if (inJail == false && playerPositionNumber == 0 && pastPositionNumber != -1)
 		{
 			hunneds += 2;
 			totalmonies += 200;
+			MoneyLabels.getInstance().reinitializeMoneyLabels();
 		}
 		pastPositionNumber = playerPositionNumber;
 	}
