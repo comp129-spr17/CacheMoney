@@ -519,6 +519,7 @@ public class DicePanel extends JPanel{
 			}
 		}
 		if(numOfDoublesInRow >= 3) {
+			numOfDoublesInRow = 0;
 			Space[] boardTracker = board.getBoardTracker();
 			Player curPlayer = players[current];
 			JailSpace jail = (JailSpace) boardTracker[board.JAIL];
