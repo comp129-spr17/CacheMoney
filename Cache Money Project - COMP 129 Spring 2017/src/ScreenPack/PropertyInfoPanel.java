@@ -90,7 +90,7 @@ public class PropertyInfoPanel extends JPanel{
 		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
 		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
 
-		name.setAlignmentX(Component.CENTER_ALIGNMENT);
+		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
 
 	public void executeSwitch(String name)
