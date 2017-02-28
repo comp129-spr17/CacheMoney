@@ -42,7 +42,7 @@ public class SoundAndMusicPlayer {
 		players = new ArrayList<MediaPlayer>();
 		isMusicPlaying = false;
 		isMusicMuted = true;  	// DEBUG
-		isSoundMuted = true;	// DEBUG
+		isSoundMuted = false;	// DEBUG
 		musicCount = 0;
 		musicOpeningPlayer = findSound("music", "music1" + "_opening.wav");
 	}

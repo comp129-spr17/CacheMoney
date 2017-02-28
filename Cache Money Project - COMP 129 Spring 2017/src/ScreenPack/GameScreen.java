@@ -232,7 +232,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(boardPanel);
 		addMuteMusic();
 		addMuteSounds();
-		
+		Sounds.buildingHouse.toggleMuteSounds(); // DEBIG
 		
 		
 		Random r = new Random();
