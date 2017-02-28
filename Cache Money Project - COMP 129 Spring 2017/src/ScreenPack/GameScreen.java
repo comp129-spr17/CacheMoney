@@ -246,22 +246,32 @@ public class GameScreen extends JFrame{
 		imgOff = new ImageIcon("src/Images/music_off.png");
 		muteMusic = new JCheckBox(imgOff); 	// DEBUG
 		muteMusic.setSelected(true); 		// DEBUG
-		muteMusic.setBounds(33, 0, 30, 33);
 		muteMusic.setBorder(null);
+		muteMusic.setBounds(40, 0, 40, 40);
 		mainPanel.add(muteMusic);
 		muteMusic.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Music.music1.toggleMuteMusic();
-				if (muteMusic.isSelected()){
-					muteMusic.setIcon(imgOff);
+				if (e.getButton() == 1){ // left click
+					Music.music1.toggleMuteMusic();
+					if (muteMusic.isSelected()){
+						muteMusic.setIcon(imgOff);
+					}
+					else{
+						playScheduledMusic();
+						muteMusic.setIcon(imgOn);
+					}
+					muteMusic.setBorder(null);
 				}
-				else{
-					playScheduledMusic();
-					muteMusic.setIcon(imgOn);
+				else if (e.getButton() == 3){ // right click
+					scheduledMusic = (scheduledMusic + 1) % NUMBER_OF_MUSIC;
+					if (!muteMusic.isSelected()){
+						Music.music1.stopMusic();
+						playScheduledMusic();
+					}
+					
 				}
-				muteMusic.setBorder(null);
 			}
 
 			@Override
@@ -294,21 +304,25 @@ public class GameScreen extends JFrame{
 		imgOff = new ImageIcon("src/Images/sound_off.png");
 		muteSounds = new JCheckBox(imgOff);	// DEBUG
 		muteSounds.setSelected(true); 		// DEBUG
-		muteSounds.setBounds(0, 0, 30, 33);
-		muteSounds.setBorder(null);
+		muteSounds.setBounds(0, 0, 40, 40);
 		mainPanel.add(muteSounds);
 		muteSounds.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buildingHouse.toggleMuteSounds();
-				if (muteSounds.isSelected()){
-					muteSounds.setIcon(imgOff);
+				if (e.getButton() == 1){
+					Sounds.buildingHouse.toggleMuteSounds();
+					if (muteSounds.isSelected()){
+						muteSounds.setIcon(imgOff);
+					}
+					else{
+						muteSounds.setIcon(imgOn);
+					}
 				}
-				else{
-					muteSounds.setIcon(imgOn);
+				else if (e.getButton() == 3){
+					Sounds.landedOnJail.playSound();
 				}
-				muteSounds.setBorder(null);
+				
 			}
 
 			@Override

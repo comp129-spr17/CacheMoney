@@ -44,6 +44,7 @@ public class SoundAndMusicPlayer {
 		isMusicMuted = true;  	// DEBUG
 		isSoundMuted = true;	// DEBUG
 		musicCount = 0;
+		musicOpeningPlayer = findSound("music", "music1" + "_opening.wav");
 	}
 	
 	public static SoundAndMusicPlayer getInstance() {
@@ -110,12 +111,14 @@ public class SoundAndMusicPlayer {
 	
 	
 	public void loopMusic(String folder, String filename, int delayUntilLoopBegins){
+		
+		
+		musicOpeningPlayer = null;
+		musicOpeningPlayer = findSound(folder, filename + "_opening.wav");
 		if (isMusicMuted){
 			return;
 		}
 		Timer t = new Timer();
-		musicOpeningPlayer = null;
-		musicOpeningPlayer = findSound(folder, filename + "_opening.wav");
 		if(musicOpeningPlayer == null) {
 			musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.wav");
 		}
@@ -207,6 +210,7 @@ public class SoundAndMusicPlayer {
 		isMusicPlaying = false;
 		musicCount += 1;
 		musicOpeningPlayer.stop();
+		
 	}
 	
 	public void muteMusic(){
