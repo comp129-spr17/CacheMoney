@@ -36,6 +36,7 @@ public class PropertyInfoPanel extends JPanel{
 	private JButton hideButton;
 	private JButton payButton;
 	private Property property;
+	private AuctionPanel AP;
 	private HashMap<String,PropertySpace> propertyInfo;
 	private OutputStream outputStream;
 	private boolean isSingle;
@@ -43,9 +44,9 @@ public class PropertyInfoPanel extends JPanel{
 	private UnicodeForServer unicode;
 	private Player[] players;
 	private DicePanel dicePanel;
-	private Board board;
+	private BoardPanel bPanel;
 	private JPanel infoPanel;
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, Board b)
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		infoPanel = new JPanel();
 		players = player;
@@ -55,7 +56,7 @@ public class PropertyInfoPanel extends JPanel{
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		dicePanel = diceP;
-		board = b;
+		this.bPanel = b;
 		init();
 	}
 
@@ -95,6 +96,7 @@ public class PropertyInfoPanel extends JPanel{
 	public void executeSwitch(String name)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
+		AP = new AuctionPanel(property, players, this);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
 		renderPropertyInfo();
@@ -205,8 +207,6 @@ public class PropertyInfoPanel extends JPanel{
 					dismissPropertyPanel();
 
 				}
-				buyButton.setVisible(false);
-				auctionButton.setVisible(false);
 			}
 		});
 		auctionButton.addMouseListener(new MouseListener() {
@@ -233,6 +233,8 @@ public class PropertyInfoPanel extends JPanel{
 				if(auctionButton.isEnabled()){
 					Sounds.landedOnOwnedProperty.playSound();					
 					//TODO Add auction functionality
+					AP.switchtoAP();
+					bPanel.add(AP);
 				}
 
 			}
@@ -288,6 +290,7 @@ public class PropertyInfoPanel extends JPanel{
 		buyButton.setBackground(Color.GREEN); 
 		buyButton.setLocation(this.getWidth()/4-buyButton.getWidth()/2, this.getHeight()/10*9-buyButton.getHeight()/2);
 		add(buyButton); 
+		buyButton.setVisible(true);
 	}
 
 	private void addAuctionButton()
@@ -297,13 +300,14 @@ public class PropertyInfoPanel extends JPanel{
 		auctionButton.setLocation(this.getWidth()/4*3-auctionButton.getWidth()/2, this.getHeight()/10*9-auctionButton.getHeight()/2);
 		auctionButton.setBackground(Color.RED);
 		add(auctionButton);
+		auctionButton.setVisible(true);
 	}
 
 	private void addPayButton()
 	{
 		payButton.setText("PAY"); 
 		payButton.setSize(100, 80);
-		payButton.setLocation(this.getWidth()/3*2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
+		payButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
 		payButton.setBackground(Color.RED);
 		add(payButton);
 	}

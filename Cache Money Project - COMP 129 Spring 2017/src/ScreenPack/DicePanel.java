@@ -106,7 +106,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players, this, board);
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players, this, bPanel);
 		bPanel.add(propertyPanel);
 		this.board = board;
 	}
