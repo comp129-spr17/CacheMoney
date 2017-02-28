@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,7 +25,9 @@ public class AuctionPanel extends JPanel{
 	private JLabel curAuctionPrice;
 	private ArrayList<JButton> bidButtons;
 	private JPanel pricePanel;
-	
+	private AuctionTimer auctionTimer;
+	private int timerCounter;
+
 	public AuctionPanel(Property property, Player player[], PropertyInfoPanel propertyInfoPanel)
 	{
 		bidButtons = new ArrayList<JButton>(4);
@@ -32,6 +36,7 @@ public class AuctionPanel extends JPanel{
 		this.propertyPanel = propertyInfoPanel;
 		auctionPrice = property.getBuyingPrice();
 		curAuctionPrice = new JLabel(Integer.toString(auctionPrice));
+		timerCounter = 10;
 		init();
 	}
 
@@ -40,7 +45,7 @@ public class AuctionPanel extends JPanel{
 		this.setSize(propertyPanel.getSize());
 		this.setLocation(propertyPanel.getLocation());
 		this.setLayout(null);
-		
+
 		pricePanel = new JPanel();
 		pricePanel.setSize(this.getWidth()/2, this.getHeight()/2);
 		pricePanel.setLocation(this.getWidth()/2 - pricePanel.getWidth()/2, this.getHeight()/2-pricePanel.getHeight()/2);
@@ -48,7 +53,7 @@ public class AuctionPanel extends JPanel{
 		pricePanel.setLayout(new BoxLayout(pricePanel, BoxLayout.Y_AXIS));
 		pricePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(pricePanel);
-		
+				
 		for(int i = 0; i < 4; i++)
 		{
 			bidButtons.add(new JButton("BID"));
@@ -62,6 +67,26 @@ public class AuctionPanel extends JPanel{
 
 				@Override
 				public void mousePressed(MouseEvent e) {
+					if(auctionTimer != null){
+						pricePanel.remove(auctionTimer.getLabel());
+						auctionTimer.restartTimer();
+					}
+					
+					
+					auctionTimer = new AuctionTimer(new TimerTask() {
+
+						@Override
+						public void run()
+						{
+							auctionTimer.setLabel();
+							pricePanel.repaint();
+						}
+
+					}, 0);
+					
+					pricePanel.add(auctionTimer.getLabel());
+					auctionTimer.startTimer();
+					
 					addAuctionPrice(200);
 				}
 
@@ -74,7 +99,7 @@ public class AuctionPanel extends JPanel{
 				}
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					
+
 				}
 			});
 
@@ -88,7 +113,7 @@ public class AuctionPanel extends JPanel{
 		curAuctionPrice.setLocation(pricePanel.getWidth()/2-curAuctionPrice.getWidth()/2, pricePanel.getHeight()/2-curAuctionPrice.getHeight()/2);
 		pricePanel.repaint();
 	}
-	
+
 	public void switchtoAP()
 	{
 		this.setBackground(Color.white);
@@ -96,7 +121,7 @@ public class AuctionPanel extends JPanel{
 		propertyPanel.setVisible(false);
 		this.setVisible(true);
 	}
-	
+
 	private void renderInterface()
 	{
 		curAuctionPrice.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -106,10 +131,10 @@ public class AuctionPanel extends JPanel{
 		bidButtons.get(1).setLocation(this.getWidth()/4-bidButtons.get(2).getWidth()-2, this.getHeight()/2-bidButtons.get(1).getHeight()/2);
 		bidButtons.get(2).setLocation(this.getWidth()/2-bidButtons.get(2).getWidth()/2, this.getHeight()/10*9-bidButtons.get(2).getHeight()/2);
 		bidButtons.get(3).setLocation(this.getWidth()/2-bidButtons.get(3).getWidth()/2, this.getHeight()/10-bidButtons.get(3).getWidth()/3);
-		
+
 		for(JButton button:bidButtons)
 			add(button);
-		
-		
+
+
 	}
 }
