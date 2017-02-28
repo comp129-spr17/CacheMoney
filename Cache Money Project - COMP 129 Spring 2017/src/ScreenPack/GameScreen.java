@@ -256,9 +256,9 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 1){ // left click
-					turnOnMuteSpamCooldown();
+					//turnOnMuteSpamCooldown();
 					Music.music1.toggleMuteMusic();
-					if (muteMusic.isSelected()){
+					if (Music.music1.getIsMuted()){
 						muteMusic.setIcon(imgOff);
 					}
 					else{
@@ -266,9 +266,6 @@ public class GameScreen extends JFrame{
 						muteMusic.setIcon(imgOn);
 					}
 					muteMusic.setBorder(null);
-					
-					
-					
 				}
 				else if (e.getButton() == 3){ // right click
 					scheduledMusic = (scheduledMusic + 1) % NUMBER_OF_MUSIC;

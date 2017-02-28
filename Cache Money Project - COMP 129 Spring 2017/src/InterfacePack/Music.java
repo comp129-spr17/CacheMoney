@@ -27,4 +27,8 @@ public enum Music {
 		SoundAndMusicPlayer.getInstance().muteMusic();
 	}
 	
+	public boolean getIsMuted(){
+		return SoundAndMusicPlayer.getInstance().isMusicMuted();
+	}
+	
 }
