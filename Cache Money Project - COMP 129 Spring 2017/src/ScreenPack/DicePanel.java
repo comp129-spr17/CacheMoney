@@ -329,17 +329,7 @@ public class DicePanel extends JPanel{
 		toggleDoubles.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		switch (rand.nextInt(3)){
-		case 0:
-			Music.music1.playMusic();
-			break;
-		case 1:
-			Music.music2.playMusic();
-			break;
-		case 2:
-			Music.music3.playMusic();
-			break;
-		}
+		
 		
 	}
 	// In board, run thread to determine which function to perform.

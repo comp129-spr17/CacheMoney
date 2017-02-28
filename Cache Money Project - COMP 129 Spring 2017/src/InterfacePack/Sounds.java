@@ -142,5 +142,9 @@ public enum Sounds {
 		return x;
 	}
 	
+	public void toggleMuteSounds(){
+		SoundAndMusicPlayer.getInstance().muteSounds();
+	}
+	
 	
 }

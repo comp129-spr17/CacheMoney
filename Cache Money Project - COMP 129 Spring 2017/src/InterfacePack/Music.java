@@ -23,4 +23,8 @@ public enum Music {
 		SoundAndMusicPlayer.getInstance().stopMusic();
 	}
 	
+	public void toggleMuteMusic(){
+		SoundAndMusicPlayer.getInstance().muteMusic();
+	}
+	
 }

@@ -14,15 +14,20 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,8 +36,10 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 
 import com.sun.glass.events.WindowEvent;
+import com.sun.prism.Image;
 
 import GamePack.*;
+import InterfacePack.Music;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.MClient;
@@ -40,6 +47,7 @@ import MultiplayerPack.MHost;
 import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
+	private final int NUMBER_OF_MUSIC = 3;
 	private JPanel mainPanel;
 	private int myComp_height;
 	private DicePanel dicePanel;
@@ -55,6 +63,12 @@ public class GameScreen extends JFrame{
 	private JDialog playerInfo;
 	private JButton showInfo;
 	private Insets insets;
+	private JCheckBox muteMusic;
+	private JCheckBox muteSounds;
+	private int scheduledMusic;
+	
+	
+	
 	// called if user is the host
 	public GameScreen(boolean isSingle){
 		//setAlwaysOnTop(true);
@@ -94,6 +108,7 @@ public class GameScreen extends JFrame{
 		if (isSingle){
 			Sounds.waitingRoomJoin.playSound();
 		}
+		playScheduledMusic();
 		
 	}
 	
@@ -101,6 +116,9 @@ public class GameScreen extends JFrame{
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
+		
+		
+		
 		createPlayers();
 		init();
 		setGameScreenBackgroundColor();
@@ -116,7 +134,7 @@ public class GameScreen extends JFrame{
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
 		this.setBackground(boardBackgroundColor);
 	}
-	// Todo: need to find the way to send exit meesage to server when closing windows.
+	// TODO: need to find the way to send exit meesage to server when closing windows.
 	private void addActionListenerForExit(boolean isHost){
 		addWindowListener( new WindowAdapter() {
 			@Override
@@ -212,7 +230,111 @@ public class GameScreen extends JFrame{
 		addButtonListeners();
 		mainPanel.add(showInfo);
 		mainPanel.add(boardPanel);
+		addMuteMusic();
+		addMuteSounds();
+		
+		
+		
+		Random r = new Random();
+		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
+		
+		
 	}
+	private void addMuteMusic() {
+		ImageIcon imgOn, imgOff;
+		imgOn = new ImageIcon("src/Images/music_on.png");
+		imgOff = new ImageIcon("src/Images/music_off.png");
+		muteMusic = new JCheckBox(imgOff); 	// DEBUG
+		muteMusic.setSelected(true); 		// DEBUG
+		muteMusic.setBounds(33, 0, 30, 33);
+		muteMusic.setBorder(null);
+		mainPanel.add(muteMusic);
+		muteMusic.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Music.music1.toggleMuteMusic();
+				if (muteMusic.isSelected()){
+					muteMusic.setIcon(imgOff);
+				}
+				else{
+					playScheduledMusic();
+					muteMusic.setIcon(imgOn);
+				}
+				muteMusic.setBorder(null);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+		});
+		
+		
+	}
+	private void addMuteSounds(){
+		ImageIcon imgOn, imgOff;
+		imgOn = new ImageIcon("src/Images/sound_on.png");
+		imgOff = new ImageIcon("src/Images/sound_off.png");
+		muteSounds = new JCheckBox(imgOff);	// DEBUG
+		muteSounds.setSelected(true); 		// DEBUG
+		muteSounds.setBounds(0, 0, 30, 33);
+		muteSounds.setBorder(null);
+		mainPanel.add(muteSounds);
+		muteSounds.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Sounds.buildingHouse.toggleMuteSounds();
+				if (muteSounds.isSelected()){
+					muteSounds.setIcon(imgOff);
+				}
+				else{
+					muteSounds.setIcon(imgOn);
+				}
+				muteSounds.setBorder(null);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+		});
+	}
+	
+	
 	public void initUserInfoWindow()
 	{
 		playerInfo = new JDialog();
@@ -232,6 +354,20 @@ public class GameScreen extends JFrame{
 //		GameScreen game = new GameScreen();
 //	}
 
+	
+	private void playScheduledMusic(){
+		switch (scheduledMusic){
+		case 0:
+			Music.music1.playMusic();
+			break;
+		case 1:
+			Music.music2.playMusic();
+			break;
+		case 2:
+			Music.music3.playMusic();
+			break;
+		}
+	}
 	
 	private void addHost(){
 		
