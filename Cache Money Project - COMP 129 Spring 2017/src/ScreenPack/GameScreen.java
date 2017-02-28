@@ -108,6 +108,8 @@ public class GameScreen extends JFrame{
 		if (isSingle){
 			Sounds.waitingRoomJoin.playSound();
 		}
+		mainPanel.add(muteSounds);
+		mainPanel.add(muteMusic);
 		playScheduledMusic();
 		
 	}
@@ -248,7 +250,7 @@ public class GameScreen extends JFrame{
 		muteMusic.setSelected(true); 		// DEBUG
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
-		mainPanel.add(muteMusic);
+		
 		muteMusic.addMouseListener(new MouseListener(){
 
 			@Override
@@ -323,7 +325,7 @@ public class GameScreen extends JFrame{
 		muteSounds = new JCheckBox(imgOff);	// DEBUG
 		muteSounds.setSelected(true); 		// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
-		mainPanel.add(muteSounds);
+		
 		muteSounds.addMouseListener(new MouseListener(){
 
 			@Override
