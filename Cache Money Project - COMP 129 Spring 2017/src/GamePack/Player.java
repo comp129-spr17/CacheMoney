@@ -98,7 +98,7 @@ public final class Player {
 		return isOn;
 	}
 //----------------------------------------Sets
-	void setTotalMonies(int newTotalMonies) {
+	public void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
 	}
 	void setFiveHunneds(int newFiveHunneds) {
@@ -161,6 +161,12 @@ public final class Player {
 	{
 		playerPositionNumber = newPosition;
 	}
+	
+	public void earnMonies(int amount)
+	{
+		totalmonies += amount;
+	}
+	
 	public void pay(int cost) {
 		int modMoney = 0;
 		if (totalmonies >= cost)

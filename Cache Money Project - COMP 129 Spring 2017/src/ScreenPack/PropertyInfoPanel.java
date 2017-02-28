@@ -1,6 +1,7 @@
 package ScreenPack;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -64,8 +65,10 @@ public class PropertyInfoPanel extends JPanel{
 		this.setSize(panelToSwitchFrom.getSize());
 		this.setLocation(panelToSwitchFrom.getLocation());
 		this.setVisible(false);	
-		infoPanel.setBounds(0, 0, getWidth()-75, getHeight()/4*3-30);
+		infoPanel.setSize(getWidth()-75, getHeight()/4*3-30);
+		infoPanel.setLocation(getWidth()/2-infoPanel.getWidth()/2, 0);
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+		infoPanel.setBackground(Color.WHITE);
 		hideButton = new JButton("Back");
 		buyButton = new JButton();
 		auctionButton = new JButton();
@@ -80,11 +83,13 @@ public class PropertyInfoPanel extends JPanel{
 		{
 			rentValues.add(new JLabel("Rent Value:"  + a.toString()));
 		}
-		
+
 		name = new JLabel(info.getName());
 
 		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
 		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
+
+		name.setAlignmentX(Component.CENTER_ALIGNMENT);
 	}
 
 	public void executeSwitch(String name)
@@ -122,7 +127,7 @@ public class PropertyInfoPanel extends JPanel{
 			a.setHorizontalAlignment(JLabel.CENTER);
 			infoPanel.add(a);
 		}
-		
+
 		infoPanel.add(mortgagePrice);
 		mortgagePrice.setHorizontalAlignment(JLabel.CENTER);
 		add(infoPanel);
@@ -195,10 +200,13 @@ public class PropertyInfoPanel extends JPanel{
 					Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
 					if(curPlayer.getTotalMonies() >= property.getBuyingPrice()) {
 						curPlayer.purchaseProperty(property.getName(), property.getBuyingPrice());
+						property.setOwner(dicePanel.getCurrentPlayerNumber());
 						property.setOwned(true);
 					}
 
 				}
+				buyButton.setVisible(false);
+				auctionButton.setVisible(false);
 			}
 		});
 		auctionButton.addMouseListener(new MouseListener() {
@@ -225,6 +233,11 @@ public class PropertyInfoPanel extends JPanel{
 				if(auctionButton.isEnabled())
 					Sounds.landedOnOwnedProperty.playSound();
 				//TODO Add auction functionality
+				Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
+				if(curPlayer.getTotalMonies() >= property.getRent()) {
+					curPlayer.pay(property.getRent());
+					players[property.getOwner()].earnMonies(property.getRent());
+				}
 			}
 		});
 		payButton.addMouseListener(new MouseListener() {
@@ -250,7 +263,7 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled())
 					Sounds.landedOnOwnedProperty.playSound();
-				//TODO Add auction functionality
+
 			}
 		});
 	}
@@ -266,7 +279,7 @@ public class PropertyInfoPanel extends JPanel{
 		buyButton.setText("BUY"); 
 		buyButton.setSize(100, 30);
 		buyButton.setBackground(Color.GREEN); 
-		buyButton.setLocation(this.getWidth()/3-buyButton.getWidth()/2, this.getHeight()/4*3-buyButton.getHeight()/2);
+		buyButton.setLocation(this.getWidth()/4-buyButton.getWidth()/2, this.getHeight()/10*9-buyButton.getHeight()/2);
 		add(buyButton); 
 	}
 
@@ -274,7 +287,7 @@ public class PropertyInfoPanel extends JPanel{
 	{
 		auctionButton.setText("AUCTION"); 
 		auctionButton.setSize(100, 30);
-		auctionButton.setLocation(this.getWidth()/3*2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
+		auctionButton.setLocation(this.getWidth()/4*3-auctionButton.getWidth()/2, this.getHeight()/10*9-auctionButton.getHeight()/2);
 		auctionButton.setBackground(Color.RED);
 		add(auctionButton);
 	}
