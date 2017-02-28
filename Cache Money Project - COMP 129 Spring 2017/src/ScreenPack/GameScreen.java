@@ -313,7 +313,7 @@ public class GameScreen extends JFrame{
 				muteMusic.setEnabled(true);
 			}
 			
-		}, 20);
+		}, 40);
 	}
 	
 	private void addMuteSounds(){
