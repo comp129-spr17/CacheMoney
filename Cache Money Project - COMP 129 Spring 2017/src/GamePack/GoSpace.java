@@ -16,8 +16,8 @@ public class GoSpace extends Space {
 
 	@Override
 	public void receivePiece(Piece piece, int n) {
+		piece.getPlayerClass().checkGo();
 		super.receivePiece(piece, n);
-		piece.getPlayerClass().setTotalMonies(piece.getPlayerClass().getTotalMonies()+200);
 		
 	}
 }

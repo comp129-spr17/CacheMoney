@@ -31,6 +31,8 @@ public class SoundAndMusicPlayer {
 	private ArrayList<MediaPlayer> players;
 	private static SoundAndMusicPlayer somePlayer;
 	private boolean isMusicPlaying;
+	private boolean isMusicMuted;
+	private boolean isSoundMuted;
 	private MediaPlayer musicOpeningPlayer;
 	private int musicCount;
 	
@@ -39,7 +41,10 @@ public class SoundAndMusicPlayer {
 		JFXPanel fxPanel = new JFXPanel();
 		players = new ArrayList<MediaPlayer>();
 		isMusicPlaying = false;
+		isMusicMuted = true;  	// DEBUG
+		isSoundMuted = false;	// DEBUG
 		musicCount = 0;
+		musicOpeningPlayer = findSound("music", "music1" + "_opening.wav");
 	}
 	
 	public static SoundAndMusicPlayer getInstance() {
@@ -50,6 +55,9 @@ public class SoundAndMusicPlayer {
 	}
 	
 	public void playSound(String folder, String filename) {
+		if (isSoundMuted){
+			return;
+		}
 		MediaPlayer mPlayer = findSound(folder, filename);
 		if(mPlayer == null) {
 			mPlayer = createMediaPlayer(folder, filename);
@@ -103,9 +111,14 @@ public class SoundAndMusicPlayer {
 	
 	
 	public void loopMusic(String folder, String filename, int delayUntilLoopBegins){
-		Timer t = new Timer();
+		
+		
 		musicOpeningPlayer = null;
 		musicOpeningPlayer = findSound(folder, filename + "_opening.wav");
+		if (isMusicMuted){
+			return;
+		}
+		Timer t = new Timer();
 		if(musicOpeningPlayer == null) {
 			musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.wav");
 		}
@@ -130,7 +143,6 @@ public class SoundAndMusicPlayer {
 				try {
 					Thread.sleep(delayUntilLoopBegins);
 				} catch (InterruptedException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
 			}
@@ -147,7 +159,6 @@ public class SoundAndMusicPlayer {
 			    try {
 					inputStream.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			    t.cancel();
@@ -171,6 +182,7 @@ public class SoundAndMusicPlayer {
 				try {
 					while (isMusicPlaying){
 						Thread.sleep(1);
+						clip.getFramePosition();
 					}
 					clip.stop();
 				} catch (InterruptedException e) {
@@ -183,10 +195,8 @@ public class SoundAndMusicPlayer {
 				try {
 					inputStream = AudioSystem.getAudioInputStream(new File("src/" + folder + "/" + filename + "_loop.wav"));
 				} catch (UnsupportedAudioFileException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				return inputStream;
@@ -200,8 +210,20 @@ public class SoundAndMusicPlayer {
 		isMusicPlaying = false;
 		musicCount += 1;
 		musicOpeningPlayer.stop();
+		
 	}
 	
+	public void muteMusic(){
+		isMusicMuted = !isMusicMuted;
+		if (isMusicMuted){
+			stopMusic();
+		}
+		
+	}
+	
+	public void muteSounds(){
+		isSoundMuted = !isSoundMuted;
+	}
 	
 	
 	public void pauseSound(String folder, String filename) {

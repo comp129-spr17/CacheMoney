@@ -152,10 +152,6 @@ public class Board {
 					}
 					
 				}
-				for (int j = 0; j < 4; j++)
-				{
-					players[j].checkGo();
-				}
 				//landedOnSpaceSounds(player);
 				
 				try {
@@ -194,5 +190,8 @@ public class Board {
 	}
 	public int getNumPlayer(){
 		return numPlayers;
+	}
+	public Space[] getBoardTracker() {
+		return boardTracker;
 	}
 }

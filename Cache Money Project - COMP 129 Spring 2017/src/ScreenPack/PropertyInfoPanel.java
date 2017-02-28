@@ -116,9 +116,11 @@ public class PropertyInfoPanel extends JPanel{
 		//Set up them buttons
 		if(property.isOwned()){
 			addPayButton();
+			Sounds.landedOnOwnedProperty.playSound();
 		}else{
 			addBuyButton();
 			addAuctionButton();
+			Sounds.landedOnUnownedProperty.playSound();
 		}
 		addHideButton();
 		buyingPrice.setHorizontalAlignment(JLabel.CENTER);
@@ -163,10 +165,7 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if(hideButton.isEnabled()){
 					Sounds.buttonCancel.playSound();
-					if(isSingle)
-						endPropertyPanel();
-					else
-						sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+					dismissPropertyPanel();
 				}else{
 					System.out.println("aaa");
 				}
@@ -203,6 +202,7 @@ public class PropertyInfoPanel extends JPanel{
 						property.setOwner(dicePanel.getCurrentPlayerNumber());
 						property.setOwned(true);
 					}
+					dismissPropertyPanel();
 
 				}
 				buyButton.setVisible(false);
@@ -230,14 +230,11 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(auctionButton.isEnabled())
-					Sounds.landedOnOwnedProperty.playSound();
-				//TODO Add auction functionality
-				Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
-				if(curPlayer.getTotalMonies() >= property.getRent()) {
-					curPlayer.pay(property.getRent());
-					players[property.getOwner()].earnMonies(property.getRent());
+				if(auctionButton.isEnabled()){
+					Sounds.landedOnOwnedProperty.playSound();					
+					//TODO Add auction functionality
 				}
+
 			}
 		});
 		payButton.addMouseListener(new MouseListener() {
@@ -264,6 +261,16 @@ public class PropertyInfoPanel extends JPanel{
 				if(auctionButton.isEnabled())
 					Sounds.landedOnOwnedProperty.playSound();
 
+				if(auctionButton.isEnabled()){
+					Sounds.money.playSound();
+					dismissPropertyPanel();
+				}
+				Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
+
+				if(curPlayer.getTotalMonies() >= property.getRent()) {
+					curPlayer.pay(property.getRent());
+					players[property.getOwner()].earnMonies(property.getRent());
+				}
 			}
 		});
 	}
@@ -271,7 +278,7 @@ public class PropertyInfoPanel extends JPanel{
 	private void addHideButton()
 	{
 		hideButton.setBounds(this.getWidth()-75,10, 70, 30);
-		add(hideButton); 
+		//add(hideButton); 
 	}
 
 	private void addBuyButton()
@@ -330,5 +337,12 @@ public class PropertyInfoPanel extends JPanel{
 		else{
 			System.out.println("WARNING: writer == null");
 		}
+	}
+
+	private void dismissPropertyPanel() {
+		if(isSingle)
+			endPropertyPanel();
+		else
+			sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
 	}
 }

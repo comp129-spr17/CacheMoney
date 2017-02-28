@@ -17,17 +17,18 @@ import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import org.omg.CORBA.SystemException;
 
 public class DicePanel extends JPanel{
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private JButton rollButton;
-	private JTextField overrideDiceRoll;
+	private JTextField overrideDiceRoll; // DEBUG
+	private JCheckBox toggleDoubles; // DEBUG
+	
 	private JButton startGameButton;
 	private JButton endTurnButton;
 	private Player[] players;
@@ -56,9 +57,11 @@ public class DicePanel extends JPanel{
 	private String ip;
 	private int port;
 	private MoneyLabels mLabel;
+	private int numOfDoublesInRow;
 	public DicePanel(boolean isSingle, Player[] player, MoneyLabels MLabels){
 		players = player;
 		mLabel = MLabels;
+		numOfDoublesInRow = 0;
 		this.isSingle = isSingle;
 		init();
 	}
@@ -85,6 +88,7 @@ public class DicePanel extends JPanel{
 		
 		addRollButton();
 		addOverrideDiceRoll();
+		addToggleDoubles();
 		addEndTurnButton();
 		result = new int[2];
 		diceRes = new int[2];
@@ -97,6 +101,7 @@ public class DicePanel extends JPanel{
 		rollButton.setVisible(false);
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
+		toggleDoubles.setVisible(false);
 		
 	}
 	public void setBoard(BoardPanel boardP, Board board){
@@ -110,7 +115,11 @@ public class DicePanel extends JPanel{
 		this.setBackground(boardBackgroundColor);
 	}
 	
-	
+	private void addToggleDoubles(){
+		toggleDoubles = new JCheckBox();
+		toggleDoubles.setBounds(sizeRelated.getDicePanelWidth()/4, sizeRelated.getDicePanelHeight()*2/5, 100, 50);
+		add(toggleDoubles);
+	}
 	
 	private void addDice() {
 		dices = new Dice[2];
@@ -250,10 +259,26 @@ public class DicePanel extends JPanel{
 				for(int i=0; i<2; i++){
 					diceRes[i] = dices[i].getDiceResult();
 				}
-				if(isSingle)
-					actionForDiceRoll(diceRes[0], diceRes[1]);
-				else
-					sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]),mPack.getByteSize());
+				
+				if (toggleDoubles.isSelected()){ // DEBUG ONLY
+					diceRes[0] = diceRes[1];
+				}
+				
+				
+				
+				if(isSingle) {
+					if(numOfDoublesInRow >= 3)
+						actionForDiceRoll(0, 0);
+					else
+						actionForDiceRoll(diceRes[0], diceRes[1]);
+				}
+				else {
+					if(numOfDoublesInRow >= 3)
+						sendMessageToServer(mPack.packDiceResult(unicode.DICE, 0, 0),mPack.getByteSize());
+					else
+						sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]),mPack.getByteSize());
+					
+				}
 				//actionForDiceRoll();
 			}
 		});
@@ -301,19 +326,10 @@ public class DicePanel extends JPanel{
 		rollButton.setVisible(true);
 		overrideDiceRoll.setVisible(true);
 		turnLabel.setVisible(true);
+		toggleDoubles.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		switch (rand.nextInt(3)){
-		case 0:
-			Music.music1.playMusic();
-			break;
-		case 1:
-			Music.music2.playMusic();
-			break;
-		case 2:
-			Music.music3.playMusic();
-			break;
-		}
+		
 		
 	}
 	// In board, run thread to determine which function to perform.
@@ -334,6 +350,7 @@ public class DicePanel extends JPanel{
 			public void run() {
 				rollButton.setVisible(true);
 				overrideDiceRoll.setVisible(true);
+				toggleDoubles.setVisible(true);
 				t.cancel();
 				t.purge();
 			}
@@ -395,6 +412,7 @@ public class DicePanel extends JPanel{
 		rollButton.setVisible(false);
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
+		toggleDoubles.setVisible(false);
 		rollDiceAnim(diceRes1,diceRes2);
 	}
 	
@@ -429,8 +447,23 @@ public class DicePanel extends JPanel{
 	
 	private void movePiece(){
 		sum = result[0] + result[1];
+		if(result[0] == result[1]) {
+			
+			numOfDoublesInRow++;
+			if(numOfDoublesInRow >= 3){
+				sum = 0;
+				Sounds.landedOnJail.playSound();
+				Sounds.doublesCelebrateSound.playSound();
+			}
+			else{
+				sameNumberCelebration();
+			}
+		} else {
+			numOfDoublesInRow = 0;
+		}
 		
-		if (!overrideDiceRoll.getText().isEmpty()){
+		
+		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
 		}
@@ -440,8 +473,7 @@ public class DicePanel extends JPanel{
 		board.movePiece(isSame ? previous : current, sum);
 		previous = current;
 		//System.out.println(previous+":"+current+":"+isSame);
-		if(isSame = result[0] == result[1])
-			sameNumberCelebration();
+		isSame = result[0] == result[1];
 		if(!isSame)
 		{
 			Sounds.diceRollConfirmed.playSound();
@@ -501,24 +533,35 @@ public class DicePanel extends JPanel{
 				e.printStackTrace();
 			}
 		}
-		
-		String curSpaceName = board.getSpacePlayerLandedOn(previous);
-		//sendSpaceLandedOn(curSpaceName);
-		if (board.isPlayerInPropertySpace(previous)){
-			Sounds.landedOnUnownedProperty.playSound();
-			propertyPanel.executeSwitch(curSpaceName);
+		if(numOfDoublesInRow >= 3) {
+			numOfDoublesInRow = 0;
+			isSame = false;
+			Space[] boardTracker = board.getBoardTracker();
+			Player curPlayer = players[current];
+			JailSpace jail = (JailSpace) boardTracker[board.JAIL];
+			boardTracker[curPlayer.getPositionNumber()].removePiece(current);
+			curPlayer.setPositionNumber(board.JAIL);
+			jail.sendToJail(curPlayer.getPiece(), current);
+		} else {
+			String curSpaceName = board.getSpacePlayerLandedOn(previous);
+			//sendSpaceLandedOn(curSpaceName);
+			if (board.isPlayerInPropertySpace(previous)){
+				//Sounds.landedOnUnownedProperty.playSound();
+				propertyPanel.executeSwitch(curSpaceName);
+			}
+			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
+				Sounds.landedOnChanceOrCommunityChest.playSound();
+				// TODO: CHANCE OR COMMUNITY CHEST EVENT HAPPEN HERE PLS
+			}
 		}
-		else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
-			Sounds.landedOnChanceOrCommunityChest.playSound();
-			// TODO: CHANCE OR COMMUNITY CHEST EVENT HAPPEN HERE PLS
-		}
-		if (!isSame){
+		if (!isSame || numOfDoublesInRow >= 3){
 			endTurnButton.setVisible(true);
 		}
 		else{
 			mLabel.reinitializeMoneyLabels();
 			rollButton.setVisible(true);
 			overrideDiceRoll.setVisible(true);
+			toggleDoubles.setVisible(true);
 		}
 	}
 	
