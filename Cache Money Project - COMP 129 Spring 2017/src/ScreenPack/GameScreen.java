@@ -234,7 +234,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(boardPanel);
 		addMuteMusic();
 		addMuteSounds();
-		Sounds.buildingHouse.toggleMuteSounds(); // DEBIG
+		Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 		
 		
 		Random r = new Random();
@@ -247,7 +247,6 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/music_on.png");
 		imgOff = new ImageIcon("src/Images/music_off.png");
 		muteMusic = new JCheckBox(imgOff); 	// DEBUG
-		muteMusic.setSelected(true); 		// DEBUG
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
 		
@@ -256,7 +255,6 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 1){ // left click
-					//turnOnMuteSpamCooldown();
 					Music.music1.toggleMuteMusic();
 					if (Music.music1.getIsMuted()){
 						muteMusic.setIcon(imgOff);
@@ -269,7 +267,7 @@ public class GameScreen extends JFrame{
 				}
 				else if (e.getButton() == 3){ // right click
 					scheduledMusic = (scheduledMusic + 1) % NUMBER_OF_MUSIC;
-					if (!muteMusic.isSelected()){
+					if (!Music.music1.getIsMuted()){
 						Music.music1.stopMusic();
 						playScheduledMusic();
 					}
@@ -296,23 +294,7 @@ public class GameScreen extends JFrame{
 			public void mouseExited(MouseEvent e) {
 				
 			}
-			
 		});
-		
-		
-	}
-	
-	private void turnOnMuteSpamCooldown() {
-		muteMusic.setEnabled(false);
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				muteMusic.setEnabled(true);
-			}
-			
-		}, 40);
 	}
 	
 	private void addMuteSounds(){
@@ -320,7 +302,6 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/sound_on.png");
 		imgOff = new ImageIcon("src/Images/sound_off.png");
 		muteSounds = new JCheckBox(imgOff);	// DEBUG
-		muteSounds.setSelected(true); 		// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
 		
 		muteSounds.addMouseListener(new MouseListener(){
@@ -329,7 +310,7 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 1){
 					Sounds.buildingHouse.toggleMuteSounds();
-					if (muteSounds.isSelected()){
+					if (Sounds.buildingHouse.getIsMuted()){
 						muteSounds.setIcon(imgOff);
 					}
 					else{

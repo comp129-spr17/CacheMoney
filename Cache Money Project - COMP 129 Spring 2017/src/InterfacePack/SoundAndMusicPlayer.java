@@ -230,6 +230,10 @@ public class SoundAndMusicPlayer {
 	}
 	
 	
+	public boolean isSoundMuted() {
+		return isSoundMuted;
+	}
+
 	public void pauseSound(String folder, String filename) {
 		MediaPlayer mp = findSound(folder, filename);
 		if(mp != null) {

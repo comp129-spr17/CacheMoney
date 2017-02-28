@@ -146,5 +146,8 @@ public enum Sounds {
 		SoundAndMusicPlayer.getInstance().muteSounds();
 	}
 	
+	public boolean getIsMuted(){
+		return SoundAndMusicPlayer.getInstance().isSoundMuted();
+	}
 	
 }
