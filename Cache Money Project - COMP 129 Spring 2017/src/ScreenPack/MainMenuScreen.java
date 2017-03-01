@@ -235,6 +235,7 @@ public class MainMenuScreen {
 		switch (mwr.askUserHostOrClient()){
 		case 0:
 			hideAndDisposeMainMenuScreen();
+			new GameScreen(false);
 			break;
 		case 1:
 			setupClient(mwr);
