@@ -43,6 +43,7 @@ public final class MoneyLabels {
 	private JLabel[] label20;
 	private JLabel[] label100;
 	private JLabel[] label1;
+	private JLabel[] playerLabels;
 	private Insets insets;
 	private Font numberfont;
 	private final static MoneyLabels MONEY_LABELS = new MoneyLabels();
@@ -140,10 +141,22 @@ public final class MoneyLabels {
 			if(b > 17)
 			{
 				xmark[b].setBounds(300, 150 + (50*(b-11)),100,100);
+				if (b == 18)
+				{
+					playerLabels[3].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 95, 200, 100);
+					playerLabels[3].setFont(new Font("Serif",Font.BOLD,28));
+					playerLabels[3].setForeground(new Color(0,204,0));
+				}
 			}
 			else
 			{
 				xmark[b].setBounds(300, 50 + (50*(b-11)),100,100);
+				if (b == 12)
+				{
+					playerLabels[2].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 95, 200, 100);
+					playerLabels[2].setFont(new Font("Serif",Font.BOLD,28));
+					playerLabels[2].setForeground(new Color(230,230, 0));
+				}
 			}
 		}
 		else
@@ -151,10 +164,22 @@ public final class MoneyLabels {
 			if (b > 5)
 			{
 				xmark[b].setBounds(100, 150 + (50*(b+1)),100,100);
+				if (b == 6)
+				{
+					playerLabels[1].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 95, 200, 100);
+					playerLabels[1].setFont(new Font("Serif",Font.BOLD,28));
+					playerLabels[1].setForeground(Color.BLUE);
+				}
 			}
 			else
 			{
 				xmark[b].setBounds(100, 50 + (50*(b + 1)),100,100);
+				if (b == 0)
+				{
+					playerLabels[0].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 95, 200, 100);
+					playerLabels[0].setFont(new Font("Serif",Font.BOLD,28));
+					playerLabels[0].setForeground(Color.RED);
+				}
 			}
 		}
 	}
@@ -182,7 +207,7 @@ public final class MoneyLabels {
 	}
 	private void setFontOfMoniesAndLabels(int i) {
 		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
-		totalmonnies[i].setForeground(new Color(50,220,50));
+		totalmonnies[i].setForeground(new Color(0,150,0));
 		cash500[i].setFont(numberfont);
 		cash50[i].setFont(numberfont);
 		cash5[i].setFont(numberfont);
@@ -212,6 +237,7 @@ public final class MoneyLabels {
 	}
 	private void distributeCashToPlayers(int i) {
 		totalmonnies[i] = new JLabel("$" + Integer.toString(players[i].getTotalMonies()));
+		playerLabels[i] = new JLabel("Player " + (i+1) + ":");
 		cash500[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));
 		cash50[i] = new JLabel(Integer.toString(players[i].getFitties()));
 		cash5[i] = new JLabel(Integer.toString(players[i].getFives()));
@@ -262,6 +288,7 @@ public final class MoneyLabels {
 		label100 = new JLabel[4];
 		label20 = new JLabel[4];
 		label1 = new JLabel[4];
+		playerLabels = new JLabel[4];
 		numberfont = new Font("Serif",Font.BOLD,18);
 	}
 	private void addLabelsToPlayerInfo() {
@@ -280,6 +307,7 @@ public final class MoneyLabels {
 			PlayerInfo.add(label5[j]);
 			PlayerInfo.add(label20[j]);
 			PlayerInfo.add(totalmonnies[j]);
+			PlayerInfo.add(playerLabels[j]);
 		}
 	}
 	private void addXMarkToPlayerInfo() {
