@@ -2,6 +2,7 @@ package ScreenPack;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,8 +21,6 @@ public class MiniGamePanel extends JPanel{
 	private Player guest;
 	private BoardPanel boardPanel;
 	private boolean isSingle;
-	private MBytePack mPack;
-	private UnicodeForServer unicode;
 	private DicePanel dicePanel;
 	private MiniGame[] mGames;
 	private PropertyInfoPanel pPanel;
@@ -32,8 +31,6 @@ public class MiniGamePanel extends JPanel{
 	}
 	private void init(boolean isSingle, DicePanel diceP, BoardPanel b,PropertyInfoPanel pPanel){
 		this.isSingle = isSingle;
-		mPack = MBytePack.getInstance();
-		unicode = UnicodeForServer.getInstance();
 		dicePanel = diceP;
 		this.boardPanel = b;
 		this.pPanel = pPanel;
@@ -43,21 +40,25 @@ public class MiniGamePanel extends JPanel{
 		initMinigames();
 		setVisible(false);
 	}
+	public void setOutputStream(OutputStream outputStream){
+		mGames[0].setOutputStream(outputStream);
+	}
 	private void initMinigames(){
 		mGames = new MiniGame[3];
-		mGames[0] = new SpammingGame(this);
+		mGames[0] = new SpammingGame(this,isSingle);
 	}
-	public void openMiniGame(Player owner, Player guest){
+	public void openMiniGame(Player owner, Player guest, int myPlayerNum){
 		dicePanel.setVisible(false);
 		setVisible(true);
 		this.owner = owner;
 		this.guest = guest;
-		mGames[0].setOwnerAndGuest(owner, guest);
+		mGames[0].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[0].addGame();
 	}
 	public void startMiniGame(String curSpaceName){
 		this.curSpaceName = curSpaceName;
 		mGames[0].play();
+		(new GameEndCheck()).start();
 	}
 	public boolean isGameOver(){
 		return mGames[0].isGameEnded();
@@ -71,21 +72,49 @@ public class MiniGamePanel extends JPanel{
 		else
 			switchToDice();
 	}
+	public void actionForOwner(){
+		mGames[0].addActionToOwner();
+	}
+	public void actionForGuest(){
+		mGames[0].addActionToGuest();
+	}
 	private void cleanup(){
 		removeAll();
 		setVisible(false);
 	}
 	public void switchToProperty(){
+		System.out.println("prop called");
 		cleanup();
 		pPanel.executeSwitch(curSpaceName,guest);
 	}
 	public void switchToDice(){
+		System.out.println("Dice called");
 		cleanup();
 		dicePanel.setVisible(true);
 	}
 	class GameEndCheck extends Thread{
 		public void run(){
-			
+			while(true){
+				if(isGameOver())
+					break;
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			mGames[0].specialEffect();
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			switchToOther();
 		}
 	}
 }

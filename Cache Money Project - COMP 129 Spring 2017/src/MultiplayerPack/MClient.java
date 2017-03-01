@@ -84,6 +84,8 @@ public class MClient {
 		doActions.put(unicode.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
 		doActions.put(unicode.PROPERTY_PURCHASE, new DoAction(){public void doAction(ArrayList<Object> result){doPurchaseProperty(result);}});
 		doActions.put(unicode.PROPERTY_RENT_PAY, new DoAction(){public void doAction(ArrayList<Object> result){doPayRent(result);}});
+		doActions.put(unicode.SPAM_MINI_GAME_GUEST, new DoAction(){public void doAction(ArrayList<Object> result){doSpamGuestAction();}});
+		doActions.put(unicode.SPAM_MINI_GAME_OWNER, new DoAction(){public void doAction(ArrayList<Object> result){doSpamOwnerAction();}});
 		
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -197,6 +199,12 @@ public class MClient {
 	}
 	private void doHostDisconnect(){
 		isServerUp = false;
+	}
+	private void doSpamOwnerAction(){
+		diceP.actionForSpamOwner();
+	}
+	private void doSpamGuestAction(){
+		diceP.actionForSpamGuest();
 	}
 	private void setPlayer(int i){
 		thisPlayNum = i;

@@ -390,6 +390,12 @@ public class DicePanel extends JPanel{
 	public void actionForRemovePropertyPanel(){
 		propertyPanel.endPropertyPanel();
 	}
+	public void actionForSpamOwner(){
+		mGamePanel.actionForOwner();;
+	}
+	public void actionForSpamGuest(){
+		mGamePanel.actionForGuest();
+	}
 	public void actionForRemovePlayer(int i){
 		board.removePlayer(i);
 		
@@ -558,12 +564,17 @@ public class DicePanel extends JPanel{
 			//sendSpaceLandedOn(curSpaceName);
 			if (board.isPlayerInPropertySpace(previous)){
 				//Sounds.landedOnUnownedProperty.playSound();
-//				if(propertyPanel.isPropertyOwned()){
-//					mGamePanel.openMiniGame(players[0], players[1]);
-//					mGamePanel.startMiniGame(curSpaceName);
-//				}else{
-				propertyPanel.executeSwitch(curSpaceName, players[current]);
-//				}
+				if(propertyPanel.isPropertyOwned(curSpaceName) && propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
+					
+				}else{
+					if(propertyPanel.isPropertyOwned(curSpaceName)){
+						mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], myPlayerNum);
+						mGamePanel.startMiniGame(curSpaceName);
+					}else{
+						propertyPanel.executeSwitch(curSpaceName, players[current]);
+					}
+				}
+				
 				
 				
 			}
@@ -612,6 +623,7 @@ public class DicePanel extends JPanel{
 	public void setOutputStream(OutputStream outputStream) {
 		this.outputStream = outputStream;
 		propertyPanel.setOutputStream(outputStream);
+		mGamePanel.setOutputStream(outputStream);
 	}
 	public String getIp() {
 		return ip;

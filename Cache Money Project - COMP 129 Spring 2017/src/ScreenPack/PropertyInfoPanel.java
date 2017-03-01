@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.sun.media.jfxmedia.events.PlayerStateEvent.PlayerState;
+
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
@@ -371,7 +373,10 @@ public class PropertyInfoPanel extends JPanel{
 		currentPlayer.pay(amount);
 		players[owner].earnMonies(amount);
 	}
-	public boolean isPropertyOwned(){
-		return property.isOwned();
+	public boolean isPropertyOwned(String name){
+		return propertyInfo.get(name).getPropertyInfo().isOwned();
+	}
+	public Player getOwner(String name){
+		return players[propertyInfo.get(name).getPropertyInfo().getOwner()];
 	}
 }

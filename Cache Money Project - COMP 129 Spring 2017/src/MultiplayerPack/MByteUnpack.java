@@ -51,6 +51,10 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.PROPERTY_RENT_PAY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPayRent(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UNI.SPAM_MINI_GAME_GUEST, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.SPAM_MINI_GAME_OWNER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
 			
 	}
 	private ArrayList<Object> cleanUpAndReturn(){

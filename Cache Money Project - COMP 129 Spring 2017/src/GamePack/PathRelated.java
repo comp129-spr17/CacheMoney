@@ -11,6 +11,7 @@ public final class PathRelated {
 	private final static String DICE_PATH="src/DiceImages/";
 	private final static String PIECE_PATH="src/PieceImages/";
 	private final static String IMG_PATH="src/Images/";
+	private final static String MINI_IMG_PATH = "src/MiniGameImages/";
 	
 	private PathRelated(){
 		
@@ -41,5 +42,8 @@ public final class PathRelated {
 	}
 	public String getPieceImgPath(){
 		return PIECE_PATH;
+	}
+	public String getMiniGamePath(){
+		return MINI_IMG_PATH;
 	}
 }
