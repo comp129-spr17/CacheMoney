@@ -1,14 +1,9 @@
 package ScreenPack;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import InterfacePack.Music;
-
+@SuppressWarnings("serial")
 public class InstructionsScreen extends JFrame {
 	private JPanel mainPanel;
 	private InstructionsPanel iPanel;
@@ -28,7 +23,6 @@ public class InstructionsScreen extends JFrame {
 		mainPanel.add(backB);
 		iPanel = new InstructionsPanel();
 		mainPanel.add(iPanel);
-		Music.music3.playMusic();
 	}
 	
 	

@@ -10,9 +10,7 @@ import java.io.IOException;
 import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
-import CacheChatPack.CacheChat;
 import GamePack.SizeRelated;
-import InterfacePack.SoundAndMusicPlayer;
 import InterfacePack.Sounds;
 import MultiplayerPack.*;
 
@@ -21,11 +19,9 @@ public class MainMenuScreen {
 	private JPanel mainPanel;
 	private JFrame mainmenuframe;
 	private JButton GameButton;
-	private JButton ChatButton;
 	private JLabel HelloThere;
 	private JButton ExitButton;
 	private JButton InstructionButton;
-	private int numPlayer;
 	private JTextField txtNumP;
 	private Object[] messages;
 	public MainMenuScreen(){
@@ -43,8 +39,7 @@ public class MainMenuScreen {
 		mainPanel = new JPanel(null);
 		mainmenuframe = new JFrame("Main Menu");
 		GameButton = new JButton("Game Screen");
-		ChatButton = new JButton("Chat Screen");
-		HelloThere = new JLabel("I'm still hungry :(", SwingConstants.CENTER);
+		HelloThere = new JLabel("NEED A TITLE", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		InstructionButton = new JButton("Instructions");
 		txtNumP = new JTextField();
@@ -90,41 +85,6 @@ public class MainMenuScreen {
 			}
 
 		});
-		ChatButton.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e){
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Timer t = new Timer();
-				t.schedule(new TimerTask(){
-
-					@Override
-					public void run() {
-						CacheChat c = new CacheChat();
-					}
-				}, 0);
-				
-			}
-		});
 		InstructionButton.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -151,7 +111,7 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				hideAndDisposeMainMenuScreen();
 				Sounds.register.playSound();
-				InstructionsScreen iScreen = new InstructionsScreen();
+				new InstructionsScreen();
 			}
 		});
 		ExitButton.addMouseListener(new MouseListener() {
@@ -199,23 +159,18 @@ public class MainMenuScreen {
 		mainmenuframe.add(mainPanel);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
-		mainmenuframe.setSize(500,500);
-		int Width = mainmenuframe.getWidth();
-		int Height = mainmenuframe.getHeight();
+		mainmenuframe.setSize(500,450);
 		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
 		HelloThere.setBounds(100,50,300,50);
 		mainPanel.add(HelloThere);
 		GameButton.setFont(mainfont);
 		GameButton.setBounds(175,150,150,50);
-		ChatButton.setFont(mainfont);
-		ChatButton.setBounds(175,225,150,50);
 		mainPanel.add(GameButton);
-		mainPanel.add(ChatButton);
 		InstructionButton.setFont(mainfont);
-		InstructionButton.setBounds(175,300,150,50);
+		InstructionButton.setBounds(175,225,150,50);
 		mainPanel.add(InstructionButton);
 		ExitButton.setFont(mainfont);
-		ExitButton.setBounds(175,375,150,50);
+		ExitButton.setBounds(175,300,150,50);
 		mainPanel.add(ExitButton);
 	}
 	
@@ -263,9 +218,7 @@ public class MainMenuScreen {
 		if(numP.length() != 1)
 			return false;
 		char num = numP.charAt(0);
-		if(num < '2' || num > '4')
-			return false;
-		return true;
+		return (num < '2' || num > '4');
 	}
 	
 	private boolean getNumPlayers(){
@@ -279,11 +232,9 @@ public class MainMenuScreen {
 	
 	
 	private void displayHostOrClientDialogBox(AskUserMultiplayerDialogBox mwr) {
-		GameScreen gameScreen;
 		switch (mwr.askUserHostOrClient()){
 		case 0:
 			hideAndDisposeMainMenuScreen();
-			gameScreen = new GameScreen(false);
 			break;
 		case 1:
 			setupClient(mwr);
@@ -299,6 +250,7 @@ public class MainMenuScreen {
 
 
 	private void setupClient(AskUserMultiplayerDialogBox mwr) {
+		@SuppressWarnings("unused")
 		GameScreen gameScreen = null;
 		if (!mwr.askUserForIPAndPort()){
 			return;
@@ -306,16 +258,14 @@ public class MainMenuScreen {
 		try {
 			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
 			hideAndDisposeMainMenuScreen();
-		} catch (IOException e) { // TODO: DOESN'T EXACTLY WORK YET
-			//gameScreen.setVisible(false);
-			//gameScreen.dispose();
+		} catch (IOException e) { 
 			setupClient(mwr);
 		}
 	}
 	
 	
 	public static void main(String[] args){
-		MainMenuScreen mms = new MainMenuScreen();
+		new MainMenuScreen();
 	}
 	
 }
