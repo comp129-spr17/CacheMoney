@@ -335,7 +335,8 @@ public class DicePanel extends JPanel{
 		toggleDoubles.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		actionForNotCurrentPlayer();
+		if(!isSingle)
+			actionForNotCurrentPlayer();
 		
 	}
 	// In board, run thread to determine which function to perform.
@@ -357,6 +358,7 @@ public class DicePanel extends JPanel{
 				rollButton.setVisible(true);
 				overrideDiceRoll.setVisible(true);
 				toggleDoubles.setVisible(true);
+				if(!isSingle)
 				actionForNotCurrentPlayer();
 				t.cancel();
 				t.purge();
@@ -371,7 +373,6 @@ public class DicePanel extends JPanel{
 		
 	}
 	public void actionForNotCurrentPlayer(){
-		System.out.println("My : " + myPlayerNum + "Cur" + current);
 		if(myPlayerNum != current){
 			rollButton.setVisible(false);
 			endTurnButton.setVisible(false);
