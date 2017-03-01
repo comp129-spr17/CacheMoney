@@ -1,8 +1,6 @@
 package ScreenPack;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -15,11 +13,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GamePack.Board;
+import com.sun.media.jfxmedia.events.PlayerStateEvent.PlayerState;
+
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
-import GamePack.SizeRelated;
+import GamePack.UtilityProperty;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
@@ -46,6 +45,7 @@ public class PropertyInfoPanel extends JPanel{
 	private DicePanel dicePanel;
 	private BoardPanel bPanel;
 	private JPanel infoPanel;
+	private Player currentPlayer;
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		infoPanel = new JPanel();
@@ -92,8 +92,8 @@ public class PropertyInfoPanel extends JPanel{
 
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
-
-	public void executeSwitch(String name)
+	
+	public void executeSwitch(String name, Player currentPlayer)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
 		AP = new AuctionPanel(property, players, this);
@@ -101,6 +101,7 @@ public class PropertyInfoPanel extends JPanel{
 		infoPanel.removeAll();
 		renderPropertyInfo();
 		hidePreviousPanel();
+		this.currentPlayer = currentPlayer;
 	}
 
 	private void hidePreviousPanel()
@@ -197,12 +198,9 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if(buyButton.isEnabled()) {
 					Sounds.money.playSound();
-					//TODO Add buying functionality
-					Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
-					if(curPlayer.getTotalMonies() >= property.getBuyingPrice()) {
-						curPlayer.purchaseProperty(property.getName(), property.getBuyingPrice());
-						property.setOwner(dicePanel.getCurrentPlayerNumber());
-						property.setOwned(true);
+					
+					if(currentPlayer.getTotalMonies() >= property.getBuyingPrice()) {
+						purchaseProp(property.getName(), property.getBuyingPrice(), currentPlayer.getPlayerNum());
 					}
 					dismissPropertyPanel();
 
@@ -260,19 +258,23 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(auctionButton.isEnabled())
-					Sounds.landedOnOwnedProperty.playSound();
-
-				if(auctionButton.isEnabled()){
+				if(payButton.isEnabled()){
 					Sounds.money.playSound();
+					if(property instanceof UtilityProperty)
+					{				
+						int cost = property.getRent()*dicePanel.getSumOfDie();
+						if(currentPlayer.getTotalMonies() >= cost) {
+							payForR(cost, property.getOwner());
+						}
+					}else{
+						if(currentPlayer.getTotalMonies() >= property.getRent()) {
+							payForR(property.getRent(), property.getOwner());
+						}
+					}
+
 					dismissPropertyPanel();
 				}
-				Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
-
-				if(curPlayer.getTotalMonies() >= property.getRent()) {
-					curPlayer.pay(property.getRent());
-					players[property.getOwner()].earnMonies(property.getRent());
-				}
+				
 			}
 		});
 	}
@@ -348,5 +350,33 @@ public class PropertyInfoPanel extends JPanel{
 			endPropertyPanel();
 		else
 			sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+	}
+	private void purchaseProp(String propertyName, int buyingPrice, int playerNum){
+		if(isSingle)
+			purchaseProperty(propertyName,buyingPrice,playerNum);
+		else
+			sendMessageToServer(mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
+		
+	}
+	private void payForR(int amount, int owner){
+		if(isSingle)
+			payForRent(amount,owner);
+		else
+			sendMessageToServer(mPack.packPayRent(unicode.PROPERTY_RENT_PAY, amount,owner));
+	}
+	public void purchaseProperty(String propertyName, int buyingPrice, int playerNum){
+		currentPlayer.purchaseProperty(propertyName, buyingPrice);
+		property.setOwner(playerNum);
+		property.setOwned(true);
+	}
+	public void payForRent(int amount, int owner){
+		currentPlayer.pay(amount);
+		players[owner].earnMonies(amount);
+	}
+	public boolean isPropertyOwned(String name){
+		return propertyInfo.get(name).getPropertyInfo().isOwned();
+	}
+	public Player getOwner(String name){
+		return players[propertyInfo.get(name).getPropertyInfo().getOwner()];
 	}
 }

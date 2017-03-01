@@ -12,10 +12,10 @@ public final class MByteUnpack {
 	private ByteArrayInputStream bInputStream;
 	private DataInputStream dInputStream;
 	private ArrayList<Object> resultList;
-	private HashMap<String, GetResult> GetResults;
+	private HashMap<Integer, GetResult> GetResults;
 	private UnicodeForServer UNI;
-	private String receivedCode;
-	private String code;
+	private int receivedCode;
+	private int code;
 	private MByteUnpack(){
 		init();
 	}
@@ -46,6 +46,14 @@ public final class MByteUnpack {
 		GetResults.put(UNI.HOST_DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.START_GAME_REPLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackGameStartResult(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.PROPERTY_PURCHASE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyPurchase(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.PROPERTY_RENT_PAY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPayRent(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.SPAM_MINI_GAME_GUEST, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.SPAM_MINI_GAME_OWNER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
 			
 	}
@@ -98,11 +106,32 @@ public final class MByteUnpack {
 			e.printStackTrace();
 		}
 	}
+	public void unpackPropertyPurchase(byte[] result){
+		try{
+			resultList.add(dInputStream.readUTF());
+			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readInt());
+			
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackPayRent(byte[] result){
+		try{
+			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readInt());
+			
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+	}
 	public ArrayList<Object> getResult(byte[] result){
 	
 		resetAndReceive(result);
 		try {
-			receivedCode = dInputStream.readUTF();
+			receivedCode = dInputStream.readInt();
 			resultList.add(receivedCode);
 			return GetResults.get(receivedCode).getResult(result);
 		} catch (IOException e) {
@@ -121,12 +150,12 @@ public final class MByteUnpack {
 	public int isSpecalCode(byte[] result){
 		resetAndReceive(result);
 		try {
-			code = dInputStream.readUTF();
-			if(UNI.DISCONNECTED.equals(code))
+			code = dInputStream.readInt();
+			if(UNI.DISCONNECTED == code)
 				return 1;
-			else if(UNI.HOST_DISCONNECTED.equals(code))
+			else if(UNI.HOST_DISCONNECTED==code)
 				return 2;
-			else if(UNI.START_GAME.equals(code))
+			else if(UNI.START_GAME == code)
 				return 3;
 			
 				

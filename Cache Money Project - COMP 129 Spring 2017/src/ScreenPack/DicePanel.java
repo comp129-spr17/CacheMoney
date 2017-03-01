@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,6 +59,8 @@ public class DicePanel extends JPanel{
 	private int port;
 	private MoneyLabels mLabel;
 	private int numOfDoublesInRow;
+	private MiniGamePanel mGamePanel;
+	private int myPlayerNum;
 	public DicePanel(boolean isSingle, Player[] player, MoneyLabels MLabels){
 		players = player;
 		mLabel = MLabels;
@@ -102,12 +105,12 @@ public class DicePanel extends JPanel{
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
 		toggleDoubles.setVisible(false);
-		
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
 		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players, this, bPanel);
 		bPanel.add(propertyPanel);
+		mGamePanel = new MiniGamePanel(isSingle, this, bPanel,propertyPanel);
 		this.board = board;
 	}
 	private void setDiceBackgroundColor() {
@@ -167,7 +170,9 @@ public class DicePanel extends JPanel{
 		startGameButton.setBounds(0, 0, sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		add(startGameButton);
 	}
-	
+	public void setMyPlayer(int p){
+		myPlayerNum = p;
+	}
 	
 	public void setStartGameButtonEnabled(boolean enabled){
 		this.startGameButton.setEnabled(enabled);
@@ -287,6 +292,7 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				endTurnButton.setVisible(false);
+				consolidateOwners();
 				if(isSingle)
 					actionForDiceEnd();
 				else
@@ -329,7 +335,8 @@ public class DicePanel extends JPanel{
 		toggleDoubles.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		
+		if(!isSingle)
+			actionForNotCurrentPlayer();
 		
 	}
 	// In board, run thread to determine which function to perform.
@@ -351,17 +358,13 @@ public class DicePanel extends JPanel{
 				rollButton.setVisible(true);
 				overrideDiceRoll.setVisible(true);
 				toggleDoubles.setVisible(true);
+				if(!isSingle)
+				actionForNotCurrentPlayer();
 				t.cancel();
 				t.purge();
 			}
 			
 		}, 500);
-		
-		
-		
-		
-		
-		
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
 		if (!isDiceButtonPressed){
@@ -369,15 +372,29 @@ public class DicePanel extends JPanel{
 		}
 		
 	}
-	public void actionForNotCurrentPlayer(int playerNum){
-		if(playerNum != current){
+	public void actionForNotCurrentPlayer(){
+		if(myPlayerNum != current){
 			rollButton.setVisible(false);
 			endTurnButton.setVisible(false);
+			revalidate();
+			repaint();
 			propertyPanel.disableButtons();
 		}
 	}
+	public void actionForPropertyPurchase(String propertyName, int buyingPrice, int playerNum){
+		propertyPanel.purchaseProperty(propertyName, buyingPrice, playerNum);
+	}
+	public void actionForPayRent(int rent, int owner){
+		propertyPanel.payForRent(rent, owner);
+	}
 	public void actionForRemovePropertyPanel(){
 		propertyPanel.endPropertyPanel();
+	}
+	public void actionForSpamOwner(){
+		mGamePanel.actionForOwner();;
+	}
+	public void actionForSpamGuest(){
+		mGamePanel.actionForGuest();
 	}
 	public void actionForRemovePlayer(int i){
 		board.removePlayer(i);
@@ -547,7 +564,19 @@ public class DicePanel extends JPanel{
 			//sendSpaceLandedOn(curSpaceName);
 			if (board.isPlayerInPropertySpace(previous)){
 				//Sounds.landedOnUnownedProperty.playSound();
-				propertyPanel.executeSwitch(curSpaceName);
+				if(propertyPanel.isPropertyOwned(curSpaceName) && propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
+					
+				}else{
+					if(propertyPanel.isPropertyOwned(curSpaceName)){
+						mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], myPlayerNum);
+						mGamePanel.startMiniGame(curSpaceName);
+					}else{
+						propertyPanel.executeSwitch(curSpaceName, players[current]);
+					}
+				}
+				
+				
+				
 			}
 			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
 				Sounds.landedOnChanceOrCommunityChest.playSound();
@@ -555,14 +584,15 @@ public class DicePanel extends JPanel{
 			}
 		}
 		if (!isSame || numOfDoublesInRow >= 3){
-			endTurnButton.setVisible(true);
+				endTurnButton.setVisible(isSingle ? true : current == myPlayerNum);
 		}
 		else{
 			mLabel.reinitializeMoneyLabels();
-			rollButton.setVisible(true);
-			overrideDiceRoll.setVisible(true);
-			toggleDoubles.setVisible(true);
+			rollButton.setVisible(isSingle ? true : current == myPlayerNum);
+			overrideDiceRoll.setVisible(isSingle ? true : current == myPlayerNum);
+			toggleDoubles.setVisible(isSingle ? true : current == myPlayerNum);
 		}
+		
 	}
 	
 //	private void sendSpaceLandedOn(String space){
@@ -593,6 +623,7 @@ public class DicePanel extends JPanel{
 	public void setOutputStream(OutputStream outputStream) {
 		this.outputStream = outputStream;
 		propertyPanel.setOutputStream(outputStream);
+		mGamePanel.setOutputStream(outputStream);
 	}
 	public String getIp() {
 		return ip;
@@ -609,4 +640,23 @@ public class DicePanel extends JPanel{
 		
 		this.startGameButton.setText(startGameButtonText);	
 	}
+	
+	public int getSumOfDie()
+	{
+		return result[0]+result[1];
+	}
+	
+	private void consolidateOwners(){
+		HashMap<String, PropertySpace> mappings = bPanel.getMappings();
+		
+		Property WW = mappings.get("Water Works").getPropertyInfo();
+		Property EC = mappings.get("Electric Company").getPropertyInfo();
+		if(WW.getOwner() == EC.getOwner() && WW.getMultiplier() == 0 && EC.getMultiplier() == 0)
+		{
+			WW.incrementMultiplier();
+			EC.incrementMultiplier();
+		}
+		
+	}
+	
 }

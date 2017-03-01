@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,12 +31,14 @@ public class MThread extends Thread{
 	private int disconnectPlayer;
 	private int myNum;
 	private ArrayList<Integer> startPlayers;
+	private sun.misc.Queue<byte[]> sendingQ;
 	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName, Integer playerNum, ArrayList<Integer> startPlayers){
 		socket = s;
 		this.playerNum = playerNum;
 		this.usersOutput = usersOutput;
 		this.hostName = hostName;
 		this.startPlayers = startPlayers;
+		sendingQ = new sun.misc.Queue<>();
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
 		ufs = UnicodeForServer.getInstance();
@@ -75,7 +78,7 @@ public class MThread extends Thread{
 				specialCode = mUnpack.isSpecalCode(msg);
 				
 				if(specialCode == 0){
-					showMsgToUsers(msg);
+					showMsgToUsers(sendingQ.dequeue());
 				}
 				else if(specialCode == 1){
 					disconnectPlayer = (Integer)mUnpack.getResult(msg).get(1);
@@ -106,6 +109,7 @@ public class MThread extends Thread{
 		try {
 			
 			readFromUser.read(msg);
+			sendingQ.enqueue(msg);
 		} catch (IOException e) {
 		}
 	}
