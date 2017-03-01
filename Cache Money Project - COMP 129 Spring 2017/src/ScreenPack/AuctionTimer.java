@@ -21,7 +21,7 @@ public class AuctionTimer extends Timer{
 		timeCounter = 10;
 	}
 	
-	public void restartTimer()
+	public void resetTimer()
 	{
 		this.cancel();
 		timeCounter = 10;
@@ -46,5 +46,10 @@ public class AuctionTimer extends Timer{
 	public JLabel getLabel()
 	{
 		return timeLabel;
+	}
+	
+	public int getCounter()
+	{
+		return timeCounter;
 	}
 }
