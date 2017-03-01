@@ -625,4 +625,9 @@ public class DicePanel extends JPanel{
 		
 		this.startGameButton.setText(startGameButtonText);	
 	}
+	
+	public int getSumOfDie()
+	{
+		return result[0]+result[1];
+	}
 }

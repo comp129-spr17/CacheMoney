@@ -1,8 +1,6 @@
 package ScreenPack;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -15,11 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GamePack.Board;
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
-import GamePack.SizeRelated;
+import GamePack.UtilityProperty;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
@@ -259,14 +256,22 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(auctionButton.isEnabled()){
+				if(payButton.isEnabled()){
 					Sounds.money.playSound();
-					if(currentPlayer.getTotalMonies() >= property.getRent()) {
-						payForR(property.getRent(), property.getOwner());
+					if(property instanceof UtilityProperty)
+					{				
+						int cost = property.getRent()*dicePanel.getSumOfDie();
+						if(currentPlayer.getTotalMonies() >= cost) {
+							payForR(cost, property.getOwner());
+						}
+					}else{
+						if(currentPlayer.getTotalMonies() >= property.getRent()) {
+							payForR(property.getRent(), property.getOwner());
+						}
 					}
+
 					dismissPropertyPanel();
 				}
-					
 				
 			}
 		});
