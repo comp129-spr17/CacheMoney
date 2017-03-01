@@ -11,7 +11,8 @@ public final class UnicodeForServer {
 	public static final String DISCONNECTED = "A!()FASNV)@$(@7";
 	public static final String HOST_DISCONNECTED = "A!()FASNV)@$(@8";
 	public static final String START_GAME_REPLY = "A!()FASNV)@$(@9";
-	
+	public static final String PROPERTY_PURCHASE = "A!()FASNV)@$(@10";
+	public static final String PROPERTY_RENT_PAY = "A!()FASNV)@$(@11";
 	private UnicodeForServer(){
 		
 	}

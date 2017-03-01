@@ -82,6 +82,8 @@ public class MClient {
 		doActions.put(unicode.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
 		doActions.put(unicode.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
 		doActions.put(unicode.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
+		doActions.put(unicode.PROPERTY_PURCHASE, new DoAction(){public void doAction(ArrayList<Object> result){doPurchaseProperty(result);}});
+		doActions.put(unicode.PROPERTY_RENT_PAY, new DoAction(){public void doAction(ArrayList<Object> result){doPayRent(result);}});
 		
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -139,7 +141,8 @@ public class MClient {
 					byteCount = inputStream.read(msgs);
 					result = mUnpack.getResult(msgs);
 					setPlayer((Integer)result.get(1));
-					(new CheckingPlayerTurn()).start();
+					diceP.setMyPlayer(thisPlayNum);
+//					(new CheckingPlayerTurn()).start();
 					Sounds.waitingRoomJoin.playSound();
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -181,6 +184,12 @@ public class MClient {
 	private void doRemoveProperty(){
 		diceP.actionForRemovePropertyPanel();
 	}
+	private void doPurchaseProperty(ArrayList<Object> result){
+		diceP.actionForPropertyPurchase((String)result.get(1), (Integer)result.get(2), (Integer)result.get(3));
+	}
+	private void doPayRent(ArrayList<Object> result){
+		diceP.actionForPayRent((Integer)result.get(1), (Integer)result.get(2));
+	}
 	private void doDisconnect(ArrayList<Object> result){
 		int playerNo = (Integer)result.get(1);
 		pList[playerNo].setIsOn(false);
@@ -209,17 +218,17 @@ public class MClient {
 	public int getPlayerNum(){
 		return thisPlayer.getPlayerNum();
 	}
-	class CheckingPlayerTurn extends Thread{
-		public void run(){
-			while(true){
-				diceP.actionForNotCurrentPlayer(thisPlayer.getPlayerNum());
-				try {
-					sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+//	class CheckingPlayerTurn extends Thread{
+//		public void run(){
+//			while(true){
+//				diceP.actionForNotCurrentPlayer(thisPlayer.getPlayerNum());
+//				try {
+//					sleep(1);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	}
 	
 }

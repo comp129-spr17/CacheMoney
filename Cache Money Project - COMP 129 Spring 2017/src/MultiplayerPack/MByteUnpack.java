@@ -47,6 +47,10 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.START_GAME_REPLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackGameStartResult(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UNI.PROPERTY_PURCHASE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyPurchase(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.PROPERTY_RENT_PAY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPayRent(result);
+		return cleanUpAndReturn();}});
 			
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
@@ -95,6 +99,27 @@ public final class MByteUnpack {
 			for(int i=0; i<a; i++)
 				resultList.add(dInputStream.readInt());
 		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackPropertyPurchase(byte[] result){
+		try{
+			resultList.add(dInputStream.readUTF());
+			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readInt());
+			
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackPayRent(byte[] result){
+		try{
+			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readInt());
+			
+		}
+		catch (IOException e){
 			e.printStackTrace();
 		}
 	}

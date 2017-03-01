@@ -86,6 +86,35 @@ public final class MBytePack {
 		}
 		return null;
 	}
+	public byte[] packPropertyPurchase(String requestCode, String propertyName, int propertyPrice, int playerNum){
+		try{
+			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeUTF(propertyName);
+			dOutputStream.writeInt(propertyPrice);
+			dOutputStream.writeInt(playerNum);
+			
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public byte[] packPayRent(String requestCode, int rentPrice, int ownerNum){
+		try{
+			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(rentPrice);
+			dOutputStream.writeInt(ownerNum);
+			
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public byte[] packSimpleRequest(String requestCode){
 		try{
 			dOutputStream.writeUTF(requestCode);
