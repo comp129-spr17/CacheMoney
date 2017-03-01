@@ -218,7 +218,7 @@ public class MainMenuScreen {
 		if(numP.length() != 1)
 			return false;
 		char num = numP.charAt(0);
-		return (num < '2' || num > '4');
+		return !(num < '2' || num > '4');
 	}
 	
 	private boolean getNumPlayers(){
