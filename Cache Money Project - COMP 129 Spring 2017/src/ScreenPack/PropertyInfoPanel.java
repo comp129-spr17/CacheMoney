@@ -353,14 +353,14 @@ public class PropertyInfoPanel extends JPanel{
 		if(isSingle)
 			purchaseProperty(propertyName,buyingPrice,playerNum);
 		else
-			mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum);
+			sendMessageToServer(mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
 		
 	}
 	private void payForR(int amount, int owner){
 		if(isSingle)
 			payForRent(amount,owner);
 		else
-			mPack.packPayRent(unicode.PROPERTY_RENT_PAY, amount,owner);
+			sendMessageToServer(mPack.packPayRent(unicode.PROPERTY_RENT_PAY, amount,owner));
 	}
 	public void purchaseProperty(String propertyName, int buyingPrice, int playerNum){
 		currentPlayer.purchaseProperty(propertyName, buyingPrice);

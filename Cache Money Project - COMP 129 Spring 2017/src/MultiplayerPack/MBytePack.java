@@ -34,9 +34,9 @@ public final class MBytePack {
 	public int getByteSize(){
 		return byteSize;
 	}
-	public byte[] packDiceResult(String requestCode, int fDice, int sDice){
+	public byte[] packDiceResult(int requestCode, int fDice, int sDice){
 		try {
-			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(fDice);
 			dOutputStream.writeInt(sDice);
 			return packResult();
@@ -46,9 +46,9 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packPropertyResult(String requestCode,int curPos, char fDice, boolean sDice){
+	public byte[] packPropertyResult(int requestCode,int curPos, char fDice, boolean sDice){
 		try {
-			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(curPos);
 			dOutputStream.writeChar(fDice);
 			dOutputStream.writeBoolean(sDice);
@@ -60,9 +60,9 @@ public final class MBytePack {
 		return null;
 	}
 	
-	public byte[] packPlayerNumber(String requestCode, int playerNum){
+	public byte[] packPlayerNumber(int requestCode, int playerNum){
 		try{
-			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(playerNum);
 			return packResult();
 		}
@@ -71,9 +71,9 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packTotalPlayerPlaying(String requestCode, ArrayList<Integer> playerList){
+	public byte[] packTotalPlayerPlaying(int requestCode, ArrayList<Integer> playerList){
 		try{
-			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(playerList.size());
 			for(int i=0; i<playerList.size(); i++)
 				dOutputStream.writeInt(playerList.get(i));
@@ -86,9 +86,9 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packPropertyPurchase(String requestCode, String propertyName, int propertyPrice, int playerNum){
+	public byte[] packPropertyPurchase(int requestCode, String propertyName, int propertyPrice, int playerNum){
 		try{
-			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeUTF(propertyName);
 			dOutputStream.writeInt(propertyPrice);
 			dOutputStream.writeInt(playerNum);
@@ -101,9 +101,9 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packPayRent(String requestCode, int rentPrice, int ownerNum){
+	public byte[] packPayRent(int requestCode, int rentPrice, int ownerNum){
 		try{
-			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(rentPrice);
 			dOutputStream.writeInt(ownerNum);
 			
@@ -115,9 +115,9 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packSimpleRequest(String requestCode){
+	public byte[] packSimpleRequest(int requestCode){
 		try{
-			dOutputStream.writeUTF(requestCode);
+			dOutputStream.writeInt(requestCode);
 			return packResult();
 		}
 		catch (IOException e){

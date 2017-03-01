@@ -12,10 +12,10 @@ public final class MByteUnpack {
 	private ByteArrayInputStream bInputStream;
 	private DataInputStream dInputStream;
 	private ArrayList<Object> resultList;
-	private HashMap<String, GetResult> GetResults;
+	private HashMap<Integer, GetResult> GetResults;
 	private UnicodeForServer UNI;
-	private String receivedCode;
-	private String code;
+	private int receivedCode;
+	private int code;
 	private MByteUnpack(){
 		init();
 	}
@@ -127,7 +127,7 @@ public final class MByteUnpack {
 	
 		resetAndReceive(result);
 		try {
-			receivedCode = dInputStream.readUTF();
+			receivedCode = dInputStream.readInt();
 			resultList.add(receivedCode);
 			return GetResults.get(receivedCode).getResult(result);
 		} catch (IOException e) {
@@ -146,12 +146,12 @@ public final class MByteUnpack {
 	public int isSpecalCode(byte[] result){
 		resetAndReceive(result);
 		try {
-			code = dInputStream.readUTF();
-			if(UNI.DISCONNECTED.equals(code))
+			code = dInputStream.readInt();
+			if(UNI.DISCONNECTED == code)
 				return 1;
-			else if(UNI.HOST_DISCONNECTED.equals(code))
+			else if(UNI.HOST_DISCONNECTED==code)
 				return 2;
-			else if(UNI.START_GAME.equals(code))
+			else if(UNI.START_GAME == code)
 				return 3;
 			
 				

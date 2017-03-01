@@ -45,7 +45,7 @@ public class MClient {
 	private int byteCount;
 	private OutputStream outputStream;
 	private int thisPlayNum;
-	private HashMap<String, DoAction> doActions;
+	private HashMap<Integer, DoAction> doActions;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
 		this.pList = pList;
@@ -58,7 +58,7 @@ public class MClient {
 		void doAction(ArrayList<Object> result);
 	}
 	public void doAction(ArrayList<Object> result){
-		doActions.get((String)result.get(0)).doAction(result);
+		doActions.get((Integer)result.get(0)).doAction(result);
 	}
 	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException, UnknownHostException {
 		this.diceP = d;
