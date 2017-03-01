@@ -382,6 +382,7 @@ public class DicePanel extends JPanel{
 		}
 	}
 	public void actionForPropertyPurchase(String propertyName, int buyingPrice, int playerNum){
+		System.out.println(propertyName + " : " + buyingPrice + " : " + playerNum);
 		propertyPanel.purchaseProperty(propertyName, buyingPrice, playerNum);
 	}
 	public void actionForPayRent(int rent, int owner){
