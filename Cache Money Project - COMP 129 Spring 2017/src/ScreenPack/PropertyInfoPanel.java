@@ -1,8 +1,6 @@
 package ScreenPack;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -15,11 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GamePack.Board;
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
-import GamePack.SizeRelated;
+import GamePack.UtilityProperty;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
@@ -260,18 +257,27 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(auctionButton.isEnabled())
+				if(payButton.isEnabled())
 					Sounds.landedOnOwnedProperty.playSound();
 
-				if(auctionButton.isEnabled()){
+				if(payButton.isEnabled()){
 					Sounds.money.playSound();
 					dismissPropertyPanel();
 				}
 				Player curPlayer = players[dicePanel.getCurrentPlayerNumber()];
 
-				if(curPlayer.getTotalMonies() >= property.getRent()) {
-					curPlayer.pay(property.getRent());
-					players[property.getOwner()].earnMonies(property.getRent());
+				if(property instanceof UtilityProperty)
+				{				
+					int cost = property.getRent()*dicePanel.getSumOfDie();
+					if(curPlayer.getTotalMonies() >= cost) {
+						curPlayer.pay(cost);
+						players[property.getOwner()].earnMonies(cost);
+					}
+				}else{
+					if(curPlayer.getTotalMonies() >= property.getRent()) {
+						curPlayer.pay(property.getRent());
+						players[property.getOwner()].earnMonies(property.getRent());
+					}
 				}
 			}
 		});
