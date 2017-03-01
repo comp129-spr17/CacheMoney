@@ -75,4 +75,9 @@ public abstract class Property {
 	public int getOwner() {
 		return owner;
 	}
+	
+	public int getMultiplier()
+	{
+		return rentMultiplier;
+	}
 }

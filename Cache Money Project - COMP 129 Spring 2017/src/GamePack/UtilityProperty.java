@@ -6,7 +6,6 @@ public class UtilityProperty extends Property {
 	
 	public UtilityProperty(int cost, String name) {
 		super(cost, name);
-		init();
 	}
 	
 	@Override
@@ -19,4 +18,5 @@ public class UtilityProperty extends Property {
 		rentValues.add(4);
 		rentValues.add(10);
 	}
+	
 }

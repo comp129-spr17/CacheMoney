@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -291,6 +292,7 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				endTurnButton.setVisible(false);
+				consolidateOwners();
 				if(isSingle)
 					actionForDiceEnd();
 				else
@@ -630,4 +632,18 @@ public class DicePanel extends JPanel{
 	{
 		return result[0]+result[1];
 	}
+	
+	private void consolidateOwners(){
+		HashMap<String, PropertySpace> mappings = bPanel.getMappings();
+		
+		Property WW = mappings.get("Water Works").getPropertyInfo();
+		Property EC = mappings.get("Electric Company").getPropertyInfo();
+		if(WW.getOwner() == EC.getOwner() && WW.getMultiplier() == 0 && EC.getMultiplier() == 0)
+		{
+			WW.incrementMultiplier();
+			EC.incrementMultiplier();
+		}
+		
+	}
+	
 }
