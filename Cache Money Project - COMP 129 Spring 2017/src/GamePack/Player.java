@@ -173,94 +173,128 @@ public final class Player {
 		int modMoney = 0;
 		if (totalmonies >= cost)
 		{
-			if (cost >= 500)
+			while (cost != 0)
 			{
-				modMoney = cost / 500;
-				for (int i = 0; i < modMoney; i++)
+				if (cost >= 500)
 				{
-					if(fivehunneds > 0)
+					modMoney = cost / 500;
+					for (int i = 0; i < modMoney; i++)
 					{
-						setFiveHunneds(fivehunneds-1);
-						totalmonies -= 500;
-						cost = cost - 500;
+						if(fivehunneds > 0)
+						{
+							setFiveHunneds(fivehunneds-1);
+							totalmonies -= 500;
+							cost = cost - 500;
+						}
 					}
 				}
-			}
-			if (cost < 500 && cost >= 100)
-			{
-				modMoney = cost / 100;
-				for (int i = 0; i < modMoney; i++)
+				if (cost < 500 && cost >= 100)
 				{
-					if (hunneds > 0)
+					modMoney = cost / 100;
+					for (int i = 0; i < modMoney; i++)
 					{
-						setHunneds(hunneds-1);
-						totalmonies -= 100;
-						cost = cost - 100;
+						if (hunneds > 0)
+						{
+							setHunneds(hunneds-1);
+							totalmonies -= 100;
+							cost = cost - 100;
+						}
 					}
 				}
-			}
-			if (cost < 100 && cost >= 50)
-			{
-				modMoney = cost / 50;
-				for (int i = 0; i < modMoney; i++)
+				if (cost < 100 && cost >= 50)
 				{
-					if (fitties > 0)
+					modMoney = cost / 50;
+					for (int i = 0; i < modMoney; i++)
 					{
-						setFitties(fitties-1);
-						totalmonies -= 50;
-						cost = cost - 50;
+						if (fitties > 0)
+						{
+							setFitties(fitties-1);
+							totalmonies -= 50;
+							cost = cost - 50;
+						}
 					}
 				}
-			}
-			if (cost < 50 && cost >= 20)
-			{
-				modMoney = cost / 20;
-				for (int i = 0; i < modMoney; i++)
+				if (cost < 50 && cost >= 20)
 				{
-					if (twennies > 0)
+					modMoney = cost / 20;
+					for (int i = 0; i < modMoney; i++)
 					{
-						setTwennies(twennies-1);
-						totalmonies -= 20;
-						cost = cost - 20;
+						if (twennies > 0)
+						{
+							setTwennies(twennies-1);
+							totalmonies -= 20;
+							cost = cost - 20;
+						}
 					}
 				}
-			}
-			if (cost < 20 && cost >= 10)
-			{
-				modMoney = cost / 10;
-				for (int i = 0; i < modMoney; i++)
+				if (cost < 20 && cost >= 10)
 				{
-					if (tens > 0)
+					modMoney = cost / 10;
+					for (int i = 0; i < modMoney; i++)
 					{
-						setTens(tens-1);
-						totalmonies -= 10;
-						cost = cost - 10;
+						if (tens > 0)
+						{
+							setTens(tens-1);
+							totalmonies -= 10;
+							cost = cost - 10;
+						}
 					}
 				}
-			}
-			if (cost < 10 && cost >= 5)
-			{
-				modMoney = cost / 5;
-				for (int i = 0; i < modMoney; i++)
+				if (cost < 10 && cost >= 5)
 				{
-					if (fives > 0)
+					modMoney = cost / 5;
+					for (int i = 0; i < modMoney; i++)
 					{
-						setFives(fives-1);
-						totalmonies -= 5;
-						cost = cost - 5;
+						if (fives > 0)
+						{
+							setFives(fives-1);
+							totalmonies -= 5;
+							cost = cost - 5;
+						}
 					}
 				}
-			}
-			if (cost < 5 && cost >= 1)
-			{
-				for (int i = 0; i < cost; i++)
+				if (cost < 5 && cost >= 1)
 				{
-					if (ones > 0)
+					for (int i = 0; i < cost; i++)
 					{
-						setOnes(ones-1);
-						totalmonies -= 1;
-						cost = cost - 1;
+						if (ones > 0)
+						{
+							setOnes(ones-1);
+							totalmonies -= 1;
+							cost = cost - 1;
+						}
 					}
+				}
+				if (fivehunneds > 0 && hunneds == 0)
+				{
+					fivehunneds -= 1;
+					hunneds += 5;
+				}
+				if (hunneds > 0 && fitties == 0)
+				{
+					hunneds -= 1;
+					fitties += 2;
+				}
+				if (fitties > 0 && twennies == 0)
+				{
+				    fitties -= 1;
+					twennies += 2;
+					tens += 1;
+				}
+				if (twennies > 0 && tens == 0)
+				{
+					twennies -= 1;
+					tens += 2;
+				}
+				if (tens > 0 && fives == 0)
+				{
+					tens -= 1;
+					fives += 2;
+				}
+				if (fives > 0 && ones == 0)
+				{
+					fives -= 1;
+					ones += 5;
 				}
 			}
 		}
