@@ -2,6 +2,9 @@ package MiniGamePack;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +18,12 @@ public class ReactionGame extends MiniGame {
 	private char pressed;
 	private ImageRelated imgs;
 	private PathRelated paths;
+	private boolean[] userPressed;
+	private double[] userTimes;
+	private boolean wasGoMentioned;
+	private long timeStarted;
+	private boolean someoneEnteredTooEarly;
+	private boolean isGameEnded;
 	
 	private void initOther(){
 		imgs = ImageRelated.getInstance();
@@ -31,7 +40,7 @@ public class ReactionGame extends MiniGame {
 	}
 	
 	private void initLabels(){
-		lbls.add(new JLabel("REACTION GAME!"));
+		lbls.add(new JLabel());
 		lbls.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
 		miniPanel.add(lbls.get(0));
 	}
@@ -39,13 +48,70 @@ public class ReactionGame extends MiniGame {
 	public void play(){
 		super.play();
 		// insert game here
+		lbls.get(0).setText("REACTION GAME!");
+		isGameEnded = false;
+		Random rand = new Random();
+		Timer t = new Timer(); 
 		initLabels();
 		manageMiniPanel();
 		
 		
-		//Timer t 
+		beginReactionTimer(rand, t);
 		
+	}
+
+
+	private void beginReactionTimer(Random rand, Timer t) {
+		userPressed = new boolean[2];
+		userTimes = new double[2];
+		userTimes[0] = 42; // arbitrary value
+		userTimes[1] = 42;
+		someoneEnteredTooEarly = false;
+		userPressed[0] = false;
+		userPressed[1] = false;
+		wasGoMentioned = false;
 		
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				wasGoMentioned = true;
+				if (!someoneEnteredTooEarly){
+					lbls.get(0).setText("PRESS A KEY NOW!!!!!!");
+					Timer c = new Timer();
+					timeStarted = System.currentTimeMillis();
+					for (int i = 0; i < 5 && (!userPressed[0] || !userPressed[1]); i++){
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					if (!userPressed[0] || userPressed[1]){
+						checkIfTooEarlyOrOk("OWNER", 0);
+						checkIfTooEarlyOrOk("GUEST", 1);
+					}
+				}
+				if (userTimes[0] <= userTimes[1]){ // if the owner beat the guest
+					lbls.get(0).setText("OWNER WINS!");
+				}
+				else{ // guest beats the owner
+					lbls.get(0).setText("GUEST WINS!");
+				}
+				for (int i = 0; i < 3; i++){
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				System.out.println("DISMISS MINIGAME PANEL HERE");
+				removeKeyListner();
+				cleanUp();
+			}
+			
+		}, rand.nextInt(9000) + 1000);
 	}
 
 
@@ -61,6 +127,22 @@ public class ReactionGame extends MiniGame {
 		super.addGame();
 	}
 	
+	private void checkIfTooEarlyOrOk(String player, int num) {
+		if (userPressed[num]){
+			return;
+		}
+		userPressed[num] = true;
+		if (wasGoMentioned){
+			System.out.println(player + " INPUTTED");
+			userTimes[num] = ((System.currentTimeMillis() - timeStarted) / 1000.0);
+			System.out.println("Time: " + userTimes[num] + " seconds.");
+		}
+		else{
+			System.out.println(player + " INPUTTED TOO EARLY!");
+			userTimes[num] = 420; // larger arbitrary value
+			someoneEnteredTooEarly = true;
+		}
+	}
 	
 	private void initListener(){
 		listener = new KeyListener() {
@@ -74,10 +156,17 @@ public class ReactionGame extends MiniGame {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				pressed = e.getKeyChar();
-				System.out.println(e.getKeyChar());
 				
-				
+				if (pressed == 'q'){
+					checkIfTooEarlyOrOk("OWNER", 0);
+				}
+				else if (pressed == 'p'){
+					checkIfTooEarlyOrOk("GUEST", 1);
+					
+				}
 			}
+
+			
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -85,5 +174,25 @@ public class ReactionGame extends MiniGame {
 			}
 		};
 	}
-
+	private void removeKeyListner(){
+		miniPanel.removeKeyListener(listener);
+		miniPanel.setFocusable(false);
+	}
+	
+	private void cleanUp(){
+		miniPanel.setFocusable(false);
+		miniPanel.remove(lbls.get(0));
+		miniPanel.repaint();
+		miniPanel.revalidate();
+		isGameEnded = true;
+	}
+	
+	public boolean isGameEnded(){
+		return isGameEnded;
+	}
+	
+	public boolean getWinner(){
+		return userTimes[0] <= userTimes[1];
+	}
+	
 }

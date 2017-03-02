@@ -27,6 +27,8 @@ public class MiniGamePanel extends JPanel{
 	private PropertyInfoPanel pPanel;
 	private String curSpaceName;
 	private boolean isCurrent;
+	private int gameNum = 1;
+	
 	public MiniGamePanel(boolean isSingle, DicePanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
 	{
 		init(isSingle,diceP,b, pPanel);
@@ -59,21 +61,21 @@ public class MiniGamePanel extends JPanel{
 		this.isCurrent = isCurrent;
 		mGames[0].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[1].setOwnerAndGuest(owner, guest, myPlayerNum);
-		mGames[1].addGame();
+		mGames[gameNum].addGame();
 		//mGames[0].addGame();
 	}
 	public void startMiniGame(String curSpaceName){
 		this.curSpaceName = curSpaceName;
 		
-		mGames[1].play();
+		mGames[gameNum].play();
 		//mGames[0].play();
 		(new GameEndCheck()).start();
 	}
 	public boolean isGameOver(){
-		return mGames[0].isGameEnded();
+		return mGames[gameNum].isGameEnded();
 	}
 	public boolean isOwnerWin(){
-		return mGames[0].getWinner();
+		return mGames[gameNum].getWinner();
 	}
 	public void switchToOther(){
 		if(isOwnerWin())
@@ -82,10 +84,10 @@ public class MiniGamePanel extends JPanel{
 			switchToDice();
 	}
 	public void actionForOwner(){
-		mGames[0].addActionToOwner();
+		mGames[gameNum].addActionToOwner();
 	}
 	public void actionForGuest(){
-		mGames[0].addActionToGuest();
+		mGames[gameNum].addActionToGuest();
 	}
 	private void cleanup(){
 		removeAll();
@@ -112,17 +114,22 @@ public class MiniGamePanel extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			try {
-				sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if (gameNum == 0){
+				try {
+					sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				mGames[gameNum].specialEffect();
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-			mGames[0].specialEffect();
-			try {
-				sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			
+			
+			
 			switchToOther();
 		}
 	}
