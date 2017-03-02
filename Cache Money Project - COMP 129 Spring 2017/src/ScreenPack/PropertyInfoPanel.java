@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.sun.glass.ui.Timer;
 import com.sun.media.jfxmedia.events.PlayerStateEvent.PlayerState;
 
 import GamePack.Player;
@@ -93,7 +95,7 @@ public class PropertyInfoPanel extends JPanel{
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
 	
-	public void executeSwitch(String name, Player currentPlayer)
+	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
 		AP = new AuctionPanel(property, players, this);
@@ -101,6 +103,8 @@ public class PropertyInfoPanel extends JPanel{
 		infoPanel.removeAll();
 		renderPropertyInfo();
 		hidePreviousPanel();
+		if(isSingle || isCurrent)
+			enableButtons();
 		this.currentPlayer = currentPlayer;
 	}
 
@@ -200,7 +204,9 @@ public class PropertyInfoPanel extends JPanel{
 					
 					if(currentPlayer.getTotalMonies() >= property.getBuyingPrice()) {
 						purchaseProp(property.getName(), property.getBuyingPrice(), currentPlayer.getPlayerNum());
+					
 					}
+					
 					dismissPropertyPanel();
 
 				}
@@ -346,17 +352,30 @@ public class PropertyInfoPanel extends JPanel{
 	private void dismissPropertyPanel() {
 		if(isSingle)
 			endPropertyPanel();
-		else
-			sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+		else{
+			java.util.Timer newTimer = new java.util.Timer();
+			newTimer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+				}
+			}, 1000);
+		}
+			
 	}
 	private void purchaseProp(String propertyName, int buyingPrice, int playerNum){
+		disableButtons();
 		if(isSingle)
 			purchaseProperty(propertyName,buyingPrice,playerNum);
 		else
 			sendMessageToServer(mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
 		
 	}
+	
 	private void payForR(int amount, int owner){
+		disableButtons();
 		if(isSingle)
 			payForRent(amount,owner);
 		else
