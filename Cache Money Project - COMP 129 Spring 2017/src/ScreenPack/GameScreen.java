@@ -228,6 +228,7 @@ public class GameScreen extends JFrame{
 		mLabels.initLabels(playerInfo, insets, players);
 		dicePanel = new DicePanel(isSingle, players, mLabels);
 		boardPanel = new BoardPanel(players,dicePanel);
+		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
 		addButtonListeners();
 		mainPanel.add(showInfo);

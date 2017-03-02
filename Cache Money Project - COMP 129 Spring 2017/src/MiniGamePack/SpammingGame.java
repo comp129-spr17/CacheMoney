@@ -46,6 +46,12 @@ public class SpammingGame extends MiniGame{
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
+				
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
 				pressed = e.getKeyChar();
 				if(isSingle){
 					if(pressed == 'q' || pressed == 'Q')
@@ -58,12 +64,6 @@ public class SpammingGame extends MiniGame{
 					else if(!isOwner && (pressed == 'p' || pressed == 'P'))
 						sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_GUEST));
 				}
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				
 			}
 			
 			@Override
@@ -85,7 +85,8 @@ public class SpammingGame extends MiniGame{
 		lbls.add(new JLabel(imgs.resizeImage(paths.getMiniGamePath()+"bomb.png", 100, 100)));
 		lbls.add(new JLabel(imgs.resizeImage(paths.getMiniGamePath()+"explosion.png", 100, 100)));
 		lbls.add(new JLabel("|"));
-		
+		lbls.add(new JLabel(""));
+		lbls.add(new JLabel(""));
 		lbls.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
 		lbls.get(1).setBounds(dpWidth/9, dpHeight*1/7, dpWidth*5/7, dpHeight*1/7);
 		lbls.get(2).setBounds(dpWidth*2/9, dpHeight*2/7+20, dpWidth*3/9, dpHeight*1/7);
@@ -97,9 +98,13 @@ public class SpammingGame extends MiniGame{
 		lbls.get(8).setBounds(dpWidth*3/9+90, dpHeight*2/7, dpWidth*1/7, dpHeight*1/7);
 		lbls.get(9).setBounds(dpWidth/2-50, dpHeight*2/7+70, 100, 100);
 		lbls.get(11).setBounds(dpWidth/2, dpHeight*2/7+110, 100, 120);
+		lbls.get(12).setBounds(0, dpHeight*2/7+70, 100, 100);
+		lbls.get(13).setBounds(dpWidth-100, dpHeight*2/7+70, 100, 100);
 	}
 	public void addGame(){
 		super.addGame();
+		lbls.get(12).setIcon(imgs.getPieceImg(owner.getPlayerNum()));
+		lbls.get(13).setIcon(imgs.getPieceImg(guest.getPlayerNum()));
 		for(int i=0; i<lbls.size(); i++)
 			miniPanel.add(lbls.get(i));
 		lbls.get(10).setVisible(false);

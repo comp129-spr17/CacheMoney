@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 public class DicePanel extends JPanel{
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
+	private ImageRelated imageRelated;
 	private JButton rollButton;
 	private JTextField overrideDiceRoll; // DEBUG
 	private JCheckBox toggleDoubles; // DEBUG
@@ -61,6 +62,7 @@ public class DicePanel extends JPanel{
 	private int numOfDoublesInRow;
 	private MiniGamePanel mGamePanel;
 	private int myPlayerNum;
+	private JLabel[] showPlayer;
 	public DicePanel(boolean isSingle, Player[] player, MoneyLabels MLabels){
 		players = player;
 		mLabel = MLabels;
@@ -76,6 +78,7 @@ public class DicePanel extends JPanel{
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		paths = PathRelated.getInstance();
+		imageRelated = ImageRelated.getInstance();
 		sizeRelated = SizeRelated.getInstance();
 		this.setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		setLayout(null);
@@ -86,9 +89,8 @@ public class DicePanel extends JPanel{
 		dCel.setSize(this.getSize());
 		dCel.setLocation(this.getLocation().x, this.getLocation().y-5);
 		
-		
 		addTurnLabel();
-		
+		setPlayerPieceStatus();
 		addRollButton();
 		addOverrideDiceRoll();
 		addToggleDoubles();
@@ -105,6 +107,29 @@ public class DicePanel extends JPanel{
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
 		toggleDoubles.setVisible(false);
+	}
+	private void setPlayerPieceStatus(){
+		showPlayer = new JLabel[4];
+		for(int i=0; i<4; i++)
+			showPlayer[i] = new JLabel("");
+		showPlayer[0].setText("My Player Piece");
+		showPlayer[1].setIcon(imageRelated.getPieceImg(0));
+		showPlayer[2].setText("Current Player Piece");
+		showPlayer[3].setIcon(imageRelated.getPieceImg(1));
+		
+		
+	}
+	public void setPlayerPiecesUp(JPanel Game, int x){
+		showPlayer[0].setBounds(x, 30, 120, 40);
+		showPlayer[1].setBounds(x, 75, 100, 100);
+		showPlayer[2].setBounds(x, 185, 120, 40);
+		showPlayer[3].setBounds(x, 225, 100, 100);
+		for(int i=0; i<4; i++){
+			Game.add(showPlayer[i]);
+			showPlayer[i].setVisible(false);
+		}
+		
+		
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
@@ -172,6 +197,9 @@ public class DicePanel extends JPanel{
 	}
 	public void setMyPlayer(int p){
 		myPlayerNum = p;
+		showPlayer[0].setVisible(true);
+		showPlayer[1].setIcon(imageRelated.getPieceImg(p));
+		showPlayer[1].setVisible(true);
 	}
 	
 	public void setStartGameButtonEnabled(boolean enabled){
@@ -335,8 +363,12 @@ public class DicePanel extends JPanel{
 		toggleDoubles.setVisible(true);
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
+		showPlayer[2].setVisible(true);
+		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
+		showPlayer[3].setVisible(true);
 		if(!isSingle)
 			actionForNotCurrentPlayer();
+			
 		
 	}
 	// In board, run thread to determine which function to perform.
@@ -416,6 +448,7 @@ public class DicePanel extends JPanel{
 	
 	private void changeTurn(){
 		turnLabel.setText("Player " + (current+1) + "'s Turn!");
+		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){
 		diceRes[0] = diceRes1;
