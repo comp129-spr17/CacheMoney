@@ -5,12 +5,14 @@ import java.awt.event.KeyListener;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GamePack.Player;
 import GamePack.PropertySpace;
+import InterfacePack.Sounds;
 import MiniGamePack.MiniGame;
 import MiniGamePack.SpammingGame;
 import MiniGamePack.ReactionGame;
@@ -18,6 +20,7 @@ import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
 public class MiniGamePanel extends JPanel{
+	private final int NUM_OF_MINIGAMES_AVAILABLE = 2;
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -28,12 +31,14 @@ public class MiniGamePanel extends JPanel{
 	private String curSpaceName;
 	private boolean isCurrent;
 	private int gameNum = 1;
+	private Random rand;
 	
 	public MiniGamePanel(boolean isSingle, DicePanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
 	{
 		init(isSingle,diceP,b, pPanel);
 	}
 	private void init(boolean isSingle, DicePanel diceP, BoardPanel b,PropertyInfoPanel pPanel){
+		rand = new Random();
 		this.isSingle = isSingle;
 		dicePanel = diceP;
 		this.boardPanel = b;
@@ -45,8 +50,9 @@ public class MiniGamePanel extends JPanel{
 		setVisible(false);
 	}
 	public void setOutputStream(OutputStream outputStream){
-		mGames[0].setOutputStream(outputStream);
-		mGames[1].setOutputStream(outputStream);
+		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){
+			mGames[i].setOutputStream(outputStream);
+		}
 	}
 	private void initMinigames(){
 		mGames = new MiniGame[3];
@@ -59,16 +65,15 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
-		mGames[0].setOwnerAndGuest(owner, guest,myPlayerNum);
-		mGames[1].setOwnerAndGuest(owner, guest, myPlayerNum);
+		gameNum = rand.nextInt(NUM_OF_MINIGAMES_AVAILABLE);
+		
+		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
-		//mGames[0].addGame();
 	}
 	public void startMiniGame(String curSpaceName){
 		this.curSpaceName = curSpaceName;
 		
 		mGames[gameNum].play();
-		//mGames[0].play();
 		(new GameEndCheck()).start();
 	}
 	public boolean isGameOver(){
@@ -78,10 +83,14 @@ public class MiniGamePanel extends JPanel{
 		return mGames[gameNum].getWinner();
 	}
 	public void switchToOther(){
-		if(isOwnerWin())
+		if(isOwnerWin()){
+			Sounds.landedOnOwnedProperty.playSound();
 			switchToProperty();
-		else
+		}
+		else{
+			Sounds.gainMoney.playSound();
 			switchToDice();
+		}
 	}
 	public void actionForOwner(){
 		mGames[gameNum].addActionToOwner();
@@ -94,12 +103,12 @@ public class MiniGamePanel extends JPanel{
 		setVisible(false);
 	}
 	public void switchToProperty(){
-		System.out.println("prop called");
+		//System.out.println("prop called");
 		cleanup();
 		pPanel.executeSwitch(curSpaceName,guest,isCurrent);
 	}
 	public void switchToDice(){
-		System.out.println("Dice called");
+		//System.out.println("Dice called");
 		cleanup();
 		dicePanel.setVisible(true);
 	}

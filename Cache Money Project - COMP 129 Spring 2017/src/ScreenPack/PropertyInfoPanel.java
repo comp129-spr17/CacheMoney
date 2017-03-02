@@ -123,7 +123,7 @@ public class PropertyInfoPanel extends JPanel{
 		//Set up them buttons
 		if(property.isOwned()){
 			addPayButton();
-			Sounds.landedOnOwnedProperty.playSound();
+			//Sounds.landedOnOwnedProperty.playSound();
 		}else{
 			addBuyButton();
 			addAuctionButton();
