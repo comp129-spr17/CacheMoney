@@ -158,7 +158,6 @@ public class BoardPanel extends JPanel{
 			add(spaces[30]);
 			for(int i=0; i<4;i++){
 				for(int j=0; j<10; j++){
-					System.out.println("i"+i +" j"+j);
 					temp = null;
 					if(i == 0){
 						if(j==0){
@@ -175,7 +174,7 @@ public class BoardPanel extends JPanel{
 						}else if (j == 5){	//Railroad
 							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine())); 
 							spaces[i*10+j] = temp;
-						}else if(j == 8){
+						}else if(j == 7){
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance");
 							spaces[i*10+j] = ws;
 						}else{
