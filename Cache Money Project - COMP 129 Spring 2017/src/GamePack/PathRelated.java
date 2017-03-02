@@ -19,6 +19,9 @@ public final class PathRelated {
 	public static PathRelated getInstance(){
 		return PATH_RELATED;
 	}
+	public String getSpaceImgPath(){
+		return SPACE_IMG_PATH;
+	}
 	public String getSpaceImgTopPath(){
 		return SPACE_IMG_TOP;
 	}

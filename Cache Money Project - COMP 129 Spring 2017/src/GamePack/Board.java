@@ -29,12 +29,12 @@ public class Board {
 	private Player[] players;
 	private boolean isDone;
 	private boolean[] propertyCheck;
-	public Board(Space[][] board, Player[] players) {
+	public Board(Space[] board, Player[] players) {
 		init(board,players);
 		
 		
 	}
-	private void init(Space[][] board, Player[] pieces){
+	private void init(Space[] board, Player[] pieces){
 		this.players = pieces;
 		boardTracker = new Space[40];
 		pieceMovingAnim = new Timer();
@@ -65,23 +65,24 @@ public class Board {
 		showMovingAnim(player, diceResult);
 	}
 	
-	private void setBoardTrack(Space[][] board){
-		//bot
-		for(int i=0; i<NUM_COL-1; i++){
-			boardTracker[i] = board[NUM_ROW-1][NUM_COL - 1 - i];
-		}
-		//left
-		for(int i=0; i<NUM_ROW-1; i++){
-			boardTracker[i+10] = board[NUM_ROW-1-i][0];
-		}
-		//top
-		for(int i=0; i<NUM_COL-1; i++){
-			boardTracker[i+20] = board[0][i];
-		}
-		//right
-		for(int i=0; i<NUM_ROW-1; i++){
-			boardTracker[i+30] = board[i][10];
-		}
+	private void setBoardTrack(Space[] board){
+		boardTracker = board;
+//		//bot
+//		for(int i=0; i<NUM_COL-1; i++){
+//			boardTracker[i] = board[NUM_ROW-1][NUM_COL - 1 - i];
+//		}
+//		//left
+//		for(int i=0; i<NUM_ROW-1; i++){
+//			boardTracker[i+10] = board[NUM_ROW-1-i][0];
+//		}
+//		//top
+//		for(int i=0; i<NUM_COL-1; i++){
+//			boardTracker[i+20] = board[0][i];
+//		}
+//		//right
+//		for(int i=0; i<NUM_ROW-1; i++){
+//			boardTracker[i+30] = board[i][10];
+//		}
 	}
 	public boolean isDoneAnimating(){
 		return isDone;
