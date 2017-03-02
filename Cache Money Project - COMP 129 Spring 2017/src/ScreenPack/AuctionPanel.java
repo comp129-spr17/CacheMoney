@@ -26,7 +26,7 @@ public class AuctionPanel extends JPanel{
 	private ArrayList<JButton> bidButtons;
 	private JPanel pricePanel;
 	private AuctionTimer auctionTimer;
-	private int timerCounter;
+	private Player curBuyer;
 
 	public AuctionPanel(Property property, Player player[], PropertyInfoPanel propertyInfoPanel)
 	{
@@ -36,7 +36,6 @@ public class AuctionPanel extends JPanel{
 		this.propertyPanel = propertyInfoPanel;
 		auctionPrice = property.getBuyingPrice();
 		curAuctionPrice = new JLabel(Integer.toString(auctionPrice));
-		timerCounter = 10;
 		init();
 	}
 
@@ -54,63 +53,74 @@ public class AuctionPanel extends JPanel{
 		pricePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(pricePanel);
 				
-		for(int i = 0; i < 4; i++)
-		{
-			bidButtons.add(new JButton("BID"));
-			bidButtons.get(i).setBackground(Color.ORANGE);
-			bidButtons.get(i).setSize(60, 40);
-			bidButtons.get(i).addMouseListener(new MouseListener() {
-
-				@Override
-				public void mouseReleased(MouseEvent e) {				
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					if(auctionTimer != null){
-						pricePanel.remove(auctionTimer.getLabel());
-						auctionTimer.resetTimer();
-					}
-					
-					
-					auctionTimer = new AuctionTimer(new TimerTask() {
-
-						@Override
-						public void run()
-						{
-							if(auctionTimer.getCounter() == 0){
-								auctionTimer.cancel();
-								endAuctionPanel();
-							}
-							
-							auctionTimer.setLabel();
-							pricePanel.repaint();
-						}
-
-					}, 0);
-					
-					pricePanel.add(auctionTimer.getLabel());
-					auctionTimer.startTimer();
-					
-					addAuctionPrice(200);
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-				}
-				@Override
-				public void mouseClicked(MouseEvent e) {
-
-				}
-			});
-
-		}
+		addButton(Color.red, player[0]);
+		addButton(Color.orange, player[1]);
+		addButton(Color.green, player[2]);
+		addButton(Color.blue, player[3]);
 	}
 
+	private void addButton(Color c, Player p)
+	{
+		JButton temp = new JButton("BID");
+		temp.setBackground(c);
+		temp.setSize(60, 40);
+		temp.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(auctionTimer != null){
+					pricePanel.remove(auctionTimer.getLabel());
+					auctionTimer.resetTimer();
+				}
+				
+				
+				auctionTimer = new AuctionTimer(new TimerTask() {
+
+					@Override
+					public void run()
+					{
+						if(auctionTimer.getCounter() == 0){
+							auctionTimer.cancel();
+							curBuyer.purchaseProperty(property.getName(), auctionPrice);
+							property.setOwned(true);
+							property.setOwner(curBuyer.getPlayerNum());
+							endAuctionPanel();
+						}
+						
+						auctionTimer.setLabel();
+						pricePanel.repaint();
+					}
+
+				}, 0);
+				
+				pricePanel.add(auctionTimer.getLabel());
+				auctionTimer.startTimer();
+				
+				addAuctionPrice(200);
+				curBuyer = p;
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+			}
+		});
+
+		bidButtons.add(temp);
+		
+	}
+	
 	private void addAuctionPrice(int cost)
 	{
 		auctionPrice += cost;
