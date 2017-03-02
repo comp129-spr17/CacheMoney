@@ -183,7 +183,7 @@ public class AuctionPanel extends JPanel{
 		bidButtons.get(0).setLocation(this.getWidth()/2-bidButtons.get(0).getWidth()/2, 5);
 		bidPrice.get(0).setLocation(bidButtons.get(0).getX(), bidButtons.get(0).getY() + bidButtons.get(0).getHeight() + 10);
 		
-		bidButtons.get(1).setLocation(this.getWidth()/4*3+5, this.getHeight()/2+5);
+		bidButtons.get(1).setLocation(this.getWidth()-bidButtons.get(1).getWidth()-5, this.getHeight()/2+5);
 		bidPrice.get(1).setLocation(bidButtons.get(1).getX(), bidButtons.get(1).getY() - bidButtons.get(1).getHeight()-10);
 
 		bidButtons.get(2).setLocation(this.getWidth()/2-bidButtons.get(2).getWidth()/2, this.getHeight()-bidButtons.get(3).getHeight()-5);
