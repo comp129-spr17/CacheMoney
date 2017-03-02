@@ -98,7 +98,7 @@ public class PropertyInfoPanel extends JPanel{
 	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
-		AP = new AuctionPanel(property, players, this);
+		AP = new AuctionPanel(property, players, this, isSingle);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
 		renderPropertyInfo();
@@ -136,14 +136,14 @@ public class PropertyInfoPanel extends JPanel{
 			a.setHorizontalAlignment(JLabel.CENTER);
 			infoPanel.add(a);
 		}
-
-		infoPanel.add(mortgagePrice);
 		mortgagePrice.setHorizontalAlignment(JLabel.CENTER);
+		infoPanel.add(mortgagePrice);
 		add(infoPanel);
 	}
 
 	public void endPropertyPanel()
 	{
+		AP = null;
 		this.removeAll();
 		this.setVisible(false);
 		panelToSwitchFrom.setVisible(true);

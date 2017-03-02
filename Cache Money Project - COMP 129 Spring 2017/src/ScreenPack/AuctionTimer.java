@@ -18,13 +18,13 @@ public class AuctionTimer extends Timer{
 		this.task = task;
 		this.delay = delay;
 		timeLabel = new JLabel();
-		timeCounter = 10;
+		timeCounter = 5;
 	}
 	
 	public void resetTimer()
 	{
 		this.cancel();
-		timeCounter = 10;
+		timeCounter = 3;
 	}
 	
 	public boolean isRunning(){
