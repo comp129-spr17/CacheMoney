@@ -13,6 +13,7 @@ import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,7 +33,7 @@ public class AuctionPanel extends JPanel{
 	private int auctionPrice;
 	private JLabel curAuctionPrice;
 	private ArrayList<JButton> bidButtons;
-	private ArrayList<JFormattedTextField> bidPrice;
+	private ArrayList<JComboBox> bidPrice;
 	private JPanel pricePanel;
 	private AuctionTimer auctionTimer;
 	private Player curBuyer;
@@ -40,19 +41,12 @@ public class AuctionPanel extends JPanel{
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 	private OutputStream outputStream;
-	private NumberFormatter numFormatter;	
 
 	public AuctionPanel(Property property, Player player[], PropertyInfoPanel propertyInfoPanel, boolean isSingle)
 	{
-		NumberFormat intFormat;
-		intFormat = NumberFormat.getIntegerInstance();
-		numFormatter = new NumberFormatter(intFormat);
-		numFormatter.setValueClass(Integer.class);
-		numFormatter.setAllowsInvalid(false);
-		numFormatter.setMinimum(0);
-		
+
 		bidButtons = new ArrayList<JButton>(4);
-		bidPrice = new ArrayList<JFormattedTextField>(4);
+		bidPrice = new ArrayList<JComboBox>(4);
 		this.property = property;
 		this.player = player;
 		this.propertyPanel = propertyInfoPanel;
@@ -90,8 +84,9 @@ public class AuctionPanel extends JPanel{
 		temp.setBackground(c);
 		temp.setSize(60, 20);	
 
-		JFormattedTextField playerText = new JFormattedTextField(numFormatter);
-		playerText.setSize(temp.getSize());
+		String bids[] = {"5", "10", "15", "25", "50", "100", "200"};
+		JComboBox bidList = new JComboBox(bids); 
+		bidList.setSize(50, 20);
 
 		temp.addMouseListener(new MouseListener() {
 
@@ -101,42 +96,40 @@ public class AuctionPanel extends JPanel{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(!playerText.getText().isEmpty())
-				{
-					if(auctionTimer != null){
-						pricePanel.remove(auctionTimer.getLabel());
-						auctionTimer.resetTimer();
-					}
+				if(auctionTimer != null){
+					pricePanel.remove(auctionTimer.getLabel());
+					auctionTimer.resetTimer();
+				}
 
 
-					auctionTimer = new AuctionTimer(new TimerTask() {
+				auctionTimer = new AuctionTimer(new TimerTask() {
 
-						@Override
-						public void run()
-						{
-							if(auctionTimer.getCounter() == 0){
-								auctionTimer.cancel();
-								purchaseProperty();
-								endAuctionPanel();
-							}
-
-							auctionTimer.setLabel();
-							pricePanel.repaint();
+					@Override
+					public void run()
+					{
+						if(auctionTimer.getCounter() == 0){
+							auctionTimer.cancel();
+							purchaseProperty();
+							endAuctionPanel();
 						}
 
-					}, 0);
-
-					int bid = Integer.parseInt(playerText.getText());
-					
-					if(p.getTotalMonies() >= bid)
-					{
-						pricePanel.add(auctionTimer.getLabel());
-						auctionTimer.startTimer();
-
-						addAuctionPrice(bid);
-						curBuyer = p;
+						auctionTimer.setLabel();
+						pricePanel.repaint();
 					}
+
+				}, 0);
+
+				int bid = Integer.parseInt((String)bidList.getSelectedItem());
+
+				if(p.getTotalMonies() >= bid)
+				{
+					pricePanel.add(auctionTimer.getLabel());
+					auctionTimer.startTimer();
+
+					addAuctionPrice(bid);
+					curBuyer = p;
 				}
+
 
 			}
 
@@ -154,7 +147,7 @@ public class AuctionPanel extends JPanel{
 		});
 
 		bidButtons.add(temp);
-		bidPrice.add(playerText);
+		bidPrice.add(bidList);
 
 	}
 
@@ -187,17 +180,17 @@ public class AuctionPanel extends JPanel{
 		curAuctionPrice.setHorizontalAlignment(JLabel.CENTER);
 		pricePanel.add(curAuctionPrice);
 
-		bidButtons.get(0).setLocation(this.getWidth()/4*3+5, this.getHeight()/2+5);
-		bidPrice.get(0).setLocation(bidButtons.get(0).getX(), bidButtons.get(0).getY() - bidButtons.get(0).getHeight()-10);
+		bidButtons.get(0).setLocation(this.getWidth()/2-bidButtons.get(0).getWidth()/2, 5);
+		bidPrice.get(0).setLocation(bidButtons.get(0).getX(), bidButtons.get(0).getY() + bidButtons.get(0).getHeight() + 10);
+		
+		bidButtons.get(1).setLocation(this.getWidth()/4*3+5, this.getHeight()/2+5);
+		bidPrice.get(1).setLocation(bidButtons.get(1).getX(), bidButtons.get(1).getY() - bidButtons.get(1).getHeight()-10);
 
-		bidButtons.get(1).setLocation(this.getWidth()/4-bidButtons.get(1).getWidth()-2, this.getHeight()/2 + 5);
-		bidPrice.get(1).setLocation(bidButtons.get(1).getX(), bidButtons.get(1).getY()- bidButtons.get(1).getHeight() - 10);
-
-		bidButtons.get(2).setLocation(this.getWidth()/2-bidButtons.get(2).getWidth()/2, 5);
-		bidPrice.get(2).setLocation(bidButtons.get(2).getX(), bidButtons.get(2).getY() + bidButtons.get(2).getHeight() + 10);
-
-		bidButtons.get(3).setLocation(this.getWidth()/2-bidButtons.get(3).getWidth()/2, this.getHeight()-bidButtons.get(3).getHeight()-5);
-		bidPrice.get(3).setLocation(bidButtons.get(3).getX(), bidButtons.get(3).getY() - bidButtons.get(3).getHeight() - 10);
+		bidButtons.get(2).setLocation(this.getWidth()/2-bidButtons.get(2).getWidth()/2, this.getHeight()-bidButtons.get(3).getHeight()-5);
+		bidPrice.get(2).setLocation(bidButtons.get(2).getX(), bidButtons.get(2).getY() - bidButtons.get(2).getHeight() - 10);
+		
+		bidButtons.get(3).setLocation(this.getWidth()/4-bidButtons.get(3).getWidth()-2, this.getHeight()/2 + 5);
+		bidPrice.get(3).setLocation(bidButtons.get(3).getX(), bidButtons.get(3).getY()- bidButtons.get(3).getHeight() - 10);
 
 		for(int i = 0; i < bidButtons.size(); i++){
 			add(bidButtons.get(i));
