@@ -86,7 +86,7 @@ public class AuctionPanel extends JPanel{
 
 		String bids[] = {"5", "10", "15", "25", "50", "100", "200"};
 		JComboBox bidList = new JComboBox(bids); 
-		bidList.setSize(50, 20);
+		bidList.setSize(80, 20);
 
 		temp.addMouseListener(new MouseListener() {
 
@@ -189,7 +189,7 @@ public class AuctionPanel extends JPanel{
 		bidButtons.get(2).setLocation(this.getWidth()/2-bidButtons.get(2).getWidth()/2, this.getHeight()-bidButtons.get(3).getHeight()-5);
 		bidPrice.get(2).setLocation(bidButtons.get(2).getX(), bidButtons.get(2).getY() - bidButtons.get(2).getHeight() - 10);
 		
-		bidButtons.get(3).setLocation(this.getWidth()/4-bidButtons.get(3).getWidth()-2, this.getHeight()/2 + 5);
+		bidButtons.get(3).setLocation(5, this.getHeight()/2 + 5);
 		bidPrice.get(3).setLocation(bidButtons.get(3).getX(), bidButtons.get(3).getY()- bidButtons.get(3).getHeight() - 10);
 
 		for(int i = 0; i < bidButtons.size(); i++){
