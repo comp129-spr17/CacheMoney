@@ -140,7 +140,7 @@ public final class MoneyLabels {
 		{
 			if(b > 17)
 			{
-				xmark[b].setBounds(300, 150 + (50*(b-11)),100,100);
+				xmark[b].setBounds(700, 50 + (50*(b-17)),100,100);
 				if (b == 18)
 				{
 					playerLabels[3].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 95, 200, 100);
@@ -150,7 +150,7 @@ public final class MoneyLabels {
 			}
 			else
 			{
-				xmark[b].setBounds(300, 50 + (50*(b-11)),100,100);
+				xmark[b].setBounds(500, 50 + (50*(b-11)),100,100);
 				if (b == 12)
 				{
 					playerLabels[2].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 95, 200, 100);
@@ -163,7 +163,7 @@ public final class MoneyLabels {
 		{
 			if (b > 5)
 			{
-				xmark[b].setBounds(100, 150 + (50*(b+1)),100,100);
+				xmark[b].setBounds(300, 50 + (50*(b-5)),100,100);
 				if (b == 6)
 				{
 					playerLabels[1].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 95, 200, 100);
@@ -185,9 +185,9 @@ public final class MoneyLabels {
 	}
 	private void setPositionOfBalances() {
 		totalmonnies[0].setBounds(75,40, 100, 100);
-		totalmonnies[1].setBounds(75,440, 100, 100);
-		totalmonnies[2].setBounds(275,40, 100, 100);
-		totalmonnies[3].setBounds(275,440, 100, 100);
+		totalmonnies[1].setBounds(275,40, 100, 100);
+		totalmonnies[2].setBounds(475,40, 100, 100);
+		totalmonnies[3].setBounds(675,40, 100, 100);
 	}
 	private void assignMoneyToLabels(int i) {
 		fivehunneds[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));

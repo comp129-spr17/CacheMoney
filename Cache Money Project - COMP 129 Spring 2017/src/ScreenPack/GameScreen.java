@@ -352,7 +352,7 @@ public class GameScreen extends JFrame{
 	{
 		playerInfo = new JDialog();
 		playerInfo.setLayout(null);
-		playerInfo.setSize(450,900);
+		playerInfo.setSize(850,1000);
         playerInfo.setTitle("Player Info!");
         insets = playerInfo.getInsets();
 	}
