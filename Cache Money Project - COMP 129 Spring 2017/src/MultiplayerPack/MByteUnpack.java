@@ -147,24 +147,23 @@ public final class MByteUnpack {
 	 * @param result
 	 * @return 0,1,2
 	 */
-	public int isSpecalCode(byte[] result){
-		resetAndReceive(result);
-		try {
-			code = dInputStream.readInt();
-			if(UNI.DISCONNECTED == code)
+	public int isSpecalCode(int result){
+		
+//		try {
+			if(UNI.DISCONNECTED == result)
 				return 1;
-			else if(UNI.HOST_DISCONNECTED==code)
+			else if(UNI.HOST_DISCONNECTED==result)
 				return 2;
-			else if(UNI.START_GAME == code)
+			else if(UNI.START_GAME == result)
 				return 3;
 			
 				
 			return 0;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return 0;
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+////		}
+//		return 0;
 	}
 	
 }

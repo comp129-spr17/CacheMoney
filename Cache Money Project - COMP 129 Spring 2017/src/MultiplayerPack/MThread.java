@@ -32,6 +32,9 @@ public class MThread extends Thread{
 	private int myNum;
 	private ArrayList<Integer> startPlayers;
 	private sun.misc.Queue<byte[]> sendingQ;
+	private byte[] tempMsg;
+	private int specialCode;
+	private boolean exitCode;
 	public MThread(Socket s, ArrayList<OutputStream> usersOutput, String hostName, Integer playerNum, ArrayList<Integer> startPlayers){
 		socket = s;
 		this.playerNum = playerNum;
@@ -67,36 +70,39 @@ public class MThread extends Thread{
 	}
 	public void run(){
 		try{
-			int specialCode;
 			sendPlayerNum(mPack.packPlayerNumber(ufs.PLAYER_NUM, usersOutput.size()-1));
 			myNum = playerNum;
 			startPlayers.add(usersOutput.size()-1);
 			
 			playerNum = playerNum.intValue()+1;
-			while(true){
+			while(!exitCode){
 				getMsg();
-				specialCode = mUnpack.isSpecalCode(msg);
 				
+				specialCode = mUnpack.isSpecalCode(msg[3]);
 				if(specialCode == 0){
-					showMsgToUsers(sendingQ.dequeue());
+					showMsgToUsers(msg);
 				}
 				else if(specialCode == 1){
+					// To do : get rid of all the property this owner owns.
 					disconnectPlayer = (Integer)mUnpack.getResult(msg).get(1);
 					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
 					usersOutput.set(disconnectPlayer,null);
 					disconnectedUser();
 					showMsgToUsers(mPack.packPlayerNumber(ufs.DISCONNECTED, disconnectPlayer));
+					exitCode = true;
 					break;
 				}else if(specialCode == 2){
 					System.out.println("Server is disconnected");
 					usersOutput.set(myNum,null);
 					startPlayers.set(myNum, null);
 					showMsgToUsers(mPack.packSimpleRequest(ufs.HOST_DISCONNECTED));
+					exitCode = true;
 					break;
 				}else {
 //					System.out.println("Called");
 					showMsgToUsers(mPack.packTotalPlayerPlaying(ufs.START_GAME_REPLY, startPlayers));
 				}
+				
 					
 				
 			}
@@ -105,11 +111,21 @@ public class MThread extends Thread{
 		}finally{
 		}
 	}
+	class SendBack extends Thread{
+		public void run(){
+			while(!exitCode){
+				while(!sendingQ.isEmpty()){
+					
+				}
+			}
+			
+		}
+	}
 	private void getMsg(){
 		try {
 			
 			readFromUser.read(msg);
-			sendingQ.enqueue(msg);
+//			sendingQ.enqueue(msg);
 		} catch (IOException e) {
 		}
 	}

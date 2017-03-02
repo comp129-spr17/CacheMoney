@@ -197,7 +197,6 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(buyButton.isEnabled()) {
-					Sounds.money.playSound();
 					
 					if(currentPlayer.getTotalMonies() >= property.getBuyingPrice()) {
 						purchaseProp(property.getName(), property.getBuyingPrice(), currentPlayer.getPlayerNum());
@@ -259,7 +258,6 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(payButton.isEnabled()){
-					Sounds.money.playSound();
 					if(property instanceof UtilityProperty)
 					{				
 						int cost = property.getRent()*dicePanel.getSumOfDie();
@@ -365,11 +363,15 @@ public class PropertyInfoPanel extends JPanel{
 			sendMessageToServer(mPack.packPayRent(unicode.PROPERTY_RENT_PAY, amount,owner));
 	}
 	public void purchaseProperty(String propertyName, int buyingPrice, int playerNum){
+
+		Sounds.money.playSound();
 		currentPlayer.purchaseProperty(propertyName, buyingPrice);
 		property.setOwner(playerNum);
 		property.setOwned(true);
 	}
 	public void payForRent(int amount, int owner){
+
+		Sounds.money.playSound();
 		currentPlayer.pay(amount);
 		players[owner].earnMonies(amount);
 	}
