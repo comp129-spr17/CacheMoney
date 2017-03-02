@@ -173,7 +173,7 @@ public class GameScreen extends JFrame{
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		myComp_height = (int)screenSize.getDisplayMode().getHeight();
-		setSize(myComp_height + 115, myComp_height - 100);
+		setSize(myComp_height + 125, myComp_height - 100);
 	}
 	
 	
@@ -359,7 +359,7 @@ public class GameScreen extends JFrame{
 	public void addShowMoneyButton()
 	{
 		showInfo = new JButton("SHOW ME THE $$$");
-		showInfo.setBounds(1020, 450, 150, 50);
+		showInfo.setBounds(myComp_height - 55, 450, 150, 50);
 		showInfo.setVisible(true);
 	}
 	
