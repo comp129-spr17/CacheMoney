@@ -157,7 +157,7 @@ public class SpammingGame extends MiniGame{
 	}
 	private void playSpamming(){
 		addKeyListener();
-		for(int i=10; i>=0; i--){
+		for(int i=10; i>0; i--){
 			lbls.get(8).setText(""+i);
 			try {
 				Thread.sleep(1000);

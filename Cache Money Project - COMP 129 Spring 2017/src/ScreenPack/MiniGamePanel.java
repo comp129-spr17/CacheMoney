@@ -13,6 +13,7 @@ import GamePack.Player;
 import GamePack.PropertySpace;
 import MiniGamePack.MiniGame;
 import MiniGamePack.SpammingGame;
+import MiniGamePack.ReactionGame;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
@@ -42,10 +43,12 @@ public class MiniGamePanel extends JPanel{
 	}
 	public void setOutputStream(OutputStream outputStream){
 		mGames[0].setOutputStream(outputStream);
+		mGames[1].setOutputStream(outputStream);
 	}
 	private void initMinigames(){
 		mGames = new MiniGame[3];
 		mGames[0] = new SpammingGame(this,isSingle);
+		mGames[1] = new ReactionGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum){
 		dicePanel.setVisible(false);
@@ -53,11 +56,15 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		mGames[0].setOwnerAndGuest(owner, guest,myPlayerNum);
-		mGames[0].addGame();
+		mGames[1].setOwnerAndGuest(owner, guest, myPlayerNum);
+		mGames[1].addGame();
+		//mGames[0].addGame();
 	}
 	public void startMiniGame(String curSpaceName){
 		this.curSpaceName = curSpaceName;
-		mGames[0].play();
+		
+		mGames[1].play();
+		//mGames[0].play();
 		(new GameEndCheck()).start();
 	}
 	public boolean isGameOver(){
