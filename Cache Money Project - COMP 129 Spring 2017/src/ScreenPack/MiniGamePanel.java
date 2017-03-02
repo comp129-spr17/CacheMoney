@@ -26,6 +26,7 @@ public class MiniGamePanel extends JPanel{
 	private MiniGame[] mGames;
 	private PropertyInfoPanel pPanel;
 	private String curSpaceName;
+	private boolean isCurrent;
 	public MiniGamePanel(boolean isSingle, DicePanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
 	{
 		init(isSingle,diceP,b, pPanel);
@@ -50,11 +51,12 @@ public class MiniGamePanel extends JPanel{
 		mGames[0] = new SpammingGame(this,isSingle);
 		mGames[1] = new ReactionGame(this, isSingle);
 	}
-	public void openMiniGame(Player owner, Player guest, int myPlayerNum){
+	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
 		dicePanel.setVisible(false);
 		setVisible(true);
 		this.owner = owner;
 		this.guest = guest;
+		this.isCurrent = isCurrent;
 		mGames[0].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[1].setOwnerAndGuest(owner, guest, myPlayerNum);
 		mGames[1].addGame();
@@ -92,7 +94,7 @@ public class MiniGamePanel extends JPanel{
 	public void switchToProperty(){
 		System.out.println("prop called");
 		cleanup();
-		pPanel.executeSwitch(curSpaceName,guest);
+		pPanel.executeSwitch(curSpaceName,guest,isCurrent);
 	}
 	public void switchToDice(){
 		System.out.println("Dice called");

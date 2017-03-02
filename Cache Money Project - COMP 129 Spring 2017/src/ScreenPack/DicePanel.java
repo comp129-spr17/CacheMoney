@@ -602,10 +602,10 @@ public class DicePanel extends JPanel{
 					
 				}else{
 					if(propertyPanel.isPropertyOwned(curSpaceName)){
-						mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], myPlayerNum);
+						mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], myPlayerNum,current == myPlayerNum);
 						mGamePanel.startMiniGame(curSpaceName);
 					}else{
-						propertyPanel.executeSwitch(curSpaceName, players[current]);
+						propertyPanel.executeSwitch(curSpaceName, players[current], current == myPlayerNum);
 					}
 				}
 				
