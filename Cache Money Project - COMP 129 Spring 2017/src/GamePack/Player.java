@@ -188,7 +188,7 @@ public final class Player {
 						}
 					}
 				}
-				if (cost < 500 && cost >= 100)
+				if (cost >= 100)
 				{
 					modMoney = cost / 100;
 					for (int i = 0; i < modMoney; i++)
@@ -201,7 +201,7 @@ public final class Player {
 						}
 					}
 				}
-				if (cost < 100 && cost >= 50)
+				if (cost >= 50)
 				{
 					modMoney = cost / 50;
 					for (int i = 0; i < modMoney; i++)
@@ -214,7 +214,7 @@ public final class Player {
 						}
 					}
 				}
-				if (cost < 50 && cost >= 20)
+				if (cost >= 20)
 				{
 					modMoney = cost / 20;
 					for (int i = 0; i < modMoney; i++)
@@ -227,7 +227,7 @@ public final class Player {
 						}
 					}
 				}
-				if (cost < 20 && cost >= 10)
+				if (cost >= 10)
 				{
 					modMoney = cost / 10;
 					for (int i = 0; i < modMoney; i++)
@@ -240,7 +240,7 @@ public final class Player {
 						}
 					}
 				}
-				if (cost < 10 && cost >= 5)
+				if (cost >= 5)
 				{
 					modMoney = cost / 5;
 					for (int i = 0; i < modMoney; i++)
@@ -253,7 +253,7 @@ public final class Player {
 						}
 					}
 				}
-				if (cost < 5 && cost >= 1)
+				if (cost >= 1)
 				{
 					for (int i = 0; i < cost; i++)
 					{
