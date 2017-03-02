@@ -69,7 +69,7 @@ public class AuctionPanel extends JPanel{
 				public void mousePressed(MouseEvent e) {
 					if(auctionTimer != null){
 						pricePanel.remove(auctionTimer.getLabel());
-						auctionTimer.restartTimer();
+						auctionTimer.resetTimer();
 					}
 					
 					
@@ -78,6 +78,11 @@ public class AuctionPanel extends JPanel{
 						@Override
 						public void run()
 						{
+							if(auctionTimer.getCounter() == 0){
+								auctionTimer.cancel();
+								endAuctionPanel();
+							}
+							
 							auctionTimer.setLabel();
 							pricePanel.repaint();
 						}
@@ -120,6 +125,13 @@ public class AuctionPanel extends JPanel{
 		renderInterface();
 		propertyPanel.setVisible(false);
 		this.setVisible(true);
+	}
+	
+	public void endAuctionPanel()
+	{
+		this.setVisible(false);
+		this.removeAll();
+		propertyPanel.endPropertyPanel();
 	}
 
 	private void renderInterface()
