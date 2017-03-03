@@ -66,6 +66,8 @@ public class GameScreen extends JFrame{
 	private JCheckBox muteMusic;
 	private JCheckBox muteSounds;
 	private int scheduledMusic;
+	private ImageRelated piecePictures;
+	private JLabel[] playerPieceDisplay;
 	
 	
 	
@@ -118,13 +120,27 @@ public class GameScreen extends JFrame{
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
-		
-		
+		playerPieceDisplay = new JLabel[4];
 		
 		createPlayers();
 		init();
 		setGameScreenBackgroundColor();
-		
+		initializePiecePictures();
+	}
+	
+	private void initializePiecePictures()
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			playerPieceDisplay[i] = new JLabel();
+		}
+		piecePictures = ImageRelated.getInstance();
+		for (int x = 0; x < 4; x++)
+		{
+			playerPieceDisplay[x].setIcon(piecePictures.getPieceImg(x));
+			playerPieceDisplay[x].setBounds((playerInfo.getWidth()/13) + (x * 200),playerInfo.getHeight()/2 - 80,100,100);
+			playerInfo.add(playerPieceDisplay[x]);
+		}
 	}
 	private void exitSetting(boolean isHost){
 		if(isSingle)
@@ -358,8 +374,13 @@ public class GameScreen extends JFrame{
 	}
 	public void addShowMoneyButton()
 	{
-		showInfo = new JButton("SHOW ME THE $$$");
-		showInfo.setBounds(myComp_height - 55, 450, 150, 50);
+		JLabel buttonLabel1 = new JLabel("SHOW ME");
+		JLabel buttonLabel2 = new JLabel("THE $$$");
+		showInfo = new JButton();
+		showInfo.setLayout(new BorderLayout());
+		showInfo.setBounds(myComp_height - 55, myComp_height/2 - 150, 100, 50);
+		showInfo.add(BorderLayout.NORTH, buttonLabel1);
+		showInfo.add(BorderLayout.SOUTH, buttonLabel2);
 		showInfo.setVisible(true);
 	}
 	
