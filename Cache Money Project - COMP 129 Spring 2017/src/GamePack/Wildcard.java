@@ -31,31 +31,8 @@ public class Wildcard extends JLabel{
 		this.setBounds(x, y, scaledSizeW, scaledSizeH);
 		this.setVisible(true);
 		
-		this.addMouseListener(new MouseAdapter(){
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(cardType == 0){
-					windowTitle = "Chance!";
-					try {
-						cardIcon = new ImageIcon(ImageIO.read(new File("src/Images/chance_Icon.png")).getScaledInstance(107, 122, Image.SCALE_DEFAULT));
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					
-				}
-				else{
-					windowTitle = "Community Chest!";
-					try {
-						cardIcon = new ImageIcon(ImageIO.read(new File("src/Images/community_Icon.png")).getScaledInstance(122, 107, Image.SCALE_DEFAULT));
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					
-				}
-				
-                JOptionPane.showMessageDialog(parent, message, windowTitle, JOptionPane.INFORMATION_MESSAGE, cardIcon);
-			}
-		});
+		
+		}
 	}
 	
-}
+
