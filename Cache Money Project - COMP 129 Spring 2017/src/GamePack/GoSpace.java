@@ -20,4 +20,9 @@ public class GoSpace extends Space {
 		super.receivePiece(piece, n);
 		
 	}
+	
+	public void sendToGo(Piece piece, int n) {
+		super.receivePiece(piece, n);
+	}
+	
 }
