@@ -149,11 +149,7 @@ public class BoxSelectGame extends MiniGame{
 					break;
 				}
 			}
-			
-			
-			
-			
-			
+			lbls.get(1).setText("");
 			if (surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1]){ // if owner got lucky
 				lbls.get(2).setText("OWNER WINS!");
 				winner = true;
@@ -225,10 +221,13 @@ public class BoxSelectGame extends MiniGame{
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
+				if (turnNum > 1){
+					return;
+				}
 				pressed = e.getKeyChar();
 				int chosenBoxNum = -1;
 				try{
-					chosenBoxNum = Integer.parseInt(String.valueOf(e.getKeyChar()));
+					chosenBoxNum = Integer.parseInt(String.valueOf(pressed));
 				} catch (Exception e1){
 					// do nothing here
 					return;
