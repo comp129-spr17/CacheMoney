@@ -68,9 +68,6 @@ public class ReactionGame extends MiniGame {
 				wasGoMentioned = true;
 				if (!someoneEnteredTooEarly){
 					waitForUsersToEnterChars();
-				}else{
-//					if(!isSingle)
-						
 				}
 				if(isSingle)
 					gameResult();

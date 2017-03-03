@@ -20,6 +20,9 @@ public final class UnicodeForServer {
 	public static final int REACTION_MINI_GAME_GUEST_END = 15;
 	public static final int REACTION_MINI_GAME_OWNER_END = 16;
 	public static final int RANDOM_NUM = 17;
+	public static final int BOX_MINI_GAME_SELECTED_BOXES = 18;
+	public static final int BOX_MINI_GAME_SURPRISE_BOXES = 19;
+	
 	private UnicodeForServer(){
 		
 	}

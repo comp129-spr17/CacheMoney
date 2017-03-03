@@ -108,6 +108,9 @@ public class MiniGame{
 	public void addActionToGame(boolean isOwner, double time){
 		
 	}
+	public void addActionToGame(int[] arr, int keyNum){
+		
+	}
 	public void specialEffect(){
 		
 	}

@@ -128,6 +128,25 @@ public final class MBytePack {
 		}
 		return null;
 	}
+	public byte[] packIntArray(int requestCode, int[] arr, int keyNum){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(keyNum);
+			for (int i = 0; i < arr.length; i++){
+				dOutputStream.writeInt(arr[i]);
+				System.out.println(arr[i]);
+			}
+			
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	
 	public byte[] packSimpleRequest(int requestCode){
 		try{
 			dOutputStream.writeInt(requestCode);

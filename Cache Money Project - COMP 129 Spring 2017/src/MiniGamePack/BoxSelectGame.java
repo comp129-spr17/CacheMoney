@@ -33,9 +33,7 @@ public class BoxSelectGame extends MiniGame{
 		super(miniPanel, isSingle);
 		initLabels();
 		initListener();
-		rand = new Random();
-		chosenBox = new int[2];
-		surpriseBoxes = new int[NUM_OF_BOXES];
+		initOthers();
 	}
 	
 	public void setOutputStream(OutputStream outputStream){
@@ -48,6 +46,7 @@ public class BoxSelectGame extends MiniGame{
 	}
 	public void play(){
 		super.play();
+		isGameEnded = false;
 		manageMiniPanel();
 		setTitleAndDescription("BoxSelect Game", "Select a box. Time: 10");
 		setVisibleForTitle(true);
@@ -57,9 +56,7 @@ public class BoxSelectGame extends MiniGame{
 		lblsForThis.get(3).setText("Box3");
 		
 		
-		rand = new Random();
-		chosenBox = new int[2];
-		surpriseBoxes = new int[NUM_OF_BOXES];
+		
 		turnNum = 0;
 		initGameSetting();
 		chosenBox[0] = 0;
@@ -72,6 +69,12 @@ public class BoxSelectGame extends MiniGame{
 		
 		
 		
+	}
+
+	private void initOthers() {
+		rand = new Random();
+		chosenBox = new int[2];
+		surpriseBoxes = new int[NUM_OF_BOXES];
 	}
 	
 	
@@ -131,7 +134,7 @@ public class BoxSelectGame extends MiniGame{
 	}
 	
 	public void addGame(){
-		
+		super.addGame();
 	}
 	public boolean isGameEnded(){
 		return isGameEnded;
@@ -149,31 +152,35 @@ public class BoxSelectGame extends MiniGame{
 	public void specialEffect(){
 		
 	}
+	public void addActionToGame(int[] arr, int keyNum){
+		
+		if (keyNum == 0){
+			System.out.println("GOT HERE");
+			chosenBox[0] = arr[0];
+			chosenBox[1] = arr[1];
+			incrementTurn();
+		}
+		else{
+			surpriseBoxes[0] = arr[0];
+			surpriseBoxes[1] = arr[1];
+			surpriseBoxes[2] = arr[2];
+			assignLabelsToBoxes();
+			displayWinnerAndCleanUp(false);
+		}
+	}
+	
 	
 	private void incrementTurn(){
 		turnNum += 1;
 		if (turnNum > 1){ // REVEAL CONTENTS OF BOXES
 			generateRandNumNoRepInSurpriseBoxes();
-			// SEND CONTENTS OF SURPRISE BOXES TO OTHER PLAYERS
-			for (int i = 0; i < 3; i++){
-				switch (surpriseBoxes[i]){
-				case 0:
-					lblsForThis.get(i+1).setText("BOMB");
-					break;
-				case 1:
-					lblsForThis.get(i+1).setText("CONFETTI");
-					break;
-				case 2:
-					lblsForThis.get(i+1).setText("PUPPIES");
-					break;
-				default:
-					System.out.println("BUG");
-					break;
-				}
+			if (isSingle){
+				assignLabelsToBoxes();
+				displayWinnerAndCleanUp(false);
 			}
-			
-			displayWinnerAndCleanUp(false);
-			
+			else if (isOwner){
+				sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, surpriseBoxes, 1));
+			}
 		}
 		else{
 			lblsForThis.get(0).setText("Guest's Turn");
@@ -181,6 +188,25 @@ public class BoxSelectGame extends MiniGame{
 			startDisqualifyTimer();
 		}
 		
+	}
+
+	private void assignLabelsToBoxes() {
+		for (int i = 0; i < 3; i++){
+			switch (surpriseBoxes[i]){
+			case 0:
+				lblsForThis.get(i+1).setText("BOMB");
+				break;
+			case 1:
+				lblsForThis.get(i+1).setText("CONFETTI");
+				break;
+			case 2:
+				lblsForThis.get(i+1).setText("PUPPIES");
+				break;
+			default:
+				System.out.println("BUG");
+				break;
+			}
+		}
 	}
 
 	private void displayWinnerAndCleanUp(boolean timeExpired) {
@@ -201,16 +227,14 @@ public class BoxSelectGame extends MiniGame{
 			lblsForThis.get(0).setText("GUEST WINS!");
 			winner = false;
 		}
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				removeKeyListner();
-				cleanUp();
-			}
-			
-		}, 5500);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		removeKeyListner();
+		cleanUp();
 	}
 	
 	
@@ -275,7 +299,17 @@ public class BoxSelectGame extends MiniGame{
 					}
 					if (chosenBoxNum > 0 && chosenBoxNum < 4 && chosenBox[0] != chosenBoxNum){
 						chosenBox[turnNum] = chosenBoxNum;
-						incrementTurn();
+						
+						if (isSingle){
+							incrementTurn();
+						}
+						else{
+							sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, chosenBox, 0));
+						}
+						
+						
+						
+						
 					}
 				}
 			}

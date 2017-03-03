@@ -72,7 +72,6 @@ public class DicePanel extends JPanel{
 	}
 	private void init(){
 		
-		// FOR NOW, WE'RE CREATING A NEW HOST TO SEND STUFF TO.
 		
 		// TODO: NEED A CHAT SCREEN IN THIS PANEL FOR EXTRA FIREWORKS AND SPARKLES
 		mPack = MBytePack.getInstance();
@@ -437,8 +436,11 @@ public class DicePanel extends JPanel{
 	}
 	public void actionForRemovePlayer(int i){
 		board.removePlayer(i);
-		
 	}
+	public void actionForReceiveArray(int[] arr, int keyNum){
+		mGamePanel.actionForGame(arr, keyNum);
+	}
+	
 	private void sendMessageToServer(byte[] msg, int byteSize){
 		if (outputStream != null){
 			try {
@@ -520,7 +522,7 @@ public class DicePanel extends JPanel{
 		}
 		
 
-//		sum = 0; // FOR SERVER DEBUGGIN PURPOSE
+		sum = 1; // FOR SERVER DEBUGGIN PURPOSE
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 

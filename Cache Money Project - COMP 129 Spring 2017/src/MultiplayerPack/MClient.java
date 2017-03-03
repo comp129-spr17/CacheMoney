@@ -75,7 +75,7 @@ public class MClient {
 		msgs = new byte[512];
 		initDoActions();
 	}
-	private void initDoActions(){
+	private void initDoActions(){ // ADD ACTIONS HERE 
 		doActions.put(unicode.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
 		doActions.put(unicode.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
 		doActions.put(unicode.START_GAME_REPLY, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame(result);}});
@@ -90,6 +90,8 @@ public class MClient {
 		doActions.put(unicode.REACTION_MINI_GAME_GUEST_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(false);}});
 		doActions.put(unicode.REACTION_MINI_GAME_OWNER_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(true,result);}});
 		doActions.put(unicode.REACTION_MINI_GAME_GUEST_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(false,result);}});
+		doActions.put(unicode.BOX_MINI_GAME_SELECTED_BOXES, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveArray(result);}});
+		
 		
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -217,6 +219,17 @@ public class MClient {
 		System.out.println("Got Reaction");
 		diceP.actionForReactionEnd(isOwner, (Double)result.get(1));
 	}
+	private void doReceiveArray(ArrayList<Object> result){
+		int[] arr = new int[result.size()];
+		int keyNum = (Integer)result.get(1);
+		for (int i = 2; i < result.size(); i++){
+			arr[i - 2] = (Integer)result.get(i);
+			System.out.println(arr[i  - 2]);
+		}
+		diceP.actionForReceiveArray(arr, keyNum);
+	}
+	
+	
 	private void setPlayer(int i){
 		thisPlayNum = i;
 		thisPlayer = pList[i];
