@@ -16,50 +16,39 @@ public class ReactionGame extends MiniGame {
 
 	private KeyListener listener;
 	private char pressed;
-	private ImageRelated imgs;
-	private PathRelated paths;
 	private boolean[] userPressed;
 	private double[] userTimes;
 	private boolean wasGoMentioned;
 	private long timeStarted;
 	private boolean someoneEnteredTooEarly;
 	private boolean isGameEnded;
-	
-	private void initOther(){
-		imgs = ImageRelated.getInstance();
-		paths = PathRelated.getInstance();
-	}
-	
-	
+	private Random rand;
 	public ReactionGame(JPanel miniPanel, boolean isSingle) {
 		super(miniPanel, isSingle);
-		
-		initOther();
 		initLabels();
 		initListener();
+		rand = new Random();
 	}
 	
 	private void initLabels(){
-		lbls.add(new JLabel());
-		lbls.add(new JLabel());
-		lbls.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
-		lbls.get(1).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*2/7);
-		miniPanel.add(lbls.get(0));
-		miniPanel.add(lbls.get(1));
+//		lbls.add(new JLabel());
+//		lbls.add(new JLabel());
+//		lbls.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
+//		lbls.get(1).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*2/7);
+//		miniPanel.add(lbls.get(0));
+//		miniPanel.add(lbls.get(1));
+//		setVisibleForTitle(false);
 	}
 	
 	public void play(){
 		super.play();
 		// insert game here
-		lbls.get(0).setText("REACTION GAME... wait...");
-		lbls.get(1).setText("Owner: 'q', Guest: 'p'");
-		isGameEnded = false;
-		Random rand = new Random();
-		Timer t = new Timer(); 
-		initLabels();
+		initGameSetting();
 		manageMiniPanel();
-		
-		
+		setTitleAndDescription("REACTION GAME... wait...", "Owner: 'q', Guest: 'p'");
+		setVisibleForTitle(true);
+		isGameEnded = false;
+		Timer t = new Timer(); 
 		beginReactionTimer(rand, t);
 		
 	}
@@ -95,13 +84,7 @@ public class ReactionGame extends MiniGame {
 			}
 
 			private void displayWinner() {
-				lbls.get(1).setText("");
-				if (userTimes[0] <= userTimes[1]){ // if the owner beat the guest
-					lbls.get(0).setText("OWNER WINS!");
-				}
-				else{ // guest beats the owner
-					lbls.get(0).setText("GUEST WINS!");
-				}
+				showTheWinner(userTimes[0] <= userTimes[1]);
 			}
 
 			private void waitForUsersToEnterChars() {
@@ -189,10 +172,14 @@ public class ReactionGame extends MiniGame {
 		miniPanel.removeKeyListener(listener);
 		miniPanel.setFocusable(false);
 	}
-	
+	protected void initGameSetting(){
+		super.initGameSetting();
+		miniPanel.repaint();
+		miniPanel.revalidate();
+	}
 	private void cleanUp(){
 		miniPanel.setFocusable(false);
-		miniPanel.remove(lbls.get(0));
+		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
 		isGameEnded = true;

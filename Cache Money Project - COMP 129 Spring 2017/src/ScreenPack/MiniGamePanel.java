@@ -46,6 +46,7 @@ public class MiniGamePanel extends JPanel{
 		setBounds(diceP.getBounds());
 		initMinigames();
 		setVisible(false);
+		gameNum = -1;
 	}
 	public void setOutputStream(OutputStream outputStream){
 		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){
@@ -69,8 +70,9 @@ public class MiniGamePanel extends JPanel{
 		
 		//gameNum = 2; // FORCE MINIGAME SELECT HERE
 		
-		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
-		
+//		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
+		gameNum = (gameNum + 1) % 3;
+//		gameNum = 2;
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
 	}
@@ -127,18 +129,11 @@ public class MiniGamePanel extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			if (gameNum == 0){
-				try {
-					sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				mGames[gameNum].specialEffect();
-				try {
-					sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			
+			try {
+				sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			
 			

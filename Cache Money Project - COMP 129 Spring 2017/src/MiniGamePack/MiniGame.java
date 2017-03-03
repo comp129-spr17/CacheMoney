@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.ImageRelated;
+import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
 import MultiplayerPack.MBytePack;
@@ -26,6 +28,8 @@ public class MiniGame{
 	protected int myPlayerNum;
 	protected MBytePack mPack;
 	protected UnicodeForServer unicode;
+	protected ImageRelated imgs;
+	protected PathRelated paths;
 	public MiniGame(JPanel miniPanel, boolean isSingle){
 		init(miniPanel, isSingle);
 	}
@@ -38,6 +42,29 @@ public class MiniGame{
 		this.isSingle = isSingle;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
+		imgs = ImageRelated.getInstance();
+		paths = PathRelated.getInstance();
+		haveInitLabels();
+	}
+	private void haveInitLabels(){
+		lbls.add(new JLabel("TITLE OF THE GAME"));
+		lbls.add(new JLabel("Description of the game"));
+		lbls.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
+		lbls.get(1).setBounds(dpWidth/9, dpHeight*1/7, dpWidth*5/7, dpHeight*1/7);
+		for(int i=0; i<lbls.size(); i++)
+			miniPanel.add(lbls.get(i));
+		setVisibleForTitle(false);
+	}
+	protected void setTitleAndDescription(String title, String description){
+		lbls.get(0).setText(title);
+		lbls.get(1).setText(description);
+	}
+	protected void setVisibleForTitle(boolean isVis){
+		lbls.get(0).setVisible(isVis);
+		lbls.get(1).setVisible(isVis);
+	}
+	protected void showTheWinner(boolean isOwner){
+		lbls.get(1).setText(isOwner? "Owner Wins!" : "Guest Wins!");
 	}
 	public void setOutputStream(OutputStream outputStream){
 		this.outputStream = outputStream;
@@ -68,6 +95,10 @@ public class MiniGame{
 	}
 	public void specialEffect(){
 		
+	}
+	protected void initGameSetting(){
+		for(int i=0; i<lbls.size(); i++)
+			miniPanel.add(lbls.get(i));
 	}
 	protected void sendMessageToServer(byte[] msg){
 		if (outputStream != null){

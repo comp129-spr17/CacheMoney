@@ -34,23 +34,17 @@ public class BoxSelectGame extends MiniGame{
 	private int turnNum;
 	private boolean isGameEnded;
 	private boolean winner;
-	
-	
+	private boolean isOwnerWin;
+	private ArrayList<JLabel> lblsForThis;
 	public BoxSelectGame(JPanel miniPanel, boolean isSingle) {
 		super(miniPanel, isSingle);
-		init(miniPanel, isSingle);
+		initLabels();
+		initListener();
+		rand = new Random();
+		chosenBox = new int[2];
+		surpriseBoxes = new int[NUM_OF_BOXES];
 	}
 	
-	private void init(JPanel miniPanel, boolean isSingle){
-		this.miniPanel = miniPanel;
-		lbls = new ArrayList<>();
-		size = SizeRelated.getInstance();
-		dpWidth = size.getDicePanelWidth();
-		dpHeight = size.getDicePanelHeight();
-		this.isSingle = isSingle;
-		mPack = MBytePack.getInstance();
-		unicode = UnicodeForServer.getInstance();
-	}
 	public void setOutputStream(OutputStream outputStream){
 		this.outputStream = outputStream;
 	}
@@ -61,28 +55,16 @@ public class BoxSelectGame extends MiniGame{
 	}
 	public void play(){
 		isGameEnded = false;
-		initLabels();
-		initListener();
 		manageMiniPanel();
-		
-		lbls.get(0).setText("BoxSelect Game");
-		lbls.get(1).setText("Select a box. Hope you get lucky!");
-		lbls.get(2).setText("Owner's Turn");
-		lbls.get(3).setText("Box1");
-		lbls.get(4).setText("Box2");
-		lbls.get(5).setText("Box3");
-		
-		rand = new Random();
-		chosenBox = new int[2];
-		surpriseBoxes = new int[NUM_OF_BOXES];
+		setTitleAndDescription("BoxSelect Game", "Select a box. Hope you get lucky!");
+		setVisibleForTitle(true);
+		lblsForThis.get(0).setText("Owner's Turn");
+		lblsForThis.get(1).setText("Box1");
+		lblsForThis.get(2).setText("Box2");
+		lblsForThis.get(3).setText("Box3");
 		turnNum = 0;
 		chosenBox[0] = -1;
-		
-		
-		
-		
-		
-		
+		initGameSetting();
 	}
 	
 	private void manageMiniPanel() {
@@ -94,19 +76,19 @@ public class BoxSelectGame extends MiniGame{
 	}
 	
 	private void initLabels(){
-		for (int i = 0; i < 6; i++){
-			lbls.add(new JLabel());	
+		lblsForThis = new ArrayList<>();
+		for (int i = 0; i < 4; i++){
+			lblsForThis.add(new JLabel());	
 		}
-		lbls.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
 		lbls.get(1).setBounds(dpWidth/8, 0, dpWidth, dpHeight*2/7);
-		lbls.get(2).setBounds(dpWidth/8, 0, dpWidth, dpHeight*3/7);
-		lbls.get(3).setBounds(dpWidth*1/8, 0, dpWidth, dpHeight*5/7);
-		lbls.get(4).setBounds(dpWidth*7/16, 0, dpWidth, dpHeight*5/7);
-		lbls.get(5).setBounds(dpWidth*6/8, 0, dpWidth, dpHeight*5/7);
-		for (int i = 0; i < 6; i++){
-			miniPanel.add(lbls.get(i));
-		}
-		
+		lblsForThis.get(0).setBounds(dpWidth/8, 0, dpWidth, dpHeight*3/7);
+		lblsForThis.get(1).setBounds(dpWidth*1/8, 0, dpWidth, dpHeight*5/7);
+		lblsForThis.get(2).setBounds(dpWidth*7/16, 0, dpWidth, dpHeight*5/7);
+		lblsForThis.get(3).setBounds(dpWidth*6/8, 0, dpWidth, dpHeight*5/7);
+		setTitleAndDescription("BoxSelect Game", "Select a box. Hope you get lucky!");
+		initGameSetting();
+
+		setVisibleForTitle(false);
 	}
 	
 	public void addGame(){
@@ -136,28 +118,24 @@ public class BoxSelectGame extends MiniGame{
 			for (int i = 0; i < 3; i++){
 				switch (surpriseBoxes[i]){
 				case 0:
-					lbls.get(i + 3).setText("BOMB");
+					lblsForThis.get(i+1).setText("BOMB");
 					break;
 				case 1:
-					lbls.get(i + 3).setText("CONFETTI");
+					lblsForThis.get(i+1).setText("CONFETTI");
 					break;
 				case 2:
-					lbls.get(i + 3).setText("PUPPIES");
+					lblsForThis.get(i+1).setText("PUPPIES");
 					break;
 				default:
 					System.out.println("THERE'S A BUG UH OH");
 					break;
 				}
 			}
-			lbls.get(1).setText("");
-			if (surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1]){ // if owner got lucky
-				lbls.get(2).setText("OWNER WINS!");
-				winner = true;
-			}
-			else{// if guest got lucky
-				lbls.get(2).setText("GUEST WINS!");
-				winner = false;
-			}
+			lblsForThis.get(0).setText("");
+			isOwnerWin = surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1];
+			showTheWinner(isOwnerWin);
+			winner = isOwnerWin;
+			
 			Timer t = new Timer();
 			t.schedule(new TimerTask(){
 
@@ -172,8 +150,8 @@ public class BoxSelectGame extends MiniGame{
 			
 		}
 		else{
-			lbls.get(2).setText("Guest's Turn");
-			lbls.get(chosenBox[0] + 2).setText("");
+			lblsForThis.get(0).setText("Guest's Turn");
+			lblsForThis.get(chosenBox[0]).setText("");
 		}
 		
 	}
@@ -200,10 +178,16 @@ public class BoxSelectGame extends MiniGame{
 		miniPanel.removeKeyListener(listener);
 		miniPanel.setFocusable(false);
 	}
-	
+	protected void initGameSetting(){
+		super.initGameSetting();
+		for(int i=0; i<lblsForThis.size(); i++)
+			miniPanel.add(lblsForThis.get(i));
+		miniPanel.repaint();
+		miniPanel.revalidate();
+	}
 	private void cleanUp(){
 		miniPanel.setFocusable(false);
-		miniPanel.remove(lbls.get(0));
+		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
 		isGameEnded = true;
