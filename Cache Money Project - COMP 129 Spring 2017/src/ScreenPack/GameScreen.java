@@ -142,13 +142,6 @@ public class GameScreen extends JFrame{
 			playerInfo.add(playerPieceDisplay[x]);
 		}
 	}
-	private void addPlayerPieces()
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			playerInfo.add(playerPieceDisplay[i]);
-		}
-	}
 	private void exitSetting(boolean isHost){
 		if(isSingle)
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
