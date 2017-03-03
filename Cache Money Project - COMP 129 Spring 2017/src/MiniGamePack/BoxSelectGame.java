@@ -12,9 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GamePack.Player;
-import GamePack.SizeRelated;
-import MultiplayerPack.MBytePack;
-import MultiplayerPack.UnicodeForServer;
 
 
 public class BoxSelectGame extends MiniGame{
@@ -28,7 +25,6 @@ public class BoxSelectGame extends MiniGame{
 	private int turnNum;
 	private boolean isGameEnded;
 	private boolean winner;
-	private boolean isOwnerWin;
 	private ArrayList<JLabel> lblsForThis;
 	private int disqualifyTimer;
 	
@@ -51,7 +47,7 @@ public class BoxSelectGame extends MiniGame{
 		this.myPlayerNum = myPlayerNum;
 	}
 	public void play(){
-		isGameEnded = false;
+		super.play();
 		manageMiniPanel();
 		setTitleAndDescription("BoxSelect Game", "Select a box. Time: 10");
 		setVisibleForTitle(true);
@@ -110,6 +106,8 @@ public class BoxSelectGame extends MiniGame{
 	
 	private void manageMiniPanel() {
 		miniPanel.addKeyListener(listener);
+		if(isUnavailableToPlay())
+			removeKeyListner();
 		miniPanel.setFocusable(true);
 		miniPanel.requestFocusInWindow();
 		miniPanel.revalidate();
@@ -208,7 +206,6 @@ public class BoxSelectGame extends MiniGame{
 
 			@Override
 			public void run() {
-				isGameEnded = true;
 				removeKeyListner();
 				cleanUp();
 			}
@@ -264,20 +261,22 @@ public class BoxSelectGame extends MiniGame{
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (turnNum > 1){
-					return;
-				}
-				pressed = e.getKeyChar();
-				int chosenBoxNum = -1;
-				try{
-					chosenBoxNum = Integer.parseInt(String.valueOf(pressed));
-				} catch (Exception e1){
-					// do nothing here
-					return;
-				}
-				if (chosenBoxNum > 0 && chosenBoxNum < 4 && chosenBox[0] != chosenBoxNum){
-					chosenBox[turnNum] = chosenBoxNum;
-					incrementTurn();
+				if(isSingle || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner)){
+					if (turnNum > 1){
+						return;
+					}
+					pressed = e.getKeyChar();
+					int chosenBoxNum = -1;
+					try{
+						chosenBoxNum = Integer.parseInt(String.valueOf(pressed));
+					} catch (Exception e1){
+						// do nothing here
+						return;
+					}
+					if (chosenBoxNum > 0 && chosenBoxNum < 4 && chosenBox[0] != chosenBoxNum){
+						chosenBox[turnNum] = chosenBoxNum;
+						incrementTurn();
+					}
 				}
 			}
 			

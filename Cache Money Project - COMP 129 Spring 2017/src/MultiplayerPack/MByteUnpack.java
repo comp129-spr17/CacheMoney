@@ -55,7 +55,14 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.SPAM_MINI_GAME_OWNER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-			
+		GetResults.put(UNI.REACTION_MINI_GAME_OWNER_EARLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.REACTION_MINI_GAME_GUEST_EARLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.REACTION_MINI_GAME_OWNER_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.REACTION_MINI_GAME_GUEST_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
@@ -122,6 +129,14 @@ public final class MByteUnpack {
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
 			
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackReactionTime(byte[] result){
+		try{
+			resultList.add(dInputStream.readDouble());
 		}
 		catch (IOException e){
 			e.printStackTrace();

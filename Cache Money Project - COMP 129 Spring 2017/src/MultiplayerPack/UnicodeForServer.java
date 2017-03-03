@@ -15,6 +15,11 @@ public final class UnicodeForServer {
 	public static final int PROPERTY_RENT_PAY = 10;
 	public static final int SPAM_MINI_GAME_GUEST = 11;
 	public static final int SPAM_MINI_GAME_OWNER = 12;
+	public static final int REACTION_MINI_GAME_GUEST_EARLY = 13;
+	public static final int REACTION_MINI_GAME_OWNER_EARLY = 14;
+	public static final int REACTION_MINI_GAME_GUEST_END = 15;
+	public static final int REACTION_MINI_GAME_OWNER_END = 16;
+	public static final int RANDOM_NUM = 17;
 	private UnicodeForServer(){
 		
 	}

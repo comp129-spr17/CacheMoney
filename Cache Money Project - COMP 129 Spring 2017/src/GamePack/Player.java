@@ -29,6 +29,7 @@ public final class Player {
 	private Player() {
 		pastPositionNumber = -1;
 		playerPositionNumber = 0;
+//		playerPositionNumber = 1; /// FOR SERVER DEBUGGING PURPOSE
 		totalmonies = 1500;
 		fivehunneds = 2;
 		hunneds = 2;

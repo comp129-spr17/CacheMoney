@@ -30,6 +30,8 @@ public class MiniGame{
 	protected UnicodeForServer unicode;
 	protected ImageRelated imgs;
 	protected PathRelated paths;
+	protected boolean isOwner;
+	protected boolean isGameEnded;
 	public MiniGame(JPanel miniPanel, boolean isSingle){
 		init(miniPanel, isSingle);
 	}
@@ -74,8 +76,15 @@ public class MiniGame{
 		this.guest = guest;
 		this.myPlayerNum = myPlayerNum;
 	}
+	protected void isOwnerSetting(){
+		isOwner = myPlayerNum == owner.getPlayerNum();
+	}
 	public void play(){
-		
+		isOwnerSetting();
+		isGameEnded = false;
+	}
+	protected boolean isUnavailableToPlay(){
+		return myPlayerNum != owner.getPlayerNum() && myPlayerNum != guest.getPlayerNum();
 	}
 	public void addGame(){
 		
@@ -91,6 +100,12 @@ public class MiniGame{
 		
 	}
 	public void addActionToGuest(){
+		
+	}
+	public void addActionToGame(boolean isOwner){
+		
+	}
+	public void addActionToGame(boolean isOwner, double time){
 		
 	}
 	public void specialEffect(){

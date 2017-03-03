@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,11 +18,9 @@ public class SpammingGame extends MiniGame{
 
 	private int ownerCount;
 	private int guestCount;
-	private boolean isGameEnded;
+	
 	private char pressed;
 	private KeyListener listener;
-	private boolean isWin;
-	private boolean isOwner;
 	private ArrayList<JLabel> lblsForThis;
 	public SpammingGame(JPanel miniPanel, boolean isSingle){
 		super(miniPanel, isSingle);
@@ -30,9 +30,6 @@ public class SpammingGame extends MiniGame{
 	}
 	public void play(){
 		super.play();
-		if(myPlayerNum != owner.getPlayerNum() && myPlayerNum != guest.getPlayerNum())
-			removeKeyListner();
-		isOwner = myPlayerNum == owner.getPlayerNum();
 		playSpamming();
 	}
 	private void initListener(){
@@ -107,9 +104,7 @@ public class SpammingGame extends MiniGame{
 		return isGameEnded;
 	}
 	public boolean getWinner(){
-		isWin = ownerCount >= guestCount;
-		cleanUp();
-		return isWin;
+		return ownerCount >= guestCount;
 	}
 	private void addKeyListener(){
 		miniPanel.addKeyListener(listener);
@@ -153,10 +148,12 @@ public class SpammingGame extends MiniGame{
 		ownerCount = 0;
 		guestCount = 0;
 		
-		isGameEnded = false;
+		isGameEnded = true;
 	}
 	private void playSpamming(){
 		addKeyListener();
+		if(isUnavailableToPlay())
+			removeKeyListner();
 		for(int i=10; i>=0; i--){
 			lblsForThis.get(6).setText(""+i);
 			try {
@@ -166,11 +163,18 @@ public class SpammingGame extends MiniGame{
 			}
 			
 		}
-		
 		specialEffect();
 		removeKeyListner();
 		showTheWinner(ownerCount >= guestCount);
-		isGameEnded = true;
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				cleanUp();
+			}
+			
+		}, 5500);
 	}
 	public void moveBomb(int i){
 		lblsForThis.get(7).setLocation(lblsForThis.get(7).getX()+i, dpHeight*2/7+70);

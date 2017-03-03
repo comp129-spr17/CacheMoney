@@ -86,6 +86,10 @@ public class MClient {
 		doActions.put(unicode.PROPERTY_RENT_PAY, new DoAction(){public void doAction(ArrayList<Object> result){doPayRent(result);}});
 		doActions.put(unicode.SPAM_MINI_GAME_GUEST, new DoAction(){public void doAction(ArrayList<Object> result){doSpamGuestAction();}});
 		doActions.put(unicode.SPAM_MINI_GAME_OWNER, new DoAction(){public void doAction(ArrayList<Object> result){doSpamOwnerAction();}});
+		doActions.put(unicode.REACTION_MINI_GAME_OWNER_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(true);}});
+		doActions.put(unicode.REACTION_MINI_GAME_GUEST_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(false);}});
+		doActions.put(unicode.REACTION_MINI_GAME_OWNER_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(true,result);}});
+		doActions.put(unicode.REACTION_MINI_GAME_GUEST_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(false,result);}});
 		
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -205,6 +209,13 @@ public class MClient {
 	}
 	private void doSpamGuestAction(){
 		diceP.actionForSpamGuest();
+	}
+	private void doReactionEarlyAction(boolean isOwner){
+		diceP.actionForReactionEarly(isOwner);
+	}
+	private void doReactionEndAction(boolean isOwner, ArrayList<Object> result){
+		System.out.println("Got Reaction");
+		diceP.actionForReactionEnd(isOwner, (Double)result.get(1));
 	}
 	private void setPlayer(int i){
 		thisPlayNum = i;

@@ -115,6 +115,19 @@ public final class MBytePack {
 		}
 		return null;
 	}
+	public byte[] packReactionTime(int requestCode, double time){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeDouble(time);
+			
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public byte[] packSimpleRequest(int requestCode){
 		try{
 			dOutputStream.writeInt(requestCode);

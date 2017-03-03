@@ -424,10 +424,16 @@ public class DicePanel extends JPanel{
 		propertyPanel.endPropertyPanel();
 	}
 	public void actionForSpamOwner(){
-		mGamePanel.actionForOwner();;
+		mGamePanel.actionForOwner();
 	}
 	public void actionForSpamGuest(){
 		mGamePanel.actionForGuest();
+	}
+	public void actionForReactionEarly(boolean isOwner){
+		mGamePanel.actionForGame(isOwner);
+	}
+	public void actionForReactionEnd(boolean isOwner, double time){
+		mGamePanel.actionForGame(isOwner, time);
 	}
 	public void actionForRemovePlayer(int i){
 		board.removePlayer(i);
@@ -513,14 +519,12 @@ public class DicePanel extends JPanel{
 			numOfDoublesInRow = 0;
 		}
 		
-		
+
+//		sum = 0; // FOR SERVER DEBUGGIN PURPOSE
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
 		}
-		
-//		sendMessageToServer("Player " + (current + 1) + " rolled " + result[0] + " and " + result[1] + "!" , true);
-		
 		board.movePiece(isSame ? previous : current, sum);
 		previous = current;
 		//System.out.println(previous+":"+current+":"+isSame);

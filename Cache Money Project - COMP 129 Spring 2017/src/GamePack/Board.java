@@ -53,6 +53,8 @@ public class Board {
 	}
 	public void placePieceToFirst(int i){
 		boardTracker[0].receivePiece(players[i].getPiece(), i);
+		
+		
 	}
 	public void placePiecesToFirst(int numPlayer){
 		this.numPlayers = numPlayer;
@@ -67,22 +69,6 @@ public class Board {
 	
 	private void setBoardTrack(Space[] board){
 		boardTracker = board;
-//		//bot
-//		for(int i=0; i<NUM_COL-1; i++){
-//			boardTracker[i] = board[NUM_ROW-1][NUM_COL - 1 - i];
-//		}
-//		//left
-//		for(int i=0; i<NUM_ROW-1; i++){
-//			boardTracker[i+10] = board[NUM_ROW-1-i][0];
-//		}
-//		//top
-//		for(int i=0; i<NUM_COL-1; i++){
-//			boardTracker[i+20] = board[0][i];
-//		}
-//		//right
-//		for(int i=0; i<NUM_ROW-1; i++){
-//			boardTracker[i+30] = board[i][10];
-//		}
 	}
 	public boolean isDoneAnimating(){
 		return isDone;
