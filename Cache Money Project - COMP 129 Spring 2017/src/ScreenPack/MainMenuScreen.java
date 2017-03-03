@@ -18,7 +18,8 @@ public class MainMenuScreen {
 	private Font mainfont;
 	private JPanel mainPanel;
 	private JFrame mainmenuframe;
-	private JButton GameButton;
+	private JButton SinglePButton;
+	private JButton MultiPButton;
 	private JLabel HelloThere;
 	private JButton ExitButton;
 	private JButton InstructionButton;
@@ -38,7 +39,8 @@ public class MainMenuScreen {
 		mainfont = new Font("Serif", Font.PLAIN, 18);
 		mainPanel = new JPanel(null);
 		mainmenuframe = new JFrame("Main Menu");
-		GameButton = new JButton("Game Screen");
+		MultiPButton = new JButton("Multiplayer");
+		SinglePButton = new JButton("Single Player");
 		HelloThere = new JLabel("NEED A TITLE", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		InstructionButton = new JButton("Instructions");
@@ -54,7 +56,7 @@ public class MainMenuScreen {
 	}
 	
 	private void addMouseListen(){
-		GameButton.addMouseListener(new MouseListener() {
+		SinglePButton.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -80,7 +82,39 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
 				//GameScreen gameScreen = new GameScreen();
-				displaySingleMultiplayerDialogBox();
+				startSinglePlayer();
+				
+			}
+
+		});
+		MultiPButton.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e){
+
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
+				//GameScreen gameScreen = new GameScreen();
+				AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+				displayHostOrClientDialogBox(mwr);
 				
 			}
 
@@ -159,18 +193,21 @@ public class MainMenuScreen {
 		mainmenuframe.add(mainPanel);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
-		mainmenuframe.setSize(500,450);
+		mainmenuframe.setSize(500,500);
 		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
 		HelloThere.setBounds(100,50,300,50);
 		mainPanel.add(HelloThere);
-		GameButton.setFont(mainfont);
-		GameButton.setBounds(175,150,150,50);
-		mainPanel.add(GameButton);
+		SinglePButton.setFont(mainfont);
+		SinglePButton.setBounds(175,150,150,50);
+		mainPanel.add(SinglePButton);
+		MultiPButton.setFont(mainfont);
+		MultiPButton.setBounds(175,225,150,50);
+		mainPanel.add(MultiPButton);
 		InstructionButton.setFont(mainfont);
-		InstructionButton.setBounds(175,225,150,50);
+		InstructionButton.setBounds(175,300,150,50);
 		mainPanel.add(InstructionButton);
 		ExitButton.setFont(mainfont);
-		ExitButton.setBounds(175,300,150,50);
+		ExitButton.setBounds(175,375,150,50);
 		mainPanel.add(ExitButton);
 	}
 	
@@ -180,6 +217,25 @@ public class MainMenuScreen {
 		mainPanel.setBackground(menuBackgroundColor);
 	}
 	
+	private void startSinglePlayer() {
+		String gNumP;
+		while(getNumPlayers()){
+			Sounds.buttonConfirm.playSound();
+			gNumP = txtNumP.getText();
+			if(isValidNum(gNumP)){
+				hideAndDisposeMainMenuScreen();
+				GameScreen gameScreen = new GameScreen(true);
+				gameScreen.setNumPlayer(Integer.parseInt(gNumP));
+				return;
+			}else{
+				JOptionPane.showMessageDialog(null, "The number of players must be between 2 and 4 inclusive.", "Invalid Number of Players!", JOptionPane.OK_OPTION);
+				Sounds.buttonCancel.playSound();
+			}
+			
+			
+		}
+		Sounds.buttonCancel.playSound();
+	}
 	
 	private void displaySingleMultiplayerDialogBox() {
 		AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();

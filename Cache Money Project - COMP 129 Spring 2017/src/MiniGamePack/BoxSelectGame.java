@@ -16,12 +16,6 @@ import GamePack.SizeRelated;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
-/*
- * THIS IS A TEMPLATE TO CREATE A MINIGAME
- * THIS WILL NOT BE USED IN THE FINAL PRODUCT
- * THIS IS JUST A REFERENCE IF YOU'D LIKE TO CREATE A NEW MINIGAME
- * YOU STILL HAVE TO ADD YOUR CLASS TO MINIGAMEPANEL.JAVA 
- */
 
 public class BoxSelectGame extends MiniGame{
 
@@ -36,6 +30,9 @@ public class BoxSelectGame extends MiniGame{
 	private boolean winner;
 	private boolean isOwnerWin;
 	private ArrayList<JLabel> lblsForThis;
+	private int disqualifyTimer;
+	
+	
 	public BoxSelectGame(JPanel miniPanel, boolean isSingle) {
 		super(miniPanel, isSingle);
 		initLabels();
@@ -56,15 +53,59 @@ public class BoxSelectGame extends MiniGame{
 	public void play(){
 		isGameEnded = false;
 		manageMiniPanel();
-		setTitleAndDescription("BoxSelect Game", "Select a box. Hope you get lucky!");
+		setTitleAndDescription("BoxSelect Game", "Select a box. Time: 10");
 		setVisibleForTitle(true);
 		lblsForThis.get(0).setText("Owner's Turn");
 		lblsForThis.get(1).setText("Box1");
 		lblsForThis.get(2).setText("Box2");
 		lblsForThis.get(3).setText("Box3");
+		
+		
+		rand = new Random();
+		chosenBox = new int[2];
+		surpriseBoxes = new int[NUM_OF_BOXES];
 		turnNum = 0;
-		chosenBox[0] = -1;
 		initGameSetting();
+		chosenBox[0] = 0;
+		chosenBox[1] = 0;
+		surpriseBoxes[0] = 0;
+		disqualifyTimer = 0;
+		
+		startDisqualifyTimer();
+		
+		
+		
+		
+	}
+	
+	
+	private void startDisqualifyTimer(){
+		if (disqualifyTimer > 0){
+			disqualifyTimer = 10;
+			lbls.get(1).setText("Select a box. Time: " + (disqualifyTimer));
+			return;
+		}
+		disqualifyTimer = 10;
+		lbls.get(1).setText("Select a box. Time: " + (disqualifyTimer));
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+			@Override
+			public void run() {
+				for (disqualifyTimer = 10; disqualifyTimer > 0; disqualifyTimer--){
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					if (turnNum > 1){
+						return;
+					}
+					lbls.get(1).setText("Select a box. Time: " + (disqualifyTimer - 1));
+				}
+				displayWinnerAndCleanUp(true);
+			}
+			
+		}, 0);
 	}
 	
 	private void manageMiniPanel() {
@@ -115,6 +156,7 @@ public class BoxSelectGame extends MiniGame{
 		turnNum += 1;
 		if (turnNum > 1){ // REVEAL CONTENTS OF BOXES
 			generateRandNumNoRepInSurpriseBoxes();
+			// SEND CONTENTS OF SURPRISE BOXES TO OTHER PLAYERS
 			for (int i = 0; i < 3; i++){
 				switch (surpriseBoxes[i]){
 				case 0:
@@ -127,33 +169,51 @@ public class BoxSelectGame extends MiniGame{
 					lblsForThis.get(i+1).setText("PUPPIES");
 					break;
 				default:
-					System.out.println("THERE'S A BUG UH OH");
+					System.out.println("BUG");
 					break;
 				}
 			}
-			lblsForThis.get(0).setText("");
-			isOwnerWin = surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1];
-			showTheWinner(isOwnerWin);
-			winner = isOwnerWin;
 			
-			Timer t = new Timer();
-			t.schedule(new TimerTask(){
-
-				@Override
-				public void run() {
-					isGameEnded = true;
-					removeKeyListner();
-					cleanUp();
-				}
-				
-			}, 5500);
+			displayWinnerAndCleanUp(false);
 			
 		}
 		else{
 			lblsForThis.get(0).setText("Guest's Turn");
 			lblsForThis.get(chosenBox[0]).setText("");
+			startDisqualifyTimer();
 		}
 		
+	}
+
+	private void displayWinnerAndCleanUp(boolean timeExpired) {
+		lbls.get(1).setText("");
+		if (timeExpired && turnNum == 1){
+			lblsForThis.get(0).setText("OWNER WINS!");
+			winner = true;
+		}
+		else if (timeExpired){
+			lblsForThis.get(0).setText("GUEST WINS!");
+			winner = false;
+		}
+		else if (surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1]){ // if owner got lucky
+			lblsForThis.get(0).setText("OWNER WINS!");
+			winner = true;
+		}
+		else{// if guest got lucky
+			lblsForThis.get(0).setText("GUEST WINS!");
+			winner = false;
+		}
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				isGameEnded = true;
+				removeKeyListner();
+				cleanUp();
+			}
+			
+		}, 5500);
 	}
 	
 	
@@ -186,7 +246,6 @@ public class BoxSelectGame extends MiniGame{
 		miniPanel.revalidate();
 	}
 	private void cleanUp(){
-		miniPanel.setFocusable(false);
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
