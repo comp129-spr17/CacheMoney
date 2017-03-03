@@ -89,7 +89,7 @@ public class ReactionGame extends MiniGame {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				System.out.println("DISMISS MINIGAME PANEL HERE");
+				//System.out.println("DISMISS MINIGAME PANEL HERE");
 				removeKeyListner();
 				cleanUp();
 			}
@@ -143,12 +143,12 @@ public class ReactionGame extends MiniGame {
 		}
 		userPressed[num] = true;
 		if (wasGoMentioned){
-			System.out.println(player + " INPUTTED");
+			//System.out.println(player + " INPUTTED");
 			userTimes[num] = ((System.currentTimeMillis() - timeStarted) / 1000.0);
-			System.out.println("Time: " + userTimes[num] + " seconds.");
+			//System.out.println("Time: " + userTimes[num] + " seconds.");
 		}
 		else{
-			System.out.println(player + " INPUT TOO EARLY!");
+			//System.out.println(player + " INPUT TOO EARLY!");
 			lbls.get(0).setText(player + " INPUT TOO EARLY!");
 			userTimes[num] = 420; // larger arbitrary value
 			someoneEnteredTooEarly = true;

@@ -13,14 +13,12 @@ import javax.swing.JPanel;
 import GamePack.Player;
 import GamePack.PropertySpace;
 import InterfacePack.Sounds;
-import MiniGamePack.MiniGame;
-import MiniGamePack.SpammingGame;
-import MiniGamePack.ReactionGame;
+import MiniGamePack.*;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
 public class MiniGamePanel extends JPanel{
-	private final int NUM_OF_MINIGAMES_AVAILABLE = 2;
+	private final int NUM_OF_MINIGAMES_AVAILABLE = 3;
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -55,9 +53,11 @@ public class MiniGamePanel extends JPanel{
 		}
 	}
 	private void initMinigames(){
-		mGames = new MiniGame[3];
+		// ADD MINIGAMES HERE
+		mGames = new MiniGame[NUM_OF_MINIGAMES_AVAILABLE];
 		mGames[0] = new SpammingGame(this,isSingle);
 		mGames[1] = new ReactionGame(this, isSingle);
+		mGames[2] = new BoxSelectGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
 		dicePanel.setVisible(false);
@@ -65,7 +65,11 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
-		gameNum = rand.nextInt(NUM_OF_MINIGAMES_AVAILABLE);
+		//gameNum = rand.nextInt(NUM_OF_MINIGAMES_AVAILABLE);
+		
+		//gameNum = 2; // FORCE MINIGAME SELECT HERE
+		
+		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
 		
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
