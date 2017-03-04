@@ -91,7 +91,7 @@ public class SpammingGame extends MiniGame{
 	}
 	public void addGame(){
 		super.addGame();
-		setTitleAndDescription("SPAMMING GAME!", "Owner will spam q and guest will spam p");
+		setTitleAndDescription("SPAMMING GAME!", "Owner spams: 'q', guest spams: 'p'");
 		setVisibleForTitle(true);
 		
 		lblsForThis.get(10).setIcon(imgs.getPieceImg(owner.getPlayerNum()));
