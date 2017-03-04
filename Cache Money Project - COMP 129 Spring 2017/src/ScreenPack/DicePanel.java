@@ -443,6 +443,9 @@ public class DicePanel extends JPanel{
 	public void actionForReceiveIntBoolean(int decision, boolean isOwner){
 		mGamePanel.actionForGame(decision, isOwner);
 	}
+	public void actionForReceiveInteger(int num){
+		mGamePanel.actionForGame(num);
+	}
 	private void sendMessageToServer(byte[] msg, int byteSize){
 		if (outputStream != null){
 			try {
@@ -524,7 +527,7 @@ public class DicePanel extends JPanel{
 		}
 		
 
-//		sum = 0; // FOR SERVER DEBUGGIN PURPOSE
+		sum = 1; // FOR SERVER DEBUGGIN PURPOSE
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 

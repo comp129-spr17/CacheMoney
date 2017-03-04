@@ -2,6 +2,7 @@ package MiniGamePack;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +24,8 @@ public class ReactionGame extends MiniGame {
 	private long timeStarted;
 	private boolean someoneEnteredTooEarly;
 	private boolean receivedResultFromServer;
+	private ArrayList<JLabel> lblsForThis;
+	private int timeUntilReact;
 	public ReactionGame(JPanel miniPanel, boolean isSingle) {
 		super(miniPanel, isSingle);
 		initOthers();
@@ -40,25 +43,17 @@ public class ReactionGame extends MiniGame {
 		// insert game here
 		initGameSetting();
 		manageMiniPanel();
-		setTitleAndDescription("REACTION GAME... wait...", "Owner: 'q', Guest: 'p'");
+		setTitleAndDescription("Reaction Game!", "Owner press: 'q', Guest press: 'p'");
 		setVisibleForTitle(true);
-		Timer t = new Timer(); 
-		beginReactionTimer(rand, t);
 		
+		init();
 	}
 
 
-	private void beginReactionTimer(Random rand, Timer t) {
+	private void beginReactionTimer() {
 		
-		userTimes[0] = 42; // arbitrary value
-		userTimes[1] = 42;
-		someoneEnteredTooEarly = false;
-		userPressed[0] = false;
-		userPressed[1] = false;
-		userPressedDoubleCheck[0] = false;
-		userPressedDoubleCheck[1] = false;
-		wasGoMentioned = false;
-
+		
+		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 
 			@Override
@@ -73,23 +68,39 @@ public class ReactionGame extends MiniGame {
 					waitForServerResult();
 					gameResult();
 				}
-					
-				
 			}
+		}, timeUntilReact);
+	}
 
-			
-			
-		}, 5555);
-//		rand.nextInt(7777) + 777; ->>>>>>>>>> we need to seriously think about these random values. 
+	private void init() {
+		
+		
+		userTimes[0] = 42; // arbitrary value
+		userTimes[1] = 42;
+		someoneEnteredTooEarly = false;
+		userPressed[0] = false;
+		userPressed[1] = false;
+		userPressedDoubleCheck[0] = false;
+		userPressedDoubleCheck[1] = false;
+		wasGoMentioned = false;
+		
+		if (!isSingle && isOwner){
+			sendMessageToServer(mPack.packIntValue(unicode.GENERIC_SEND_INTEGER, rand.nextInt(7777) + 1500));
+		}
+		else if (isSingle){
+			beginReactionTimer();
+		}
+		
+		
 	}
 	private void gameResult(){
 		displayWinner();
+		
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//System.out.println("DISMISS MINIGAME PANEL HERE");
 		removeKeyListner();
 		cleanUp();
 	}
@@ -104,11 +115,14 @@ public class ReactionGame extends MiniGame {
 	}
 	private void displayWinner() {
 		System.out.println("Owner : "+userTimes[0] + ", Guest : "+userTimes[1]);
+		lblsForThis.get(3).setBounds(userTimes[0] <= userTimes[1] ? dpWidth*1/20 : dpWidth*4/9, dpHeight*1/10,dpWidth*4/9 , dpHeight*4/7);
+		lblsForThis.get(0).setText("");
+		
 		showTheWinner(userTimes[0] <= userTimes[1]);
 	}
 
 	private void waitForUsersToEnterChars() {
-		lbls.get(0).setText("PRESS A KEY NOW!!!!!!");
+		lblsForThis.get(0).setText("GOOOOOOOOOOOO!!!");
 		Timer c = new Timer();
 		timeStarted = System.currentTimeMillis();
 		for (int i = 0; i < 5 && (!userPressed[0] || !userPressed[1]); i++){
@@ -128,10 +142,32 @@ public class ReactionGame extends MiniGame {
 		miniPanel.addKeyListener(listener);
 		if(isUnavailableToPlay())
 			removeKeyListner();
+		
+		initLabels();
+		
 		miniPanel.setFocusable(true);
 		miniPanel.requestFocusInWindow();
 		miniPanel.revalidate();
 		miniPanel.repaint();
+	}
+
+	private void initLabels() {
+		lblsForThis = new ArrayList<>();
+		lblsForThis.add(new JLabel("wait for it..."));
+		lblsForThis.get(0).setBounds(dpWidth*3/9, dpHeight*2/7+20, dpWidth*4/9, dpHeight*1/7);
+		miniPanel.add(lblsForThis.get(0));
+		
+		lblsForThis.add(new JLabel(imgs.getPieceImg(owner.getPlayerNum())));
+		lblsForThis.get(1).setBounds(0, dpHeight*2/7+70, 100, 100);
+		miniPanel.add(lblsForThis.get(1));
+		
+		lblsForThis.add(new JLabel(imgs.getPieceImg(guest.getPlayerNum())));
+		lblsForThis.get(2).setBounds(dpWidth-100, dpHeight*2/7+70, 100, 100);
+		miniPanel.add(lblsForThis.get(2));
+		
+		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniReactGamePath()+"cake.png", 60, 93)));
+		lblsForThis.get(3).setBounds(dpWidth*1/4, dpHeight*3/7, dpWidth*1/2, dpHeight*3/7);
+		miniPanel.add(lblsForThis.get(3));
 	}
 	
 	public void addGame(){
@@ -168,6 +204,14 @@ public class ReactionGame extends MiniGame {
 	public void addActionToGame(boolean isOwner){
 		actionForTooEarly(isOwner, isOwner?0:1);
 	}
+	
+	public void addSyncedRandomNumber(int num){
+		timeUntilReact = num;
+		beginReactionTimer();
+	}
+	
+	
+	
 	public void addActionToGame(boolean isOwner, double time){
 		userTimes[isOwner?0:1] = time;
 		userPressedDoubleCheck[isOwner?0:1] = true;

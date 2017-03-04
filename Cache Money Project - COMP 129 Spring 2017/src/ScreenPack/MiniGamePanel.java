@@ -46,7 +46,8 @@ public class MiniGamePanel extends JPanel{
 		setBounds(diceP.getBounds());
 		initMinigames();
 		setVisible(false);
-		gameNum = -1;
+//		gameNum = -1;
+		gameNum = 0;
 	}
 	public void setOutputStream(OutputStream outputStream){
 		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){
@@ -114,6 +115,9 @@ public class MiniGamePanel extends JPanel{
 	}
 	public void actionForGame(int decision, boolean isOwner){
 		mGames[gameNum].addActionToGame(decision, isOwner);
+	}
+	public void actionForGame(int num){
+		mGames[gameNum].addSyncedRandomNumber(num);
 	}
 	private void cleanup(){
 		removeAll();

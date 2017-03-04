@@ -146,6 +146,19 @@ public final class MBytePack {
 		
 		return null;
 	}
+	public byte[] packIntValue(int requestCode, int num){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(num);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	public byte[] packIntBoolean(int requestCode, int select, boolean isOwner){
 		try{
 			dOutputStream.writeInt(requestCode);

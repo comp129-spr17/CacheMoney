@@ -114,6 +114,9 @@ public class MiniGame{
 	public void addActionToGame(int[] arr, int keyNum){
 		
 	}
+	public void addSyncedRandomNumber(int num){
+		
+	}
 	public void addActionToGame(int decision, boolean isOwner){
 		
 	}
