@@ -88,6 +88,7 @@ public class ReactionGame extends MiniGame {
 			sendMessageToServer(mPack.packIntValue(unicode.GENERIC_SEND_INTEGER, rand.nextInt(7777) + 1500));
 		}
 		else if (isSingle){
+			timeUntilReact = rand.nextInt(7777) + 1500;
 			beginReactionTimer();
 		}
 		
