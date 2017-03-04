@@ -14,11 +14,19 @@ public final class ImageRelated {
 	private final static ImageRelated IMAGE_RELATED = new ImageRelated();
 	private PathRelated pathRelated;
 	private ImageIcon[] pieces;
+	private ImageIcon[] rsps;
 	public ImageRelated(){
-		pieces = new ImageIcon[4];
 		pathRelated = PathRelated.getInstance();
+		initImages();
+	}
+	private void initImages(){
+		pieces = new ImageIcon[4];
 		for(int i=0; i<4; i++)
 			pieces[i] = resizeImage(pathRelated.getPieceImgPath()+i+i+".png", 100, 100);
+		rsps = new ImageIcon[8];
+		for(int i=0; i<8; i++)
+			rsps[i] = resizeImage(pathRelated.getMiniRspGamePath()+i+".png", 100, 100);
+		
 	}
 	public static ImageRelated getInstance(){
 		return IMAGE_RELATED;
@@ -38,5 +46,8 @@ public final class ImageRelated {
 	}
 	public ImageIcon getPieceImg(int i){
 		return pieces[i];
+	}
+	public ImageIcon getRspImg(int i){
+		return rsps[i];
 	}
 }

@@ -12,7 +12,8 @@ public final class PathRelated {
 	private final static String PIECE_PATH="src/PieceImages/";
 	private final static String IMG_PATH="src/Images/";
 	private final static String MINI_IMG_PATH = "src/MiniGameImages/";
-	
+	private final static String MINI_SPAM_IMG_PATH = MINI_IMG_PATH + "spam/";
+	private final static String MINI_RSP_IMG_PATH = MINI_IMG_PATH + "rsp/";
 	private PathRelated(){
 		
 	}
@@ -46,7 +47,10 @@ public final class PathRelated {
 	public String getPieceImgPath(){
 		return PIECE_PATH;
 	}
-	public String getMiniGamePath(){
-		return MINI_IMG_PATH;
+	public String getMiniSpamGamePath(){
+		return MINI_SPAM_IMG_PATH;
+	}
+	public String getMiniRspGamePath(){
+		return MINI_RSP_IMG_PATH;
 	}
 }

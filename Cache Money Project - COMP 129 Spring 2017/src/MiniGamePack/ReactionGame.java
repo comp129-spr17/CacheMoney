@@ -22,13 +22,11 @@ public class ReactionGame extends MiniGame {
 	private boolean wasGoMentioned;
 	private long timeStarted;
 	private boolean someoneEnteredTooEarly;
-	private Random rand;
 	private boolean receivedResultFromServer;
 	public ReactionGame(JPanel miniPanel, boolean isSingle) {
 		super(miniPanel, isSingle);
 		initOthers();
 		initListener();
-		rand = new Random();
 	}
 	
 	private void initOthers(){

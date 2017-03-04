@@ -66,6 +66,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.BOX_MINI_GAME_SELECTED_BOXES, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArray(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UNI.RSP_MINI_GAME_DECISION, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntBoolean(result);
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
@@ -151,6 +153,16 @@ public final class MByteUnpack {
 			sizeOfArray = dInputStream.readInt();
 			for(int i=0; i<sizeOfArray; i++)
 				resultList.add(dInputStream.readInt());
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackIntBoolean(byte[] result){
+		System.out.println("Received");
+		try{
+			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readBoolean());
 		}
 		catch(IOException e){
 			e.printStackTrace();

@@ -22,6 +22,8 @@ public final class UnicodeForServer {
 	public static final int RANDOM_NUM = 17;
 	public static final int BOX_MINI_GAME_SELECTED_BOXES = 18;
 	public static final int BOX_MINI_GAME_SURPRISE_BOXES = 19;
+	public static final int RSP_MINI_GAME_DECISION = 20;
+	
 	
 	private UnicodeForServer(){
 		

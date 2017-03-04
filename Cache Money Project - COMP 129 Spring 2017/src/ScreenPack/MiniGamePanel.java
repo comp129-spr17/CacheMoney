@@ -18,7 +18,7 @@ import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
 public class MiniGamePanel extends JPanel{
-	private final int NUM_OF_MINIGAMES_AVAILABLE = 3;
+	private final int NUM_OF_MINIGAMES_AVAILABLE = 4;
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -46,8 +46,7 @@ public class MiniGamePanel extends JPanel{
 		setBounds(diceP.getBounds());
 		initMinigames();
 		setVisible(false);
-		//gameNum = -1;
-		gameNum = 1;
+		gameNum = -1;
 	}
 	public void setOutputStream(OutputStream outputStream){
 		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){
@@ -60,6 +59,7 @@ public class MiniGamePanel extends JPanel{
 		mGames[0] = new SpammingGame(this,isSingle);
 		mGames[1] = new ReactionGame(this, isSingle);
 		mGames[2] = new BoxSelectGame(this, isSingle);
+		mGames[3] = new RockScissorPaperGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
 		dicePanel.setVisible(false);
@@ -67,13 +67,11 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
-		//gameNum = rand.nextInt(NUM_OF_MINIGAMES_AVAILABLE);
 		
 		//gameNum = 2; // FORCE MINIGAME SELECT HERE
 		
-//		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
-		gameNum = (gameNum + 1) % 3;
-		gameNum = 2;
+		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
+//		gameNum = 2;
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
 	}
@@ -114,7 +112,9 @@ public class MiniGamePanel extends JPanel{
 	public void actionForGame(int[] arr, int keyNum){
 		mGames[gameNum].addActionToGame(arr, keyNum);
 	}
-	
+	public void actionForGame(int decision, boolean isOwner){
+		mGames[gameNum].addActionToGame(decision, isOwner);
+	}
 	private void cleanup(){
 		removeAll();
 		setVisible(false);

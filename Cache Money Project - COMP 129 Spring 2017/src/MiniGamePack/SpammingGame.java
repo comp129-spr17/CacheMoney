@@ -18,7 +18,6 @@ public class SpammingGame extends MiniGame{
 
 	private int ownerCount;
 	private int guestCount;
-	
 	private char pressed;
 	private KeyListener listener;
 	private ArrayList<JLabel> lblsForThis;
@@ -72,8 +71,8 @@ public class SpammingGame extends MiniGame{
 		lblsForThis.add(new JLabel("0"));
 		lblsForThis.add(new JLabel("Time Left : "));
 		lblsForThis.add(new JLabel("6"));
-		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniGamePath()+"bomb.png", 100, 100)));
-		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniGamePath()+"explosion.png", 100, 100)));
+		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniSpamGamePath()+"bomb.png", 100, 100)));
+		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniSpamGamePath()+"explosion.png", 100, 100)));
 		lblsForThis.add(new JLabel("|"));
 		lblsForThis.add(new JLabel(""));
 		lblsForThis.add(new JLabel(""));
@@ -155,16 +154,15 @@ public class SpammingGame extends MiniGame{
 		if(isUnavailableToPlay())
 			removeKeyListner();
 		for(int i=10; i>=0; i--){
-			lblsForThis.get(6).setText(""+i);
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+			lblsForThis.get(6).setText(""+i);
 		}
-		specialEffect();
 		removeKeyListner();
+		specialEffect();
 		showTheWinner(ownerCount >= guestCount);
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){

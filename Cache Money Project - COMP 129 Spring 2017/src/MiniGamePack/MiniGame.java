@@ -3,6 +3,7 @@ package MiniGamePack;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +33,7 @@ public class MiniGame{
 	protected PathRelated paths;
 	protected boolean isOwner;
 	protected boolean isGameEnded;
+	protected Random rand;
 	public MiniGame(JPanel miniPanel, boolean isSingle){
 		init(miniPanel, isSingle);
 	}
@@ -46,6 +48,7 @@ public class MiniGame{
 		unicode = UnicodeForServer.getInstance();
 		imgs = ImageRelated.getInstance();
 		paths = PathRelated.getInstance();
+		rand = new Random();
 		haveInitLabels();
 	}
 	private void haveInitLabels(){
@@ -109,6 +112,9 @@ public class MiniGame{
 		
 	}
 	public void addActionToGame(int[] arr, int keyNum){
+		
+	}
+	public void addActionToGame(int decision, boolean isOwner){
 		
 	}
 	public void specialEffect(){

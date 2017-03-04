@@ -16,7 +16,6 @@ import GamePack.Player;
 
 public class BoxSelectGame extends MiniGame{
 
-	Random rand;
 	private final int NUM_OF_BOXES = 3;
 	private char pressed;
 	private KeyListener listener;
@@ -72,7 +71,6 @@ public class BoxSelectGame extends MiniGame{
 	}
 
 	private void initOthers() {
-		rand = new Random();
 		chosenBox = new int[2];
 		surpriseBoxes = new int[NUM_OF_BOXES];
 	}

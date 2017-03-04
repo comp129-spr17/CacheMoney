@@ -58,6 +58,7 @@ public class MClient {
 		void doAction(ArrayList<Object> result);
 	}
 	public void doAction(ArrayList<Object> result){
+		System.out.println("Receiving code : " + (Integer)result.get(0));
 		doActions.get((Integer)result.get(0)).doAction(result);
 	}
 	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException, UnknownHostException {
@@ -91,6 +92,7 @@ public class MClient {
 		doActions.put(unicode.REACTION_MINI_GAME_OWNER_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(true,result);}});
 		doActions.put(unicode.REACTION_MINI_GAME_GUEST_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(false,result);}});
 		doActions.put(unicode.BOX_MINI_GAME_SELECTED_BOXES, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArray(result);}});
+		doActions.put(unicode.RSP_MINI_GAME_DECISION, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntBoolean(result);}});
 		
 		
 	}
@@ -227,6 +229,9 @@ public class MClient {
 			System.out.println(arr[i  - 2]);
 		}
 		diceP.actionForReceiveArray(arr, keyNum);
+	}
+	private void doReceiveIntBoolean(ArrayList<Object> result){
+		diceP.actionForReceiveIntBoolean((Integer)result.get(1), (Boolean)result.get(2));
 	}
 	
 	
