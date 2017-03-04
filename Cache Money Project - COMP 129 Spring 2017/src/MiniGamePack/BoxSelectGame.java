@@ -225,14 +225,19 @@ public class BoxSelectGame extends MiniGame{
 			lblsForThis.get(0).setText("GUEST WINS!");
 			winner = false;
 		}
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		removeKeyListner();
-		cleanUp();
+		
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				removeKeyListner();
+				cleanUp();
+			}
+			
+		},5000);
+		
+		
 	}
 	
 	
@@ -304,10 +309,6 @@ public class BoxSelectGame extends MiniGame{
 						else{
 							sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, chosenBox, 0));
 						}
-						
-						
-						
-						
 					}
 				}
 			}
