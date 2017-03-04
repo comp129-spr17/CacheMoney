@@ -90,7 +90,7 @@ public class MClient {
 		doActions.put(unicode.REACTION_MINI_GAME_GUEST_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(false);}});
 		doActions.put(unicode.REACTION_MINI_GAME_OWNER_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(true,result);}});
 		doActions.put(unicode.REACTION_MINI_GAME_GUEST_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(false,result);}});
-		doActions.put(unicode.BOX_MINI_GAME_SELECTED_BOXES, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveArray(result);}});
+		doActions.put(unicode.BOX_MINI_GAME_SELECTED_BOXES, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArray(result);}});
 		
 		
 	}
@@ -219,7 +219,7 @@ public class MClient {
 		System.out.println("Got Reaction");
 		diceP.actionForReactionEnd(isOwner, (Double)result.get(1));
 	}
-	private void doReceiveArray(ArrayList<Object> result){
+	private void doReceiveIntArray(ArrayList<Object> result){
 		int[] arr = new int[result.size()];
 		int keyNum = (Integer)result.get(1);
 		for (int i = 2; i < result.size(); i++){

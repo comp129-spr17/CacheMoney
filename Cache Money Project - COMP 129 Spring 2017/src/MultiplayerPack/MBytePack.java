@@ -132,6 +132,7 @@ public final class MBytePack {
 		try{
 			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(keyNum);
+			dOutputStream.writeInt(arr.length);
 			for (int i = 0; i < arr.length; i++){
 				dOutputStream.writeInt(arr[i]);
 				System.out.println(arr[i]);

@@ -16,6 +16,7 @@ public final class MByteUnpack {
 	private UnicodeForServer UNI;
 	private int receivedCode;
 	private int code;
+	private int sizeOfArray;
 	private MByteUnpack(){
 		init();
 	}
@@ -61,7 +62,7 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.REACTION_MINI_GAME_OWNER_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.REACTION_MINI_GAME_GUEST_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);
+		GetResults.put(UNI.REACTION_MINI_GAME_GUEST_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);	
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.BOX_MINI_GAME_SELECTED_BOXES, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArray(result);
 		return cleanUpAndReturn();}});
@@ -147,9 +148,9 @@ public final class MByteUnpack {
 	public void unpackIntArray(byte[] result){
 		try{
 			resultList.add(dInputStream.readInt());
-			resultList.add(dInputStream.readInt());
-			resultList.add(dInputStream.readInt());
-			resultList.add(dInputStream.readInt());
+			sizeOfArray = dInputStream.readInt();
+			for(int i=0; i<sizeOfArray; i++)
+				resultList.add(dInputStream.readInt());
 		}
 		catch(IOException e){
 			e.printStackTrace();

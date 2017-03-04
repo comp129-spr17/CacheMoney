@@ -73,7 +73,7 @@ public class MiniGamePanel extends JPanel{
 		
 //		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
 		gameNum = (gameNum + 1) % 3;
-//		gameNum = 1;
+		gameNum = 2;
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
 	}
