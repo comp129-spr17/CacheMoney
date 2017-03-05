@@ -28,7 +28,7 @@ public class MiniGamePanel extends JPanel{
 	private PropertyInfoPanel pPanel;
 	private String curSpaceName;
 	private boolean isCurrent;
-	private int gameNum = 1;
+	private int gameNum;
 	private Random rand;
 	
 	public MiniGamePanel(boolean isSingle, DicePanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
@@ -47,7 +47,7 @@ public class MiniGamePanel extends JPanel{
 		initMinigames();
 		setVisible(false);
 //		gameNum = -1;
-		gameNum = 0;
+		gameNum = 1;
 	}
 	public void setOutputStream(OutputStream outputStream){
 		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){

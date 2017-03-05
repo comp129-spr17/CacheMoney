@@ -21,11 +21,13 @@ public class BoxSelectGame extends MiniGame{
 	private KeyListener listener;
 	private int[] chosenBox;
 	private int[] surpriseBoxes;
+	private int[] boxImageValues;
 	private int turnNum;
 	private boolean isGameEnded;
 	private boolean winner;
 	private ArrayList<JLabel> lblsForThis;
 	private int disqualifyTimer;
+	
 	
 	
 	public BoxSelectGame(JPanel miniPanel, boolean isSingle) {
@@ -50,10 +52,12 @@ public class BoxSelectGame extends MiniGame{
 		setTitleAndDescription("BoxSelect Game", "Select a box. Time: 10");
 		setVisibleForTitle(true);
 		lblsForThis.get(0).setText("Owner's Turn");
-		lblsForThis.get(1).setText("Box1");
-		lblsForThis.get(2).setText("Box2");
-		lblsForThis.get(3).setText("Box3");
 		
+		boxImageValues = this.generateRandNumNoRep(3);
+		System.out.println(boxImageValues[0]);
+		lblsForThis.get(1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[0] + 1) + ".png", 40, 40));
+		lblsForThis.get(2).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[1] + 1) + ".png", 40, 40));
+		lblsForThis.get(3).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[2] + 1) + ".png", 40, 40));
 		
 		
 		turnNum = 0;
@@ -117,7 +121,7 @@ public class BoxSelectGame extends MiniGame{
 	
 	private void initLabels(){
 		lblsForThis = new ArrayList<>();
-		for (int i = 0; i < 4; i++){
+		for (int i = 0; i < 7; i++){
 			lblsForThis.add(new JLabel());	
 		}
 		lbls.get(1).setBounds(dpWidth/8, 0, dpWidth, dpHeight*2/7);
@@ -125,6 +129,10 @@ public class BoxSelectGame extends MiniGame{
 		lblsForThis.get(1).setBounds(dpWidth*1/8, 0, dpWidth, dpHeight*5/7);
 		lblsForThis.get(2).setBounds(dpWidth*7/16, 0, dpWidth, dpHeight*5/7);
 		lblsForThis.get(3).setBounds(dpWidth*6/8, 0, dpWidth, dpHeight*5/7);
+		lblsForThis.get(4).setBounds(dpWidth*1/8, 50, dpWidth, dpHeight*5/7);
+		lblsForThis.get(5).setBounds(dpWidth*7/16, 50, dpWidth, dpHeight*5/7);
+		lblsForThis.get(6).setBounds(dpWidth*6/8, 50, dpWidth, dpHeight*5/7);
+		
 		setTitleAndDescription("BoxSelect Game", "Select a box. Hope you get lucky!");
 		initGameSetting();
 
@@ -171,7 +179,8 @@ public class BoxSelectGame extends MiniGame{
 	private void incrementTurn(){
 		turnNum += 1;
 		if (turnNum > 1){ // REVEAL CONTENTS OF BOXES
-			generateRandNumNoRepInSurpriseBoxes();
+			lblsForThis.get(chosenBox[1] + 3).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
+			surpriseBoxes = generateRandNumNoRep(surpriseBoxes.length);
 			if (isSingle){
 				assignLabelsToBoxes();
 				displayWinnerAndCleanUp(false);
@@ -182,7 +191,7 @@ public class BoxSelectGame extends MiniGame{
 		}
 		else{
 			lblsForThis.get(0).setText("Guest's Turn");
-			lblsForThis.get(chosenBox[0]).setText("");
+			lblsForThis.get(chosenBox[0] + 3).setIcon(imgs.resizeImage(paths.getPieceImgPath() + owner.getPlayerNum() + owner.getPlayerNum() + ".png", 30, 30));
 			startDisqualifyTimer();
 		}
 		
@@ -192,13 +201,13 @@ public class BoxSelectGame extends MiniGame{
 		for (int i = 0; i < 3; i++){
 			switch (surpriseBoxes[i]){
 			case 0:
-				lblsForThis.get(i+1).setText("BOMB");
+				lblsForThis.get(i+1).setIcon(imgs.resizeImage(paths.getMiniSpamGamePath() + "bomb" + ".png", 60, 60));
 				break;
 			case 1:
-				lblsForThis.get(i+1).setText("CONFETTI");
+				lblsForThis.get(i+1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "confetti" + ".png", 60, 60));
 				break;
 			case 2:
-				lblsForThis.get(i+1).setText("PUPPIES");
+				lblsForThis.get(i+1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "puppies" + ".png", 60, 60));
 				break;
 			default:
 				System.out.println("BUG");
@@ -241,20 +250,22 @@ public class BoxSelectGame extends MiniGame{
 	}
 	
 	
-	private void generateRandNumNoRepInSurpriseBoxes(){
+	private int[] generateRandNumNoRep(int size){
 		int i = 0;
+		int[] arr = new int[size];
 		boolean doIncrement = true;
-		while (i < 3){
+		while (i < size){
 			doIncrement = true;
 			int prototypeVal = rand.nextInt(NUM_OF_BOXES);
 			for (int j = 0; j < i && doIncrement; ++j){
-				doIncrement = surpriseBoxes[j] != prototypeVal;
+				doIncrement = arr[j] != prototypeVal;
 			}
 			if (doIncrement){
-				surpriseBoxes[i] = prototypeVal;
+				arr[i] = prototypeVal;
 				i += 1;
 			}
 		}
+		return arr;
 		
 	}
 	
