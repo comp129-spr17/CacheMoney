@@ -58,7 +58,10 @@ public class BoxSelectGame extends MiniGame{
 		lblsForThis.get(1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[0] + 1) + ".png", 40, 40));
 		lblsForThis.get(2).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[1] + 1) + ".png", 40, 40));
 		lblsForThis.get(3).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[2] + 1) + ".png", 40, 40));
-		
+		lblsForThis.get(1).setText("1");
+		lblsForThis.get(2).setText("2");
+		lblsForThis.get(3).setText("3");
+		lblsForThis.get(7).setIcon(imgs.resizeImage(paths.getPieceImgPath() + owner.getPlayerNum() + owner.getPlayerNum() + ".png", 30, 30));
 		
 		turnNum = 0;
 		initGameSetting();
@@ -121,7 +124,7 @@ public class BoxSelectGame extends MiniGame{
 	
 	private void initLabels(){
 		lblsForThis = new ArrayList<>();
-		for (int i = 0; i < 7; i++){
+		for (int i = 0; i < 8; i++){
 			lblsForThis.add(new JLabel());	
 		}
 		lbls.get(1).setBounds(dpWidth/8, 0, dpWidth, dpHeight*2/7);
@@ -132,6 +135,7 @@ public class BoxSelectGame extends MiniGame{
 		lblsForThis.get(4).setBounds(dpWidth*1/8, 50, dpWidth, dpHeight*5/7);
 		lblsForThis.get(5).setBounds(dpWidth*7/16, 50, dpWidth, dpHeight*5/7);
 		lblsForThis.get(6).setBounds(dpWidth*6/8, 50, dpWidth, dpHeight*5/7);
+		lblsForThis.get(7).setBounds(dpWidth*7/16, dpHeight/3, dpWidth, dpHeight*5/7);
 		
 		setTitleAndDescription("BoxSelect Game", "Select a box. Hope you get lucky!");
 		initGameSetting();
@@ -180,6 +184,7 @@ public class BoxSelectGame extends MiniGame{
 		turnNum += 1;
 		if (turnNum > 1){ // REVEAL CONTENTS OF BOXES
 			lblsForThis.get(chosenBox[1] + 3).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
+			lblsForThis.get(7).setIcon(null);
 			surpriseBoxes = generateRandNumNoRep(surpriseBoxes.length);
 			if (isSingle){
 				assignLabelsToBoxes();
@@ -192,6 +197,7 @@ public class BoxSelectGame extends MiniGame{
 		else{
 			lblsForThis.get(0).setText("Guest's Turn");
 			lblsForThis.get(chosenBox[0] + 3).setIcon(imgs.resizeImage(paths.getPieceImgPath() + owner.getPlayerNum() + owner.getPlayerNum() + ".png", 30, 30));
+			lblsForThis.get(7).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
 			startDisqualifyTimer();
 		}
 		
@@ -213,11 +219,14 @@ public class BoxSelectGame extends MiniGame{
 				System.out.println("BUG");
 				break;
 			}
+			lblsForThis.get(i + 1).setText("");
 		}
+		
 	}
 
 	private void displayWinnerAndCleanUp(boolean timeExpired) {
 		lbls.get(1).setText("");
+		
 		if (timeExpired && turnNum == 1){
 			lblsForThis.get(0).setText("OWNER WINS!");
 			winner = true;
@@ -234,7 +243,7 @@ public class BoxSelectGame extends MiniGame{
 			lblsForThis.get(0).setText("GUEST WINS!");
 			winner = false;
 		}
-		
+		turnNum = 9;
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 
@@ -289,6 +298,8 @@ public class BoxSelectGame extends MiniGame{
 	
 	
 	private void initListener(){
+		
+		
 		listener = new KeyListener() {
 			
 			@Override
@@ -300,7 +311,7 @@ public class BoxSelectGame extends MiniGame{
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(isSingle || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner)){
-					if (turnNum > 1){
+					if (turnNum > 1 ){
 						return;
 					}
 					pressed = e.getKeyChar();
