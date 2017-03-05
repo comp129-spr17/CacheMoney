@@ -237,39 +237,6 @@ public class MainMenuScreen {
 		Sounds.buttonCancel.playSound();
 	}
 	
-	private void displaySingleMultiplayerDialogBox() {
-		AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
-		String gNumP;
-		switch (mwr.askUserSingleMultiPlayer()){
-		case 0: // USER WANTED MULTIPLAYER
-			displayHostOrClientDialogBox(mwr);
-			break;
-		case 1: // USER WANTED SINGLEPLAYER
-			while(getNumPlayers()){
-				Sounds.buttonConfirm.playSound();
-				gNumP = txtNumP.getText();
-				if(isValidNum(gNumP)){
-					hideAndDisposeMainMenuScreen();
-					GameScreen gameScreen = new GameScreen(true);
-					gameScreen.setNumPlayer(Integer.parseInt(gNumP));
-					return;
-				}else{
-					JOptionPane.showMessageDialog(null, "The number of players must be between 2 and 4 inclusive.", "Invalid Number of Players!", JOptionPane.OK_OPTION);
-					Sounds.buttonCancel.playSound();
-				}
-				
-				
-			}
-			Sounds.buttonCancel.playSound();
-			break;
-		case 2:
-			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
-			break;
-		default:
-			System.out.println("***** THERE'S SOMETHING WRONG INSIDE OF GAMEBUTTON MOUSE CLICKED ASKING USER SINGLE/MULTI PLAYER");
-			break;	
-		}
-	}
 	private boolean isValidNum(String numP){
 		if(numP.length() != 1)
 			return false;
