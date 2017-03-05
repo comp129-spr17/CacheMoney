@@ -203,7 +203,14 @@ public final class MoneyLabels {
 		cash5image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/5.png"));
 		cash20image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/20.png"));
 		cash100image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/100.png"));
-		cash1image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/1.png"));
+		cash1image[i] = new JLabel(new ImageIcon("src/MoneyImages/1.png"));
+
+		cash1image[i].setBounds(200, 500, 32, 65);
+		cash20image[i].setBounds(200, 600, 32, 65);
+		cash100image[i].setBounds(200, 700, 32, 65);
+		cash5image[i].setBounds(200, 800, 32, 65);
+		cash50image[i].setBounds(200, 900, 32, 65);
+		cash500image[i].setBounds(200, 1000, 32, 65);
 	}
 	private void setFontOfMoniesAndLabels(int i) {
 		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
@@ -309,6 +316,11 @@ public final class MoneyLabels {
 			PlayerInfo.add(totalmonnies[j]);
 			PlayerInfo.add(playerLabels[j]);
 			PlayerInfo.add(cash1image[j]);
+			PlayerInfo.add(cash5image[j]);
+			PlayerInfo.add(cash20image[j]);
+			PlayerInfo.add(cash50image[j]);
+			PlayerInfo.add(cash100image[j]);
+			PlayerInfo.add(cash500image[j]);
 		}
 	}
 	private void addXMarkToPlayerInfo() {
