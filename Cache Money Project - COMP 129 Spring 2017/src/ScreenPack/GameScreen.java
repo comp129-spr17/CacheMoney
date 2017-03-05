@@ -210,7 +210,7 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 					playerInfo.setVisible(true);
-					playerInfo.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+					//playerInfo.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
