@@ -46,6 +46,7 @@ public final class MoneyLabels {
 	private JLabel[] playerLabels;
 	private Insets insets;
 	private Font numberfont;
+	private ImageIcon[] moneyImages;
 	private final static MoneyLabels MONEY_LABELS = new MoneyLabels();
 	private MoneyLabels(){
 		
@@ -87,7 +88,6 @@ public final class MoneyLabels {
 		}
 	}
 	private void setPositionOfCashLabelsBasedOnXMarkPosition(int b) {
-		Dimension size;
 		if (b == 0 || b == 6 || b == 12 || b == 18 )
 		{
 			cash500[b / 6].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
@@ -198,12 +198,12 @@ public final class MoneyLabels {
 		ones[i] = new JLabel(Integer.toString(players[i].getOnes()));
 	}
 	private void addImagesToLabels(int i) {
-		cash500image[i] = new JLabel(new ImageIcon("MoneyImages/500.png"));
-		cash50image[i] = new JLabel(new ImageIcon("MoneyImages/50.png"));
-		cash5image[i] = new JLabel(new ImageIcon("MoneyImages/5.png"));
-		cash20image[i] = new JLabel(new ImageIcon("MoneyImages/20.png"));
-		cash100image[i] = new JLabel(new ImageIcon("MoneyImages/100.png"));
-		cash1image[i] = new JLabel(new ImageIcon("MoneyImages/1.png"));
+		cash500image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/500.png"));
+		cash50image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/50.png"));
+		cash5image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/5.png"));
+		cash20image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/20.png"));
+		cash100image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/100.png"));
+		cash1image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/1.png"));
 	}
 	private void setFontOfMoniesAndLabels(int i) {
 		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
@@ -308,6 +308,7 @@ public final class MoneyLabels {
 			PlayerInfo.add(label20[j]);
 			PlayerInfo.add(totalmonnies[j]);
 			PlayerInfo.add(playerLabels[j]);
+			PlayerInfo.add(cash1image[j]);
 		}
 	}
 	private void addXMarkToPlayerInfo() {
