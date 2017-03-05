@@ -18,7 +18,7 @@ import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
 public class MiniGamePanel extends JPanel{
-	private final int NUM_OF_MINIGAMES_AVAILABLE = 4;
+	private final int NUM_OF_MINIGAMES_AVAILABLE = 5;
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -47,7 +47,7 @@ public class MiniGamePanel extends JPanel{
 		initMinigames();
 		setVisible(false);
 //		gameNum = -1;
-		gameNum = 1;
+		gameNum = 3;
 	}
 	public void setOutputStream(OutputStream outputStream){
 		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){
@@ -61,6 +61,7 @@ public class MiniGamePanel extends JPanel{
 		mGames[1] = new ReactionGame(this, isSingle);
 		mGames[2] = new BoxSelectGame(this, isSingle);
 		mGames[3] = new RockScissorPaperGame(this, isSingle);
+		mGames[4] = new EliminationGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
 		dicePanel.setVisible(false);

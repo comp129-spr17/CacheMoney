@@ -49,7 +49,7 @@ public class BoxSelectGame extends MiniGame{
 		super.play();
 		isGameEnded = false;
 		manageMiniPanel();
-		setTitleAndDescription("BoxSelect Game", "Select a box. Time: 10");
+		setTitleAndDescription("BoxSelect Game", "Select a box using the number keys. Time: 10");
 		setVisibleForTitle(true);
 		lblsForThis.get(0).setText("Owner's Turn");
 		
@@ -86,7 +86,7 @@ public class BoxSelectGame extends MiniGame{
 	private void startDisqualifyTimer(){
 		if (disqualifyTimer > 0){
 			disqualifyTimer = 10;
-			lbls.get(1).setText("Select a box. Time: " + (disqualifyTimer));
+			lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer));
 			return;
 		}
 		disqualifyTimer = 10;
