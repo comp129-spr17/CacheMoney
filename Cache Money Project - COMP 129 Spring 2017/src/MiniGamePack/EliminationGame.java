@@ -1,5 +1,6 @@
 package MiniGamePack;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,13 +22,18 @@ import MultiplayerPack.UnicodeForServer;
 public class EliminationGame extends MiniGame{
 
 	private final int MAXIMUM_TIME_REMAINING = 10;
+	private final int APPLE = 0;
+	private final int ROTTEN_APPLE = 1;
+	private final int SELECTED_APPLE = 2;
 	private int disqualifyTimer;
 	private ArrayList<JLabel> lblsForThis;
 	private int numApplesToRemove;
 	private int numApplesAvailable;
-	private boolean[] isRottenApple;
-	private int turnNum;
+	private int numApplesUserRemoved;
+	private int[] apples;
+	private boolean turnNum;
 	private boolean winner;
+	private boolean allowInput;
 	private KeyListener listener;
 	
 	
@@ -39,17 +45,21 @@ public class EliminationGame extends MiniGame{
 		isOwnerSetting();
 		isGameEnded = false;
 		
-		turnNum = 0;
+		allowInput = true;
+		turnNum = true;
+		numApplesUserRemoved = 0;
 		numApplesToRemove = 3; // THIS WILL BE RANDOM BETWEEN 2 AND 4
 		numApplesAvailable = 10; // THIS WILL BE RANDOM BETWEEN 7 AND 9
 		
-		isRottenApple = new boolean[numApplesAvailable];
+		apples = new int[numApplesAvailable];
 		
 		initLabels();
 		
-		setTitleAndDescription("Elimination Game", "Take 1-" + numApplesToRemove + " apples per turn.");
+		setTitleAndDescription("Elimination Game : " + (turnNum ? "Owner" : "Guest"), "Take 1-" + numApplesToRemove + " apples per turn.");
 		setVisibleForTitle(true);
+		initializeListener();
 		
+		miniPanel.addKeyListener(listener);
 		miniPanel.setFocusable(true);
 		miniPanel.requestFocusInWindow();
 		miniPanel.revalidate();
@@ -63,7 +73,7 @@ public class EliminationGame extends MiniGame{
 	private void startDisqualifyTimer(){
 		if (disqualifyTimer > 0){
 			disqualifyTimer = MAXIMUM_TIME_REMAINING;
-			lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer));
+			lblsForThis.get(0).setText("Do NOT take the rotten apple! Time: " + (disqualifyTimer));
 			return;
 		}
 		disqualifyTimer = MAXIMUM_TIME_REMAINING;
@@ -78,21 +88,36 @@ public class EliminationGame extends MiniGame{
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					if (turnNum > 1){
+					if (!allowInput){
 						return;
 					}
 					lblsForThis.get(0).setText("Do NOT take the rotten apple! Time: " + (disqualifyTimer - 1));
 					
 				}
-				//displayWinnerAndCleanUp(true);
 				
-				isGameEnded = true;
-				winner = true;
+				displayWinnerAndCleanUp();
+				
+				
+			}
+			
+		}, 0);
+	}
+	
+	private void displayWinnerAndCleanUp(){
+		allowInput = false;
+		winner = !turnNum;		
+		lblsForThis.get(0).setText((winner ? "OWNER" : "GUEST") + " WINS!");
+		
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
 				removeKeyListner();
 				cleanUp();
 			}
 			
-		}, 0);
+		},3000);
 	}
 	
 	private void cleanUp(){
@@ -108,11 +133,11 @@ public class EliminationGame extends MiniGame{
 	}
 	
 	private void initializeApples(){
-		for (int i = 0; i < isRottenApple.length; ++i){
-			isRottenApple[i] = false;
+		for (int i = 0; i < apples.length; ++i){
+			apples[i] = APPLE;
 		}
 		
-		isRottenApple[0] = true; // THIS WILL EVENTUALLY BE RANDOMIZED (POSITION)
+		apples[0] = ROTTEN_APPLE; // THIS WILL EVENTUALLY BE RANDOMIZED (POSITION)
 	}
 	
 	
@@ -196,6 +221,67 @@ public class EliminationGame extends MiniGame{
 		else{
 			System.out.println("WARNING: writer == null");
 		}
+	}
+	
+	private void changeTurn(){
+		turnNum = !turnNum;
+		numApplesUserRemoved = 0;
+		setTitleAndDescription("Elimination Game : " + (turnNum ? "Owner" : "Guest"), "Take 1-" + numApplesToRemove + " apples per turn.");
+		startDisqualifyTimer();
+	}
+	
+	private void initializeListener(){
+		listener = new KeyListener(){
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (!allowInput){
+					return;
+				}
+				char pressed = e.getKeyChar();
+				int chosenApple;
+				try{
+					chosenApple = Integer.parseInt(String.valueOf(pressed));
+				} catch (Exception e1){
+					if (pressed == '\n' && numApplesUserRemoved > 0){
+						changeTurn();
+					}
+					return;
+				}
+				if (chosenApple == 0){
+					return;
+				}
+				switch (apples[chosenApple - 1]){
+				case APPLE:
+					apples[chosenApple - 1] = SELECTED_APPLE;
+					lblsForThis.get(chosenApple).setText("");
+					numApplesUserRemoved += 1;
+					if (numApplesUserRemoved >= numApplesToRemove){
+						changeTurn();
+					}
+					break;
+				case ROTTEN_APPLE:
+					lblsForThis.get(chosenApple).setText("");
+					displayWinnerAndCleanUp();
+					break;
+				case SELECTED_APPLE:
+					break;
+				}
+				
+				
+			}
+			
+		};
 	}
 
 	
