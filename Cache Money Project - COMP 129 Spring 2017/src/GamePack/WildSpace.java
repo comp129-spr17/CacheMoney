@@ -1,6 +1,7 @@
 package GamePack;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 import ScreenPack.ChanceStack;
 import ScreenPack.CommunityStack;
@@ -12,16 +13,15 @@ public class WildSpace extends Space {
 	private ChanceStack chanceStack;
 	private CommunityStack communityStack;
 	private GoSpace go;
-	private Board board;
 	private Space spaces[];
 	
 	
 
-	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s) {
+	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel) {
 		super(img, name);
 		this.name = name;
-		chanceStack = new ChanceStack();
-		communityStack = new CommunityStack();
+		chanceStack = new ChanceStack(boardPanel);
+		communityStack = new CommunityStack(boardPanel);
 		go  = (GoSpace) gospace;
 		spaces = s;
 	}
