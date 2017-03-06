@@ -10,7 +10,7 @@ public class CommunityStack extends JPanel{
 	int cardDrawn;
 	
 	
-	public CommunityStack(){
+	public CommunityStack(JPanel boardPanel){
 		initStack();
 	}
 	
