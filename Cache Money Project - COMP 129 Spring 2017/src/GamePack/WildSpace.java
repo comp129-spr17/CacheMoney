@@ -17,10 +17,10 @@ public class WildSpace extends Space {
 	
 	
 
-	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel) {
+	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel, JPanel dicePanel) {
 		super(img, name);
 		this.name = name;
-		chanceStack = new ChanceStack(boardPanel);
+		chanceStack = new ChanceStack(boardPanel, dicePanel);
 		communityStack = new CommunityStack(boardPanel);
 		go  = (GoSpace) gospace;
 		spaces = s;
@@ -32,11 +32,11 @@ public class WildSpace extends Space {
 		
 		if(name == "Chance"){
 			command = chanceStack.getResultingCommand();
-			
+			//System.out.println(command);
 			if(command == "Move0"){
 					System.out.println("Advance to go!");
 					super.removePiece(piece.getPlayer());
-					//chanceStack.displayImage();
+					chanceStack.displayImage();
 					go.sendToGo(piece, piece.getPlayer());
 					playerPosition = Board.HOME;
 				}

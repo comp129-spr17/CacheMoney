@@ -1,5 +1,7 @@
 package ScreenPack;
 
+import java.awt.Color;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,18 +26,26 @@ public class ChanceStack extends JPanel{
 	ImageIcon cardIcon; 
 	
 	JPanel boardPanel;
+	JPanel dicePanel;
 	JLabel card;
 	
 	
 	Map<String,String> deck = new HashMap<String, String>();
 	
-	public ChanceStack(JPanel bp){
+	public ChanceStack(JPanel bp, JPanel dp){
 		boardPanel = bp;
+		dicePanel = dp;
 		initStack();
 	}
 	
 	private void initStack(){
 		fillDeck();
+		setLayout(new GridBagLayout());
+		this.setSize(dicePanel.getSize());
+		this.setLocation(dicePanel.getLocation());
+		this.setVisible(false);	
+		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
+		this.setBackground(boardBackgroundColor);
 	}
 	
 	private void fillDeck(){
@@ -67,20 +77,37 @@ public class ChanceStack extends JPanel{
 		    e.printStackTrace();
 		}
 		
-		Image dimg = img.getScaledInstance(350, 200, Image.SCALE_SMOOTH);
+		Image dimg = img.getScaledInstance(320, 170, Image.SCALE_SMOOTH);
 		
 		ImageIcon cardIcon = new ImageIcon(dimg);
 		
 		card.setIcon(cardIcon);
+		
+		this.add(card);
+		
 		card.setVisible(true);
 		
-		boardPanel.add(card);
+		dicePanel.setVisible(false);
 		
+		boardPanel.add(this);
+		
+		this.setVisible(true);
+		
+		try {
+		    Thread.sleep(4000);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		
+		
+		dicePanel.setVisible(true);
+		this.setVisible(false);
+	
 	}
 	
 	private int getNextCard(){
-		cardDrawn = rand.nextInt(17);//puts all cards in play 
-		//cardDrawn = 0; //only puts go to go card in play
+		//cardDrawn = rand.nextInt(17);//puts all cards in play 
+		cardDrawn = 0; //only puts go to go card in play
 		return cardDrawn;
 	}
 	
