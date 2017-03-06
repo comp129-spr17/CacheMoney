@@ -38,7 +38,7 @@ public class MathGame extends MiniGame{
 		lblsForThis.add(new JLabel("Time left : "));
 		lblsForThis.add(new JLabel("10"));
 		if(isSingle){
-			lblsForThis.add(new JLabel("Owner's turn"));
+			lblsForThis.add(new JLabel(""));
 			lblsForThis.get(7).setBounds(dpWidth*3/9, dpHeight*1/7-10, dpWidth-dpWidth*2/9, dpHeight*1/7);
 		}
 		lbls.get(1).setBounds(dpWidth*2/9, dpHeight*1/7-40, dpWidth*5/7, dpHeight*1/7);
@@ -68,13 +68,15 @@ public class MathGame extends MiniGame{
 	}
 	public void addGame(){
 		super.addGame();
+		initMathProblems();
 		setTitleAndDescription("Math Game!", "Solve more problems to win the game!");
 		setVisibleForTitle(true);
 		initGameSetting();
-		initMathProblems();
+		
 		
 	}
 	private void initMathProblems(){
+		didGetProblems = false;
 		if(isSingle){
 			for(int i=0; i<NUM_PROBLEMS; i++){
 				problems[i].setProblem();
@@ -115,7 +117,6 @@ public class MathGame extends MiniGame{
 		miniPanel.repaint();
 		miniPanel.revalidate();
 		isGameEnded = false;
-		didGetProblems = false;
 		if(isSingle)
 			isOwner = true;
 		if(!isUnavailableToPlay())
@@ -231,7 +232,7 @@ public class MathGame extends MiniGame{
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					System.out.println("WAiting");
+					System.out.println("Waiting.......");
 				}
 			}
 			
@@ -261,7 +262,7 @@ public class MathGame extends MiniGame{
 		}
 	}
 	private void forEachTurn(){
-		for(int i=30; i>=0; --i){
+		for(int i=10; i>=0; --i){
 			lblsForThis.get(6).setText(i +"");
 			try {
 				Thread.sleep(1000);

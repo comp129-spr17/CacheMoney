@@ -92,6 +92,7 @@ public class MiniGame{
 		return myPlayerNum != owner.getPlayerNum() && myPlayerNum != guest.getPlayerNum();
 	}
 	public void addGame(){
+		miniPanel.removeAll();
 		isOwnerSetting();
 	}
 	public boolean isGameEnded(){

@@ -533,7 +533,7 @@ public class DicePanel extends JPanel{
 		}
 		
 
-		sum = 0; // FOR SERVER DEBUGGIN PURPOSE
+//		sum = 0; // FOR SERVER DEBUGGIN PURPOSE
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
