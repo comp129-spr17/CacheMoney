@@ -22,7 +22,6 @@ public class ChanceStack extends JPanel{
 	
 	private void initStack(){
 		fillDeck();
-		setImage();
 	}
 	
 	private void fillDeck(){
@@ -30,7 +29,7 @@ public class ChanceStack extends JPanel{
 		deck.put("command1", "Move24"); //advance to illinois ave 
 		deck.put("command2", "Move11");//advance to st.charles place
 		deck.put("command3", "Move12");//advance token to nearest utility (defaults to electric company for now)
-		deck.put("command4", "Move5");//nearest railroad (defaults to reading now)
+		deck.put("command4", "Move5U");//nearest railroad (defaults to reading now)
 		deck.put("command5", "Get$50");//Bank pays dividend of 50
 		deck.put("command6", "Free");//Get out of jail free
 		deck.put("command7", "Back3");//Go back 3 spaces 
@@ -40,22 +39,21 @@ public class ChanceStack extends JPanel{
 		deck.put("commandb", "Move5");//Go to reading railroad
 		deck.put("commandc", "Move39");//go to board walk
 		deck.put("commandd", "Pay$Players");//pay each player 50 
-		deck.put("commande", "Get$150150");//collect 150
+		deck.put("commande", "Get$150");//collect 150
 		deck.put("commandf", "Get$100");//collect 100
 	}
 	
-	private void setImage(){
-		//System.out.println("Image here of the chance card drawn");
+	public void displayImage(){
+		//build function to display chance card image
 	}
 	
 	private int getNextCard(){
-		cardDrawn = 0;//at zero now because only advance to go functionality is implemented
+		cardDrawn = rand.nextInt(17);//at zero now because only advance to go functionality is implemented
 		return cardDrawn;
 	}
 	
 	public String getResultingCommand() {
 		cardDrawn = getNextCard();
-		//System.out.println(deck.get("command" + cardDrawn));
 		return deck.get("command" + cardDrawn);
 	}
 	
