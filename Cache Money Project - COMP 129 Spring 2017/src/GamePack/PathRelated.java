@@ -17,6 +17,7 @@ public final class PathRelated {
 	private final static String MINI_REACT_IMG_PATH = MINI_IMG_PATH + "react/";
 	private final static String MINI_BOX_IMG_PATH = MINI_IMG_PATH + "box/";
 	private final static String MINI_MATH_IMG_PATH = MINI_IMG_PATH + "math/";
+	private final static String MINI_ELIMINATION_PATH = MINI_IMG_PATH + "elimination/";
 	private PathRelated(){
 		
 	}
@@ -64,5 +65,8 @@ public final class PathRelated {
 	}
 	public String getMiniMathImgPath() {
 		return MINI_MATH_IMG_PATH;
+	}
+	public String getMiniEliminationPath() {
+		return MINI_ELIMINATION_PATH;
 	}
 }

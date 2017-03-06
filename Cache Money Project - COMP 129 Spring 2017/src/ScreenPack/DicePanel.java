@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class DicePanel extends JPanel{
+	private final boolean SERVER_DEBUG = true;
+	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
@@ -186,6 +188,11 @@ public class DicePanel extends JPanel{
 	private void addOverrideDiceRoll() {
 		this.overrideDiceRoll = new JTextField();
 		overrideDiceRoll.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*2/5, 100, 50);
+		if (!isSingle){
+			overrideDiceRoll.setEnabled(false);
+			overrideDiceRoll.setEditable(false);
+		}
+		
 		add(overrideDiceRoll);
 	}
 	
@@ -532,8 +539,10 @@ public class DicePanel extends JPanel{
 			numOfDoublesInRow = 0;
 		}
 		
-
-//		sum = 0; // FOR SERVER DEBUGGIN PURPOSE
+		if (SERVER_DEBUG){
+			sum = 1; // FOR SERVER DEBUGGIN PURPOSE
+		}
+		
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 

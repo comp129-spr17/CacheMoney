@@ -224,7 +224,7 @@ public class MClient {
 		diceP.actionForReactionEnd(isOwner, (Double)result.get(1));
 	}
 	private void doReceiveIntArray(ArrayList<Object> result){
-		int[] arr = new int[result.size()];
+		int[] arr = new int[result.size() - 2];
 		int keyNum = (Integer)result.get(1);
 		for (int i = 2; i < result.size(); i++){
 			arr[i - 2] = (Integer)result.get(i);
