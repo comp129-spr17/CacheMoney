@@ -107,13 +107,11 @@ public class EliminationGame extends MiniGame{
 						lblsForThis.get(0).setText("Do NOT take the rotten apple! Time: " + (disqualifyTimer - 1));
 					}
 				}
-				// TIME RAN OUT.
-				// TODO: SEND THIS TO SERVER!
 				if (isSingle){
 					displayWinnerAndCleanUp();
 				}
 				else{
-					sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, apples, chosenRotten - 1));
+					sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, apples, chosenRotten + 1));
 				}
 			}
 		}, 0);
