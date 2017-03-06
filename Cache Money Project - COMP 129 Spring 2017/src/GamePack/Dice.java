@@ -85,7 +85,7 @@ public class Dice {
 				for(int i=0; i<10; i++)
 				{
 					dice.setIcon(diceImages.get(getRand()));
-					Thread.sleep(100);
+					Thread.sleep(80);
 				}
 				dice.setIcon(diceImages.get(result));
 				isAnimating = false;
@@ -103,7 +103,7 @@ public class Dice {
 				for(int i=0; i<11; i++)
 				{
 					dice.setLocation(dice.getX()+1, dice.getY()-15);
-					Thread.sleep(100);
+					Thread.sleep(80);
 				}
 				isAnimating = false;
 			} catch (InterruptedException e) {

@@ -133,7 +133,7 @@ public class Board {
 					
 					try {
 						
-						Thread.sleep(200);
+						Thread.sleep(175);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

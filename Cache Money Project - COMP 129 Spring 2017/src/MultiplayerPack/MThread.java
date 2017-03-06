@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Queue;
@@ -129,13 +130,14 @@ public class MThread extends Thread{
 		} catch (IOException e) {
 		}
 	}
-	private void showMsgToUsers(byte[] msg){
+	private void showMsgToUsers(byte[] msg) throws SocketException{
 		for(OutputStream output:usersOutput){
 			try {
 				if(output != null)
 					output.write(msg);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
+				
 			}
 		}
 	}

@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true;
+	private final boolean SERVER_DEBUG = false;
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -373,7 +373,7 @@ public class DicePanel extends JPanel{
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 		showPlayer[3].setVisible(true);
 		if(!isSingle)
-			actionForNotCurrentPlayer();
+			actionForPlayers();
 			
 		
 	}
@@ -388,21 +388,13 @@ public class DicePanel extends JPanel{
 		dices[0].hideDice();
 		dices[1].hideDice();
 		propertyPanel.enableButtons();
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
 
-			@Override
-			public void run() {
-				rollButton.setVisible(true);
-				overrideDiceRoll.setVisible(true);
-				toggleDoubles.setVisible(true);
-				if(!isSingle)
-				actionForNotCurrentPlayer();
-				t.cancel();
-				t.purge();
-			}
-			
-		}, 500);
+		
+		
+		if(!isSingle){
+			actionForPlayers();
+		}
+		
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
 		if (!isDiceButtonPressed){
@@ -410,13 +402,18 @@ public class DicePanel extends JPanel{
 		}
 		
 	}
-	public void actionForNotCurrentPlayer(){
+	public void actionForPlayers(){
 		if(myPlayerNum != current){
 			rollButton.setVisible(false);
 			endTurnButton.setVisible(false);
 			revalidate();
 			repaint();
 			propertyPanel.disableButtons();
+		}
+		else{
+			rollButton.setVisible(true);
+			overrideDiceRoll.setVisible(true);
+			toggleDoubles.setVisible(true);
 		}
 	}
 	public void actionForPropertyPurchase(String propertyName, int buyingPrice, int playerNum){
@@ -519,7 +516,7 @@ public class DicePanel extends JPanel{
 
 				waitForDiceMoving();
 			}
-		}, 1200);
+		}, 900);
 	}
 	
 	private void movePiece(){
@@ -595,7 +592,7 @@ public class DicePanel extends JPanel{
 					else
 						hand[which].setLocation(sizeRelated.getDicePanelWidth()/2 -i*15, hand[which].getY() + (i < 2 ? -3 : 3));
 						
-					Thread.sleep(60);
+					Thread.sleep(40);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -640,7 +637,6 @@ public class DicePanel extends JPanel{
 			}
 			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
 				Sounds.landedOnChanceOrCommunityChest.playSound();
-				// TODO: CHANCE OR COMMUNITY CHEST EVENT HAPPEN HERE PLS
 			}
 		}
 		if (!isSame || numOfDoublesInRow >= 3){
