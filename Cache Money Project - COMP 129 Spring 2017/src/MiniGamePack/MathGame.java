@@ -270,6 +270,7 @@ public class MathGame extends MiniGame{
 				e.printStackTrace();
 			}
 		}
+		disableFunctions();
 	}
 	private void forSingleGuestTurn(){
 		isOwner = false;
