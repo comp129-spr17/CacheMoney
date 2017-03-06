@@ -119,8 +119,6 @@ public final class MBytePack {
 		try{
 			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeDouble(time);
-			
-				
 			return packResult();
 		}
 		catch (IOException e){
@@ -164,6 +162,22 @@ public final class MBytePack {
 			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(select);
 			dOutputStream.writeBoolean(isOwner);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public byte[] packMathGameAns(int requestCode, int ithProblem, int playerNum, boolean isOwner, boolean isAnswer){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(ithProblem);
+			dOutputStream.writeInt(playerNum);
+			dOutputStream.writeBoolean(isOwner);
+			dOutputStream.writeBoolean(isAnswer);
 			return packResult();
 		}
 		catch (IOException e){

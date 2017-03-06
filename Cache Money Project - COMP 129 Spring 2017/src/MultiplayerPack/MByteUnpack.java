@@ -70,6 +70,10 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.GENERIC_SEND_INTEGER, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackInteger(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UNI.MATH_MINI_GAME_RANDS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArray(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UNI.MATH_MINI_GAME_ANS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackMiniGameAns(result);
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
@@ -173,6 +177,17 @@ public final class MByteUnpack {
 	public void unpackInteger(byte[] result){
 		try{
 			resultList.add(dInputStream.readInt());
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackMiniGameAns(byte[] result){
+		try{
+			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readBoolean());
+			resultList.add(dInputStream.readBoolean());
 		}
 		catch(IOException e){
 			e.printStackTrace();

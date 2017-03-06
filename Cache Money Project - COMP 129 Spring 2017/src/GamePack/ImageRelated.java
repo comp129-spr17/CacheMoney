@@ -13,19 +13,27 @@ import javax.swing.JPanel;
 public final class ImageRelated {
 	private final static ImageRelated IMAGE_RELATED = new ImageRelated();
 	private PathRelated pathRelated;
+	private SizeRelated sizeRelated;
 	private ImageIcon[] pieces;
 	private ImageIcon[] rsps;
+	private ImageIcon[] smallPieces;
+	private ImageIcon wrongAnswer;
 	public ImageRelated(){
 		pathRelated = PathRelated.getInstance();
+		sizeRelated = SizeRelated.getInstance();
 		initImages();
 	}
 	private void initImages(){
 		pieces = new ImageIcon[4];
 		for(int i=0; i<4; i++)
 			pieces[i] = resizeImage(pathRelated.getPieceImgPath()+i+i+".png", 100, 100);
+		smallPieces = new ImageIcon[4];
+		for(int i=0; i<4; i++)
+			smallPieces[i] = resizeImage(pathRelated.getPieceImgPath()+i+i+".png", sizeRelated.getDicePanelHeight()/15, sizeRelated.getDicePanelHeight()/15);
 		rsps = new ImageIcon[8];
 		for(int i=0; i<8; i++)
 			rsps[i] = resizeImage(pathRelated.getMiniRspGamePath()+i+".png", 100, 100);
+		wrongAnswer = resizeImage(pathRelated.getMiniMathImgPath()+"x.png",sizeRelated.getDicePanelHeight()/15,sizeRelated.getDicePanelHeight()/15);
 		
 	}
 	public static ImageRelated getInstance(){
@@ -49,5 +57,11 @@ public final class ImageRelated {
 	}
 	public ImageIcon getRspImg(int i){
 		return rsps[i];
+	}
+	public ImageIcon getSmallPieceImg(int i){
+		return smallPieces[i];
+	}
+	public ImageIcon getWrongAnswer(){
+		return wrongAnswer;
 	}
 }

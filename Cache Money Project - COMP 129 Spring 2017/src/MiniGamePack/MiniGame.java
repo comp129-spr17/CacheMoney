@@ -32,6 +32,7 @@ public class MiniGame{
 	protected ImageRelated imgs;
 	protected PathRelated paths;
 	protected boolean isOwner;
+	protected boolean isGuest;
 	protected boolean isGameEnded;
 	protected Random rand;
 	public MiniGame(JPanel miniPanel, boolean isSingle){
@@ -81,16 +82,17 @@ public class MiniGame{
 	}
 	protected void isOwnerSetting(){
 		isOwner = myPlayerNum == owner.getPlayerNum();
+		isGuest = myPlayerNum == guest.getPlayerNum();
 	}
 	public void play(){
-		isOwnerSetting();
+		
 		isGameEnded = false;
 	}
 	protected boolean isUnavailableToPlay(){
 		return myPlayerNum != owner.getPlayerNum() && myPlayerNum != guest.getPlayerNum();
 	}
 	public void addGame(){
-		
+		isOwnerSetting();
 	}
 	public boolean isGameEnded(){
 		return false;
@@ -112,6 +114,12 @@ public class MiniGame{
 		
 	}
 	public void addActionToGame(int[] arr, int keyNum){
+		
+	}
+	public void addActionToGame(int[] arr){
+		
+	}
+	public void addActionToGame(int ith, int playerN, boolean isOwner, boolean isAns){
 		
 	}
 	public void addSyncedRandomNumber(int num){
