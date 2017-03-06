@@ -13,6 +13,8 @@ public final class Player {
 	private int tens;
 	private int fives;
 	private int ones;
+	private boolean isAlive;
+	private boolean alreadyDead;
 	private Piece playerpiece;
 	private boolean inJail;
 	private int playerNum;
@@ -27,6 +29,8 @@ public final class Player {
 //------------------------------------Default Constructor
 	
 	private Player() {
+		isAlive = true;
+		alreadyDead = false;
 		pastPositionNumber = -1;
 		playerPositionNumber = 0;
 //		playerPositionNumber = 1; /// FOR SERVER DEBUGGING PURPOSE
@@ -99,6 +103,14 @@ public final class Player {
 	public boolean isOn(){
 		return isOn;
 	}
+	public boolean getIsAlive()
+	{
+		return isAlive;
+	}
+	public boolean getAlreadyDead()
+	{
+		return alreadyDead;
+	}
 //----------------------------------------Sets
 	public void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
@@ -138,27 +150,14 @@ public final class Player {
 	public void setIsOn(boolean o){
 		isOn = o;
 	}
-	public void checkGo()
+	public void setAlreadyDead(boolean o)
 	{
-		if (inJail == false && playerPositionNumber == 0 && pastPositionNumber != -1)
-		{
-			hunneds += 2;
-			totalmonies += 200;
-			MoneyLabels.getInstance().reinitializeMoneyLabels();
-		}
-		pastPositionNumber = playerPositionNumber;
+		alreadyDead = o;
 	}
 	public void setplayerNum(int i)
 	{
 		playerNum = i;
 		playerpiece = new Piece(playerNum, this);
-	}
-	
-	public void purchaseProperty(String propertyName, int cost)
-	{
-		ownedProperties.add(propertyName);
-		pay(cost);
-		//Subtract the cost of the property using the pay function right below.
 	}
 	public void setPositionNumber(int newPosition)
 	{
@@ -169,7 +168,34 @@ public final class Player {
 	{
 		totalmonies += amount;
 	}
-	
+	public void setIsAlive(boolean TF)
+	{
+		isAlive = TF;
+	}
+	public void checkIfAlive()
+	{
+		if (totalmonies == 0)
+		{
+			isAlive = false;
+		}
+	}
+	//-------------------------------------------OPERATIONS
+	public void checkGo()
+	{
+		if (inJail == false && playerPositionNumber == 0 && pastPositionNumber != -1)
+		{
+			hunneds += 2;
+			totalmonies += 200;
+			MoneyLabels.getInstance().reinitializeMoneyLabels();
+		}
+		pastPositionNumber = playerPositionNumber;
+	}
+	public void purchaseProperty(String propertyName, int cost)
+	{
+		ownedProperties.add(propertyName);
+		pay(cost);
+		//Subtract the cost of the property using the pay function right below.
+	}
 	public void pay(int cost) {
 		int modMoney = 0;
 		if (totalmonies >= cost)

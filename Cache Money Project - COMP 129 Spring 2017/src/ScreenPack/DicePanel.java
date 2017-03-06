@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false;
+	private final boolean SERVER_DEBUG = true;
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
