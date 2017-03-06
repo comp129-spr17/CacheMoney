@@ -47,6 +47,7 @@ public class MiniGamePanel extends JPanel{
 		initMinigames();
 		setVisible(false);
 		gameNum = -1;
+		gameNum = 3;
 	}
 	public void setOutputStream(OutputStream outputStream){
 		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){

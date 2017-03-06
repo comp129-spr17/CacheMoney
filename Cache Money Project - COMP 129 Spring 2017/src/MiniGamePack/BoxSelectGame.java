@@ -90,7 +90,7 @@ public class BoxSelectGame extends MiniGame{
 			return;
 		}
 		disqualifyTimer = 10;
-		lbls.get(1).setText("Select a box. Time: " + (disqualifyTimer));
+		lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer));
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 			@Override
@@ -104,7 +104,7 @@ public class BoxSelectGame extends MiniGame{
 					if (turnNum > 1){
 						return;
 					}
-					lbls.get(1).setText("Select a box. Time: " + (disqualifyTimer - 1));
+					lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer - 1));
 				}
 				displayWinnerAndCleanUp(true);
 			}
