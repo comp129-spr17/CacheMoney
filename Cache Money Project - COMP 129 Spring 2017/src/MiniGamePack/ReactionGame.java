@@ -48,7 +48,13 @@ public class ReactionGame extends MiniGame {
 		
 		setVisibleForTitle(true);
 		
+		miniPanel.setFocusable(true);
+		miniPanel.requestFocusInWindow();
+		
 		init();
+		
+		
+		
 	}
 
 
@@ -150,10 +156,7 @@ public class ReactionGame extends MiniGame {
 		
 		initLabels();
 		
-		miniPanel.setFocusable(true);
-		miniPanel.requestFocusInWindow();
-		miniPanel.revalidate();
-		miniPanel.repaint();
+		
 	}
 
 	private void initLabels() {
