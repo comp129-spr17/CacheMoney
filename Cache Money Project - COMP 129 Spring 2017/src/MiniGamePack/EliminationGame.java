@@ -334,7 +334,7 @@ public class EliminationGame extends MiniGame{
 					}
 					return;
 				}
-				if (chosenApple == 0 || numApplesUserRemoved >= numApplesToRemove || chosenApple > numApplesAvailable || (turnNum && isOwner) || (!turnNum && !isOwner)){
+				if (chosenApple == 0 || numApplesUserRemoved >= numApplesToRemove || chosenApple > numApplesAvailable || (!turnNum && isOwner) || (turnNum && !isOwner)){
 					return;
 				}
 				switch (apples[chosenApple - 1]){

@@ -25,14 +25,14 @@ import javax.swing.JTextField;
 
 public class DicePanel extends JPanel{
 	private final boolean SERVER_DEBUG = true;
-	
+
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
 	private JButton rollButton;
 	private JTextField overrideDiceRoll; // DEBUG
 	private JCheckBox toggleDoubles; // DEBUG
-	
+
 	private JButton startGameButton;
 	private JButton endTurnButton;
 	private Player[] players;
@@ -73,8 +73,8 @@ public class DicePanel extends JPanel{
 		init();
 	}
 	private void init(){
-		
-		
+
+
 		// TODO: NEED A CHAT SCREEN IN THIS PANEL FOR EXTRA FIREWORKS AND SPARKLES
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
@@ -89,7 +89,7 @@ public class DicePanel extends JPanel{
 		dCel = new DoubleCelebrate();
 		dCel.setSize(this.getSize());
 		dCel.setLocation(this.getLocation().x, this.getLocation().y-5);
-		
+
 		addTurnLabel();
 		setPlayerPieceStatus();
 		addRollButton();
@@ -103,7 +103,7 @@ public class DicePanel extends JPanel{
 		addListeners();
 		addHands();
 		setDiceBackgroundColor();
-		
+
 		rollButton.setVisible(false);
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
@@ -117,8 +117,8 @@ public class DicePanel extends JPanel{
 		showPlayer[1].setIcon(imageRelated.getPieceImg(0));
 		showPlayer[2].setText("Current Player Piece");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(1));
-		
-		
+
+
 	}
 	public void setPlayerPiecesUp(JPanel Game, int x){
 		showPlayer[0].setBounds(x, 30, 120, 40);
@@ -129,8 +129,8 @@ public class DicePanel extends JPanel{
 			Game.add(showPlayer[i]);
 			showPlayer[i].setVisible(false);
 		}
-		
-		
+
+
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
@@ -143,13 +143,13 @@ public class DicePanel extends JPanel{
 		Color boardBackgroundColor = new Color(180, 240, 255); // VERY LIGHT BLUE
 		this.setBackground(boardBackgroundColor);
 	}
-	
+
 	private void addToggleDoubles(){
 		toggleDoubles = new JCheckBox();
 		toggleDoubles.setBounds(sizeRelated.getDicePanelWidth()/4, sizeRelated.getDicePanelHeight()*2/5, 100, 50);
 		add(toggleDoubles);
 	}
-	
+
 	private void addDice() {
 		dices = new Dice[2];
 		for(int i=0; i<2; i++)
@@ -160,7 +160,7 @@ public class DicePanel extends JPanel{
 			handImage = new ImageIcon[2];
 			handImage[0] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"left_handed.png")));
 			handImage[1] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"right_handed.png")));
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -192,10 +192,10 @@ public class DicePanel extends JPanel{
 			overrideDiceRoll.setEnabled(false);
 			overrideDiceRoll.setEditable(false);
 		}
-		
+
 		add(overrideDiceRoll);
 	}
-	
+
 	private void addStartGameButton(){
 		this.startGameButton = new JButton("Click here to begin game...");
 		startGameButton.setBounds(0, 0, sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
@@ -207,7 +207,7 @@ public class DicePanel extends JPanel{
 		showPlayer[1].setIcon(imageRelated.getPieceImg(p));
 		showPlayer[1].setVisible(true);
 	}
-	
+
 	public void setStartGameButtonEnabled(boolean enabled){
 		this.startGameButton.setEnabled(enabled);
 		if (enabled){
@@ -216,33 +216,33 @@ public class DicePanel extends JPanel{
 		else{
 			startGameButton.setText(startGameButton.getText() + "<br />Waiting for host to begin game..." + "</html>");
 		}
-		
+
 	}
-	
-	
+
+
 	private void addEndTurnButton() {
 		endTurnButton = new JButton("End Turn");
 		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
 		endTurnButton.setBackground(Color.RED);
 		add(endTurnButton);
-		
+
 		endTurnButton.setVisible(false);
 	}
-	
-	
+
+
 	private void initDiceTimer(){
 		diceTimer = new Timer();
 	}
-	
+
 	public void placePlayerToBoard(int i){
 		board.placePieceToFirst(i);
 	}
 	private void addListeners(){
 		startGameButton.addMouseListener(new MouseListener(){
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 				if (startGameButton.isEnabled()){
 					if(isSingle){
 						actionForStart();
@@ -250,61 +250,61 @@ public class DicePanel extends JPanel{
 					else
 						sendMessageToServer(mPack.packSimpleRequest(unicode.START_GAME),mPack.getByteSize());
 				}
-				
+
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+
 			}
-			
+
 		});
 		rollButton.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {				
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				for(int i=0; i<2; i++){
 					diceRes[i] = dices[i].getDiceResult();
 				}
-				
+
 				if (toggleDoubles.isSelected()){ // DEBUG ONLY
 					diceRes[0] = diceRes[1];
 				}
-				
-				
-				
+
+
+
 				if(isSingle) {
 					if(numOfDoublesInRow >= 3)
 						actionForDiceRoll(0, 0);
@@ -316,7 +316,7 @@ public class DicePanel extends JPanel{
 						sendMessageToServer(mPack.packDiceResult(unicode.DICE, 0, 0),mPack.getByteSize());
 					else
 						sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]),mPack.getByteSize());
-					
+
 				}
 				//actionForDiceRoll();
 			}
@@ -332,33 +332,33 @@ public class DicePanel extends JPanel{
 				else
 					sendMessageToServer(mPack.packSimpleRequest(unicode.END_TURN),mPack.getByteSize());
 				mLabel.reinitializeMoneyLabels();
-//				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
+				//				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
-				
+
+
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
-				
+
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
-				
+
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
-				
+
+
 			}
-			
+
 		});
 	}
 	public void actionForStart(){
@@ -374,8 +374,8 @@ public class DicePanel extends JPanel{
 		showPlayer[3].setVisible(true);
 		if(!isSingle)
 			actionForPlayers();
-			
-		
+
+
 	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
@@ -389,18 +389,18 @@ public class DicePanel extends JPanel{
 		dices[1].hideDice();
 		propertyPanel.enableButtons();
 
-		
-		
+
+
 		//if(!isSingle){
-			actionForPlayers();
+		actionForPlayers();
 		//}
-		
+
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
 		if (!isDiceButtonPressed){
 			rollDice(diceRes1, diceRes2);
 		}
-		
+
 	}
 	public void actionForPlayers(){
 		if(myPlayerNum != current && !isSingle){
@@ -468,7 +468,7 @@ public class DicePanel extends JPanel{
 			System.out.println("WARNING: writer == null");
 		}
 	}
-	
+
 	private void changeTurn(){
 		turnLabel.setText("Player " + (current+1) + "'s Turn!");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
@@ -489,7 +489,7 @@ public class DicePanel extends JPanel{
 		toggleDoubles.setVisible(false);
 		rollDiceAnim(diceRes1,diceRes2);
 	}
-	
+
 	public void rollDiceAnim(int diceRes1, int diceRes2){
 		(new handMovingAnimation()).start();
 		for(int i=0; i<2; i++){
@@ -501,7 +501,7 @@ public class DicePanel extends JPanel{
 		}
 		resetElem();
 	}
-	
+
 	private void resetElem(){
 		diceTimer.schedule(new TimerTask() {
 			@Override
@@ -518,11 +518,11 @@ public class DicePanel extends JPanel{
 			}
 		}, 900);
 	}
-	
+
 	private void movePiece(){
 		sum = result[0] + result[1];
 		if(result[0] == result[1]) {
-			
+
 			numOfDoublesInRow++;
 			if(numOfDoublesInRow >= 3){
 				sum = 0;
@@ -535,11 +535,11 @@ public class DicePanel extends JPanel{
 		} else {
 			numOfDoublesInRow = 0;
 		}
-		
+
 		if (SERVER_DEBUG){
 			sum = 1; // FOR SERVER DEBUGGIN PURPOSE
 		}
-		
+
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
@@ -551,18 +551,18 @@ public class DicePanel extends JPanel{
 		if(!isSame)
 		{
 			Sounds.diceRollConfirmed.playSound();
-//			current = current == 3 ? 0 : current+1 ;
-			
+			//			current = current == 3 ? 0 : current+1 ;
+
 		}
-			
+
 	}
-	
+
 	private void sameNumberCelebration(){
 		Timer nTimer = new Timer();
 		isCelebrating = true;
 		Sounds.doublesCelebrateSound.playSound();
 		nTimer.schedule(new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				bPanel.add(dCel);
@@ -579,7 +579,7 @@ public class DicePanel extends JPanel{
 				isCelebrating = false;
 			}
 		}, 50);
-		
+
 	}
 	public class handMovingAnimation extends Thread{
 		public void run(){
@@ -591,7 +591,7 @@ public class DicePanel extends JPanel{
 						hand[which].setLocation(sizeRelated.getDicePanelWidth()/10+i*15, hand[which].getY() + (i < 2 ? -3 : 3));
 					else
 						hand[which].setLocation(sizeRelated.getDicePanelWidth()/2 -i*15, hand[which].getY() + (i < 2 ? -3 : 3));
-						
+
 					Thread.sleep(40);
 				}
 			}catch(Exception e){
@@ -622,25 +622,27 @@ public class DicePanel extends JPanel{
 			if (board.isPlayerInPropertySpace(previous)){
 				//Sounds.landedOnUnownedProperty.playSound();
 				if(propertyPanel.isPropertyOwned(curSpaceName) && propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
-					
+
 				}else{
 					if(propertyPanel.isPropertyOwned(curSpaceName)){
-						mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], myPlayerNum,current == myPlayerNum);
-						mGamePanel.startMiniGame(curSpaceName);
+						if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
+							mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], myPlayerNum,current == myPlayerNum);
+							mGamePanel.startMiniGame(curSpaceName);
+						}
 					}else{
 						propertyPanel.executeSwitch(curSpaceName, players[current], current == myPlayerNum);
 					}
 				}
-				
-				
-				
+
+
+
 			}
 			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
 				Sounds.landedOnChanceOrCommunityChest.playSound();
 			}
 		}
 		if (!isSame || numOfDoublesInRow >= 3){
-				endTurnButton.setVisible(isSingle ? true : current == myPlayerNum);
+			endTurnButton.setVisible(isSingle ? true : current == myPlayerNum);
 		}
 		else{
 			mLabel.reinitializeMoneyLabels();
@@ -648,23 +650,23 @@ public class DicePanel extends JPanel{
 			overrideDiceRoll.setVisible(isSingle ? true : current == myPlayerNum);
 			toggleDoubles.setVisible(isSingle ? true : current == myPlayerNum);
 		}
-		
+
 	}
-	
-//	private void sendSpaceLandedOn(String space){
-////		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
-//	}
-	
+
+	//	private void sendSpaceLandedOn(String space){
+	////		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
+	//	}
+
 	public int getCurrentPlayerNumber() {
 		return current;
 	}
-	
+
 	private void changePlayerTurn(){
 		checkPlayerAvailabilty();
 	}
 	// ToDo: need to track the missing player.
 	private void checkPlayerAvailabilty(){
-		
+
 		while(!players[(++current)%4].isOn());
 		current = (current)%4;
 	}
@@ -693,18 +695,18 @@ public class DicePanel extends JPanel{
 	public void setPort(int port) {
 		this.port = port;
 		String startGameButtonText = "<html>" + "Welcome to Monopoly Waiting Room! <br /><br />" + "Other players may connect to this game by the following:<br /><br />" + "IP: " + this.ip + "<br />Port: " + this.port + "<br />";
-		
+
 		this.startGameButton.setText(startGameButtonText);	
 	}
-	
+
 	public int getSumOfDie()
 	{
 		return result[0]+result[1];
 	}
-	
+
 	private void consolidateOwners(){
 		HashMap<String, PropertySpace> mappings = bPanel.getMappings();
-		
+
 		Property WW = mappings.get("Water Works").getPropertyInfo();
 		Property EC = mappings.get("Electric Company").getPropertyInfo();
 		if(WW.getOwner() == EC.getOwner() && WW.getMultiplier() == 0 && EC.getMultiplier() == 0)
@@ -712,7 +714,7 @@ public class DicePanel extends JPanel{
 			WW.incrementMultiplier();
 			EC.incrementMultiplier();
 		}
-		
+
 	}
-	
+
 }

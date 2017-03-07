@@ -330,4 +330,8 @@ public final class Player {
 			System.out.print("You owe more money than you have!"); //Need to implement mortgage backup stuff
 		}
 	}
+	
+	public int getNumPropertiesOwned(){
+		return ownedProperties.size();
+	}
 }

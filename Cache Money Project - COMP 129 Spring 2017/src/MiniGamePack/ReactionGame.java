@@ -48,8 +48,7 @@ public class ReactionGame extends MiniGame {
 		
 		setVisibleForTitle(true);
 		
-		miniPanel.setFocusable(true);
-		miniPanel.requestFocusInWindow();
+		
 		
 		init();
 		
@@ -163,19 +162,16 @@ public class ReactionGame extends MiniGame {
 		lblsForThis = new ArrayList<>();
 		lblsForThis.add(new JLabel("wait for it..."));
 		lblsForThis.get(0).setBounds(dpWidth*3/9, dpHeight*2/7+20, dpWidth*4/9, dpHeight*1/7);
-		miniPanel.add(lblsForThis.get(0));
+		
 		
 		lblsForThis.add(new JLabel(imgs.getPieceImg(owner.getPlayerNum())));
 		lblsForThis.get(1).setBounds(0, dpHeight*2/7+70, 100, 100);
-		miniPanel.add(lblsForThis.get(1));
 		
 		lblsForThis.add(new JLabel(imgs.getPieceImg(guest.getPlayerNum())));
 		lblsForThis.get(2).setBounds(dpWidth-100, dpHeight*2/7+70, 100, 100);
-		miniPanel.add(lblsForThis.get(2));
 		
 		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniReactGamePath()+"cake.png", 60, 93)));
 		lblsForThis.get(3).setBounds(dpWidth*1/4, dpHeight*3/7, dpWidth*1/2, dpHeight*3/7);
-		miniPanel.add(lblsForThis.get(3));
 	}
 	
 	public void addGame(){
@@ -269,6 +265,12 @@ public class ReactionGame extends MiniGame {
 	}
 	protected void initGameSetting(){
 		super.initGameSetting();
+		for (int i = 0; i < lblsForThis.size(); i++){
+			miniPanel.add(lblsForThis.get(i));
+		}
+		
+		miniPanel.setFocusable(true);
+		miniPanel.requestFocusInWindow();
 		miniPanel.repaint();
 		miniPanel.revalidate();
 	}

@@ -274,8 +274,8 @@ public class BoardPanel extends JPanel{
 			System.out.println("BufferedReader failed to read from file");
 			e.printStackTrace();
 		}
-		add(chance);
-		add(communityChest);
+		//add(chance);
+		//add(communityChest);
 	}
 	private ImageIcon resizedImgs(String path, int type){
 		int width,height;

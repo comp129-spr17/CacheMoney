@@ -80,7 +80,7 @@ public class AuctionPanel extends JPanel{
 
 	private void addBidInterface(Color c, Player p)
 	{		
-		JButton temp = new JButton("BID");
+		JButton temp = new JButton("ADD\nBID");
 		temp.setBackground(c);
 		temp.setSize(60, 20);	
 
