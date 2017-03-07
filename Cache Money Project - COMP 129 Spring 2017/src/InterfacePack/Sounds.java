@@ -28,7 +28,9 @@ public enum Sounds {
 	buyProperty,
 	gainMoney,
 	waitingRoomJoin,
-	winGame
+	winGame,
+	fuse,
+	bomb
 	;
 	
 	private Random rand = new Random();
@@ -116,6 +118,12 @@ public enum Sounds {
 			return;
 		case winGame:
 			SoundAndMusicPlayer.getInstance().playSound("audio", "winGame.wav");
+			return;
+		case fuse:
+			SoundAndMusicPlayer.getInstance().playSound("audio", "fuse.wav");
+			return;
+		case bomb:
+			SoundAndMusicPlayer.getInstance().playSound("audio", "bomb.wav");
 			return;
 		default:
 			System.out.println("Sound Error");

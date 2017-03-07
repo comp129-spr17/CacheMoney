@@ -391,9 +391,9 @@ public class DicePanel extends JPanel{
 
 		
 		
-		if(!isSingle){
+		//if(!isSingle){
 			actionForPlayers();
-		}
+		//}
 		
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
@@ -403,7 +403,7 @@ public class DicePanel extends JPanel{
 		
 	}
 	public void actionForPlayers(){
-		if(myPlayerNum != current){
+		if(myPlayerNum != current && !isSingle){
 			rollButton.setVisible(false);
 			endTurnButton.setVisible(false);
 			revalidate();

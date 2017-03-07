@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
+import InterfacePack.Sounds;
 
 public class SpammingGame extends MiniGame{
 
@@ -153,6 +154,7 @@ public class SpammingGame extends MiniGame{
 		addKeyListener();
 		if(isUnavailableToPlay())
 			removeKeyListner();
+		Sounds.fuse.playSound();
 		for(int i=10; i>=0; i--){
 			try {
 				Thread.sleep(1000);
@@ -161,8 +163,10 @@ public class SpammingGame extends MiniGame{
 			}
 			lblsForThis.get(6).setText(""+i);
 		}
+		
 		removeKeyListner();
 		specialEffect();
+		Sounds.bomb.playSound();
 		showTheWinner(ownerCount >= guestCount);
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
