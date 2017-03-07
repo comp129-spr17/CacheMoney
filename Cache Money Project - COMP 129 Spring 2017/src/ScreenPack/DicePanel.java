@@ -48,6 +48,7 @@ public class DicePanel extends JPanel{
 	private int sum;
 	private boolean isSame;
 	private boolean isCelebrating;
+	private boolean movementAllowed;
 	private int previous;
 	private int current;
 	private DoubleCelebrate dCel;
@@ -69,6 +70,7 @@ public class DicePanel extends JPanel{
 		players = player;
 		mLabel = MLabels;
 		numOfDoublesInRow = 0;
+		movementAllowed = true;
 		this.isSingle = isSingle;
 		init();
 	}
@@ -295,9 +297,7 @@ public class DicePanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				for(int i=0; i<2; i++){
-					diceRes[i] = dices[i].getDiceResult();
-				}
+				diceRes = getDiceRoll();
 
 				if (toggleDoubles.isSelected()){ // DEBUG ONLY
 					diceRes[0] = diceRes[1];
@@ -477,6 +477,12 @@ public class DicePanel extends JPanel{
 		diceRes[0] = diceRes1;
 		diceRes[1] = diceRes2;
 	}
+	public int[] getDiceRoll() {
+		for(int i=0; i<2; i++){
+			diceRes[i] = dices[i].getDiceResult();
+		}
+		return diceRes;
+	}
 	public void rollDice(int diceRes1, int diceRes2){
 		setDiceResult(diceRes1, diceRes2);
 		isDiceButtonPressed = true;
@@ -544,7 +550,11 @@ public class DicePanel extends JPanel{
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
 		}
-		board.movePiece(isSame ? previous : current, sum);
+		if (movementAllowed){
+			board.movePiece(isSame ? previous : current, sum);
+		} else {
+			movementAllowed = true;
+		}
 		previous = current;
 		//System.out.println(previous+":"+current+":"+isSame);
 		isSame = result[0] == result[1];
@@ -657,6 +667,14 @@ public class DicePanel extends JPanel{
 	////		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
 	//	}
 
+	public boolean isDoublesRolled() {
+		return isSame;
+	}
+	
+	public void setMovementAllowed(boolean b) {
+		movementAllowed = b;
+	}
+	
 	public int getCurrentPlayerNumber() {
 		return current;
 	}
