@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -23,6 +24,7 @@ public class MathGame extends MiniGame{
 	private int guestCount;
 	private int count;
 	private boolean isThisUpYet;
+	private JButton btnStart;
 	public MathGame(JPanel miniPanel, boolean isSingle){
 		super(miniPanel,isSingle);
 		initExtra();
@@ -50,7 +52,25 @@ public class MathGame extends MiniGame{
 		lblsForThis.get(4).setBounds(dpWidth*5/9 + 50, dpHeight*1/7+10, dpWidth*1/9, dpHeight*1/7);
 		lblsForThis.get(5).setBounds(dpWidth*3/9, dpHeight*1/7+30, dpWidth*4/7, dpHeight*1/7);
 		lblsForThis.get(6).setBounds(dpWidth*3/9+90, dpHeight*1/7+30, dpWidth*1/7, dpHeight*1/7);
-		
+		btnStart = new JButton("Start");
+		btnStart.setBounds(dpWidth*3/9, dpHeight*1/7, 70, 20);
+		btnStart.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				guestGetRandAndSendToOthers();
+				miniPanel.remove(btnStart);
+				miniPanel.revalidate();
+				miniPanel.repaint();
+			}
+		});
 	}
 	private void initExtra(){
 		problems = new MathProblem[NUM_PROBLEMS];
@@ -85,7 +105,7 @@ public class MathGame extends MiniGame{
 			}	
 		}else{
 			if(isGuest){
-				guestGetRandAndSendToOthers();
+				
 			}
 				
 			
@@ -115,6 +135,8 @@ public class MathGame extends MiniGame{
 		guestCount = 0;
 		for(int i=0; i<lblsForThis.size(); i++)
 			miniPanel.add(lblsForThis.get(i));
+		if(!isSingle && isGuest)
+			miniPanel.add(btnStart);
 		addProblems();
 		miniPanel.repaint();
 		miniPanel.revalidate();
