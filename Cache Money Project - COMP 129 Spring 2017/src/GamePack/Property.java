@@ -7,6 +7,7 @@ public abstract class Property {
 	protected int mortgageValue;
 	protected int buyingPrice;
 	protected int rentMultiplier;
+	protected boolean mortgaged;
 	protected boolean owned;
 	protected int owner = -1;
 	protected String name;
@@ -17,6 +18,7 @@ public abstract class Property {
 		this.name = name;
 		mortgageValue = roundUp(buyingPrice,2);
 		rentValues = new ArrayList<Integer>(5);
+		mortgaged = false;
 		init();
 	}
 
@@ -80,4 +82,16 @@ public abstract class Property {
 	{
 		return rentMultiplier;
 	}
+	
+	public boolean isMortgaged()
+	{
+		return mortgaged;
+	}
+	
+	public void setMortgagedTo(boolean m)
+	{
+		mortgaged = m;
+	}
+	
+	
 }

@@ -48,6 +48,8 @@ public class PropertyInfoPanel extends JPanel{
 	private BoardPanel bPanel;
 	private JPanel infoPanel;
 	private Player currentPlayer;
+	private MortgagePanel mPanel;
+
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		infoPanel = new JPanel();
@@ -94,11 +96,13 @@ public class PropertyInfoPanel extends JPanel{
 
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
-	
+
 	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
 		AP = new AuctionPanel(property, players, this, isSingle);
+		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo,property.getRent());
+		bPanel.add(mPanel);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
 		renderPropertyInfo();
@@ -201,12 +205,12 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(buyButton.isEnabled()) {
-					
+
 					if(currentPlayer.getTotalMonies() >= property.getBuyingPrice()) {
 						purchaseProp(property.getName(), property.getBuyingPrice(), currentPlayer.getPlayerNum());
-					
+
 					}
-					
+
 					dismissPropertyPanel();
 
 				}
@@ -269,16 +273,19 @@ public class PropertyInfoPanel extends JPanel{
 						int cost = property.getRent()*dicePanel.getSumOfDie();
 						if(currentPlayer.getTotalMonies() >= cost) {
 							payForR(cost, property.getOwner());
+							dismissPropertyPanel();
+						}else{
+							mPanel.executeSwitch(currentPlayer);
 						}
 					}else{
 						if(currentPlayer.getTotalMonies() >= property.getRent()) {
 							payForR(property.getRent(), property.getOwner());
+							dismissPropertyPanel();
+						}else{
+							mPanel.executeSwitch(currentPlayer);
 						}
 					}
-
-					dismissPropertyPanel();
 				}
-				
 			}
 		});
 	}
@@ -355,7 +362,7 @@ public class PropertyInfoPanel extends JPanel{
 		else{
 			java.util.Timer newTimer = new java.util.Timer();
 			newTimer.schedule(new TimerTask() {
-				
+
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
@@ -363,7 +370,7 @@ public class PropertyInfoPanel extends JPanel{
 				}
 			}, 1000);
 		}
-			
+
 	}
 	private void purchaseProp(String propertyName, int buyingPrice, int playerNum){
 		disableButtons();
@@ -371,9 +378,9 @@ public class PropertyInfoPanel extends JPanel{
 			purchaseProperty(propertyName,buyingPrice,playerNum);
 		else
 			sendMessageToServer(mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
-		
+
 	}
-	
+
 	private void payForR(int amount, int owner){
 		disableButtons();
 		if(isSingle)
@@ -397,6 +404,11 @@ public class PropertyInfoPanel extends JPanel{
 	public boolean isPropertyOwned(String name){
 		return propertyInfo.get(name).getPropertyInfo().isOwned();
 	}
+
+	public boolean isPropertyMortgaged(String name){
+		return propertyInfo.get(name).getPropertyInfo().isMortgaged();
+	}
+
 	public Player getOwner(String name){
 		return players[propertyInfo.get(name).getPropertyInfo().getOwner()];
 	}
