@@ -148,7 +148,7 @@ public class EliminationGame extends MiniGame{
 				cleanUp();
 			}
 			
-		},3000);
+		},1200);
 	}
 	
 	private void cleanUp(){

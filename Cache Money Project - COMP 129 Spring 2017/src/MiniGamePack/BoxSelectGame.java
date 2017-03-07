@@ -260,7 +260,7 @@ public class BoxSelectGame extends MiniGame{
 				cleanUp();
 			}
 			
-		},5000);
+		},1200);
 		
 		
 	}
