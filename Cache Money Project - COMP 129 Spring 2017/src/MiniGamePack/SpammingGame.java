@@ -71,7 +71,7 @@ public class SpammingGame extends MiniGame{
 		lblsForThis.add(new JLabel("Guest "));
 		lblsForThis.add(new JLabel("0"));
 		lblsForThis.add(new JLabel("Time Left : "));
-		lblsForThis.add(new JLabel("6"));
+		lblsForThis.add(new JLabel("10"));
 		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniSpamGamePath()+"bomb.png", 100, 100)));
 		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniSpamGamePath()+"explosion.png", 100, 100)));
 		lblsForThis.add(new JLabel("|"));
