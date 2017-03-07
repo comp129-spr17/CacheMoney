@@ -18,11 +18,11 @@ import javax.swing.JPanel;
 public class ChanceStack extends JPanel{
 	Random rand = new Random();
 	int cardDrawn;
-	String FILE_PATH = "src/WildcardImages/chance_card_1.jpeg";
+	String FILE_PATH = "src/WildcardImages/chance_card_";
 	String fileExt;
 	
-	BufferedImage img;
-	Image dimg;
+	//BufferedImage img;
+	//Image dimg;
 	ImageIcon cardIcon; 
 	
 	JPanel boardPanel;
@@ -67,17 +67,23 @@ public class ChanceStack extends JPanel{
 		deck.put("command15", "Get$100");//collect 100
 	}
 	
-	public void displayImage(){
+	public void displayImage(int idNum){
+		
 		card = new JLabel();
 		BufferedImage img = null;
+		Image dimg = null;
+		
+		fileExt = FILE_PATH + idNum + ".jpeg";
+		
+		System.out.println(fileExt);
 		
 		try {
-		    img = ImageIO.read(new File(FILE_PATH));
+		    img = ImageIO.read(new File(fileExt));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
 		
-		Image dimg = img.getScaledInstance(320, 170, Image.SCALE_SMOOTH);
+		dimg = img.getScaledInstance(320, 170, Image.SCALE_SMOOTH);
 		
 		ImageIcon cardIcon = new ImageIcon(dimg);
 		
@@ -101,13 +107,17 @@ public class ChanceStack extends JPanel{
 		
 		
 		dicePanel.setVisible(true);
+		
 		this.setVisible(false);
+		this.remove(card);
+		
 	
 	}
 	
 	private int getNextCard(){
-		//cardDrawn = rand.nextInt(17);//puts all cards in play 
-		cardDrawn = 0; //only puts go to go card in play
+		cardDrawn = rand.nextInt(17);//puts all cards in play 
+		System.out.println(cardDrawn);
+		//cardDrawn = 0; //only puts go to go card in play
 		return cardDrawn;
 	}
 	
