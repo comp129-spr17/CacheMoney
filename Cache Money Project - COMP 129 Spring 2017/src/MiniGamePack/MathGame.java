@@ -243,17 +243,10 @@ public class MathGame extends MiniGame{
 			}
 			
 			removeListner();
-			for(int i=0; i<2; i++){
-				try {
-					sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
 			uncoverResult();
 			for(int i=0; i<5; i++){
 				try {
-					sleep(1000);
+					sleep(1200);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
