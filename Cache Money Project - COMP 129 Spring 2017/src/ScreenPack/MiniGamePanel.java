@@ -152,15 +152,6 @@ public class MiniGamePanel extends JPanel{
 					e.printStackTrace();
 				}
 			}
-			
-			try {
-				sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			
-			
 			switchToOther();
 		}
 	}
