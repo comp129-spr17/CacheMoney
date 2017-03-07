@@ -42,9 +42,10 @@ public class ReactionGame extends MiniGame {
 	public void play(){
 		super.play();
 		// insert game here
-		initGameSetting();
-		manageMiniPanel();
 		setTitleAndDescription("Reaction Game!", "Owner press: 'q', Guest press: 'p'");
+		manageMiniPanel();
+		initGameSetting();
+		
 		setVisibleForTitle(true);
 		
 		init();

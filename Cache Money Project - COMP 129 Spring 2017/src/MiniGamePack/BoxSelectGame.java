@@ -297,6 +297,10 @@ public class BoxSelectGame extends MiniGame{
 		miniPanel.revalidate();
 	}
 	private void cleanUp(){
+		for (int i = 4; i < 8; i++){
+			lblsForThis.get(i).setIcon(null);
+		}
+		
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
