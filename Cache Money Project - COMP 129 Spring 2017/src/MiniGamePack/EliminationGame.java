@@ -16,6 +16,7 @@ import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
@@ -129,6 +130,13 @@ public class EliminationGame extends MiniGame{
 		else{
 			lbls.get(1).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
 		}
+		if (disqualifyTimer == 0){
+			Sounds.buttonCancel.playSound();
+		}
+		else{
+			Sounds.waitingRoomJoin.playSound();
+			Sounds.landedOnJail.playSound();
+		}
 		
 		
 		Timer t = new Timer();
@@ -140,7 +148,7 @@ public class EliminationGame extends MiniGame{
 				cleanUp();
 			}
 			
-		},3000);
+		},1200);
 	}
 	
 	private void cleanUp(){
@@ -287,7 +295,7 @@ public class EliminationGame extends MiniGame{
 		else{
 			lbls.get(1).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
 		}
-		
+		Sounds.landedOnUnownedProperty.playSound();
 		
 		startDisqualifyTimer();
 	}
@@ -326,12 +334,13 @@ public class EliminationGame extends MiniGame{
 					}
 					return;
 				}
-				if (chosenApple == 0 || numApplesUserRemoved >= numApplesToRemove || chosenApple > numApplesAvailable){
+				if (chosenApple == 0 || numApplesUserRemoved >= numApplesToRemove || chosenApple > numApplesAvailable || (!turnNum && isOwner) || (turnNum && !isOwner)){
 					return;
 				}
 				switch (apples[chosenApple - 1]){
 				case APPLE:
 					apples[chosenApple - 1] = SELECTED_APPLE;
+					
 					if (isSingle){
 						removeApple(chosenApple);
 					}
@@ -361,7 +370,7 @@ public class EliminationGame extends MiniGame{
 	}
 	
 	private void removeApple(int chosenApple) {
-		
+		Sounds.buttonPress.playSound();
 		removeAppleIcon(chosenApple);
 		numApplesUserRemoved += 1;
 		setTitleAndDescription("Elimination Game", "Take up to " + (numApplesToRemove - numApplesUserRemoved) + " apple(s).");

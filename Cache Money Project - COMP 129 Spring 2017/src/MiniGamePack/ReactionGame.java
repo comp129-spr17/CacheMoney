@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
+import InterfacePack.Sounds;
 
 public class ReactionGame extends MiniGame {
 
@@ -41,12 +42,18 @@ public class ReactionGame extends MiniGame {
 	public void play(){
 		super.play();
 		// insert game here
-		initGameSetting();
-		manageMiniPanel();
 		setTitleAndDescription("Reaction Game!", "Owner press: 'q', Guest press: 'p'");
+		manageMiniPanel();
+		initGameSetting();
+		
 		setVisibleForTitle(true);
 		
+		
+		
 		init();
+		
+		
+		
 	}
 
 
@@ -98,7 +105,7 @@ public class ReactionGame extends MiniGame {
 		displayWinner();
 		
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(1200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -119,11 +126,13 @@ public class ReactionGame extends MiniGame {
 		lblsForThis.get(3).setBounds(userTimes[0] <= userTimes[1] ? dpWidth*1/20 : dpWidth*4/9, dpHeight*1/10,dpWidth*4/9 , dpHeight*4/7);
 		lblsForThis.get(0).setText("");
 		
+		Sounds.waitingRoomJoin.playSound();
 		showTheWinner(userTimes[0] <= userTimes[1]);
 	}
 
 	private void waitForUsersToEnterChars() {
 		lblsForThis.get(0).setText("GOOOOOOOOOOOO!!!");
+		Sounds.doublesCelebrateSound.playSound();
 		Timer c = new Timer();
 		timeStarted = System.currentTimeMillis();
 		for (int i = 0; i < 5 && (!userPressed[0] || !userPressed[1]); i++){
@@ -146,29 +155,23 @@ public class ReactionGame extends MiniGame {
 		
 		initLabels();
 		
-		miniPanel.setFocusable(true);
-		miniPanel.requestFocusInWindow();
-		miniPanel.revalidate();
-		miniPanel.repaint();
+		
 	}
 
 	private void initLabels() {
 		lblsForThis = new ArrayList<>();
 		lblsForThis.add(new JLabel("wait for it..."));
 		lblsForThis.get(0).setBounds(dpWidth*3/9, dpHeight*2/7+20, dpWidth*4/9, dpHeight*1/7);
-		miniPanel.add(lblsForThis.get(0));
+		
 		
 		lblsForThis.add(new JLabel(imgs.getPieceImg(owner.getPlayerNum())));
 		lblsForThis.get(1).setBounds(0, dpHeight*2/7+70, 100, 100);
-		miniPanel.add(lblsForThis.get(1));
 		
 		lblsForThis.add(new JLabel(imgs.getPieceImg(guest.getPlayerNum())));
 		lblsForThis.get(2).setBounds(dpWidth-100, dpHeight*2/7+70, 100, 100);
-		miniPanel.add(lblsForThis.get(2));
 		
 		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniReactGamePath()+"cake.png", 60, 93)));
 		lblsForThis.get(3).setBounds(dpWidth*1/4, dpHeight*3/7, dpWidth*1/2, dpHeight*3/7);
-		miniPanel.add(lblsForThis.get(3));
 	}
 	
 	public void addGame(){
@@ -221,6 +224,7 @@ public class ReactionGame extends MiniGame {
 	}
 	private void actionForTooEarly(boolean isOwner, int num){
 		lbls.get(0).setText((isOwner? "OWNER" : "GUEST") + " INPUT TOO EARLY!");
+		Sounds.landedOnJail.playSound();
 		userTimes[num] = 420; // larger arbitrary value
 		someoneEnteredTooEarly = true;
 	}
@@ -261,6 +265,12 @@ public class ReactionGame extends MiniGame {
 	}
 	protected void initGameSetting(){
 		super.initGameSetting();
+		for (int i = 0; i < lblsForThis.size(); i++){
+			miniPanel.add(lblsForThis.get(i));
+		}
+		
+		miniPanel.setFocusable(true);
+		miniPanel.requestFocusInWindow();
 		miniPanel.repaint();
 		miniPanel.revalidate();
 	}

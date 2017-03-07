@@ -71,7 +71,7 @@ public class SpammingGame extends MiniGame{
 		lblsForThis.add(new JLabel("Guest "));
 		lblsForThis.add(new JLabel("0"));
 		lblsForThis.add(new JLabel("Time Left : "));
-		lblsForThis.add(new JLabel("6"));
+		lblsForThis.add(new JLabel("10"));
 		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniSpamGamePath()+"bomb.png", 100, 100)));
 		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniSpamGamePath()+"explosion.png", 100, 100)));
 		lblsForThis.add(new JLabel("|"));
@@ -94,7 +94,8 @@ public class SpammingGame extends MiniGame{
 		super.addGame();
 		setTitleAndDescription("SPAMMING GAME!", "Owner spams: 'q', guest spams: 'p'");
 		setVisibleForTitle(true);
-		
+		ownerCount = 0;
+		guestCount = 0;
 		lblsForThis.get(10).setIcon(imgs.getPieceImg(owner.getPlayerNum()));
 		lblsForThis.get(11).setIcon(imgs.getPieceImg(guest.getPlayerNum()));
 		lblsForThis.get(8).setVisible(false);
@@ -124,10 +125,12 @@ public class SpammingGame extends MiniGame{
 	private void addOwnerCount(){
 		lblsForThis.get(1).setText(++ownerCount +"");
 		moveBomb(1);
+		Sounds.movePiece.playSound();
 	}
 	private void addGuestCount(){
 		lblsForThis.get(4).setText(++guestCount +"");
 		moveBomb(-1);
+		Sounds.movePiece.playSound();
 	}
 	protected void initGameSetting(){
 		super.initGameSetting();
@@ -145,8 +148,6 @@ public class SpammingGame extends MiniGame{
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
-		ownerCount = 0;
-		guestCount = 0;
 		
 		isGameEnded = true;
 	}
@@ -176,7 +177,7 @@ public class SpammingGame extends MiniGame{
 				cleanUp();
 			}
 			
-		}, 5500);
+		}, 1200);
 	}
 	public void moveBomb(int i){
 		lblsForThis.get(7).setLocation(lblsForThis.get(7).getX()+i, dpHeight*2/7+70);
