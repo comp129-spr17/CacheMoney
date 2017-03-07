@@ -46,7 +46,7 @@ public class MiniGamePanel extends JPanel{
 		setBounds(diceP.getBounds());
 		initMinigames();
 		setVisible(false);
-		gameNum = -1;
+		gameNum = 4;
 		//gameNum = 3;
 	}
 	public void setOutputStream(OutputStream outputStream){

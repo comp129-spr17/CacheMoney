@@ -106,9 +106,7 @@ public class MathGame extends MiniGame{
 				problems[i].setProblem();
 			}	
 		}else{
-			if(isGuest){
-				
-			}
+			disableFunctions();
 				
 			
 		}
@@ -262,6 +260,7 @@ public class MathGame extends MiniGame{
 					}
 //					System.out.println("Waiting.......");
 				}
+				enableFunctions();
 			}
 			
 			forEachTurn();
@@ -292,6 +291,10 @@ public class MathGame extends MiniGame{
 			}
 		}
 		disableFunctions();
+	}
+	private void enableFunctions(){
+		for(int i=0; i<NUM_PROBLEMS; i++)
+			problems[i].enableTxtAndBtn();
 	}
 	private void forSingleGuestTurn(){
 		isOwner = false;
