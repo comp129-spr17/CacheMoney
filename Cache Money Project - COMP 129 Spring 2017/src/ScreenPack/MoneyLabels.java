@@ -236,6 +236,22 @@ public final class MoneyLabels {
 			cash20[i].setText(Integer.toString(players[i].getTwennies()));
 			cash100[i].setText(Integer.toString(players[i].getHunneds()));
 			cash1[i].setText(Integer.toString(players[i].getOnes()));
+			players[i].checkIfAlive();
+			if (players[i].getIsAlive() == false && players[i].getAlreadyDead() == false)
+			{
+				PlayerInfo.remove(totalmonnies[i]);
+				PlayerInfo.remove(cash500[i]);
+				PlayerInfo.remove(cash50[i]);
+				PlayerInfo.remove(cash5[i]);
+				PlayerInfo.remove(cash20[i]);
+				PlayerInfo.remove(cash100[i]);
+				PlayerInfo.remove(cash1[i]);
+				players[i].setAlreadyDead(true);
+				for (int h = (6 * i); h < (6 * i); h++)
+				{
+					PlayerInfo.remove(xmark[h]);
+				}
+			}
 		}
 		System.out.println(totalmonnies[0].getText());
 	}
