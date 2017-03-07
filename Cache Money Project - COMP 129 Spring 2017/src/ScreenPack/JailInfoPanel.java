@@ -112,7 +112,12 @@ public class JailInfoPanel extends JPanel {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//TODO
+				if(hideButton.isEnabled()){
+					Sounds.buttonCancel.playSound();
+					dismissJailInfoPanel();
+				}else{
+					System.out.println("aaa");
+				}
 
 			}
 		});
@@ -138,6 +143,8 @@ public class JailInfoPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//TODO
+				// Switch panels to dice screen and get result but don't move any piece, just check if they are doubles 
+				// Remain in Jail if not third turn in jail or else pay fine
 			}
 		});
 		payButton.addMouseListener(new MouseListener() {
@@ -162,14 +169,14 @@ public class JailInfoPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//TODO
-				
+				//Pay fine to get out of jail
 			}
 		});
 	}
 	private void addHideButton()
 	{
 		hideButton.setBounds(this.getWidth()-75,10, 70, 30);
-		//add(hideButton); 
+		add(hideButton); 
 	}
 
 	private void addRollButton()
@@ -197,6 +204,22 @@ public class JailInfoPanel extends JPanel {
 			payButton.setEnabled(false);
 		}
 
+	}
+	private void dismissJailInfoPanel() {
+		if(isSingle)
+			endJailPanel();
+		else{
+			java.util.Timer newTimer = new java.util.Timer();
+			newTimer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					//sendMessageToServer(mPack.packSimpleRequest(unicode.END_JAIL_INFO));
+				}
+			}, 1000);
+		}
+			
 	}
 	public void enableButtons(){
 		hideButton.setEnabled(true);
