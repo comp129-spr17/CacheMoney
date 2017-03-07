@@ -94,7 +94,8 @@ public class SpammingGame extends MiniGame{
 		super.addGame();
 		setTitleAndDescription("SPAMMING GAME!", "Owner spams: 'q', guest spams: 'p'");
 		setVisibleForTitle(true);
-		
+		ownerCount = 0;
+		guestCount = 0;
 		lblsForThis.get(10).setIcon(imgs.getPieceImg(owner.getPlayerNum()));
 		lblsForThis.get(11).setIcon(imgs.getPieceImg(guest.getPlayerNum()));
 		lblsForThis.get(8).setVisible(false);
@@ -147,8 +148,6 @@ public class SpammingGame extends MiniGame{
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
-		ownerCount = 0;
-		guestCount = 0;
 		
 		isGameEnded = true;
 	}
