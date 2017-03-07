@@ -260,7 +260,8 @@ public class MathGame extends MiniGame{
 					}
 //					System.out.println("Waiting.......");
 				}
-				enableFunctions();
+				if(!isUnavailableToPlay())
+					enableFunctions();
 			}
 			
 			forEachTurn();
