@@ -44,14 +44,14 @@ public class MortgagePanel extends JPanel {
 		this.setLocation(0,0);
 		this.setBackground(Color.white);
 		this.setVisible(false);
-		loadPlayerInfo();
-		renderPanel();
 	}
 	
 	public void executeSwitch(Player curPlayer){
 		this.setVisible(true);
 		panelToSwitchFrom.setVisible(false);
 		this.curPlayer = curPlayer;
+		loadPlayerInfo();
+		renderPanel();
 	}
 	
 	private void loadPlayerInfo()
