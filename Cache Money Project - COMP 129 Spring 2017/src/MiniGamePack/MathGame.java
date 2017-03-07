@@ -22,6 +22,7 @@ public class MathGame extends MiniGame{
 	private int ownerCount;
 	private int guestCount;
 	private int count;
+	private boolean isThisUpYet;
 	public MathGame(JPanel miniPanel, boolean isSingle){
 		super(miniPanel,isSingle);
 		initExtra();
@@ -65,6 +66,7 @@ public class MathGame extends MiniGame{
 		for(int i=0; i<NUM_PROBLEMS; i++){
 			miniPanel.add(problems[i]);
 		}
+		isThisUpYet = true;
 	}
 	public void addGame(){
 		super.addGame();
@@ -104,8 +106,8 @@ public class MathGame extends MiniGame{
 		didGetProblems=true;
 		System.out.println("And changed");
 	}
-	public void addActionToGame(int ith, int playerN, boolean isOwner, boolean isAns){
-		actionForSubmit(ith, playerN, isOwner, isAns);
+	public void addActionToGame(int ith, int playerN, boolean isOwner, int enteredAns){
+		actionForSubmit(ith, playerN, isOwner, enteredAns);
 	}
 	protected void initGameSetting(){
 		super.initGameSetting();
@@ -166,20 +168,20 @@ public class MathGame extends MiniGame{
 	}
 	private void actionsForKeys(int i){
 		if(isSingle){
-			actionForSubmit(i, isOwner ? owner.getPlayerNum() : guest.getPlayerNum(), isOwner, problems[i].isAnswer());
+			actionForSubmit(i, isOwner ? owner.getPlayerNum() : guest.getPlayerNum(), isOwner, problems[i].getEnteredVal());
 		}else{
-			sendMessageToServer(mPack.packMathGameAns(unicode.MATH_MINI_GAME_ANS, i, isOwner ? owner.getPlayerNum() : guest.getPlayerNum(), isOwner, problems[i].isAnswer()));
+			sendMessageToServer(mPack.packMathGameAns(unicode.MATH_MINI_GAME_ANS, i, isOwner ? owner.getPlayerNum() : guest.getPlayerNum(), isOwner, problems[i].getEnteredVal()));
 		}
 	}
-	private void actionForSubmit(int i, int playerNum, boolean isOwner, boolean isAnswer){
-		if(isAnswer){
+	private void actionForSubmit(int i, int playerNum, boolean isOwner, int enteredVal){
+		if(problems[i].evalAnswer(enteredVal, playerNum)){
 			if(isOwner)
 				ownerCount++;
 			else
 				guestCount++;
 			updateScore(isOwner);
 		}
-		problems[i].evalAnswer(isAnswer, playerNum);
+		
 	}
 	private void addListener(){
 		for(int i=0; i<NUM_PROBLEMS; i++){
@@ -205,6 +207,7 @@ public class MathGame extends MiniGame{
 	private void cleanProblems(){
 		for(int i=0; i<NUM_PROBLEMS; i++)
 			problems[i].clearProblems();
+		isThisUpYet = false;
 	}
 	public boolean isGameEnded(){
 		return isGameEnded;
@@ -232,7 +235,7 @@ public class MathGame extends MiniGame{
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					System.out.println("Waiting.......");
+//					System.out.println("Waiting.......");
 				}
 			}
 			

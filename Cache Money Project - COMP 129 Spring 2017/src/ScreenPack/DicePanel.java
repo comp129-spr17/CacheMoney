@@ -450,8 +450,8 @@ public class DicePanel extends JPanel{
 	public void actionForReceiveInteger(int num){
 		mGamePanel.actionForGame(num);
 	}
-	public void actionForReceiveAnswer(int ith, int playerN, boolean isOwner, boolean isAns){
-		mGamePanel.actionForGame(ith, playerN, isOwner, isAns);
+	public void actionForReceiveAnswer(int ith, int playerN, boolean isOwner, int enteredAns){
+		mGamePanel.actionForGame(ith, playerN, isOwner, enteredAns);
 	}
 	public void actionForReceiveArray(int[] arr){
 		mGamePanel.actionForGame(arr);

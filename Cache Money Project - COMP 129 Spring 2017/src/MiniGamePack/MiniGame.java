@@ -120,7 +120,7 @@ public class MiniGame{
 	public void addActionToGame(int[] arr){
 		
 	}
-	public void addActionToGame(int ith, int playerN, boolean isOwner, boolean isAns){
+	public void addActionToGame(int ith, int playerN, boolean isOwner, int enteredAns){
 		
 	}
 	public void addSyncedRandomNumber(int num){

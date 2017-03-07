@@ -187,7 +187,7 @@ public final class MByteUnpack {
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readBoolean());
-			resultList.add(dInputStream.readBoolean());
+			resultList.add(dInputStream.readInt());
 		}
 		catch(IOException e){
 			e.printStackTrace();

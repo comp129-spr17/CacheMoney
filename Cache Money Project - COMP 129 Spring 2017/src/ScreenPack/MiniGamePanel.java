@@ -74,7 +74,7 @@ public class MiniGamePanel extends JPanel{
 		//gameNum = 2; // FORCE MINIGAME SELECT HERE
 		
 		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
-//		gameNum = 4;
+		gameNum = 5;
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
 	}
@@ -115,8 +115,8 @@ public class MiniGamePanel extends JPanel{
 	public void actionForGame(int[] arr, int keyNum){
 		mGames[gameNum].addActionToGame(arr, keyNum);
 	}
-	public void actionForGame(int ith, int playerN, boolean isOwner, boolean isAns){
-		mGames[gameNum].addActionToGame(ith, playerN, isOwner, isAns);
+	public void actionForGame(int ith, int playerN, boolean isOwner, int enteredAns){
+		mGames[gameNum].addActionToGame(ith, playerN, isOwner, enteredAns);
 	}
 	public void actionForGame(int[] arr){
 		mGames[gameNum].addActionToGame(arr);

@@ -246,7 +246,7 @@ public class MClient {
 		diceP.actionForReceiveArray(arr);
 	}
 	private void doReceiveAnsForMath(ArrayList<Object> result){
-		diceP.actionForReceiveAnswer((Integer)result.get(1), (Integer)result.get(2), (Boolean)result.get(3), (Boolean)result.get(4));
+		diceP.actionForReceiveAnswer((Integer)result.get(1), (Integer)result.get(2), (Boolean)result.get(3), (Integer)result.get(4));
 	}
 	
 	private void setPlayer(int i){

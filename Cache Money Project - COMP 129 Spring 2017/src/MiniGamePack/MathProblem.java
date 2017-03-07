@@ -32,6 +32,7 @@ public class MathProblem extends JPanel{
 	private int gettingAns;
 	private ImageRelated imageRelated;
 	private boolean isAnsweredAlready;
+	private boolean correct;
 	public MathProblem(SizeRelated sizeRelated){
 		this.sizeRelated = sizeRelated;
 		init();
@@ -123,27 +124,40 @@ public class MathProblem extends JPanel{
 	public void setAnswer(int type, int a, int b){
 		SetAnswers.get(type).setAnswer(type, a, b);
 	}
-	public boolean isAnswer(){
+	public int getEnteredVal(){
 		try{
-			gettingAns = Integer.parseInt(txtAnswer.getText());
+			return Integer.parseInt(txtAnswer.getText());
 		}catch(NumberFormatException e){
-			return false;
+			return -999;
 		}
-		return gettingAns == answer;
 	}
-	public void evalAnswer(boolean isAns, int playerNum){
+	public boolean isAnswer(int inputAns){
+		return inputAns == answer;
+	}
+	public boolean evalAnswer(int inputAns, int playerNum){
 		System.out.println("Ans : " + answer + " Getting Ans : "+ gettingAns);
-		if(!isAnsweredAlready && isAns){
-			isAnsweredAlready = true;
-			disableTxtAndBtn();
-			txtAnswer.setText(answer+"");
-			lblProblems[4].setIcon(imageRelated.getSmallPieceImg(playerNum));
-			Sounds.waitingRoomJoin.playSound();
-		}else if(!isAnsweredAlready && !isAns){
-			lblProblems[4].setIcon(imageRelated.getWrongAnswer());
-			Sounds.buttonCancel.playSound();
+		if(!isAnsweredAlready){
+			if(isAnswer(inputAns)){
+				System.out.println("at true point");
+				isAnsweredAlready = true;
+				correct = true;
+				disableTxtAndBtn();
+				txtAnswer.setText(answer+"");
+				lblProblems[4].setIcon(imageRelated.getSmallPieceImg(playerNum));
+				
+				Sounds.waitingRoomJoin.playSound();
+			}else{
+				System.out.println("at false point");
+				correct = false;
+				lblProblems[4].setIcon(imageRelated.getWrongAnswer());
+				Sounds.buttonCancel.playSound();
+			}
+		}else{
+			correct = false;
 		}
 		lblProblems[4].setVisible(true);
+		System.out.println("Passed all.");
+		return correct;
 	}
 	public void addListners(MouseListener mListener, KeyListener kListener){
 		this.mListener = mListener;
@@ -176,6 +190,7 @@ public class MathProblem extends JPanel{
 		txtAnswer.setText("");
 		lblProblems[4].setVisible(false);
 		gettingAns = -999;
+		correct = false;
 		isAnsweredAlready = false;
 	}
 }

@@ -171,13 +171,13 @@ public final class MBytePack {
 		return null;
 	}
 	
-	public byte[] packMathGameAns(int requestCode, int ithProblem, int playerNum, boolean isOwner, boolean isAnswer){
+	public byte[] packMathGameAns(int requestCode, int ithProblem, int playerNum, boolean isOwner, int enteredAns){
 		try{
 			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeInt(ithProblem);
 			dOutputStream.writeInt(playerNum);
 			dOutputStream.writeBoolean(isOwner);
-			dOutputStream.writeBoolean(isAnswer);
+			dOutputStream.writeInt(enteredAns);
 			return packResult();
 		}
 		catch (IOException e){
