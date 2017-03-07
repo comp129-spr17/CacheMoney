@@ -27,13 +27,12 @@ public class MortgagePanel extends JPanel {
 	private HashMap<String,PropertySpace> propertyInfo;
 	private int paymentAmount; 
 	
-	MortgagePanel(Player players[], JPanel panelToSwitchFrom, JPanel bPanel, HashMap<String,PropertySpace> propertyInfo, int cost)
+	MortgagePanel(Player players[], JPanel panelToSwitchFrom, JPanel bPanel, HashMap<String,PropertySpace> propertyInfo)
 	{
 		this.players = players;
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.bPanel = bPanel;
 		this.propertyInfo = propertyInfo;
-		paymentAmount = cost;
 		init();
 	}
 	
@@ -46,10 +45,11 @@ public class MortgagePanel extends JPanel {
 		this.setVisible(false);
 	}
 	
-	public void executeSwitch(Player curPlayer){
+	public void executeSwitch(Player curPlayer, int cost){
 		this.setVisible(true);
 		panelToSwitchFrom.setVisible(false);
 		this.curPlayer = curPlayer;
+		paymentAmount = cost;
 		loadPlayerInfo();
 		renderPanel();
 	}
@@ -103,8 +103,8 @@ public class MortgagePanel extends JPanel {
 	{
 		backButton = new JButton();
 		backButton.setText("BACK");
-		backButton.setSize(40, 30);
-		backButton.setLocation(this.getWidth()/2 - backButton.getWidth()/2, this.getHeight()-backButton.getHeight()-5);
+		backButton.setSize(100, 100);
+		backButton.setLocation(this.getWidth()/2 - backButton.getWidth()/2, this.getHeight()/2-backButton.getHeight()/2);
 		
 		backButton.addMouseListener(new MouseListener() {
 

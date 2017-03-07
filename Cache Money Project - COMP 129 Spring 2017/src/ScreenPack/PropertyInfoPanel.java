@@ -101,7 +101,7 @@ public class PropertyInfoPanel extends JPanel{
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
 		AP = new AuctionPanel(property, players, this, isSingle);
-		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo,property.getRent());
+		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo);
 		bPanel.add(mPanel);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
@@ -275,14 +275,14 @@ public class PropertyInfoPanel extends JPanel{
 							payForR(cost, property.getOwner());
 							dismissPropertyPanel();
 						}else{
-							mPanel.executeSwitch(currentPlayer);
+							mPanel.executeSwitch(currentPlayer,cost);
 						}
 					}else{
 						if(currentPlayer.getTotalMonies() >= property.getRent()) {
 							payForR(property.getRent(), property.getOwner());
 							dismissPropertyPanel();
 						}else{
-							mPanel.executeSwitch(currentPlayer);
+							mPanel.executeSwitch(currentPlayer,property.getRent());
 						}
 					}
 				}
