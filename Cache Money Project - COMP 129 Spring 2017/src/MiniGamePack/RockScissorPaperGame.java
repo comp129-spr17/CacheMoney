@@ -8,6 +8,8 @@ import java.util.Timer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import InterfacePack.Sounds;
+
 public class RockScissorPaperGame extends MiniGame{
 	private RockScissorPaper rsp;
 	private KeyListener listener;
@@ -86,9 +88,10 @@ public class RockScissorPaperGame extends MiniGame{
 				
 	}
 	private void uncoverResult(){
-		for(int i=0; i<2; i++)
+		for(int i=0; i<2; i++){
 			lblsForThis.get(i+5).setIcon(imgs.getRspImg(selected[i]+(3*i)));
-		
+		}
+		Sounds.waitingRoomJoin.playSound();
 		lbls.get(1).setText((getWinner() ? "OWNER":"GUEST") + " WINS!");
 	}
 	public void play(){
@@ -109,11 +112,13 @@ public class RockScissorPaperGame extends MiniGame{
 			public void keyReleased(KeyEvent e) {
 				enteredChar = Character.toLowerCase(e.getKeyChar());
 				if((enteredChar == 'q' || enteredChar == 'w' || enteredChar == 'e')){
+					Sounds.buttonPress.playSound();
 					if(isSingle)
 						selectDecision(ascii[enteredChar], true);
 					else if(isOwner)
 						sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], true));
 				}else if(enteredChar == 'i' || enteredChar == 'o' || enteredChar == 'p'){
+					Sounds.buttonPress.playSound();
 					if(isSingle)
 						selectDecision(ascii[enteredChar], false);
 					else if(!isOwner)

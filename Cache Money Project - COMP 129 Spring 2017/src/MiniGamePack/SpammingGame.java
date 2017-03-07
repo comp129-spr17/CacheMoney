@@ -124,10 +124,12 @@ public class SpammingGame extends MiniGame{
 	private void addOwnerCount(){
 		lblsForThis.get(1).setText(++ownerCount +"");
 		moveBomb(1);
+		Sounds.movePiece.playSound();
 	}
 	private void addGuestCount(){
 		lblsForThis.get(4).setText(++guestCount +"");
 		moveBomb(-1);
+		Sounds.movePiece.playSound();
 	}
 	protected void initGameSetting(){
 		super.initGameSetting();

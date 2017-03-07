@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GamePack.Player;
+import InterfacePack.Sounds;
 
 
 public class BoxSelectGame extends MiniGame{
@@ -198,6 +199,7 @@ public class BoxSelectGame extends MiniGame{
 			lblsForThis.get(0).setText("Guest's Turn");
 			lblsForThis.get(chosenBox[0] + 3).setIcon(imgs.resizeImage(paths.getPieceImgPath() + owner.getPlayerNum() + owner.getPlayerNum() + ".png", 30, 30));
 			lblsForThis.get(7).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
+			Sounds.landedOnUnownedProperty.playSound();
 			startDisqualifyTimer();
 		}
 		
@@ -208,12 +210,15 @@ public class BoxSelectGame extends MiniGame{
 			switch (surpriseBoxes[i]){
 			case 0:
 				lblsForThis.get(i+1).setIcon(imgs.resizeImage(paths.getMiniSpamGamePath() + "bomb" + ".png", 60, 60));
+				Sounds.bomb.playSound();
 				break;
 			case 1:
 				lblsForThis.get(i+1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "confetti" + ".png", 60, 60));
+				Sounds.waitingRoomJoin.playSound();
 				break;
 			case 2:
 				lblsForThis.get(i+1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "puppies" + ".png", 60, 60));
+				Sounds.winGame.playSound();
 				break;
 			default:
 				System.out.println("BUG");
@@ -230,10 +235,12 @@ public class BoxSelectGame extends MiniGame{
 		if (timeExpired && turnNum == 1){
 			lblsForThis.get(0).setText("OWNER WINS!");
 			winner = true;
+			Sounds.buttonCancel.playSound();
 		}
 		else if (timeExpired){
 			lblsForThis.get(0).setText("GUEST WINS!");
 			winner = false;
+			Sounds.buttonCancel.playSound();
 		}
 		else if (surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1]){ // if owner got lucky
 			lblsForThis.get(0).setText("OWNER WINS!");

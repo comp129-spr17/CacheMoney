@@ -14,6 +14,7 @@ import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 import GamePack.ImageRelated;
 import GamePack.SizeRelated;
+import InterfacePack.Sounds;
 
 public class MathProblem extends JPanel{
 	private JLabel[] lblProblems;
@@ -137,8 +138,10 @@ public class MathProblem extends JPanel{
 			disableTxtAndBtn();
 			txtAnswer.setText(answer+"");
 			lblProblems[4].setIcon(imageRelated.getSmallPieceImg(playerNum));
+			Sounds.waitingRoomJoin.playSound();
 		}else if(!isAnsweredAlready && !isAns){
 			lblProblems[4].setIcon(imageRelated.getWrongAnswer());
+			Sounds.buttonCancel.playSound();
 		}
 		lblProblems[4].setVisible(true);
 	}

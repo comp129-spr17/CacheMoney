@@ -16,6 +16,7 @@ import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
@@ -128,6 +129,13 @@ public class EliminationGame extends MiniGame{
 		}
 		else{
 			lbls.get(1).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
+		}
+		if (disqualifyTimer == 0){
+			Sounds.buttonCancel.playSound();
+		}
+		else{
+			Sounds.waitingRoomJoin.playSound();
+			Sounds.landedOnJail.playSound();
 		}
 		
 		
@@ -287,7 +295,7 @@ public class EliminationGame extends MiniGame{
 		else{
 			lbls.get(1).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
 		}
-		
+		Sounds.landedOnUnownedProperty.playSound();
 		
 		startDisqualifyTimer();
 	}
@@ -332,6 +340,7 @@ public class EliminationGame extends MiniGame{
 				switch (apples[chosenApple - 1]){
 				case APPLE:
 					apples[chosenApple - 1] = SELECTED_APPLE;
+					
 					if (isSingle){
 						removeApple(chosenApple);
 					}
@@ -361,7 +370,7 @@ public class EliminationGame extends MiniGame{
 	}
 	
 	private void removeApple(int chosenApple) {
-		
+		Sounds.buttonPress.playSound();
 		removeAppleIcon(chosenApple);
 		numApplesUserRemoved += 1;
 		setTitleAndDescription("Elimination Game", "Take up to " + (numApplesToRemove - numApplesUserRemoved) + " apple(s).");

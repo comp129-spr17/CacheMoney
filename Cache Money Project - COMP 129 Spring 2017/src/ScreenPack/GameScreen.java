@@ -251,7 +251,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(boardPanel);
 		addMuteMusic();
 		addMuteSounds();
-		Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
+		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 		
 		
 		Random r = new Random();
@@ -263,6 +263,7 @@ public class GameScreen extends JFrame{
 		ImageIcon imgOn, imgOff;
 		imgOn = new ImageIcon("src/Images/music_on.png");
 		imgOff = new ImageIcon("src/Images/music_off.png");
+		//muteMusic = new JCheckBox(imgOff); 	// DEBUG
 		muteMusic = new JCheckBox(imgOff); 	// DEBUG
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
@@ -318,7 +319,8 @@ public class GameScreen extends JFrame{
 		ImageIcon imgOn, imgOff;
 		imgOn = new ImageIcon("src/Images/sound_on.png");
 		imgOff = new ImageIcon("src/Images/sound_off.png");
-		muteSounds = new JCheckBox(imgOff);	// DEBUG
+		//muteSounds = new JCheckBox(imgOff);	// DEBUG
+		muteSounds = new JCheckBox(imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
 		
 		muteSounds.addMouseListener(new MouseListener(){

@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
+import InterfacePack.Sounds;
 
 public class ReactionGame extends MiniGame {
 
@@ -119,11 +120,13 @@ public class ReactionGame extends MiniGame {
 		lblsForThis.get(3).setBounds(userTimes[0] <= userTimes[1] ? dpWidth*1/20 : dpWidth*4/9, dpHeight*1/10,dpWidth*4/9 , dpHeight*4/7);
 		lblsForThis.get(0).setText("");
 		
+		Sounds.waitingRoomJoin.playSound();
 		showTheWinner(userTimes[0] <= userTimes[1]);
 	}
 
 	private void waitForUsersToEnterChars() {
 		lblsForThis.get(0).setText("GOOOOOOOOOOOO!!!");
+		Sounds.doublesCelebrateSound.playSound();
 		Timer c = new Timer();
 		timeStarted = System.currentTimeMillis();
 		for (int i = 0; i < 5 && (!userPressed[0] || !userPressed[1]); i++){
@@ -221,6 +224,7 @@ public class ReactionGame extends MiniGame {
 	}
 	private void actionForTooEarly(boolean isOwner, int num){
 		lbls.get(0).setText((isOwner? "OWNER" : "GUEST") + " INPUT TOO EARLY!");
+		Sounds.landedOnJail.playSound();
 		userTimes[num] = 420; // larger arbitrary value
 		someoneEnteredTooEarly = true;
 	}
