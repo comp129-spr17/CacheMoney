@@ -177,7 +177,7 @@ public class SpammingGame extends MiniGame{
 				cleanUp();
 			}
 			
-		}, 1200);
+		}, 2000);
 	}
 	public void moveBomb(int i){
 		lblsForThis.get(7).setLocation(lblsForThis.get(7).getX()+i, dpHeight*2/7+70);
