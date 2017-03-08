@@ -11,7 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 
+import GamePack.ImageRelated;
 import GamePack.Player;
+import GamePack.SizeRelated;
 
 public final class MoneyLabels {
 	private JDialog PlayerInfo;
@@ -42,6 +44,8 @@ public final class MoneyLabels {
 	private Font numberfont;
 	private ImageIcon[] moneyImages;
 	private final static MoneyLabels MONEY_LABELS = new MoneyLabels();
+	private SizeRelated sizerelated;
+	private ImageRelated imagerelated;
 	private MoneyLabels(){
 		
 	}
@@ -55,6 +59,8 @@ public final class MoneyLabels {
 		init();
 	}
 	private void init(){
+		sizerelated = SizeRelated.getInstance();
+		imagerelated = ImageRelated.getInstance();
 		createMoniesLabels();
 		createAndAssignValuesToMoniesLabels();
 		setPositionOfBalances();
@@ -191,12 +197,12 @@ public final class MoneyLabels {
 		ones[i] = new JLabel(Integer.toString(players[i].getOnes()));
 	}
 	private void addImagesToLabels(int i) {
-		cash500image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/500.png"));
-		cash50image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/50.png"));
-		cash5image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/5.png"));
-		cash20image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/20.png"));
-		cash100image[i] = new JLabel(new ImageIcon(System.getProperty("user.dir") + "/src/MoneyImages/100.png"));
-		cash1image[i] = new JLabel(new ImageIcon("src/MoneyImages/1.png"));
+		cash500image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/500.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
+		cash50image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/50.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
+		cash5image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/5.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
+		cash20image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/20.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
+		cash100image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/100.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
+		cash1image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/1.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
 
 		//cash1image[i].setBounds(200, 500, 32, 65);
 		//cash20image[i].setBounds(200, 600, 32, 65);

@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import InterfacePack.Sounds;
+
 public class MathGame extends MiniGame{
 
 	private ArrayList<JLabel> lblsForThis;
@@ -104,9 +106,7 @@ public class MathGame extends MiniGame{
 				problems[i].setProblem();
 			}	
 		}else{
-			if(isGuest){
-				
-			}
+			disableFunctions();
 				
 			
 		}
@@ -242,6 +242,7 @@ public class MathGame extends MiniGame{
 		lblsForThis.get(isOwner?1:4).setText((isOwner?ownerCount : guestCount) + "");
 	}
 	private void uncoverResult(){
+		Sounds.waitingRoomJoin.playSound();
 		lbls.get(1).setText((getWinner() ? "OWNER":"GUEST") + " WINS!");
 	}
 	private void disableFunctions(){
@@ -259,6 +260,8 @@ public class MathGame extends MiniGame{
 					}
 //					System.out.println("Waiting.......");
 				}
+				if(!isUnavailableToPlay())
+					enableFunctions();
 			}
 			
 			forEachTurn();
@@ -289,6 +292,10 @@ public class MathGame extends MiniGame{
 			}
 		}
 		disableFunctions();
+	}
+	private void enableFunctions(){
+		for(int i=0; i<NUM_PROBLEMS; i++)
+			problems[i].enableTxtAndBtn();
 	}
 	private void forSingleGuestTurn(){
 		isOwner = false;

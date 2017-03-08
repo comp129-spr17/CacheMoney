@@ -148,7 +148,7 @@ public class EliminationGame extends MiniGame{
 				cleanUp();
 			}
 			
-		},1200);
+		},2000);
 	}
 	
 	private void cleanUp(){
@@ -315,7 +315,7 @@ public class EliminationGame extends MiniGame{
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!allowInput){
+				if (!allowInput || (turnNum != isOwner && !isSingle)){
 					return;
 				}
 				char pressed = e.getKeyChar();
@@ -334,7 +334,7 @@ public class EliminationGame extends MiniGame{
 					}
 					return;
 				}
-				if (chosenApple == 0 || numApplesUserRemoved >= numApplesToRemove || chosenApple > numApplesAvailable || (!turnNum && isOwner) || (turnNum && !isOwner)){
+				if (chosenApple == 0 || numApplesUserRemoved >= numApplesToRemove || chosenApple > numApplesAvailable){
 					return;
 				}
 				switch (apples[chosenApple - 1]){

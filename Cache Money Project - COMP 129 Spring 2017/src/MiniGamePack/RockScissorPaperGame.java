@@ -17,7 +17,6 @@ public class RockScissorPaperGame extends MiniGame{
 	private int[] selected;
 	private int[] ascii;
 	private boolean[] decided;
-	private int numReadyPlayers;
 	private ArrayList<JLabel> lblsForThis;
 	
 	public RockScissorPaperGame(JPanel miniPanel, boolean isSingle){
@@ -58,8 +57,6 @@ public class RockScissorPaperGame extends MiniGame{
 		super.addGame();
 		setTitleAndDescription("Rock Scissor Paper Game!", "Order of rock,scissor,paper:");
 		setVisibleForTitle(true);
-		
-		numReadyPlayers = 0;
 		lblsForThis.get(3).setIcon(imgs.getPieceImg(owner.getPlayerNum()));
 		lblsForThis.get(4).setIcon(imgs.getPieceImg(guest.getPlayerNum()));
 		lblsForThis.get(5).setVisible(false);
@@ -177,16 +174,13 @@ public class RockScissorPaperGame extends MiniGame{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				if (numReadyPlayers > 1){
-					break;
-				}
 			}
 			removeKeyListner();
 			ifNotSelected();
 			uncoverResult();
 			for(int i=0; i<5; i++){
 				try {
-					sleep(1000);
+					sleep(2000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

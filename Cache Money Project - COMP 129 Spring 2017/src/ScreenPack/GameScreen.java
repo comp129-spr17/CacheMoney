@@ -380,7 +380,7 @@ public class GameScreen extends JFrame{
 		JLabel buttonLabel2 = new JLabel("THE $$$");
 		showInfo = new JButton();
 		showInfo.setLayout(new BorderLayout());
-		showInfo.setBounds(myComp_height - 55, myComp_height/2 - 150, 100, 50);
+		showInfo.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 100, 100, 50);
 		showInfo.add(BorderLayout.NORTH, buttonLabel1);
 		showInfo.add(BorderLayout.SOUTH, buttonLabel2);
 		showInfo.setVisible(true);

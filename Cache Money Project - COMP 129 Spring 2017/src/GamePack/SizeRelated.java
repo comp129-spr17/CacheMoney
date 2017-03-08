@@ -18,6 +18,14 @@ public final class SizeRelated {
 	private int dice_panel_y;
 	private int celeb_panel_w;
 	private int celeb_panel_h;
+	private int money_panel_w;
+	private int money_panel_h;
+	private int money_player_x;
+	private int money_player_y;
+	private int money_icons_w;
+	private int money_icons_h;
+	private int money_piece_w;
+	private int money_piece_h;
 	
 	private static final SizeRelated SIZE_RELATED = new SizeRelated();
 	private SizeRelated(){
@@ -36,6 +44,9 @@ public final class SizeRelated {
 		setDicePanelXY();
 		setDiceWidthHeight();
 		setCelePanelWidthHeight();
+		setMoneyPanelWidth();
+		setMoneyPanelHeight();
+		setMoneyLabelStuff();
 	}
 	/*
 	Size Formula:
@@ -74,6 +85,20 @@ public final class SizeRelated {
 	}
 	private void setCelePanelWidthHeight(){
 		celeb_panel_w = celeb_panel_h = SPACE_ROW_SPACE_WIDTH*9;
+	}
+	private void setMoneyPanelWidth(){
+		money_panel_w = (int)(screen_w * 0.5);
+	}
+	private void setMoneyPanelHeight(){
+		money_panel_w = (int)(screen_h);
+	}
+	private void setMoneyLabelStuff(){
+		money_icons_w = money_panel_w / 25;
+		money_icons_h = money_panel_h / 13; 
+		money_piece_w = money_panel_h / 13;
+		money_piece_h = money_panel_h / 13;
+		
+		
 	}
 	public int getSpaceRowWidth(){
 		return SPACE_ROW_SPACE_WIDTH;
@@ -119,5 +144,23 @@ public final class SizeRelated {
 	}
 	public int getCelebHeight(){
 		return celeb_panel_h;
+	}
+	public int getMoneyPanelWidth(){
+		return money_panel_w;
+	}
+	public int getMoneyPanelHeight(){
+		return money_panel_h;
+	}
+	public int getMoneyIconWidth(){
+		return money_icons_w;
+	}
+	public int getMoneyIconHeight(){
+		return money_icons_w;
+	}
+	public int getMoneyPieceWidth(){
+		return money_piece_w;
+	}
+	public int getMoneyPieceHeight(){
+		return money_piece_h;
 	}
 }

@@ -105,7 +105,7 @@ public class ReactionGame extends MiniGame {
 		displayWinner();
 		
 		try {
-			Thread.sleep(1200);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
