@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class CommunityStack extends JPanel{
 	Random rand = new Random();
 	int cardDrawn;
-	String FILE_PATH = "src/WildcardImages/community_card_0.gif";
+	String FILE_PATH = "src/WildcardImages/community_card_";
 	String fileExt;
 	
 	//BufferedImage img;
@@ -74,12 +74,12 @@ public class CommunityStack extends JPanel{
 		BufferedImage img = null;
 		Image dimg = null;
 		
-		//fileExt = FILE_PATH + idNum + ".jpeg";
+		fileExt = FILE_PATH + idNum + ".gif";
 		
-		//System.out.println(fileExt);
+		System.out.println(fileExt);
 		
 		try {
-		    img = ImageIO.read(new File(FILE_PATH));
+		    img = ImageIO.read(new File(fileExt));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
@@ -116,9 +116,9 @@ public class CommunityStack extends JPanel{
 	}
 	
 	private int getNextCard(){
-		//cardDrawn = rand.nextInt(18);//puts all cards in play 
+		cardDrawn = rand.nextInt(18);//puts all cards in play 
 		//System.out.println(cardDrawn);
-		cardDrawn = 0; //only puts go to go card in play
+		//cardDrawn = 0; //only puts go to go card in play
 		return cardDrawn;
 	}
 	

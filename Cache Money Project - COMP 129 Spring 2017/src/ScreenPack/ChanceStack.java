@@ -116,7 +116,7 @@ public class ChanceStack extends JPanel{
 	
 	private int getNextCard(){
 		cardDrawn = rand.nextInt(17);//puts all cards in play 
-		System.out.println(cardDrawn);
+		//System.out.println(cardDrawn);
 		//cardDrawn = 0; //only puts go to go card in play
 		return cardDrawn;
 	}
