@@ -137,21 +137,11 @@ public class EliminationGame extends MiniGame{
 			Sounds.waitingRoomJoin.playSound();
 			Sounds.landedOnJail.playSound();
 		}
-		
-		
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				removeKeyListner();
-				cleanUp();
-			}
-			
-		},2000);
+		removeKeyListner();
+		forEnding();
 	}
 	
-	private void cleanUp(){
+	protected void cleanUp(){
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();

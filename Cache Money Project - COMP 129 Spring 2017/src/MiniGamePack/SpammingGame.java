@@ -143,7 +143,7 @@ public class SpammingGame extends MiniGame{
 		miniPanel.repaint();
 		miniPanel.revalidate();
 	}
-	private void cleanUp(){
+	protected void cleanUp(){
 		miniPanel.setFocusable(false);
 		lblsForThis.get(1).setText("0");
 		lblsForThis.get(4).setText("0");
@@ -152,7 +152,6 @@ public class SpammingGame extends MiniGame{
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
-		
 		isGameEnded = true;
 	}
 	private void playSpamming(){
@@ -173,15 +172,7 @@ public class SpammingGame extends MiniGame{
 		specialEffect();
 		Sounds.bomb.playSound();
 		showTheWinner(ownerCount >= guestCount);
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				cleanUp();
-			}
-			
-		}, 2000);
+		forEnding();
 	}
 	public void moveBomb(int i){
 		lblsForThis.get(7).setLocation(lblsForThis.get(7).getX()+i, dpHeight*2/7+70);

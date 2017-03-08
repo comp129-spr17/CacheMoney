@@ -46,7 +46,7 @@ public class MiniGamePanel extends JPanel{
 		setBounds(diceP.getBounds());
 		initMinigames();
 		setVisible(false);
-		gameNum = 4;
+		gameNum = -1;
 		//gameNum = 3;
 	}
 	public void setOutputStream(OutputStream outputStream){
@@ -74,7 +74,7 @@ public class MiniGamePanel extends JPanel{
 		//gameNum = 2; // FORCE MINIGAME SELECT HERE
 		
 		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
-//		gameNum = 5;
+//		gameNum = 0;
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
 	}

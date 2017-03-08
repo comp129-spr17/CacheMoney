@@ -274,7 +274,7 @@ public class ReactionGame extends MiniGame {
 		miniPanel.repaint();
 		miniPanel.revalidate();
 	}
-	private void cleanUp(){
+	protected void cleanUp(){
 		miniPanel.setFocusable(false);
 		miniPanel.removeAll();
 		miniPanel.repaint();

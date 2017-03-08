@@ -146,7 +146,7 @@ public class RockScissorPaperGame extends MiniGame{
 		lblsForThis.get(isOwner?5:6).setIcon(imgs.getRspImg(isOwner?6:7));
 		lblsForThis.get(isOwner?5:6).setVisible(true);
 	}
-	private void cleanUp(){
+	protected void cleanUp(){
 		miniPanel.setFocusable(false);
 		lblsForThis.get(2).setText("10");
 		for(int i=0; i<2; i++){
@@ -178,14 +178,7 @@ public class RockScissorPaperGame extends MiniGame{
 			removeKeyListner();
 			ifNotSelected();
 			uncoverResult();
-			for(int i=0; i<5; i++){
-				try {
-					sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			cleanUp();
+			forEnding();
 		}
 	}
 }

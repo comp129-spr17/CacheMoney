@@ -251,16 +251,8 @@ public class BoxSelectGame extends MiniGame{
 			winner = false;
 		}
 		turnNum = 9;
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				removeKeyListner();
-				cleanUp();
-			}
-			
-		},3000);
+		removeKeyListner();
+		forEnding();
 		
 		
 	}
@@ -296,7 +288,7 @@ public class BoxSelectGame extends MiniGame{
 		miniPanel.repaint();
 		miniPanel.revalidate();
 	}
-	private void cleanUp(){
+	protected void cleanUp(){
 		for (int i = 4; i < 8; i++){
 			lblsForThis.get(i).setIcon(null);
 		}

@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.sun.glass.ui.Timer;
 
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
@@ -102,6 +105,12 @@ public class MiniGame{
 	public boolean getWinner(){
 		return false;
 	}
+	protected void forEnding(){
+		(new GameEnding()).start();
+	}
+	protected void cleanUp(){
+		
+	}
 	public void addActionToOwner(){
 		
 	}
@@ -148,5 +157,15 @@ public class MiniGame{
 			System.out.println("WARNING: writer == null");
 		}
 	}
-
+	class GameEnding extends Thread{
+		public void run(){
+			for(int i=0; i<3; i++)
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			cleanUp();
+		}
+	}
 }

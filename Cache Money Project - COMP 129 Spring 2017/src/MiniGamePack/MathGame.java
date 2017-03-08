@@ -216,15 +216,15 @@ public class MathGame extends MiniGame{
 		}
 	}
 	
-	private void cleanUp(){
+	protected void cleanUp(){
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
-		isGameEnded = true;
 		lblsForThis.get(1).setText("0");
 		lblsForThis.get(4).setText("0");
 		removeListner();
 		cleanProblems();
+		isGameEnded = true;
 	}
 	private void cleanProblems(){
 		for(int i=0; i<NUM_PROBLEMS; i++)
@@ -272,14 +272,7 @@ public class MathGame extends MiniGame{
 			
 			removeListner();
 			uncoverResult();
-			for(int i=0; i<5; i++){
-				try {
-					sleep(1200);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			cleanUp();
+			forEnding();
 		}
 	}
 	private void forEachTurn(){
