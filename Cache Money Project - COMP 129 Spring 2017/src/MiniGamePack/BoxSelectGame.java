@@ -66,7 +66,7 @@ public class BoxSelectGame extends MiniGame{
 	}
 
 	private void resetLabels() {
-		setTitleAndDescription("BoxSelect Game", "Select a box using the number keys. Time: 10");
+		setTitleAndDescription("BoxSelect Game", "Select a box. Time: 10");
 		lblsForThis.get(0).setText("Owner's Turn");
 		lblsForThis.get(1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[0] + 1) + ".png", 40, 40));
 		lblsForThis.get(2).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[1] + 1) + ".png", 40, 40));
@@ -84,7 +84,7 @@ public class BoxSelectGame extends MiniGame{
 	
 	
 	private void startDisqualifyTimer(){
-		lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer));
+		lbls.get(1).setText("Select a box. Time: 10");
 		if (disqualifyTimer > 0){
 			disqualifyTimer = 10;
 			return;
@@ -105,7 +105,7 @@ public class BoxSelectGame extends MiniGame{
 						t.purge();
 						return;
 					}
-					lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer - 1));
+					lbls.get(1).setText("Select a box. Time: " + (disqualifyTimer - 1));
 				}
 				displayWinnerAndCleanUp(true);
 				t.cancel();
@@ -220,8 +220,8 @@ public class BoxSelectGame extends MiniGame{
 	
 	private void displayWinnerAndCleanUp(boolean timeExpired) {
 		lbls.get(1).setText("");
+		setWinnerText(timeExpired ? turnNum == 1 : surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1]);
 		turnNum = 9;
-		setWinnerText(timeExpired ? surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1] : turnNum == 1);
 		removeKeyListner();
 		forEnding();
 	}
