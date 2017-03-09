@@ -138,7 +138,7 @@ public class GameScreen extends JFrame{
 		for (int x = 0; x < 4; x++)
 		{
 			playerPieceDisplay[x].setIcon(piecePictures.getPieceImg(x));
-			playerPieceDisplay[x].setBounds((playerInfo.getWidth()/13) + (x * 200),playerInfo.getHeight()/2 + 40,100,100);
+			playerPieceDisplay[x].setBounds((playerInfo.getWidth()/13) + (x * 200),playerInfo.getHeight()/2 - 20,100,100);
 			playerInfo.add(playerPieceDisplay[x]);
 		}
 	}
