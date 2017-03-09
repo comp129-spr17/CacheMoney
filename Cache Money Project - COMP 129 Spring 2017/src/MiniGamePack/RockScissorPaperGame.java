@@ -34,11 +34,11 @@ public class RockScissorPaperGame extends MiniGame{
 		lblsForThis.add(new JLabel(""));
 		lblsForThis.add(new JLabel(imgs.getRspImg(6)));
 		lblsForThis.add(new JLabel(imgs.getRspImg(7)));
-
-		lbls.get(1).setBounds(dpWidth*3/9, dpHeight*1/7-20, dpWidth*5/7, dpHeight*1/7);
-		lblsForThis.get(0).setBounds(dpWidth*3/9, dpHeight*1/7+20, dpWidth-dpWidth*2/9, dpHeight*1/7);
-		lblsForThis.get(1).setBounds(dpWidth*3/9, dpHeight*1/7+40, dpWidth*4/7, dpHeight*1/7);
-		lblsForThis.get(2).setBounds(dpWidth*3/9+140, dpHeight*1/7+40, dpWidth*1/7, dpHeight*1/7);
+		lbls.get(0).setBounds(dpWidth*2/9, 0, dpWidth*2/3, dpHeight*1/7);
+		lbls.get(1).setBounds(dpWidth*2/9, dpHeight*1/7-20, dpWidth*5/7, dpHeight*1/7);
+		lblsForThis.get(0).setBounds(dpWidth*2/9, dpHeight*1/7+20, dpWidth-dpWidth*2/9, dpHeight*1/7);
+		lblsForThis.get(1).setBounds(dpWidth*2/9, dpHeight*1/7+40, dpWidth*4/7, dpHeight*1/7);
+		lblsForThis.get(2).setBounds(dpWidth*2/9+140, dpHeight*1/7+40, dpWidth*1/7, dpHeight*1/7);
 		lblsForThis.get(3).setBounds(0, dpHeight*1/7+70, 100, 100);
 		lblsForThis.get(4).setBounds(dpWidth-100, dpHeight*1/7+70, 100, 100);
 		lblsForThis.get(5).setBounds(100, dpHeight-100, 100, 100);
@@ -103,31 +103,27 @@ public class RockScissorPaperGame extends MiniGame{
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
+			public void keyTyped(KeyEvent e) {}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				enteredChar = Character.toLowerCase(e.getKeyChar());
-				if((enteredChar == 'q' || enteredChar == 'w' || enteredChar == 'e')){
+				if((enteredChar == 'q' || enteredChar == 'w' || enteredChar == 'e') && (isOwner || isSingle)){
 					Sounds.buttonPress.playSound();
 					if(isSingle)
 						selectDecision(ascii[enteredChar], true);
-					else if(isOwner)
+					else
 						sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], true));
-				}else if(enteredChar == 'i' || enteredChar == 'o' || enteredChar == 'p'){
+				}else if((enteredChar == 'i' || enteredChar == 'o' || enteredChar == 'p') && (isGuest || isSingle)){
 					Sounds.buttonPress.playSound();
 					if(isSingle)
 						selectDecision(ascii[enteredChar], false);
-					else if(!isOwner)
+					else
 						sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], false));
 				}
 			}
 			@Override
-			public void keyPressed(KeyEvent e) {
-				
-			}
+			public void keyPressed(KeyEvent e) {}
 				
 			};
 	}

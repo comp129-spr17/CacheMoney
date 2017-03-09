@@ -90,7 +90,7 @@ public class SpammingGame extends MiniGame{
 	}
 	public void addGame(){
 		super.addGame();
-		setTitleAndDescription("SPAMMING GAME!", "Owner spams: 'q', guest spams: 'p'");
+		setTitleAndDescription("SPAMMING GAME!", "Owner: 'q', Guest: 'p'");
 		setVisibleForTitle(true);
 		ownerCount = 0;
 		guestCount = 0;
