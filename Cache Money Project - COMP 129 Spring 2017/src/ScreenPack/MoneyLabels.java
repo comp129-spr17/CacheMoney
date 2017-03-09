@@ -228,6 +228,10 @@ public final class MoneyLabels {
 			playerPieceDisplay[x].setBounds(0,500,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
 			PlayerInfo.add(playerPieceDisplay[x]);
 		}
+		playerPieceDisplay[0].setBounds(xmark[5].getX() - 10,xmark[5].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
+		playerPieceDisplay[1].setBounds(xmark[11].getX() - 10,xmark[11].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
+		playerPieceDisplay[2].setBounds(xmark[17].getX() - 10,xmark[17].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
+		playerPieceDisplay[3].setBounds(xmark[23].getX() - 10,xmark[23].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
 	}
 	private void setFontOfMoniesAndLabels(int i) {
 		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));

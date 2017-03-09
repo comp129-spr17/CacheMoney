@@ -95,8 +95,8 @@ public final class SizeRelated {
 	private void setMoneyLabelStuff(){
 		money_icons_w = money_panel_w / 20;
 		money_icons_h = money_panel_h / 20; 
-		money_piece_w = money_panel_h / 30;
-		money_piece_h = money_panel_h / 30;
+		money_piece_w = money_panel_h / 15;
+		money_piece_h = money_panel_h / 15;
 
 		System.out.println(money_panel_h);
 	}
