@@ -26,6 +26,7 @@ public final class UnicodeForServer {
 	public static final int GENERIC_SEND_INTEGER = 21;
 	public static final int MATH_MINI_GAME_RANDS = 22;
 	public static final int MATH_MINI_GAME_ANS = 23;
+	public static final int MINI_GAME_START_CODE = 24;
 	private UnicodeForServer(){
 		
 	}

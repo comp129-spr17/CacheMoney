@@ -74,6 +74,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.MATH_MINI_GAME_ANS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackMiniGameAns(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UNI.MINI_GAME_START_CODE, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);

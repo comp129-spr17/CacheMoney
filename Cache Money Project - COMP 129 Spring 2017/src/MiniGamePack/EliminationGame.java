@@ -43,15 +43,17 @@ public class EliminationGame extends MiniGame{
 		super(miniPanel, isSingle);
 		apples = new int[NUM_APPLES_AVAILABLE];
 		initLabels();
+		initializeListener();
 	}
 	
 	public void play(){
+		super.play();
 		isOwnerSetting();
 		initializeVars();
 		setTitleAndDescription("Elimination Game", "Take up to " + numApplesToRemove + " apple(s).");
 		setVisibleForTitle(true);
 		lbls.get(1).setIcon(imgs.resizeImage(paths.getPieceImgPath() + owner.getPlayerNum() + owner.getPlayerNum() + ".png", 30, 30));
-		initializeListener();
+		
 		initializeApples();
 		initGameSetting();
 		startDisqualifyTimer();

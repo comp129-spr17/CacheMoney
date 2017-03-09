@@ -72,9 +72,7 @@ public class RockScissorPaperGame extends MiniGame{
 			miniPanel.add(lblsForThis.get(i));
 		miniPanel.repaint();
 		miniPanel.revalidate();
-		addKeyListener();
-		if(isUnavailableToPlay())
-			removeKeyListner();
+		
 	}
 	private void ifNotSelected(){
 		for(int i=0; i<2; i++)
@@ -143,7 +141,6 @@ public class RockScissorPaperGame extends MiniGame{
 		lblsForThis.get(isOwner?5:6).setVisible(true);
 	}
 	protected void cleanUp(){
-		miniPanel.setFocusable(false);
 		lblsForThis.get(2).setText("10");
 		for(int i=0; i<2; i++){
 			decided[i] = false;
@@ -162,7 +159,9 @@ public class RockScissorPaperGame extends MiniGame{
 	}
 	class PlayGame extends Thread{
 		public void run(){
-
+			addKeyListener();
+			if(isUnavailableToPlay())
+				removeKeyListner();
 			for(int i=10; i>=0; --i){
 				lblsForThis.get(2).setText(i +"");
 				try {

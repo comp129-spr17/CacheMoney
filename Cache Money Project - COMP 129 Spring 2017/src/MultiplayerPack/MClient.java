@@ -96,6 +96,7 @@ public class MClient {
 		doActions.put(unicode.GENERIC_SEND_INTEGER, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveInteger(result);}});
 		doActions.put(unicode.MATH_MINI_GAME_RANDS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArraySingle(result);}});
 		doActions.put(unicode.MATH_MINI_GAME_ANS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveAnsForMath(result);}});
+		doActions.put(unicode.MINI_GAME_START_CODE, new DoAction(){public void doAction(ArrayList<Object> result){doStartMiniGame(result);}});
 		
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -248,7 +249,9 @@ public class MClient {
 	private void doReceiveAnsForMath(ArrayList<Object> result){
 		diceP.actionForReceiveAnswer((Integer)result.get(1), (Integer)result.get(2), (Boolean)result.get(3), (Integer)result.get(4));
 	}
-	
+	private void doStartMiniGame(ArrayList<Object> result){
+		diceP.actionForStartMiniGame();
+	}
 	private void setPlayer(int i){
 		thisPlayNum = i;
 		thisPlayer = pList[i];

@@ -1,11 +1,14 @@
 package MiniGamePack;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.TimerTask;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -38,6 +41,9 @@ public class MiniGame{
 	protected boolean isGuest;
 	protected boolean isGameEnded;
 	protected Random rand;
+	private JButton btnStart;
+	private boolean readyToPlay;
+	private JPanel startPanel;
 	public MiniGame(JPanel miniPanel, boolean isSingle){
 		init(miniPanel, isSingle);
 	}
@@ -53,7 +59,34 @@ public class MiniGame{
 		imgs = ImageRelated.getInstance();
 		paths = PathRelated.getInstance();
 		rand = new Random();
+		startPanel = new JPanel();
+		startPanel.setBounds(0, 0, dpWidth, dpHeight);
+		startPanel.setLayout(null);
 		haveInitLabels();
+		btnStart = new JButton("Guest, Please click to start the game");
+		btnStart.setBounds(dpWidth/10, dpHeight/2, dpWidth*8/10, dpHeight/6);
+		btnStart.setEnabled(false);
+		startPanel.add(btnStart);
+		btnStart.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(btnStart.isEnabled()){
+					if(isSingle)
+						actionForStart();
+					else
+						sendMessageToServer(mPack.packSimpleRequest(unicode.MINI_GAME_START_CODE));
+				}
+				
+			}
+		});
 	}
 	private void haveInitLabels(){
 		lbls.add(new JLabel("TITLE OF THE GAME"));
@@ -88,8 +121,14 @@ public class MiniGame{
 		isGuest = myPlayerNum == guest.getPlayerNum();
 	}
 	public void play(){
-		
 		isGameEnded = false;
+		while(!readyToPlay){
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	protected boolean isUnavailableToPlay(){
 		return myPlayerNum != owner.getPlayerNum() && myPlayerNum != guest.getPlayerNum();
@@ -97,6 +136,11 @@ public class MiniGame{
 	public void addGame(){
 		miniPanel.removeAll();
 		isOwnerSetting();
+		miniPanel.add(startPanel);
+		miniPanel.revalidate();
+		miniPanel.repaint();
+		if(isSingle || isGuest)
+			btnStart.setEnabled(true);
 	}
 	public boolean isGameEnded(){
 		return false;
@@ -116,6 +160,9 @@ public class MiniGame{
 	}
 	public void addActionToGuest(){
 		
+	}
+	public void addActionToGame(){
+		actionForStart();
 	}
 	public void addActionToGame(boolean isOwner){
 		
@@ -138,7 +185,18 @@ public class MiniGame{
 	public void addActionToGame(int decision, boolean isOwner){
 		
 	}
+	private void actionForStart(){
+		miniPanel.remove(startPanel);
+		miniPanel.revalidate();
+		miniPanel.repaint();
+		readyToPlay = true;
+		btnStart.setEnabled(false);
+		forStarting();
+	}
 	public void specialEffect(){
+		
+	}
+	protected void forStarting(){
 		
 	}
 	protected void initGameSetting(){
@@ -159,6 +217,7 @@ public class MiniGame{
 	}
 	class GameEnding extends Thread{
 		public void run(){
+			readyToPlay = false;
 			for(int i=0; i<3; i++)
 				try {
 					sleep(1000);

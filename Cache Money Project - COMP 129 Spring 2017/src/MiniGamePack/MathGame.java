@@ -25,8 +25,6 @@ public class MathGame extends MiniGame{
 	private int ownerCount;
 	private int guestCount;
 	private int count;
-	private boolean isThisUpYet;
-	private JButton btnStart;
 	public MathGame(JPanel miniPanel, boolean isSingle){
 		super(miniPanel,isSingle);
 		initExtra();
@@ -54,25 +52,7 @@ public class MathGame extends MiniGame{
 		lblsForThis.get(4).setBounds(dpWidth*5/9 + 50, dpHeight*1/7+10, dpWidth*1/9, dpHeight*1/7);
 		lblsForThis.get(5).setBounds(dpWidth*3/9, dpHeight*1/7+30, dpWidth*4/7, dpHeight*1/7);
 		lblsForThis.get(6).setBounds(dpWidth*3/9+90, dpHeight*1/7+30, dpWidth*1/7, dpHeight*1/7);
-		btnStart = new JButton("Start");
-		btnStart.setBounds(dpWidth*3/9, dpHeight*1/7, 70, 20);
-		btnStart.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				guestGetRandAndSendToOthers();
-				miniPanel.remove(btnStart);
-				miniPanel.revalidate();
-				miniPanel.repaint();
-			}
-		});
+		
 	}
 	private void initExtra(){
 		problems = new MathProblem[NUM_PROBLEMS];
@@ -88,7 +68,6 @@ public class MathGame extends MiniGame{
 		for(int i=0; i<NUM_PROBLEMS; i++){
 			miniPanel.add(problems[i]);
 		}
-		isThisUpYet = true;
 	}
 	public void addGame(){
 		super.addGame();
@@ -135,11 +114,7 @@ public class MathGame extends MiniGame{
 		guestCount = 0;
 		for(int i=0; i<lblsForThis.size(); i++)
 			miniPanel.add(lblsForThis.get(i));
-		if(!isSingle && isGuest)
-			miniPanel.add(btnStart);
-		addProblems();
-		miniPanel.repaint();
-		miniPanel.revalidate();
+
 		isGameEnded = false;
 		if(isSingle)
 			isOwner = true;
@@ -153,6 +128,9 @@ public class MathGame extends MiniGame{
 	
 	public void play(){
 		super.play();
+		addProblems();
+		miniPanel.repaint();
+		miniPanel.revalidate();
 		(new PlayGame()).start();
 	}
 	private void initListeners(){
@@ -226,10 +204,14 @@ public class MathGame extends MiniGame{
 		cleanProblems();
 		isGameEnded = true;
 	}
+
+	protected void forStarting(){
+		if(!isSingle && isGuest)
+			guestGetRandAndSendToOthers();
+	}
 	private void cleanProblems(){
 		for(int i=0; i<NUM_PROBLEMS; i++)
 			problems[i].clearProblems();
-		isThisUpYet = false;
 	}
 	public boolean isGameEnded(){
 		return isGameEnded;
