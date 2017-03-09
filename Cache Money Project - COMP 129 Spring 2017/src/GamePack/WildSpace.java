@@ -62,7 +62,7 @@ public class WildSpace extends Space {
 				spaces[12].receivePiece(piece, piece.getPlayer());
 				playerPosition = 12;
 			}
-			else if(command == "MoveU"){
+			else if(command == "Move5U"){
 				System.out.println("Advance to nearest railroad(defaults to reading for now)");
 				super.removePiece(piece.getPlayer());
 				chanceStack.displayImage(5);
