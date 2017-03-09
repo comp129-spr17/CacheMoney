@@ -93,10 +93,10 @@ public final class SizeRelated {
 		money_panel_w = (int)(screen_h);
 	}
 	private void setMoneyLabelStuff(){
-		money_icons_w = money_panel_w / 25;
-		money_icons_h = money_panel_h / 13; 
-		money_piece_w = money_panel_h / 13;
-		money_piece_h = money_panel_h / 13;
+		money_icons_w = money_panel_w / 20;
+		money_icons_h = money_panel_h / 20; 
+		money_piece_w = money_panel_h / 30;
+		money_piece_h = money_panel_h / 30;
 		
 		
 	}

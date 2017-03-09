@@ -139,20 +139,20 @@ public final class MoneyLabels {
 		{
 			if(b > 17)
 			{
-				xmark[b].setBounds(700, 50 + (70*(b-17)),100,100);
+				xmark[b].setBounds(700, 40 + (60*(b-17)),100,100);
 				if (b == 18)
 				{
-					playerLabels[3].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 120, 200, 100);
+					playerLabels[3].setBounds(xmark[b].getX() - 40, 0, 200, 100);
 					playerLabels[3].setFont(new Font("Serif",Font.BOLD,28));
 					playerLabels[3].setForeground(new Color(0,204,0));
 				}
 			}
 			else
 			{
-				xmark[b].setBounds(500, 50 + (70*(b-11)),100,100);
+				xmark[b].setBounds(500, 40 + (60*(b-11)),100,100);
 				if (b == 12)
 				{
-					playerLabels[2].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 120, 200, 100);
+					playerLabels[2].setBounds(xmark[b].getX() - 40,0, 200, 100);
 					playerLabels[2].setFont(new Font("Serif",Font.BOLD,28));
 					playerLabels[2].setForeground(new Color(230,230, 0));
 				}
@@ -162,20 +162,20 @@ public final class MoneyLabels {
 		{
 			if (b > 5)
 			{
-				xmark[b].setBounds(300, 50 + (70*(b-5)),100,100);
+				xmark[b].setBounds(300, 40 + (60*(b-5)),100,100);
 				if (b == 6)
 				{
-					playerLabels[1].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 120, 200, 100);
+					playerLabels[1].setBounds(xmark[b].getX() - 40,0, 200, 100);
 					playerLabels[1].setFont(new Font("Serif",Font.BOLD,28));
 					playerLabels[1].setForeground(Color.BLUE);
 				}
 			}
 			else
 			{
-				xmark[b].setBounds(100, 50 + (70*(b + 1)),100,100);
+				xmark[b].setBounds(100, 40 + (60*(b + 1)),100,100);
 				if (b == 0)
 				{
-					playerLabels[0].setBounds(xmark[b].getX() - 40,xmark[b].getY() - 120, 200, 100);
+					playerLabels[0].setBounds(xmark[b].getX() - 40,0, 200, 100);
 					playerLabels[0].setFont(new Font("Serif",Font.BOLD,28));
 					playerLabels[0].setForeground(Color.RED);
 				}
