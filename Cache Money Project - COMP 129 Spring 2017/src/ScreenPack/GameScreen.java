@@ -66,9 +66,6 @@ public class GameScreen extends JFrame{
 	private JCheckBox muteMusic;
 	private JCheckBox muteSounds;
 	private int scheduledMusic;
-	private ImageRelated piecePictures;
-	private JLabel[] playerPieceDisplay;
-	
 	
 	
 	// called if user is the host
@@ -120,28 +117,13 @@ public class GameScreen extends JFrame{
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
-		playerPieceDisplay = new JLabel[4];
 		
 		createPlayers();
 		init();
 		setGameScreenBackgroundColor();
-		initializePiecePictures();
 	}
 	
-	private void initializePiecePictures()
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			playerPieceDisplay[i] = new JLabel();
-		}
-		piecePictures = ImageRelated.getInstance();
-		for (int x = 0; x < 4; x++)
-		{
-			playerPieceDisplay[x].setIcon(piecePictures.getPieceImg(x));
-			playerPieceDisplay[x].setBounds((playerInfo.getWidth()/13) + (x * 200),playerInfo.getHeight()/2 - 20,100,100);
-			playerInfo.add(playerPieceDisplay[x]);
-		}
-	}
+
 	private void exitSetting(boolean isHost){
 		if(isSingle)
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

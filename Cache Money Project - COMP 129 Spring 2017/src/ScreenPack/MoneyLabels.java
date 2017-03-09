@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JWindow;
 
 import GamePack.ImageRelated;
+import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
 
@@ -46,6 +47,8 @@ public final class MoneyLabels {
 	private final static MoneyLabels MONEY_LABELS = new MoneyLabels();
 	private SizeRelated sizerelated;
 	private ImageRelated imagerelated;
+	private JLabel[] playerPieceDisplay;
+	private PathRelated pathRelated;
 	private MoneyLabels(){
 		
 	}
@@ -61,12 +64,15 @@ public final class MoneyLabels {
 	private void init(){
 		sizerelated = SizeRelated.getInstance();
 		imagerelated = ImageRelated.getInstance();
+
 		createMoniesLabels();
 		createAndAssignValuesToMoniesLabels();
 		setPositionOfBalances();
 		createAndManageXMarkAndMoniesLabels();
 		addXMarkToPlayerInfo();
 		addLabelsToPlayerInfo();
+
+		initializePiecePictures();
 	}
 	private void createAndManageXMarkAndMoniesLabels() {
 		for(int b=0; b < 24; b++)
@@ -210,6 +216,18 @@ public final class MoneyLabels {
 		//cash5image[i].setBounds(200, 800, 32, 65);
 		//cash50image[i].setBounds(200, 900, 32, 65);
 		//cash500image[i].setBounds(200, 1000, 32, 65);
+	}
+	private void initializePiecePictures()
+	{
+
+		playerPieceDisplay = new JLabel[4];
+		pathRelated = PathRelated.getInstance();
+		for (int x = 0; x < 4; x++)
+		{
+			playerPieceDisplay[x] = new JLabel(imagerelated.resizeImage(pathRelated.getPieceImgPath() + x+x + ".png", sizerelated.getMoneyPieceWidth(), sizerelated.getMoneyPieceHeight()));
+			playerPieceDisplay[x].setBounds(0,500,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
+			PlayerInfo.add(playerPieceDisplay[x]);
+		}
 	}
 	private void setFontOfMoniesAndLabels(int i) {
 		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
