@@ -37,32 +37,32 @@ public class ReactionGame extends MiniGame {
 		userPressed = new boolean[2];
 		userTimes = new double[2];
 		userPressedDoubleCheck = new boolean[2];
+		
+		lblsForThis = new ArrayList<>();
+		for (int i = 0; i < 4; i++){
+			lblsForThis.add(new JLabel());
+		}
+		lblsForThis.get(0).setBounds(dpWidth*3/9, dpHeight*2/7+20, dpWidth, dpHeight*1/7);
+		lblsForThis.get(1).setBounds(0, dpHeight*2/7+70, 100, 100);
+		lblsForThis.get(2).setBounds(dpWidth-100, dpHeight*2/7+70, 100, 100);
+		lblsForThis.get(3).setIcon(imgs.resizeImage(paths.getMiniReactGamePath()+"cake.png", 60, 93));
+		
+		
 	}
 	
 	public void play(){
 		super.play();
-		// insert game here
 		setTitleAndDescription("Reaction Game!", "Owner press: 'q', Guest press: 'p'");
 		manageMiniPanel();
 		initGameSetting();
-		
 		setVisibleForTitle(true);
-		
-		
-		
 		init();
-		
-		
-		
 	}
 
 
 	private void beginReactionTimer() {
-		
-		
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
-
 			@Override
 			public void run() {
 				wasGoMentioned = true;
@@ -75,6 +75,8 @@ public class ReactionGame extends MiniGame {
 					waitForServerResult();
 					gameResult();
 				}
+				//t.cancel();
+				//t.purge();
 			}
 		}, timeUntilReact);
 	}
@@ -82,14 +84,7 @@ public class ReactionGame extends MiniGame {
 	private void init() {
 		
 		
-		userTimes[0] = 42; // arbitrary value
-		userTimes[1] = 42;
-		someoneEnteredTooEarly = false;
-		userPressed[0] = false;
-		userPressed[1] = false;
-		userPressedDoubleCheck[0] = false;
-		userPressedDoubleCheck[1] = false;
-		wasGoMentioned = false;
+		resetVars();
 		
 		if (!isSingle && isOwner){
 			sendMessageToServer(mPack.packIntValue(unicode.GENERIC_SEND_INTEGER, rand.nextInt(7777) + 1500));
@@ -101,29 +96,34 @@ public class ReactionGame extends MiniGame {
 		
 		
 	}
+
+	private void resetVars() {
+		userTimes[0] = 42; // arbitrary value
+		userTimes[1] = 42;
+		someoneEnteredTooEarly = false;
+		userPressed[0] = false;
+		userPressed[1] = false;
+		userPressedDoubleCheck[0] = false;
+		userPressedDoubleCheck[1] = false;
+		wasGoMentioned = false;
+		lblsForThis.get(3).setBounds(dpWidth*7/16, dpHeight*3/7, dpWidth*1/2, dpHeight*3/7);
+		lblsForThis.get(0).setText("wait... wait... wait...");
+	}
+	
 	private void gameResult(){
 		displayWinner();
-		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		delayThread(2000);
 		removeKeyListner();
 		cleanUp();
 	}
 	private void waitForServerResult(){
 		while(!receivedResultFromServer && !someoneEnteredTooEarly){
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			delayThread(1);
 		}
 	}
 	private void displayWinner() {
 		System.out.println("Owner : "+userTimes[0] + ", Guest : "+userTimes[1]);
-		lblsForThis.get(3).setBounds(userTimes[0] <= userTimes[1] ? dpWidth*1/20 : dpWidth*4/9, dpHeight*1/10,dpWidth*4/9 , dpHeight*4/7);
+		lblsForThis.get(3).setBounds(userTimes[0] <= userTimes[1] ? dpWidth*1/20 : dpWidth*6/9, dpHeight*1/10,dpWidth*4/9 , dpHeight*4/7);
 		lblsForThis.get(0).setText("");
 		
 		Sounds.waitingRoomJoin.playSound();
@@ -133,14 +133,9 @@ public class ReactionGame extends MiniGame {
 	private void waitForUsersToEnterChars() {
 		lblsForThis.get(0).setText("GOOOOOOOOOOOO!!!");
 		Sounds.doublesCelebrateSound.playSound();
-		Timer c = new Timer();
 		timeStarted = System.currentTimeMillis();
 		for (int i = 0; i < 5 && (!userPressed[0] || !userPressed[1]); i++){
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			delayThread(1000);
 		}
 		if (!userPressed[0] || !userPressed[1]){
 			checkIfTooEarlyOrOk(true, 0);
@@ -152,26 +147,12 @@ public class ReactionGame extends MiniGame {
 		miniPanel.addKeyListener(listener);
 		if(isUnavailableToPlay())
 			removeKeyListner();
-		
 		initLabels();
-		
-		
 	}
 
 	private void initLabels() {
-		lblsForThis = new ArrayList<>();
-		lblsForThis.add(new JLabel("wait for it..."));
-		lblsForThis.get(0).setBounds(dpWidth*3/9, dpHeight*2/7+20, dpWidth*4/9, dpHeight*1/7);
-		
-		
-		lblsForThis.add(new JLabel(imgs.getPieceImg(owner.getPlayerNum())));
-		lblsForThis.get(1).setBounds(0, dpHeight*2/7+70, 100, 100);
-		
-		lblsForThis.add(new JLabel(imgs.getPieceImg(guest.getPlayerNum())));
-		lblsForThis.get(2).setBounds(dpWidth-100, dpHeight*2/7+70, 100, 100);
-		
-		lblsForThis.add(new JLabel(imgs.resizeImage(paths.getMiniReactGamePath()+"cake.png", 60, 93)));
-		lblsForThis.get(3).setBounds(dpWidth*1/4, dpHeight*3/7, dpWidth*1/2, dpHeight*3/7);
+		lblsForThis.get(1).setIcon(imgs.getPieceImg(owner.getPlayerNum()));
+		lblsForThis.get(2).setIcon(imgs.getPieceImg(guest.getPlayerNum()));
 	}
 	
 	public void addGame(){
@@ -182,10 +163,8 @@ public class ReactionGame extends MiniGame {
 		if (userPressed[num] || someoneEnteredTooEarly){
 			return;
 		}
-
 		userPressed[num] = true;
 		if (wasGoMentioned){
-			//System.out.println(player + " INPUTTED");
 			if(userPressedDoubleCheck[num])
 				userTimes[num] = ((System.currentTimeMillis() - timeStarted) / 1000.0);
 			else
@@ -195,7 +174,6 @@ public class ReactionGame extends MiniGame {
 				sendMessageToServer(mPack.packReactionTime(isOwner ? unicode.REACTION_MINI_GAME_OWNER_END : unicode.REACTION_MINI_GAME_GUEST_END, userTimes[num]));
 		}
 		else{
-			//System.out.println(player + " INPUT TOO EARLY!");
 			if(isSingle){
 				actionForTooEarly(isOwner, num);
 			}else{
@@ -215,7 +193,6 @@ public class ReactionGame extends MiniGame {
 	}
 	
 	
-	
 	public void addActionToGame(boolean isOwner, double time){
 		userTimes[isOwner?0:1] = time;
 		userPressedDoubleCheck[isOwner?0:1] = true;
@@ -232,25 +209,20 @@ public class ReactionGame extends MiniGame {
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-				
-			}
+			public void keyTyped(KeyEvent e) {}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				pressed = e.getKeyChar();
-				
-				if ((isSingle || isOwner) && pressed == 'q'){
-					userPressedDoubleCheck[0] = true;
-					checkIfTooEarlyOrOk(true, 0);
+				if (pressed != 'q' && pressed != 'p'){
+					return;
 				}
-				else if ((isSingle || !isOwner) && pressed == 'p'){
-					userPressedDoubleCheck[1] = true;
-					checkIfTooEarlyOrOk(false, 1);
+				if (isSingle || (isOwner && pressed == 'q') || (isGuest && pressed == 'p')){
+					boolean tooEarlyPresser = pressed == 'q';
+					int userNum = tooEarlyPresser ? 0 : 1;
+					userPressedDoubleCheck[userNum] = true;
+					checkIfTooEarlyOrOk(tooEarlyPresser, userNum);
 				}
-				
-				
 			}
 			
 			@Override
@@ -268,7 +240,6 @@ public class ReactionGame extends MiniGame {
 		for (int i = 0; i < lblsForThis.size(); i++){
 			miniPanel.add(lblsForThis.get(i));
 		}
-		
 		miniPanel.setFocusable(true);
 		miniPanel.requestFocusInWindow();
 		miniPanel.repaint();
@@ -280,6 +251,14 @@ public class ReactionGame extends MiniGame {
 		miniPanel.repaint();
 		miniPanel.revalidate();
 		isGameEnded = true;
+	}
+	
+	private void delayThread(int milliseconds){
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean isGameEnded(){

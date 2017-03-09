@@ -37,10 +37,7 @@ public class SpammingGame extends MiniGame{
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-				
-			}
+			public void keyTyped(KeyEvent e) {}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -60,11 +57,8 @@ public class SpammingGame extends MiniGame{
 						sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_GUEST));
 				}
 			}
-			
 			@Override
-			public void keyPressed(KeyEvent e) {
-				
-			}
+			public void keyPressed(KeyEvent e) {}
 		};
 	}
 	private void initLabels(){

@@ -19,6 +19,8 @@ import MultiplayerPack.UnicodeForServer;
 
 public class MiniGamePanel extends JPanel{
 	private final int NUM_OF_MINIGAMES_AVAILABLE = 6;
+	private final boolean DEBUG_SAME_MINIGAME = false;
+	private final int GAME_TO_START_ON = 1; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -46,7 +48,7 @@ public class MiniGamePanel extends JPanel{
 		setBounds(diceP.getBounds());
 		initMinigames();
 		setVisible(false);
-		gameNum = -1;
+		gameNum = GAME_TO_START_ON;
 		//gameNum = 3;
 	}
 	public void setOutputStream(OutputStream outputStream){
@@ -75,6 +77,11 @@ public class MiniGamePanel extends JPanel{
 		
 		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
 //		gameNum = 0;
+		if (DEBUG_SAME_MINIGAME){
+			gameNum = GAME_TO_START_ON;
+		}
+		
+		
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
 	}

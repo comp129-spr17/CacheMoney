@@ -48,14 +48,26 @@ public class BoxSelectGame extends MiniGame{
 	}
 	public void play(){
 		super.play();
-		isGameEnded = false;
+		resetVars();
+		resetLabels();
+		initGameSetting();
 		manageMiniPanel();
+		startDisqualifyTimer();
+	}
+
+	private void resetVars() {
+		isGameEnded = false;
+		boxImageValues = generateRandNumNoRep(3);
+		turnNum = 0;
+		chosenBox[0] = 0;
+		chosenBox[1] = 0;
+		surpriseBoxes[0] = 0;
+		disqualifyTimer = 0;
+	}
+
+	private void resetLabels() {
 		setTitleAndDescription("BoxSelect Game", "Select a box using the number keys. Time: 10");
-		setVisibleForTitle(true);
 		lblsForThis.get(0).setText("Owner's Turn");
-		
-		boxImageValues = this.generateRandNumNoRep(3);
-		System.out.println(boxImageValues[0]);
 		lblsForThis.get(1).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[0] + 1) + ".png", 40, 40));
 		lblsForThis.get(2).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[1] + 1) + ".png", 40, 40));
 		lblsForThis.get(3).setIcon(imgs.resizeImage(paths.getMiniBoxImgPath() + "box" + (boxImageValues[2] + 1) + ".png", 40, 40));
@@ -63,19 +75,6 @@ public class BoxSelectGame extends MiniGame{
 		lblsForThis.get(2).setText("2");
 		lblsForThis.get(3).setText("3");
 		lblsForThis.get(7).setIcon(imgs.resizeImage(paths.getPieceImgPath() + owner.getPlayerNum() + owner.getPlayerNum() + ".png", 30, 30));
-		
-		turnNum = 0;
-		initGameSetting();
-		chosenBox[0] = 0;
-		chosenBox[1] = 0;
-		surpriseBoxes[0] = 0;
-		disqualifyTimer = 0;
-		
-		startDisqualifyTimer();
-		
-		
-		
-		
 	}
 
 	private void initOthers() {
@@ -85,13 +84,12 @@ public class BoxSelectGame extends MiniGame{
 	
 	
 	private void startDisqualifyTimer(){
+		lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer));
 		if (disqualifyTimer > 0){
 			disqualifyTimer = 10;
-			lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer));
 			return;
 		}
 		disqualifyTimer = 10;
-		lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer));
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 			@Override
@@ -103,17 +101,21 @@ public class BoxSelectGame extends MiniGame{
 						e.printStackTrace();
 					}
 					if (turnNum > 1){
+						t.cancel();
+						t.purge();
 						return;
 					}
 					lbls.get(1).setText("Select a box using the number keys. Time: " + (disqualifyTimer - 1));
 				}
 				displayWinnerAndCleanUp(true);
+				t.cancel();
+				t.purge();
 			}
-			
 		}, 0);
 	}
 	
 	private void manageMiniPanel() {
+		setVisibleForTitle(true);
 		miniPanel.addKeyListener(listener);
 		if(isUnavailableToPlay())
 			removeKeyListner();
@@ -150,36 +152,21 @@ public class BoxSelectGame extends MiniGame{
 	public boolean isGameEnded(){
 		return isGameEnded;
 	}
-	// 0 == guest wins, 1 == owner wins
 	public boolean getWinner(){
 		return winner;
-	}
-	public void addActionToOwner(){
-		
-	}
-	public void addActionToGuest(){
-		
-	}
-	public void specialEffect(){
-		
 	}
 	public void addActionToGame(int[] arr, int keyNum){
 		
 		if (keyNum == 0){
-			System.out.println("GOT HERE");
-			chosenBox[0] = arr[0];
-			chosenBox[1] = arr[1];
+			chosenBox = arr;
 			incrementTurn();
 		}
 		else{
-			surpriseBoxes[0] = arr[0];
-			surpriseBoxes[1] = arr[1];
-			surpriseBoxes[2] = arr[2];
+			surpriseBoxes = arr;
 			assignLabelsToBoxes();
 			displayWinnerAndCleanUp(false);
 		}
 	}
-	
 	
 	private void incrementTurn(){
 		turnNum += 1;
@@ -228,34 +215,22 @@ public class BoxSelectGame extends MiniGame{
 		}
 		
 	}
-
+	
+	
+	
 	private void displayWinnerAndCleanUp(boolean timeExpired) {
 		lbls.get(1).setText("");
-		
-		if (timeExpired && turnNum == 1){
-			lblsForThis.get(0).setText("OWNER WINS!");
-			winner = true;
-			Sounds.buttonCancel.playSound();
-		}
-		else if (timeExpired){
-			lblsForThis.get(0).setText("GUEST WINS!");
-			winner = false;
-			Sounds.buttonCancel.playSound();
-		}
-		else if (surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1]){ // if owner got lucky
-			lblsForThis.get(0).setText("OWNER WINS!");
-			winner = true;
-		}
-		else{// if guest got lucky
-			lblsForThis.get(0).setText("GUEST WINS!");
-			winner = false;
-		}
 		turnNum = 9;
+		setWinnerText(timeExpired ? surpriseBoxes[chosenBox[0] - 1] >= surpriseBoxes[chosenBox[1] - 1] : turnNum == 1);
 		removeKeyListner();
 		forEnding();
-		
-		
 	}
+	
+	private void setWinnerText(boolean winner){
+		lblsForThis.get(0).setText(winner ? "OWNER WINS!" : "GUEST WINS!");
+		this.winner = winner;
+	}
+	
 	
 	
 	private int[] generateRandNumNoRep(int size){
@@ -285,14 +260,11 @@ public class BoxSelectGame extends MiniGame{
 		super.initGameSetting();
 		for(int i=0; i<lblsForThis.size(); i++)
 			miniPanel.add(lblsForThis.get(i));
-		miniPanel.repaint();
-		miniPanel.revalidate();
 	}
 	protected void cleanUp(){
 		for (int i = 4; i < 8; i++){
 			lblsForThis.get(i).setIcon(null);
 		}
-		
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
@@ -306,11 +278,7 @@ public class BoxSelectGame extends MiniGame{
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {
-				
-				
-			}
-			
+			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if(isSingle || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner)){
@@ -327,7 +295,6 @@ public class BoxSelectGame extends MiniGame{
 					}
 					if (chosenBoxNum > 0 && chosenBoxNum < 4 && chosenBox[0] != chosenBoxNum){
 						chosenBox[turnNum] = chosenBoxNum;
-						
 						if (isSingle){
 							incrementTurn();
 						}
@@ -339,9 +306,7 @@ public class BoxSelectGame extends MiniGame{
 			}
 			
 			@Override
-			public void keyPressed(KeyEvent e) {
-				
-			}
+			public void keyPressed(KeyEvent e) {}
 		};
 	}
 	
