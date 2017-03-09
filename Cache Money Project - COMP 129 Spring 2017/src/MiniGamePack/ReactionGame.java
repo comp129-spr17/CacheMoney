@@ -112,9 +112,8 @@ public class ReactionGame extends MiniGame {
 	
 	private void gameResult(){
 		displayWinner();
-		delayThread(2000);
 		removeKeyListner();
-		cleanUp();
+		forEnding();
 	}
 	private void waitForServerResult(){
 		while(!receivedResultFromServer && !someoneEnteredTooEarly){
@@ -246,7 +245,6 @@ public class ReactionGame extends MiniGame {
 		miniPanel.revalidate();
 	}
 	protected void cleanUp(){
-		miniPanel.setFocusable(false);
 		miniPanel.removeAll();
 		miniPanel.repaint();
 		miniPanel.revalidate();
