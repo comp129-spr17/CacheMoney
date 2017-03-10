@@ -10,9 +10,12 @@ import java.io.IOException;
 import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import GamePack.ImageRelated;
 import GamePack.SizeRelated;
 import InterfacePack.Sounds;
 import MultiplayerPack.*;
+import sun.util.resources.cldr.mr.TimeZoneNames_mr;
 
 public class MainMenuScreen {
 	private Font mainfont;
@@ -25,11 +28,16 @@ public class MainMenuScreen {
 	private JButton InstructionButton;
 	private JTextField txtNumP;
 	private Object[] messages;
+	private LoadingScreen loadingScreen;
+	private Timer gameThread;
+	private GameScreen gameScreen;
+	
 	public MainMenuScreen(){
 		init();
 		createMenuWindow();
 		Sounds.register.playSound();
 		addMouseListen();
+		
 		
 	}
 	
@@ -48,6 +56,10 @@ public class MainMenuScreen {
 		messages = new Object[2];
 		messages[0] = "How many players would you like to play with:";
 		messages[1] = txtNumP;
+		gameThread = new Timer();
+		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
+		loadingScreen.setVisible(false);
 	}
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -81,8 +93,13 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
-				//GameScreen gameScreen = new GameScreen();
-				startSinglePlayer();
+				gameThread.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						startSinglePlayer();
+					}
+				}, 0);
+				
 				
 			}
 
@@ -112,9 +129,15 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
-				//GameScreen gameScreen = new GameScreen();
-				AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
-				displayHostOrClientDialogBox(mwr);
+				gameThread.schedule(new TimerTask() {
+					
+					@Override
+					public void run() {
+						AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+						displayHostOrClientDialogBox(mwr);
+					}
+				}, 0);
+				
 				
 			}
 
@@ -224,8 +247,10 @@ public class MainMenuScreen {
 			gNumP = txtNumP.getText();
 			if(isValidNum(gNumP)){
 				hideAndDisposeMainMenuScreen();
-				GameScreen gameScreen = new GameScreen(true);
+				loadingScreen.setVisible(true);
+				gameScreen = new GameScreen(true);
 				gameScreen.setNumPlayer(Integer.parseInt(gNumP));
+				loadingScreen.setVisible(false);
 				return;
 			}else{
 				JOptionPane.showMessageDialog(null, "The number of players must be between 2 and 4 inclusive.", "Invalid Number of Players!", JOptionPane.OK_OPTION);
@@ -258,7 +283,9 @@ public class MainMenuScreen {
 		switch (mwr.askUserHostOrClient()){
 		case 0:
 			hideAndDisposeMainMenuScreen();
-			new GameScreen(false);
+			loadingScreen.setVisible(true);
+			gameScreen = new GameScreen(false);
+			loadingScreen.setVisible(false);
 			break;
 		case 1:
 			setupClient(mwr);
@@ -274,15 +301,19 @@ public class MainMenuScreen {
 
 
 	private void setupClient(AskUserMultiplayerDialogBox mwr) {
-		@SuppressWarnings("unused")
-		GameScreen gameScreen = null;
+		gameScreen = null;
+		mainmenuframe.setVisible(true);
 		if (!mwr.askUserForIPAndPort()){
 			return;
 		}
 		try {
+			mainmenuframe.setVisible(false);
+			loadingScreen.setVisible(true);
 			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
+			loadingScreen.setVisible(false);
 			hideAndDisposeMainMenuScreen();
-		} catch (IOException e) { 
+		} catch (IOException e) {
+			loadingScreen.setVisible(false);
 			setupClient(mwr);
 		}
 	}

@@ -55,10 +55,8 @@ public class GameScreen extends JFrame{
 	private boolean isSingle;
 	private MoneyLabels mLabels;
 	private MClient client;
-	private MHost host;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
-	private int numPlayer;
 	private BoardPanel boardPanel;
 	private JDialog playerInfo;
 	private JButton showInfo;
@@ -66,6 +64,7 @@ public class GameScreen extends JFrame{
 	private JCheckBox muteMusic;
 	private JCheckBox muteSounds;
 	private int scheduledMusic;
+	private int loadingProgress;
 	
 	
 	// called if user is the host
@@ -94,7 +93,6 @@ public class GameScreen extends JFrame{
 		exitSetting(false);
 	}
 	public void setNumPlayer(int numPlayer){
-		this.numPlayer = numPlayer;
 		boardPanel.PlacePiecesToBaord(numPlayer);
 	}
 	private void setWindowVisible(){
@@ -114,6 +112,7 @@ public class GameScreen extends JFrame{
 	}
 	
 	private void initEverything(){
+		loadingProgress = 0;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
@@ -217,14 +216,16 @@ public class GameScreen extends JFrame{
 	}
 	
 	private void init(){
-
+		// 10
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
 		initUserInfoWindow();
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players);
+		loadingProgress = 10;
 		dicePanel = new DicePanel(isSingle, players, mLabels);
+		loadingProgress = 20;
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
@@ -249,7 +250,7 @@ public class GameScreen extends JFrame{
 		muteMusic = new JCheckBox(imgOff); 	// DEBUG
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
-		
+		mainPanel.add(muteMusic);
 		muteMusic.addMouseListener(new MouseListener(){
 
 			@Override
@@ -396,7 +397,7 @@ public class GameScreen extends JFrame{
 			public void run() {
 				try {
 
-					host = new MHost(dicePanel,players);
+					new MHost(dicePanel,players);
 					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -410,5 +411,8 @@ public class GameScreen extends JFrame{
 	}
 	private void addClient(String ip, int port) throws UnknownHostException, IOException{
 			client = new MClient(ip,port,false,dicePanel,players);
+	}
+	public int getLoadingProgress() {
+		return loadingProgress;
 	}
 }
