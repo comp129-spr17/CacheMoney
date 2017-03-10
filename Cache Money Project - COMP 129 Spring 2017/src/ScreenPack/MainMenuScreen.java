@@ -41,6 +41,15 @@ public class MainMenuScreen {
 		
 	}
 	
+	private void initializeLoadingScreen(){
+		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
+	}
+	
+	private void hideAndDisposeLoadingScreen(){
+		loadingScreen.setVisible(false);
+		loadingScreen.dispose();
+	}
 
 	private void init(){
 		scaleBoardToScreenSize();
@@ -57,9 +66,7 @@ public class MainMenuScreen {
 		messages[0] = "How many players would you like to play with:";
 		messages[1] = txtNumP;
 		gameThread = new Timer();
-		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
-		loadingScreen.setVisible(false);
+		
 	}
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -246,11 +253,12 @@ public class MainMenuScreen {
 			Sounds.buttonConfirm.playSound();
 			gNumP = txtNumP.getText();
 			if(isValidNum(gNumP)){
+				initializeLoadingScreen();
 				hideAndDisposeMainMenuScreen();
 				loadingScreen.setVisible(true);
 				gameScreen = new GameScreen(true);
 				gameScreen.setNumPlayer(Integer.parseInt(gNumP));
-				loadingScreen.setVisible(false);
+				hideAndDisposeLoadingScreen();
 				return;
 			}else{
 				JOptionPane.showMessageDialog(null, "The number of players must be between 2 and 4 inclusive.", "Invalid Number of Players!", JOptionPane.OK_OPTION);
@@ -282,12 +290,14 @@ public class MainMenuScreen {
 	private void displayHostOrClientDialogBox(AskUserMultiplayerDialogBox mwr) {
 		switch (mwr.askUserHostOrClient()){
 		case 0:
+			initializeLoadingScreen();
 			hideAndDisposeMainMenuScreen();
 			loadingScreen.setVisible(true);
 			gameScreen = new GameScreen(false);
-			loadingScreen.setVisible(false);
+			hideAndDisposeLoadingScreen();
 			break;
 		case 1:
+			initializeLoadingScreen();
 			setupClient(mwr);
 			break;
 		case 2:
@@ -312,6 +322,7 @@ public class MainMenuScreen {
 			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
 			loadingScreen.setVisible(false);
 			hideAndDisposeMainMenuScreen();
+			hideAndDisposeLoadingScreen();
 		} catch (IOException e) {
 			loadingScreen.setVisible(false);
 			setupClient(mwr);
