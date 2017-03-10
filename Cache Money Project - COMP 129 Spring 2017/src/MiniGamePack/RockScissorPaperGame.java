@@ -45,6 +45,7 @@ public class RockScissorPaperGame extends MiniGame{
 		lblsForThis.get(6).setBounds(200, dpHeight-100, 100, 100);
 	}
 	private void initExtra(){
+		
 		rsp = new RockScissorPaper();
 		selected = new int[2];
 		ascii = new int[128];
