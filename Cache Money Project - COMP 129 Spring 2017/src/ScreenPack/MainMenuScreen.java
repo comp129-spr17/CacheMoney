@@ -42,8 +42,10 @@ public class MainMenuScreen {
 	}
 	
 	private void initializeLoadingScreen(){
-		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
+		if (loadingScreen == null){
+			GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+			loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
+		}
 	}
 	
 	private void hideAndDisposeLoadingScreen(){
@@ -66,6 +68,7 @@ public class MainMenuScreen {
 		messages[0] = "How many players would you like to play with:";
 		messages[1] = txtNumP;
 		gameThread = new Timer();
+		initializeLoadingScreen();
 		
 	}
 	private void scaleBoardToScreenSize() {
@@ -253,7 +256,6 @@ public class MainMenuScreen {
 			Sounds.buttonConfirm.playSound();
 			gNumP = txtNumP.getText();
 			if(isValidNum(gNumP)){
-				initializeLoadingScreen();
 				hideAndDisposeMainMenuScreen();
 				loadingScreen.setVisible(true);
 				gameScreen = new GameScreen(true);
@@ -290,14 +292,12 @@ public class MainMenuScreen {
 	private void displayHostOrClientDialogBox(AskUserMultiplayerDialogBox mwr) {
 		switch (mwr.askUserHostOrClient()){
 		case 0:
-			initializeLoadingScreen();
 			hideAndDisposeMainMenuScreen();
 			loadingScreen.setVisible(true);
 			gameScreen = new GameScreen(false);
 			hideAndDisposeLoadingScreen();
 			break;
 		case 1:
-			initializeLoadingScreen();
 			setupClient(mwr);
 			break;
 		case 2:
