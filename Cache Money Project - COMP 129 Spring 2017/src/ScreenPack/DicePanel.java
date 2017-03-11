@@ -5,6 +5,8 @@ import InterfacePack.Music;
 import InterfacePack.Sounds;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -16,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,7 +28,7 @@ import javax.swing.JTextField;
 
 public class DicePanel extends JPanel{
 	private final boolean SERVER_DEBUG = true;
-
+	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
@@ -66,6 +69,8 @@ public class DicePanel extends JPanel{
 	private MiniGamePanel mGamePanel;
 	private int myPlayerNum;
 	private JLabel[] showPlayer;
+	private boolean setDebugVisible;
+	
 	public DicePanel(boolean isSingle, Player[] player, MoneyLabels MLabels){
 		players = player;
 		mLabel = MLabels;
@@ -75,9 +80,8 @@ public class DicePanel extends JPanel{
 		init();
 	}
 	private void init(){
+		setDebugVisible = SERVER_DEBUG;
 
-
-		// TODO: NEED A CHAT SCREEN IN THIS PANEL FOR EXTRA FIREWORKS AND SPARKLES
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		paths = PathRelated.getInstance();
@@ -88,6 +92,7 @@ public class DicePanel extends JPanel{
 		addStartGameButton();
 		rand = new Random();
 		isDiceButtonPressed = false;
+		
 		dCel = new DoubleCelebrate();
 		dCel.setSize(this.getSize());
 		dCel.setLocation(this.getLocation().x, this.getLocation().y-5);
@@ -110,6 +115,7 @@ public class DicePanel extends JPanel{
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
 		toggleDoubles.setVisible(false);
+		
 	}
 	private void setPlayerPieceStatus(){
 		showPlayer = new JLabel[4];
@@ -120,7 +126,7 @@ public class DicePanel extends JPanel{
 		showPlayer[2].setText("Current Player Piece");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(1));
 
-
+ 
 	}
 	public void setPlayerPiecesUp(JPanel Game, int x){
 		showPlayer[0].setBounds(x, 30, 120, 40);
@@ -177,19 +183,23 @@ public class DicePanel extends JPanel{
 		hand[1].setBounds(sizeRelated.getDicePanelWidth()/2, sizeRelated.getDicePanelHeight()/2, 200, 200);
 	}
 	private void addTurnLabel() {
-		turnLabel = new JLabel("Player 1's Turn!");
-		turnLabel.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*4/5, 100, 50);
+		turnLabel = new JLabel("<html> Player 1's Turn! <br /> Click the dice to roll! </html>");
+		turnLabel.setBounds(sizeRelated.getDicePanelWidth()*5/16, sizeRelated.getDicePanelHeight()*4/5, 400, 50);
 		add(turnLabel);
 	}
 	private void addRollButton() {
-		rollButton = new JButton("Roll!");
-		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*3/5, 100, 50);
+		rollButton = new JButton();
+		Icon img = imageRelated.getGIFImage(this, "DiceImages/" +"spinningDice.gif");
+		rollButton.setIcon(img);
+		rollButton.setPressedIcon(img);
+		rollButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*8/20, 120, 120);
+		rollButton.setBorder(null);
 		rollButton.setBackground(Color.WHITE);
 		add(rollButton);
 	}
 	private void addOverrideDiceRoll() {
 		this.overrideDiceRoll = new JTextField();
-		overrideDiceRoll.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*2/5, 100, 50);
+		overrideDiceRoll.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*1/5, 100, 50);
 		if (!isSingle){
 			overrideDiceRoll.setEnabled(false);
 			overrideDiceRoll.setEditable(false);
@@ -244,7 +254,10 @@ public class DicePanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
+				if (e.getButton() == 3){
+					setDebugVisible = false;
+				}
+				
 				if (startGameButton.isEnabled()){
 					if(isSingle){
 						actionForStart();
@@ -279,12 +292,12 @@ public class DicePanel extends JPanel{
 		rollButton.addMouseListener(new MouseListener() {
 
 			@Override
-			public void mouseReleased(MouseEvent e) {				
+			public void mouseReleased(MouseEvent e) {	
+				
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-
 			}
 
 			@Override
@@ -364,9 +377,11 @@ public class DicePanel extends JPanel{
 	public void actionForStart(){
 		startGameButton.setVisible(false);
 		rollButton.setVisible(true);
-		overrideDiceRoll.setVisible(true);
 		turnLabel.setVisible(true);
-		toggleDoubles.setVisible(true);
+		if (setDebugVisible){
+			overrideDiceRoll.setVisible(true);
+			toggleDoubles.setVisible(true);
+		}
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
 		showPlayer[2].setVisible(true);
@@ -412,8 +427,10 @@ public class DicePanel extends JPanel{
 		}
 		else{
 			rollButton.setVisible(true);
-			overrideDiceRoll.setVisible(true);
-			toggleDoubles.setVisible(true);
+			if (setDebugVisible){
+				overrideDiceRoll.setVisible(true);
+				toggleDoubles.setVisible(true);
+			}
 		}
 	}
 	public void actionForPropertyPurchase(String propertyName, int buyingPrice, int playerNum){
@@ -473,7 +490,7 @@ public class DicePanel extends JPanel{
 	}
 
 	private void changeTurn(){
-		turnLabel.setText("Player " + (current+1) + "'s Turn!");
+		turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br /> Click the dice to roll! </html>");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){
@@ -660,8 +677,11 @@ public class DicePanel extends JPanel{
 		else{
 			mLabel.reinitializeMoneyLabels();
 			rollButton.setVisible(isSingle ? true : current == myPlayerNum);
-			overrideDiceRoll.setVisible(isSingle ? true : current == myPlayerNum);
-			toggleDoubles.setVisible(isSingle ? true : current == myPlayerNum);
+			if (setDebugVisible){
+				overrideDiceRoll.setVisible(isSingle ? true : current == myPlayerNum);
+				toggleDoubles.setVisible(isSingle ? true : current == myPlayerNum);
+			}
+			
 		}
 
 	}
@@ -735,7 +755,6 @@ public class DicePanel extends JPanel{
 			WW.incrementMultiplier();
 			EC.incrementMultiplier();
 		}
-
 	}
 
 }

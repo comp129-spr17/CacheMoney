@@ -11,7 +11,7 @@ import GamePack.ImageRelated;
 
 public class LoadingScreenPanel extends JPanel{
 
-	private final int NUM_OF_RANDOM_MESSAGES_AVAILABLE = 12;
+	private final int NUM_OF_RANDOM_MESSAGES_AVAILABLE = 16;
 	private final static String FILE_PATH="Images/";
 	private ImageIcon loadingGif;
 	private ImageRelated imageRelated;
@@ -50,8 +50,7 @@ public class LoadingScreenPanel extends JPanel{
 		JLabel randomLoadingMessageLabel = new JLabel();
 		add(randomLoadingMessageLabel);
 		String text = "NULL";
-		// rand.nextInt(NUM_OF_RANDOM_MESSAGES_AVAILABLE)
-		switch (rand.nextInt(NUM_OF_RANDOM_MESSAGES_AVAILABLE)){ // 20 CHARACTER LIMIT
+		switch (rand.nextInt(NUM_OF_RANDOM_MESSAGES_AVAILABLE)){ // 35 CHARACTER LIMIT
 		case 0:
 			text = "Created by Team Cache Money!";
 			break;
@@ -80,13 +79,25 @@ public class LoadingScreenPanel extends JPanel{
 			text = "I forgot to commit the images...";
 			break;
 		case 9:
-			text = "Life gets better if you break things.";
+			text = "Don't forget to commit.";
 			break;
 		case 10:
 			text = "To branch or not to branch...";
 			break;
 		case 11:
-			text = "NullPointerExeption: your mouse";
+			text = "NullPointerExeption: social_life";
+			break;
+		case 12:
+			text = "Devin, please get some sleep!";
+			break;
+		case 13:
+			text = "I'm hungry.";
+			break;
+		case 14:
+			text = "Remember to get some sleep.";
+			break;
+		case 15:
+			text = "Don't play this during class!";
 			break;
 		}
 		randomLoadingMessageLabel.setText("  " + text);
