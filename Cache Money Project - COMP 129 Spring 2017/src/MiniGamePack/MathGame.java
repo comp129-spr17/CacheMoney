@@ -73,7 +73,7 @@ public class MathGame extends MiniGame{
 		GAME_NUM = 5;
 		super.addGame();
 		initMathProblems();
-		setTitleAndDescription("Math Game!", "Solve more problems to win the game!");
+		setTitleAndDescription("Math Game!", "");
 		setVisibleForTitle(true);
 		initGameSetting();
 		
@@ -226,7 +226,7 @@ public class MathGame extends MiniGame{
 	}
 	private void uncoverResult(){
 		Sounds.waitingRoomJoin.playSound();
-		lbls.get(1).setText((getWinner() ? "OWNER":"GUEST") + " WINS!");
+		lbls.get(0).setText((getWinner() ? "OWNER":"GUEST") + " WINS!");
 	}
 	private void disableFunctions(){
 		for(int i=0; i<NUM_PROBLEMS; i++)

@@ -15,6 +15,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import InterfacePack.Sounds;
+
 public class CommunityStack extends JPanel{
 	Random rand = new Random();
 	int cardDrawn;
@@ -99,6 +101,7 @@ public class CommunityStack extends JPanel{
 		boardPanel.add(this);
 		
 		this.setVisible(true);
+		//Sounds.quickDisplay.playSound();
 		
 		try {
 		    Thread.sleep(4000);

@@ -189,7 +189,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				Sounds.quickDisplay.playSound();
 					playerInfo.setVisible(true);
 					//playerInfo.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 			}

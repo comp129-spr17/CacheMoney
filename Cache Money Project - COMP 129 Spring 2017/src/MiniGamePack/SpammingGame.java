@@ -142,7 +142,7 @@ public class SpammingGame extends MiniGame{
 		miniPanel.setFocusable(false);
 		lblsForThis.get(1).setText("0");
 		lblsForThis.get(4).setText("0");
-		lblsForThis.get(6).setText("");
+		lblsForThis.get(6).setText("10");
 		lblsForThis.get(7).setLocation(dpWidth/2-50, dpHeight*2/7+70);
 		miniPanel.removeAll();
 		miniPanel.repaint();

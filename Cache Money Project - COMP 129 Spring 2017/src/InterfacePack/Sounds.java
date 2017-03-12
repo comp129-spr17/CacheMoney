@@ -30,7 +30,9 @@ public enum Sounds {
 	waitingRoomJoin,
 	winGame,
 	fuse,
-	bomb
+	bomb,
+	minigameBegin,
+	quickDisplay
 	;
 	
 	private Random rand = new Random();
@@ -124,6 +126,12 @@ public enum Sounds {
 			return;
 		case bomb:
 			SoundAndMusicPlayer.getInstance().playSound("audio", "bomb.wav");
+			return;
+		case minigameBegin:
+			SoundAndMusicPlayer.getInstance().playSound("audio", "minigameBegin.wav");
+			return;
+		case quickDisplay:
+			SoundAndMusicPlayer.getInstance().playSound("audio", "quickDisplay.wav");
 			return;
 		default:
 			System.out.println("Sound Error");

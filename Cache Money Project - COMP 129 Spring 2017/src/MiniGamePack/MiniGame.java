@@ -20,6 +20,7 @@ import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 import ScreenPack.MiniGamePanel;
@@ -67,8 +68,8 @@ public class MiniGame{
 		startPanel.setBounds(0, 0, dpWidth, dpHeight);
 		startPanel.setLayout(null);
 		haveInitLabels();
-		btnStart = new JButton("Click to Begin Minigame Challenge.");
-		btnStart.setBounds(dpWidth/10, dpHeight/2, dpWidth*8/10, dpHeight/6);
+		btnStart = new JButton("Start Minigame!");
+		btnStart.setBounds(dpWidth/10, dpHeight*6/8, dpWidth*8/10, dpHeight/6);
 		btnStart.setEnabled(false);
 		startPanel.add(btnStart);
 		btnStart.addMouseListener(new MouseListener() {
@@ -105,7 +106,7 @@ public class MiniGame{
 		instructionsLabels.add(new JLabel("TITLE OF GAME"));
 		instructionsLabels.add(new JLabel("Instructions"));
 		instructionsLabels.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
-		instructionsLabels.get(1).setBounds(dpWidth/20, dpHeight*1/14, dpWidth * 9/10, dpHeight*3/7);
+		instructionsLabels.get(1).setBounds(dpWidth/20, dpHeight*1/28, dpWidth * 9/10, dpHeight*5/7);
 		startPanel.add(instructionsLabels.get(0));
 		startPanel.add(instructionsLabels.get(1));
 	}
@@ -162,9 +163,10 @@ public class MiniGame{
 		miniPanel.add(startPanel);
 		btnStart.setEnabled(isSingle || isOwner);
 		if (!isSingle){
-			btnStart.setText(isOwner ? "Click to Begin Minigame Challenge." : "Waiting For Owner to Start...");
+			btnStart.setText(isOwner ? "Start Minigame!" : "Waiting For Owner to Start...");
 		}
 		setAppropriateMinigameTitleAndDescription(GAME_NUM);
+		Sounds.quickDisplay.playSound();
 	}
 
 	
@@ -193,11 +195,6 @@ public class MiniGame{
 			break;
 		}
 	}
-	
-	
-	
-	
-	
 	
 	public boolean isGameEnded(){
 		return false;
@@ -246,6 +243,7 @@ public class MiniGame{
 		miniPanel.remove(startPanel);
 		miniPanel.revalidate();
 		miniPanel.repaint();
+		Sounds.minigameBegin.playSound();
 		readyToPlay = true;
 		btnStart.setEnabled(false);
 		forStarting();
