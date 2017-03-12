@@ -338,7 +338,7 @@ public class DicePanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (mGamePanel.isPlayingMinigame()){
+				if (!mGamePanel.isPlayingMinigame()){
 					endTurnButtonPressed();
 				}
 			}
