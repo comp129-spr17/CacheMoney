@@ -281,7 +281,7 @@ public final class MoneyLabels {
 				}
 			}
 		}
-		System.out.println(totalmonnies[0].getText());
+		//System.out.println(totalmonnies[0].getText());
 	}
 	private void createMoniesLabels() {
 		xmark = new JLabel[4];

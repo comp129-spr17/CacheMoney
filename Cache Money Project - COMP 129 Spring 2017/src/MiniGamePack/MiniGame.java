@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.KeyStore.PrivateKeyEntry;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.TimerTask;
@@ -63,7 +64,7 @@ public class MiniGame{
 		startPanel.setBounds(0, 0, dpWidth, dpHeight);
 		startPanel.setLayout(null);
 		haveInitLabels();
-		btnStart = new JButton("Guest, Please click to start the game");
+		btnStart = new JButton("Click to Begin Minigame Challenge.");
 		btnStart.setBounds(dpWidth/10, dpHeight/2, dpWidth*8/10, dpHeight/6);
 		btnStart.setEnabled(false);
 		startPanel.add(btnStart);
@@ -92,7 +93,7 @@ public class MiniGame{
 		lbls.add(new JLabel("TITLE OF THE GAME"));
 		lbls.add(new JLabel("Description of the game"));
 		lbls.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
-		lbls.get(1).setBounds(dpWidth/9, dpHeight*1/7, dpWidth*5/7, dpHeight*1/7);
+		lbls.get(1).setBounds(dpWidth/9, dpHeight*1/7, dpWidth, dpHeight*1/7);
 		for(int i=0; i<lbls.size(); i++)
 			miniPanel.add(lbls.get(i));
 		setVisibleForTitle(false);
@@ -133,15 +134,42 @@ public class MiniGame{
 	protected boolean isUnavailableToPlay(){
 		return myPlayerNum != owner.getPlayerNum() && myPlayerNum != guest.getPlayerNum();
 	}
+	
 	public void addGame(){
 		miniPanel.removeAll();
 		isOwnerSetting();
 		miniPanel.add(startPanel);
 		miniPanel.revalidate();
 		miniPanel.repaint();
-		if(isSingle || isGuest)
-			btnStart.setEnabled(true);
+		btnStart.setEnabled(isSingle || isOwner);
+		if (!isSingle){
+			btnStart.setText(isOwner ? "Click to Begin Minigame Challenge." : "Waiting For Owner to Start...");
+		}
 	}
+
+	
+	
+	private void setAppropriateMinigameTitleAndDescription(int gameNum){
+		switch (gameNum) {
+		case 0:
+			setTitleAndDescription("Spam Minigame", "<html> Nudge the bomb to your opponent's side before time expires. <br /> Owner: Press 'q' as fast as you can! <br />Guest: Press 'p' as fast as you can! <html>");
+			break;
+		case 1:
+			setTitleAndDescription("Reaction Game", "<html> React faster than your opponent when you see: GOOOOOO! <br /> Owner: Press 'q' to react! <br />Guest: Press 'p' to react! <html>");
+			break;
+		case 2:
+			setTitleAndDescription("Box Selecting Game", "<html> Select a box. You'll know what's inside once everyone has chosen! <br /> Owner: Press 1, 2, or 3 to select a box on your turn. <br />Guest: Press 1, 2, or 3 to select a box on your turn. <html>");
+			break;
+		default:
+			break;
+		}
+	}
+	
+	
+	
+	
+	
+	
 	public boolean isGameEnded(){
 		return false;
 	}

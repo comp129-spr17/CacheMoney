@@ -311,13 +311,9 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				diceRes = getDiceRoll();
-
 				if (toggleDoubles.isSelected()){ // DEBUG ONLY
 					diceRes[0] = diceRes[1];
 				}
-
-
-
 				if(isSingle) {
 					if(numOfDoublesInRow >= 3)
 						actionForDiceRoll(0, 0);
@@ -403,12 +399,7 @@ public class DicePanel extends JPanel{
 		dices[0].hideDice();
 		dices[1].hideDice();
 		propertyPanel.enableButtons();
-
-
-
-		//if(!isSingle){
 		actionForPlayers();
-		//}
 
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
@@ -533,7 +524,6 @@ public class DicePanel extends JPanel{
 			@Override
 			public void run() {
 				isDiceButtonPressed = false;
-				//System.out.println("Sum : " + (result[0] + result[1]));
 				for(int i=0; i<2; i++)
 					hand[i].setVisible(false);
 				hand[0].setLocation(sizeRelated.getDicePanelWidth()/10, sizeRelated.getDicePanelHeight()/2);
@@ -563,7 +553,7 @@ public class DicePanel extends JPanel{
 		}
 
 		if (SERVER_DEBUG){
-			sum = 1; // FOR SERVER DEBUGGIN PURPOSE
+			sum = 1;
 		}
 
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
@@ -592,17 +582,12 @@ public class DicePanel extends JPanel{
 		isCelebrating = true;
 		Sounds.doublesCelebrateSound.playSound();
 		nTimer.schedule(new TimerTask() {
-
 			@Override
 			public void run() {
 				bPanel.add(dCel);
 				bPanel.revalidate();
 				bPanel.repaint();
-				try {
-					Thread.sleep(2500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				delayThread(2500);
 				bPanel.remove(dCel);
 				bPanel.revalidate();
 				bPanel.repaint();
@@ -621,21 +606,16 @@ public class DicePanel extends JPanel{
 						hand[which].setLocation(sizeRelated.getDicePanelWidth()/10+i*15, hand[which].getY() + (i < 2 ? -3 : 3));
 					else
 						hand[which].setLocation(sizeRelated.getDicePanelWidth()/2 -i*15, hand[which].getY() + (i < 2 ? -3 : 3));
-
-					Thread.sleep(40);
+					delayThread(40);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
 	}
-	private void waitForDiceMoving(){
+	private void waitForDiceMoving(){ // TODO: THERE'S WAY TOO MANY IF-STATEMENTS IN THIS FUNCTION!!!!!
 		while(!board.isDoneAnimating() || isCelebrating){
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			delayThread(1);
 		}
 		if(numOfDoublesInRow >= 3) {
 			numOfDoublesInRow = 0;
@@ -648,9 +628,7 @@ public class DicePanel extends JPanel{
 			jail.sendToJail(curPlayer.getPiece(), current);
 		} else {
 			String curSpaceName = board.getSpacePlayerLandedOn(previous);
-			//sendSpaceLandedOn(curSpaceName);
 			if (board.isPlayerInPropertySpace(previous)){
-				//Sounds.landedOnUnownedProperty.playSound();
 				if(propertyPanel.isPropertyOwned(curSpaceName) && propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
 
 				}else{
@@ -663,19 +641,17 @@ public class DicePanel extends JPanel{
 						propertyPanel.executeSwitch(curSpaceName, players[current], current == myPlayerNum);
 					}
 				}
-
-
-
 			}
 			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
 				Sounds.landedOnChanceOrCommunityChest.playSound();
 			}
 		}
+		delayThread(600);
+		mLabel.reinitializeMoneyLabels();
 		if (!isSame || numOfDoublesInRow >= 3){
 			endTurnButton.setVisible(isSingle ? true : current == myPlayerNum);
 		}
 		else{
-			mLabel.reinitializeMoneyLabels();
 			rollButton.setVisible(isSingle ? true : current == myPlayerNum);
 			if (setDebugVisible){
 				overrideDiceRoll.setVisible(isSingle ? true : current == myPlayerNum);
@@ -685,10 +661,6 @@ public class DicePanel extends JPanel{
 		}
 
 	}
-
-	//	private void sendSpaceLandedOn(String space){
-	////		sendMessageToServer("Player " + (previous + 1) + " landed on " + space + "!", true);
-	//	}
 
 	public boolean isDoublesRolled() {
 		return isSame;
@@ -754,6 +726,14 @@ public class DicePanel extends JPanel{
 		{
 			WW.incrementMultiplier();
 			EC.incrementMultiplier();
+		}
+	}
+	
+	private void delayThread(int milliseconds){
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
