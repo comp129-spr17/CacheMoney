@@ -55,6 +55,7 @@ public class RockScissorPaperGame extends MiniGame{
 		ascii['e'] = ascii['p'] = 3;
 	}
 	public void addGame(){
+		GAME_NUM = 3;
 		super.addGame();
 		setTitleAndDescription("Rock Scissor Paper Game!", "Order of rock,scissor,paper:");
 		setVisibleForTitle(true);

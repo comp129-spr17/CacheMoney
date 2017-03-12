@@ -179,6 +179,7 @@ public class EliminationGame extends MiniGame{
 		this.myPlayerNum = myPlayerNum;
 	}
 	public void addGame(){
+		GAME_NUM = 4;
 		super.addGame();
 	}
 	public boolean isGameEnded(){

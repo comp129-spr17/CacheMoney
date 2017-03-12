@@ -155,6 +155,7 @@ public class ReactionGame extends MiniGame {
 	}
 	
 	public void addGame(){
+		GAME_NUM = 1;
 		super.addGame();
 	}
 	

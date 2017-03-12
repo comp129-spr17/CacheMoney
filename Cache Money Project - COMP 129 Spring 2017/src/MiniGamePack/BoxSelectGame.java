@@ -147,7 +147,7 @@ public class BoxSelectGame extends MiniGame{
 	}
 	
 	public void addGame(){
-		
+		GAME_NUM = 2;
 		super.addGame();
 	}
 	public boolean isGameEnded(){

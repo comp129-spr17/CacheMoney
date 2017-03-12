@@ -70,6 +70,7 @@ public class MathGame extends MiniGame{
 		}
 	}
 	public void addGame(){
+		GAME_NUM = 5;
 		super.addGame();
 		initMathProblems();
 		setTitleAndDescription("Math Game!", "Solve more problems to win the game!");

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import com.sun.glass.ui.Timer;
 
+import GamePack.GoSpace;
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
@@ -24,9 +25,11 @@ import MultiplayerPack.UnicodeForServer;
 import ScreenPack.MiniGamePanel;
 // abstract class for MiniGames
 public class MiniGame{
+	protected int GAME_NUM;
 	protected Player owner;
 	protected Player guest;
 	protected ArrayList<JLabel> lbls;
+	protected ArrayList<JLabel> instructionsLabels;
 	protected SizeRelated size;
 	protected int dpWidth;
 	protected int dpHeight;
@@ -97,7 +100,25 @@ public class MiniGame{
 		for(int i=0; i<lbls.size(); i++)
 			miniPanel.add(lbls.get(i));
 		setVisibleForTitle(false);
+		
+		instructionsLabels = new ArrayList<JLabel>();
+		instructionsLabels.add(new JLabel("TITLE OF GAME"));
+		instructionsLabels.add(new JLabel("Instructions"));
+		instructionsLabels.get(0).setBounds(dpWidth/3, 0, dpWidth*2/3, dpHeight*1/7);
+		instructionsLabels.get(1).setBounds(dpWidth/20, dpHeight*1/14, dpWidth * 9/10, dpHeight*3/7);
+		startPanel.add(instructionsLabels.get(0));
+		startPanel.add(instructionsLabels.get(1));
 	}
+	
+	private void setInstructions(String title, String description){
+		instructionsLabels.get(0).setVisible(false);
+		instructionsLabels.get(1).setVisible(false);
+		instructionsLabels.get(0).setText(title);
+		instructionsLabels.get(1).setText(description);
+		instructionsLabels.get(0).setVisible(true);
+		instructionsLabels.get(1).setVisible(true);
+	}
+	
 	protected void setTitleAndDescription(String title, String description){
 		lbls.get(0).setText(title);
 		lbls.get(1).setText(description);
@@ -139,12 +160,11 @@ public class MiniGame{
 		miniPanel.removeAll();
 		isOwnerSetting();
 		miniPanel.add(startPanel);
-		miniPanel.revalidate();
-		miniPanel.repaint();
 		btnStart.setEnabled(isSingle || isOwner);
 		if (!isSingle){
 			btnStart.setText(isOwner ? "Click to Begin Minigame Challenge." : "Waiting For Owner to Start...");
 		}
+		setAppropriateMinigameTitleAndDescription(GAME_NUM);
 	}
 
 	
@@ -152,13 +172,22 @@ public class MiniGame{
 	private void setAppropriateMinigameTitleAndDescription(int gameNum){
 		switch (gameNum) {
 		case 0:
-			setTitleAndDescription("Spam Minigame", "<html> Nudge the bomb to your opponent's side before time expires. <br /> Owner: Press 'q' as fast as you can! <br />Guest: Press 'p' as fast as you can! <html>");
+			setInstructions("Spam Minigame", "<html>Instructions: <br />Nudge the bomb to your opponent's side before time expires. <br /><br />Controls:<br />Owner: Press 'q' as fast as you can! <br />Guest: Press 'p' as fast as you can! <html>");
 			break;
 		case 1:
-			setTitleAndDescription("Reaction Game", "<html> React faster than your opponent when you see: GOOOOOO! <br /> Owner: Press 'q' to react! <br />Guest: Press 'p' to react! <html>");
+			setInstructions("Reaction Game", "<html>Instructions: <br />React faster than your opponent when you see: GOOOOOO!!! <br /><br />Controls:<br />Owner: Press 'q' to react! <br />Guest: Press 'p' to react! <html>");
 			break;
 		case 2:
-			setTitleAndDescription("Box Selecting Game", "<html> Select a box. You'll know what's inside once everyone has chosen! <br /> Owner: Press 1, 2, or 3 to select a box on your turn. <br />Guest: Press 1, 2, or 3 to select a box on your turn. <html>");
+			setInstructions("Box Selecting Game", "<html>Instructions: <br />On your turn, select a box. You'll know what's inside once you and your opponent have chosen! <br /><br />Controls:<br />Owner: Press 1, 2, or 3 to select a box on your turn. <br />Guest: Press 1, 2, or 3 to select a box on your turn. <html>");
+			break;
+		case 3:
+			setInstructions("Rock Scissors Paper", "<html>Instructions: <br />Duel your opponent in an epic rock-paper-scissors match! You may change your decision before time expires. <br /><br />Controls:<br />Owner: 'q' = rock / 'w' = scissors / 'e' = paper. <br />Guest: 'i' = rock / 'o' = scissors / 'p' = paper. <html>");
+			break;
+		case 4:
+			setInstructions("Elimination Game", "<html>Instructions: <br />On your turn, take 1, 2, or 3 apples. Do not take the rotten apple! <br /><br />Controls:<br />Owner: Select an apple using the num keys, then press enter to end your turn. <br />Guest: Select an apple using the num keys, then press enter to end your turn. <html>");
+			break;
+		case 5:
+			setInstructions("Math Game", "<html>Instructions: <br />Solve more math problems than your opponent before time expires! <br /><br />Controls:<br />Owner: Type your answer in the text field, then press enter to submit the answer. <br />Guest: Type your answer in the text field, then press enter to submit the answer. <html>");
 			break;
 		default:
 			break;
