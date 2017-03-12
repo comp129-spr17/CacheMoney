@@ -31,14 +31,14 @@ public class MiniGamePanel extends JPanel{
 	private String curSpaceName;
 	private boolean isCurrent;
 	private int gameNum;
-	private Random rand;
+	private boolean isPlayingMinigame;
 	
 	public MiniGamePanel(boolean isSingle, DicePanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
 	{
 		init(isSingle,diceP,b, pPanel);
 	}
 	private void init(boolean isSingle, DicePanel diceP, BoardPanel b,PropertyInfoPanel pPanel){
-		rand = new Random();
+		isPlayingMinigame = false;
 		this.isSingle = isSingle;
 		dicePanel = diceP;
 		this.boardPanel = b;
@@ -67,16 +67,14 @@ public class MiniGamePanel extends JPanel{
 		mGames[5] = new MathGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
+		isPlayingMinigame = true;
+		
 		dicePanel.setVisible(false);
 		setVisible(true);
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
-		
-		//gameNum = 2; // FORCE MINIGAME SELECT HERE
-		
 		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
-//		gameNum = 5;
 		if (DEBUG_SAME_MINIGAME){
 			gameNum = GAME_TO_START_ON;
 		}
@@ -98,6 +96,7 @@ public class MiniGamePanel extends JPanel{
 		return mGames[gameNum].getWinner();
 	}
 	public void switchToOther(){
+		
 		if(isOwnerWin()){
 			Sounds.landedOnOwnedProperty.playSound();
 			switchToProperty();
@@ -138,18 +137,23 @@ public class MiniGamePanel extends JPanel{
 		mGames[gameNum].addSyncedRandomNumber(num);
 	}
 	private void cleanup(){
+		isPlayingMinigame = false;
 		removeAll();
 		setVisible(false);
 	}
 	public void switchToProperty(){
-		//System.out.println("prop called");
 		cleanup();
 		pPanel.executeSwitch(curSpaceName,guest,isCurrent);
 	}
 	public void switchToDice(){
-		//System.out.println("Dice called");
 		cleanup();
 		dicePanel.setVisible(true);
+	}
+	public boolean isPlayingMinigame() {
+		return isPlayingMinigame;
+	}
+	public void setPlayingMinigame(boolean isPlayingMinigame) {
+		this.isPlayingMinigame = isPlayingMinigame;
 	}
 	class GameEndCheck extends Thread{
 		public void run(){

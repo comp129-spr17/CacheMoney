@@ -310,6 +310,12 @@ public class DicePanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (!mGamePanel.isPlayingMinigame()){
+					beginDiceRoll();
+				}
+			}
+
+			private void beginDiceRoll() {
 				diceRes = getDiceRoll();
 				if (toggleDoubles.isSelected()){ // DEBUG ONLY
 					diceRes[0] = diceRes[1];
@@ -325,15 +331,19 @@ public class DicePanel extends JPanel{
 						sendMessageToServer(mPack.packDiceResult(unicode.DICE, 0, 0),mPack.getByteSize());
 					else
 						sendMessageToServer(mPack.packDiceResult(unicode.DICE, diceRes[0], diceRes[1]),mPack.getByteSize());
-
 				}
-				//actionForDiceRoll();
 			}
 		});
 		endTurnButton.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (mGamePanel.isPlayingMinigame()){
+					endTurnButtonPressed();
+				}
+			}
+
+			private void endTurnButtonPressed() {
 				endTurnButton.setVisible(false);
 				consolidateOwners();
 				if(isSingle)
@@ -341,7 +351,6 @@ public class DicePanel extends JPanel{
 				else
 					sendMessageToServer(mPack.packSimpleRequest(unicode.END_TURN),mPack.getByteSize());
 				mLabel.reinitializeMoneyLabels();
-				//				sendMessageToServer("Player " + (current + 1) + " turn begins!", true);
 			}
 
 			@Override
