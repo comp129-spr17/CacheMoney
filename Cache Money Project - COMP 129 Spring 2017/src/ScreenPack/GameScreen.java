@@ -47,7 +47,7 @@ import MultiplayerPack.MHost;
 import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
-	private final int NUMBER_OF_MUSIC = 3;
+	private final int NUMBER_OF_MUSIC = 5;
 	private JPanel mainPanel;
 	private int myComp_height;
 	private DicePanel dicePanel;
@@ -384,6 +384,12 @@ public class GameScreen extends JFrame{
 			break;
 		case 2:
 			Music.music3.playMusic();
+			break;
+		case 3:
+			Music.music4.playMusic();
+			break;
+		case 4:
+			Music.music5.playMusic();
 			break;
 		}
 	}

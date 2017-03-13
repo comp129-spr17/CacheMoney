@@ -3,7 +3,9 @@ package InterfacePack;
 public enum Music {
 	music1,
 	music2,
-	music3;
+	music3,
+	music4,
+	music5;
 	
 	public void playMusic(){
 		switch (this){
@@ -15,6 +17,12 @@ public enum Music {
 			return;
 		case music3:
 			SoundAndMusicPlayer.getInstance().loopMusic("music", "music3", 280);
+			return;
+		case music4:
+			SoundAndMusicPlayer.getInstance().loopMusic("music", "music4", 1080);
+			return;
+		case music5:
+			SoundAndMusicPlayer.getInstance().loopMusic("music", "music5", 6900);
 			return;
 		}
 	}
