@@ -258,7 +258,7 @@ public class MainMenuScreen {
 			if(isValidNum(gNumP)){
 				hideAndDisposeMainMenuScreen();
 				loadingScreen.setVisible(true);
-				gameScreen = new GameScreen(true);
+				gameScreen = new GameScreen(true, Integer.parseInt(gNumP));
 				gameScreen.setNumPlayer(Integer.parseInt(gNumP));
 				hideAndDisposeLoadingScreen();
 				return;
@@ -280,7 +280,7 @@ public class MainMenuScreen {
 	}
 	
 	private boolean getNumPlayers(){
-		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of players:", JOptionPane.YES_NO_OPTION);
+		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of total players:", JOptionPane.YES_NO_OPTION);
 		return res == JOptionPane.YES_OPTION ? true : false;
 	}
 	private void hideAndDisposeMainMenuScreen() {
@@ -294,7 +294,7 @@ public class MainMenuScreen {
 		case 0:
 			hideAndDisposeMainMenuScreen();
 			loadingScreen.setVisible(true);
-			gameScreen = new GameScreen(false);
+			gameScreen = new GameScreen(false, 4);
 			hideAndDisposeLoadingScreen();
 			break;
 		case 1:

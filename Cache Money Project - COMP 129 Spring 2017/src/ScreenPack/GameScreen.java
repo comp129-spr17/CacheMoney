@@ -65,12 +65,14 @@ public class GameScreen extends JFrame{
 	private JCheckBox muteSounds;
 	private int scheduledMusic;
 	private int loadingProgress;
+	private int totalPlayers;
 	
 	
 	// called if user is the host
-	public GameScreen(boolean isSingle){
+	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
 		this.isSingle = isSingle;
+		this.totalPlayers = totalplayers;
 		initEverything();
 		if(!isSingle)
 			addHost();
@@ -94,6 +96,8 @@ public class GameScreen extends JFrame{
 	}
 	public void setNumPlayer(int numPlayer){
 		boardPanel.PlacePiecesToBaord(numPlayer);
+		System.out.print(numPlayer);
+		totalPlayers = numPlayer;
 	}
 	private void setWindowVisible(){
 		try {
@@ -222,7 +226,7 @@ public class GameScreen extends JFrame{
 		getContentPane().add(mainPanel);
 		initUserInfoWindow();
 		mLabels = MoneyLabels.getInstance();
-		mLabels.initLabels(playerInfo, insets, players);
+		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
 		loadingProgress = 10;
 		dicePanel = new DicePanel(isSingle, players, mLabels);
 		loadingProgress = 20;

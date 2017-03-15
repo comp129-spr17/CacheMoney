@@ -49,16 +49,18 @@ public final class MoneyLabels {
 	private ImageRelated imagerelated;
 	private JLabel[] playerPieceDisplay;
 	private PathRelated pathRelated;
+	private int totalPlayers;
 	private MoneyLabels(){
 		
 	}
 	public static MoneyLabels getInstance(){
 		return MONEY_LABELS;
 	}
-	public void initLabels(JDialog playerInfoPanel, Insets inset, Player[] players){
+	public void initLabels(JDialog playerInfoPanel, Insets inset, Player[] players, int playerCount){
 		this.PlayerInfo = playerInfoPanel;
 		this.players = players;
 		this.insets = inset;
+		this.totalPlayers = playerCount;
 		init();
 	}
 	private void init(){
@@ -71,8 +73,36 @@ public final class MoneyLabels {
 		createAndManageXMarkAndMoniesLabels();
 		addXMarkToPlayerInfo();
 		addLabelsToPlayerInfo();
-
 		initializePiecePictures();
+		removeNonPlayers();
+	}
+	private void removeNonPlayers()
+	{
+		for (int x = 0; x < 4; x ++)
+		{
+			if (x >= totalPlayers)
+			{
+				for (int p = 6 * x; p < 6 * (x+1) ; p ++)
+				{
+					PlayerInfo.remove(xmark[p]);
+				}
+				PlayerInfo.remove(playerLabels[x]);
+				PlayerInfo.remove(cash1[x]);
+				PlayerInfo.remove(cash100[x]);
+				PlayerInfo.remove(cash5[x]);
+				PlayerInfo.remove(cash500[x]);
+				PlayerInfo.remove(cash20[x]);
+				PlayerInfo.remove(cash50[x]);
+				PlayerInfo.remove(cash100image[x]);
+				PlayerInfo.remove(cash1image[x]);
+				PlayerInfo.remove(cash5image[x]);
+				PlayerInfo.remove(cash500image[x]);
+				PlayerInfo.remove(cash20image[x]);
+				PlayerInfo.remove(cash50image[x]);
+				PlayerInfo.remove(playerPieceDisplay[x]);
+				PlayerInfo.remove(totalmonnies[x]);
+			}
+		}
 	}
 	private void createAndManageXMarkAndMoniesLabels() {
 		for(int b=0; b < 24; b++)
@@ -84,7 +114,7 @@ public final class MoneyLabels {
 		}
 	}
 	private void createAndAssignValuesToMoniesLabels() {
-		for(int i=0; i<4; i++)
+		for(int i=0; i< 4; i++)
 		{
 			distributeCashToPlayers(i);
 			setFontOfMoniesAndLabels(i);
