@@ -15,6 +15,8 @@ import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
+import sun.java2d.cmm.kcms.KcmsServiceProvider;
+import sun.launcher.resources.launcher;
 
 public final class MoneyLabels {
 	private JDialog PlayerInfo;
@@ -86,7 +88,6 @@ public final class MoneyLabels {
 				{
 					PlayerInfo.remove(xmark[p]);
 				}
-				PlayerInfo.remove(playerLabels[x]);
 				PlayerInfo.remove(cash1[x]);
 				PlayerInfo.remove(cash100[x]);
 				PlayerInfo.remove(cash5[x]);
@@ -100,7 +101,8 @@ public final class MoneyLabels {
 				PlayerInfo.remove(cash20image[x]);
 				PlayerInfo.remove(cash50image[x]);
 				PlayerInfo.remove(playerPieceDisplay[x]);
-				PlayerInfo.remove(totalmonnies[x]);
+				totalmonnies[x].setText("OFFLINE");
+				totalmonnies[x].setBounds(50 + (200 * (x)),40, 300, 100);
 			}
 		}
 	}
@@ -219,10 +221,10 @@ public final class MoneyLabels {
 		}
 	}
 	private void setPositionOfBalances() {
-		totalmonnies[0].setBounds(75,40, 100, 100);
-		totalmonnies[1].setBounds(275,40, 100, 100);
-		totalmonnies[2].setBounds(475,40, 100, 100);
-		totalmonnies[3].setBounds(675,40, 100, 100);
+		for (int x = 0; x < 4; x++)
+		{
+			totalmonnies[x].setBounds(75 + (200 * (x)),40, 300, 100);
+		}
 	}
 	private void assignMoneyToLabels(int i) {
 		fivehunneds[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));
@@ -258,11 +260,11 @@ public final class MoneyLabels {
 			playerPieceDisplay[x].setBounds(0,500,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
 			PlayerInfo.add(playerPieceDisplay[x]);
 		}
-		playerPieceDisplay[0].setBounds(xmark[5].getX() - 10,xmark[5].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
-		playerPieceDisplay[1].setBounds(xmark[11].getX() - 10,xmark[11].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
-		playerPieceDisplay[2].setBounds(xmark[17].getX() - 10,xmark[17].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
-		playerPieceDisplay[3].setBounds(xmark[23].getX() - 10,xmark[23].getY() + xmark[5].getHeight() - 20,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
-	}
+			for (int j = 0; j < 4; j++)
+			{
+				playerPieceDisplay[j].setBounds(xmark[5 + (6*j)].getX() - 10, xmark[5 + (6*j)].getY() + xmark[5 + (6*j)].getHeight() - 20, sizerelated.getMoneyPieceWidth(), sizerelated.getMoneyPieceHeight());
+			}
+		}
 	private void setFontOfMoniesAndLabels(int i) {
 		totalmonnies[i].setFont(new Font("Serif",Font.BOLD,28));
 		totalmonnies[i].setForeground(new Color(0,150,0));
@@ -287,27 +289,31 @@ public final class MoneyLabels {
 	{
 		for(int i = 0; i < 4; i++)
 		{
-			totalmonnies[i].setText("$" + Integer.toString(players[i].getTotalMonies()));
-			cash500[i].setText(Integer.toString(players[i].getFiveHunneds()));
-			cash50[i].setText(Integer.toString(players[i].getFitties()));
-			cash5[i].setText(Integer.toString(players[i].getFives()));
-			cash20[i].setText(Integer.toString(players[i].getTwennies()));
-			cash100[i].setText(Integer.toString(players[i].getHunneds()));
-			cash1[i].setText(Integer.toString(players[i].getOnes()));
-			players[i].checkIfAlive();
-			if (players[i].getIsAlive() == false && players[i].getAlreadyDead() == false)
+			if (totalmonnies[i].getText() != "OFFLINE")
 			{
-				PlayerInfo.remove(totalmonnies[i]);
-				PlayerInfo.remove(cash500[i]);
-				PlayerInfo.remove(cash50[i]);
-				PlayerInfo.remove(cash5[i]);
-				PlayerInfo.remove(cash20[i]);
-				PlayerInfo.remove(cash100[i]);
-				PlayerInfo.remove(cash1[i]);
-				players[i].setAlreadyDead(true);
-				for (int h = (6 * i); h < (6 * i); h++)
+				totalmonnies[i].setText("$" + Integer.toString(players[i].getTotalMonies()));
+				cash500[i].setText(Integer.toString(players[i].getFiveHunneds()));
+				cash50[i].setText(Integer.toString(players[i].getFitties()));
+				cash5[i].setText(Integer.toString(players[i].getFives()));
+				cash20[i].setText(Integer.toString(players[i].getTwennies()));
+				cash100[i].setText(Integer.toString(players[i].getHunneds()));
+				cash1[i].setText(Integer.toString(players[i].getOnes()));
+				players[i].checkIfAlive();
+				if (players[i].getIsAlive() == false && players[i].getAlreadyDead() == false)
 				{
-					PlayerInfo.remove(xmark[h]);
+					totalmonnies[i].setText("LOSER");
+					totalmonnies[i].setBounds(65 + (200 * (i)),40, 300, 100);
+					PlayerInfo.remove(cash500[i]);
+					PlayerInfo.remove(cash50[i]);
+					PlayerInfo.remove(cash5[i]);
+					PlayerInfo.remove(cash20[i]);
+					PlayerInfo.remove(cash100[i]);
+					PlayerInfo.remove(cash1[i]);
+					players[i].setAlreadyDead(true);
+					for (int h = (6 * i); h < (6 * i); h++)
+					{
+						PlayerInfo.remove(xmark[h]);
+					}
 				}
 			}
 		}
