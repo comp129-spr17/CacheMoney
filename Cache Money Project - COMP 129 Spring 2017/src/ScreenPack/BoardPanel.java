@@ -108,7 +108,7 @@ public class BoardPanel extends JPanel{
 		paths = PathRelated.getInstance();
 		imageRelated = ImageRelated.getInstance();
 		setBackground(new Color(202, 232, 224));
-		setBounds(100,10,START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
+		setBounds(sizeRelated.getBoardStartX(),sizeRelated.getBoardStartY(),START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
 
 		setLayout(null);
 

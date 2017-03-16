@@ -66,14 +66,15 @@ public class GameScreen extends JFrame{
 	private int scheduledMusic;
 	private int loadingProgress;
 	private int totalPlayers;
-	
-	
+	private JButton btnExit;
+	private SizeRelated sizeRelated;
+	private PropertyDisplay pDisplay;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
 		this.isSingle = isSingle;
 		this.totalPlayers = totalplayers;
-		initEverything();
+		initEverything(true);
 		if(!isSingle)
 			addHost();
 		setWindowVisible();
@@ -82,7 +83,7 @@ public class GameScreen extends JFrame{
 	// called if user is the client
 	public GameScreen(boolean isSingle, String ip, int port) throws UnknownHostException, IOException{
 		this.isSingle = isSingle;
-		initEverything();
+		initEverything(false);
 		try{
 			addClient(ip,port);
 		}
@@ -115,14 +116,14 @@ public class GameScreen extends JFrame{
 		
 	}
 	
-	private void initEverything(){
+	private void initEverything(boolean isHost){
 		loadingProgress = 0;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
 		
 		createPlayers();
-		init();
+		init(isHost);
 		setGameScreenBackgroundColor();
 	}
 	
@@ -143,34 +144,71 @@ public class GameScreen extends JFrame{
 			@Override
             public void windowClosing(java.awt.event.WindowEvent e) {
             	super.windowClosing(e);
-            	if(isHost){
-            		// need to figure out the problem
-//            		while(host == null || host.getOutputStream() == null){
-//                		try {
-//    						Thread.sleep(1);
-//    					} catch (InterruptedException e1) {
-//    						e1.printStackTrace();
-//    					}
-//                	}
-//                	host.writeToServer(mPack.packSimpleRequest(unicode.HOST_DISCONNECTED), mPack.getByteSize());
-                    System.exit(1);
-            		
-            	}else{
-            		while(client.getOutputStream() == null){
-                		try {
-    						Thread.sleep(1);
-    					} catch (InterruptedException e1) {
-    						e1.printStackTrace();
-    					}
-                	}
-                	client.writeToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,client.getPlayerNum()), mPack.getByteSize());
-                    System.exit(1);
-            	}
+            	exitForServer(false,isHost);
             	
             }
         } );
 	}
-	
+	private void exitForServer(boolean isSingle, boolean isHost){
+		if(!isSingle){
+			if(isHost){
+	    		// need to figure out the problem
+//	    		while(host == null || host.getOutputStream() == null){
+//	        		try {
+//						Thread.sleep(1);
+//					} catch (InterruptedException e1) {
+//						e1.printStackTrace();
+//					}
+//	        	}
+//	        	host.writeToServer(mPack.packSimpleRequest(unicode.HOST_DISCONNECTED), mPack.getByteSize());
+	    		
+	    	}else{
+	    		while(client.getOutputStream() == null){
+	        		try {
+						Thread.sleep(1);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+	        	}
+	        	client.writeToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,client.getPlayerNum()), mPack.getByteSize());
+
+	    	}
+		}
+        System.exit(1);
+	}
+	private void addExitListener(boolean isHost){
+		btnExit.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				exitForServer(isSingle, isHost);
+			}
+		});
+	}
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		myComp_height = (int)screenSize.getDisplayMode().getHeight();
@@ -219,11 +257,19 @@ public class GameScreen extends JFrame{
 		});
 	}
 	
-	private void init(){
+	private void init(boolean isHost){
 		// 10
+		sizeRelated = SizeRelated.getInstance();
+		pDisplay = PropertyDisplay.getInstance();
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
+		mainPanel.add(pDisplay);
+		pDisplay.setVisible(false);
+		btnExit = new JButton("X");
+		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
+		mainPanel.add(btnExit);
+		addExitListener(isHost);
 		initUserInfoWindow();
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
@@ -238,6 +284,9 @@ public class GameScreen extends JFrame{
 		mainPanel.add(boardPanel);
 		addMuteMusic();
 		addMuteSounds();
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setUndecorated(true);
+		
 		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 		
 		

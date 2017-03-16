@@ -9,6 +9,8 @@ public abstract class Property {
 	protected int rentMultiplier;
 	protected boolean mortgaged;
 	protected boolean owned;
+	protected int numHouse;
+	protected int numHotel;
 	protected int owner = -1;
 	protected String name;
 	
@@ -92,6 +94,23 @@ public abstract class Property {
 	{
 		mortgaged = m;
 	}
-	
-	
+	public void incNumHouse(){
+		numHouse++;
+	}
+	public void incNumHotel(){
+		numHotel++;
+	}
+	public void decNumHouse(){
+		numHouse--;
+	}
+	public void decNumHotel(){
+		numHotel--;
+	}
+	public int getNumHouse(){
+		return numHouse;
+	}
+	public int getNumHotel(){
+		return numHotel;
+	}
+
 }

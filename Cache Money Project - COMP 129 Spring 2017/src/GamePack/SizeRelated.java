@@ -3,6 +3,10 @@ package GamePack;
 public final class SizeRelated {
 	private int screen_w;
 	private int screen_h;
+	private int board_start_x;
+	private int board_start_y;
+	private int board_w;
+	private int board_h;
 	private int SPACE_ROW_SPACE_WIDTH;
 	private int SPACE_ROW_SPACE_HEIGHT;
 	private int SPACE_COL_SPACE_WIDTH;
@@ -38,6 +42,7 @@ public final class SizeRelated {
 		this.screen_w = screen_w;
 		this.screen_h = screen_h;
 		setSpaceRowCol();
+		setBoardStartXY();
 		setPieceWidthHeight();
 		setPieceXYs();
 		setDicePanelWidthHeight();
@@ -57,9 +62,15 @@ public final class SizeRelated {
 		h = screen_height*.95/12
 		w = 1.5h
 	*/
+	private void setBoardStartXY(){
+		board_start_x = (int)(screen_w*0.25);
+		board_start_y = (int)(screen_h*0.1);
+	}
 	private void setSpaceRowCol(){
 		SPACE_ROW_SPACE_WIDTH = SPACE_COL_SPACE_HEIGHT = (int)(screen_h * .85 / 12);
 		SPACE_COL_SPACE_WIDTH = SPACE_ROW_SPACE_HEIGHT = (int)(1.5 * SPACE_ROW_SPACE_WIDTH);
+		board_w = 9*SPACE_ROW_SPACE_WIDTH + SPACE_COL_SPACE_WIDTH * 2;
+		board_h = 9*SPACE_ROW_SPACE_WIDTH + SPACE_COL_SPACE_WIDTH * 2;
 	}
 	private void setPieceWidthHeight(){
 		piece_w = piece_h = SPACE_ROW_SPACE_WIDTH/2;
@@ -73,7 +84,9 @@ public final class SizeRelated {
 					piece_x_y[i][j] = piece_h * (i<2?0:1);
 			}
 	}
-	
+	public int getBoardW(){
+		return board_w;
+	}
 	private void setDiceWidthHeight(){
 		dice_w = dice_h= SPACE_ROW_SPACE_WIDTH;
 	}
@@ -99,6 +112,18 @@ public final class SizeRelated {
 		money_piece_h = money_panel_h / 15;
 
 		System.out.println(money_panel_h);
+	}
+	public int getScreenW(){
+		return screen_w;
+	}
+	public int getScreenH(){
+		return screen_h;
+	}
+	public int getBoardStartX(){
+		return board_start_x;
+	}
+	public int getBoardStartY(){
+		return board_start_y;
 	}
 	public int getSpaceRowWidth(){
 		return SPACE_ROW_SPACE_WIDTH;

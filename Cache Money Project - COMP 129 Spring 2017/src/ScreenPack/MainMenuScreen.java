@@ -26,7 +26,8 @@ public class MainMenuScreen {
 	private JLabel HelloThere;
 	private JButton ExitButton;
 	private JButton InstructionButton;
-	private JTextField txtNumP;
+	private Integer[] numPlayer = {2,3,4};
+	private JComboBox cmbNumP;
 	private Object[] messages;
 	private LoadingScreen loadingScreen;
 	private Timer gameThread;
@@ -63,10 +64,11 @@ public class MainMenuScreen {
 		HelloThere = new JLabel("NEED A TITLE", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		InstructionButton = new JButton("Instructions");
-		txtNumP = new JTextField();
+		cmbNumP = new JComboBox(numPlayer);
+		cmbNumP.setSelectedIndex(0);
 		messages = new Object[2];
 		messages[0] = "How many players would you like to play with:";
-		messages[1] = txtNumP;
+		messages[1] = cmbNumP;
 		gameThread = new Timer();
 		initializeLoadingScreen();
 		
@@ -251,34 +253,17 @@ public class MainMenuScreen {
 	}
 	
 	private void startSinglePlayer() {
-		String gNumP;
-		while(getNumPlayers()){
-			Sounds.buttonConfirm.playSound();
-			gNumP = txtNumP.getText();
-			if(isValidNum(gNumP)){
-				hideAndDisposeMainMenuScreen();
-				loadingScreen.setVisible(true);
-				gameScreen = new GameScreen(true, Integer.parseInt(gNumP));
-				gameScreen.setNumPlayer(Integer.parseInt(gNumP));
-				hideAndDisposeLoadingScreen();
-				return;
-			}else{
-				JOptionPane.showMessageDialog(null, "The number of players must be between 2 and 4 inclusive.", "Invalid Number of Players!", JOptionPane.OK_OPTION);
-				Sounds.buttonCancel.playSound();
-			}
-			
-			
-		}
+		int gNumP;
+		getNumPlayers();
+		Sounds.buttonConfirm.playSound();
+		gNumP = (Integer)cmbNumP.getSelectedItem();
+		hideAndDisposeMainMenuScreen();
+		loadingScreen.setVisible(true);
+		gameScreen = new GameScreen(true, gNumP);
+		gameScreen.setNumPlayer(gNumP);
+		hideAndDisposeLoadingScreen();
 		Sounds.buttonCancel.playSound();
 	}
-	
-	private boolean isValidNum(String numP){
-		if(numP.length() != 1)
-			return false;
-		char num = numP.charAt(0);
-		return !(num < '2' || num > '4');
-	}
-	
 	private boolean getNumPlayers(){
 		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of total players:", JOptionPane.YES_NO_OPTION);
 		return res == JOptionPane.YES_OPTION ? true : false;
