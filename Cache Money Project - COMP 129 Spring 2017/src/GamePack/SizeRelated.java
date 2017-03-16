@@ -63,7 +63,7 @@ public final class SizeRelated {
 		w = 1.5h
 	*/
 	private void setBoardStartXY(){
-		board_start_x = (int)(screen_w*0.25);
+		board_start_x = (int)(screen_w*0.15);
 		board_start_y = (int)(screen_h*0.1);
 	}
 	private void setSpaceRowCol(){
