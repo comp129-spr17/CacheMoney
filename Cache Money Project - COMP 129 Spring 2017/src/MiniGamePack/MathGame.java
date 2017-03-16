@@ -226,6 +226,8 @@ public class MathGame extends MiniGame{
 	}
 	private void uncoverResult(){
 		Sounds.waitingRoomJoin.playSound();
+		for(int i=0; i<NUM_PROBLEMS; i++)
+			problems[i].setVisible(false);
 		lbls.get(0).setText((getWinner() ? "OWNER":"GUEST") + " WINS!");
 	}
 	private void disableFunctions(){

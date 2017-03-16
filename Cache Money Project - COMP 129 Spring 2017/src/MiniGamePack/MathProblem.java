@@ -49,7 +49,7 @@ public class MathProblem extends JPanel{
 		setSize(sizeRelated.getDicePanelWidth()-40,thisHeight);
 		lblProblems = new JLabel[5];
 		txtAnswer = new JTextField(4);
-		btnSubmit = new JButton("Submit");
+		btnSubmit = new JButton("✓");
 		random = new Random();
 		pList = new int[3];
 		initLocation();
@@ -80,15 +80,15 @@ public class MathProblem extends JPanel{
 			add(lblProblems[i]);
 		}
 		lblProblems[3].setText("=");
-		lblProblems[0].setBounds(0, 0, 30, thisHeight);
-		lblProblems[1].setBounds(35, 0, 20, thisHeight);
-		lblProblems[2].setBounds(60, 0, 30, thisHeight);
-		lblProblems[3].setBounds(97, 0, 20, thisHeight);
-		txtAnswer.setBounds(120, 0, 50, thisHeight);
-		btnSubmit.setBounds(180, 0, 90, thisHeight);
+		lblProblems[0].setBounds(35, 0, 30, thisHeight);
+		lblProblems[1].setBounds(70, 0, 20, thisHeight);
+		lblProblems[2].setBounds(95, 0, 30, thisHeight);
+		lblProblems[3].setBounds(132, 0, 20, thisHeight);
+		txtAnswer.setBounds(155, 0, 50, thisHeight);
+		btnSubmit.setBounds(215, 0, 40, thisHeight);
 		add(txtAnswer);
-		add(btnSubmit);
-		lblProblems[4].setBounds(273, 0, 50, thisHeight);
+		//add(btnSubmit);  REMOVED BECAUSE YOU CAN JUST PRESS ENTER TO SUBMIT YOUR ANSWER
+		lblProblems[4].setBounds(218, 0, 50, thisHeight);
 	}
 	public int[] getProblem(){
 		pList[0] = random.nextInt(6);

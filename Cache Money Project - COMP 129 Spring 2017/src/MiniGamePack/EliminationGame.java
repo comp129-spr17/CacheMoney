@@ -152,15 +152,15 @@ public class EliminationGame extends MiniGame{
 		}
 		lblsForThis.get(0).setBounds(dpWidth/15, dpHeight / 4, dpWidth, dpHeight*1/7);
 		lblsForThis.get(0).setText("Do NOT take the rotten apple! Time: " + MAXIMUM_TIME_REMAINING);
-		for (int i = 1; i < NUM_APPLES_AVAILABLE + 1; i++){
-			lblsForThis.get(i).setBounds(dpWidth*((i-1) % 3 + 1)/4, dpHeight*((i - 1) / 3 + 2)/5, dpWidth*5/7, dpHeight*1/7);
-			lblsForThis.get(i).setText("" + i);
-		}
+		
 	}
 
 	protected void initGameSetting(){
 		super.initGameSetting();
-		
+		for (int i = 1; i < NUM_APPLES_AVAILABLE + 1; i++){
+			lblsForThis.get(i).setBounds(dpWidth*((i-1) % 3 + 1)/4, dpHeight*((i - 1) / 3 + 2)/5, dpWidth*5/7, dpHeight*1/7);
+			lblsForThis.get(i).setText("" + i);
+		}
 		for(int i=0; i<lblsForThis.size(); i++)
 			miniPanel.add(lblsForThis.get(i));
 		miniPanel.addKeyListener(listener);
