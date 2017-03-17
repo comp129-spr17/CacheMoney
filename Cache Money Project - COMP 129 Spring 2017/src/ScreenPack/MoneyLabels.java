@@ -78,6 +78,28 @@ public final class MoneyLabels {
 		initializePiecePictures();
 		removeNonPlayers();
 	}
+	private void checkWinner()
+	{
+		int aliveCount = 4;
+		int aliveNow = 0;
+		for (int o = 0; o < 4; o++)
+		{
+			if (totalmonnies[o].getText() == "LOSER" || totalmonnies[o].getText() == "OFFLINE")
+			{
+				aliveCount -= 1;
+			}
+			else
+			{
+				aliveNow = o;
+			}
+		}
+		if (aliveCount == 1)
+		{
+				totalmonnies[aliveNow].setText("WINNER");
+		}
+	
+		
+	}
 	private void removeNonPlayers()
 	{
 		for (int x = 0; x < 4; x ++)
@@ -317,6 +339,7 @@ public final class MoneyLabels {
 				}
 			}
 		}
+		checkWinner();
 		//System.out.println(totalmonnies[0].getText());
 	}
 	private void createMoniesLabels() {
