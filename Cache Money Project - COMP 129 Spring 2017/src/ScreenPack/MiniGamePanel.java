@@ -19,8 +19,8 @@ import MultiplayerPack.UnicodeForServer;
 
 public class MiniGamePanel extends JPanel{
 	private final boolean DEBUG_SAME_MINIGAME = false;
-	private final int NUM_OF_MINIGAMES_AVAILABLE = 6;
-	private final int GAME_TO_START_ON = -1; // -1 FOR DEFAULT
+	private final int NUM_OF_MINIGAMES_AVAILABLE = 7;
+	private final int GAME_TO_START_ON = 5; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -65,6 +65,7 @@ public class MiniGamePanel extends JPanel{
 		mGames[3] = new RockScissorPaperGame(this, isSingle);
 		mGames[4] = new EliminationGame(this, isSingle);
 		mGames[5] = new MathGame(this, isSingle);
+		mGames[6] = new MemorizationGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
 		isPlayingMinigame = true;

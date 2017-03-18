@@ -191,6 +191,9 @@ public class MiniGame{
 		case 5:
 			setInstructions("Math Game", "<html>Instructions: <br />Solve more math problems than your opponent before time expires! <br /><br />Controls:<br />Owner: Type your answer in the text field, then press enter to submit the answer. <br />Guest: Type your answer in the text field, then press enter to submit the answer. <html>");
 			break;
+		case 6:
+			setInstructions("Memorization Game", "<html>Instructions: <br />Memorize how many of each color dot there are. Then answer a question on your turn.<br /><br />Controls:<br />Owner: Press a num key to enter and lock in a 1-digit answer. <br />Guest: Press a num key to enter and lock in a 1-digit answer.<html>");
+			break;
 		default:
 			break;
 		}

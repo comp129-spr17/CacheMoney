@@ -11,7 +11,7 @@ import GamePack.ImageRelated;
 
 public class LoadingScreenPanel extends JPanel{
 
-	private final int NUM_OF_RANDOM_MESSAGES_AVAILABLE = 16;
+	private final int NUM_OF_RANDOM_MESSAGES_AVAILABLE = 23;
 	private final static String FILE_PATH="Images/";
 	private ImageIcon loadingGif;
 	private ImageRelated imageRelated;
@@ -58,7 +58,7 @@ public class LoadingScreenPanel extends JPanel{
 			text = "Why not party like a parrot?";
 			break;
 		case 2:
-			text = "Stay aware of your surroundings.";
+			text = "Don't break your keyboard!";
 			break;
 		case 3:
 			text = "Remember to be alert at all times.";
@@ -88,7 +88,7 @@ public class LoadingScreenPanel extends JPanel{
 			text = "NullPointerExeption: social_life";
 			break;
 		case 12:
-			text = "Devin, please get some sleep!";
+			text = "Printing out Monopoly money...";
 			break;
 		case 13:
 			text = "I'm hungry.";
@@ -98,6 +98,27 @@ public class LoadingScreenPanel extends JPanel{
 			break;
 		case 15:
 			text = "Don't play this during class!";
+			break;
+		case 16:
+			text = "Pink backgrounds are a nice touch!";
+			break;
+		case 17:
+			text = "Your RAM is delicious...";
+			break;
+		case 18:
+			text = "Health low? Eat some apples.";
+			break;
+		case 19:
+			text = "Loading friendship killers...";
+			break;
+		case 20:
+			text = "My bae is salty like the bay";
+			break;
+		case 21:
+			text = "Wanna get T4 after class?";
+			break;
+		case 22:
+			text = "Loading MLG Rolling Doubles...";
 			break;
 		}
 		randomLoadingMessageLabel.setText("  " + text);
