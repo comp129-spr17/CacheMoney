@@ -81,9 +81,16 @@ public class JailInfoPanel extends JPanel {
 		panelToSwitchFrom.setVisible(false);
 		this.setVisible(true);
 	}
+	private void hideThisPanelShowDice() {
+		this.setVisible(false);
+		panelToSwitchFrom.setVisible(true);
+	}
 	private void renderJailInfo()
 	{
 		//Create JLabels that tell the player they are in jail and can't leave
+		addHideButton();
+		addRollButton();
+		addPayButton();
 	}
 	public void endJailPanel()
 	{
@@ -145,6 +152,15 @@ public class JailInfoPanel extends JPanel {
 				//TODO
 				// Switch panels to dice screen and get result but don't move any piece, just check if they are doubles 
 				// Remain in Jail if not third turn in jail or else pay fine
+				hideThisPanelShowDice();
+				dicePanel.setMovementAllowed(false);
+				int[] diceResults = new int[2];
+				diceResults = dicePanel.getDiceRoll();
+				dicePanel.rollDice(diceResults[0], diceResults[1]);
+				boolean doubles = dicePanel.isDoublesRolled();
+				if (doubles) {
+					
+				}
 			}
 		});
 		payButton.addMouseListener(new MouseListener() {
