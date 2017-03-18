@@ -66,6 +66,7 @@ public class MathGame extends MiniGame{
 	}
 	private void addProblems(){
 		for(int i=0; i<NUM_PROBLEMS; i++){
+			problems[i].setVisible(true);
 			miniPanel.add(problems[i]);
 		}
 	}
