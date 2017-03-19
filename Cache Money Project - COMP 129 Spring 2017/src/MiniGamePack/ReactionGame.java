@@ -39,14 +39,15 @@ public class ReactionGame extends MiniGame {
 		userPressedDoubleCheck = new boolean[2];
 		
 		lblsForThis = new ArrayList<>();
-		for (int i = 0; i < 4; i++){
+		for (int i = 0; i < 6; i++){
 			lblsForThis.add(new JLabel());
 		}
 		lblsForThis.get(0).setBounds(dpWidth*3/9, dpHeight*2/7+20, dpWidth, dpHeight*1/7);
 		lblsForThis.get(1).setBounds(0, dpHeight*2/7+70, 100, 100);
 		lblsForThis.get(2).setBounds(dpWidth-100, dpHeight*2/7+70, 100, 100);
 		lblsForThis.get(3).setIcon(imgs.resizeImage(paths.getMiniReactGamePath()+"cake.png", 60, 93));
-		
+		lblsForThis.get(4).setBounds(0, dpHeight*2/7 + 140, 100, 100);
+		lblsForThis.get(5).setBounds(dpWidth-100, dpHeight*2/7+140, 100, 100);
 		
 	}
 	
@@ -123,6 +124,11 @@ public class ReactionGame extends MiniGame {
 	private void displayWinner() {
 		System.out.println("Owner : "+userTimes[0] + ", Guest : "+userTimes[1]);
 		lblsForThis.get(3).setBounds(userTimes[0] <= userTimes[1] ? dpWidth*1/20 : dpWidth*6/9, dpHeight*1/10,dpWidth*4/9 , dpHeight*4/7);
+		if (!someoneEnteredTooEarly){
+			lblsForThis.get(4).setText("Time: " + userTimes[0]);
+			lblsForThis.get(5).setText("Time: " + userTimes[1]);
+		}
+		
 		lblsForThis.get(0).setText("");
 		
 		Sounds.waitingRoomJoin.playSound();

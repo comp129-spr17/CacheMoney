@@ -45,7 +45,6 @@ public class BackButton extends JButton{
 		});
 	}
 	private void closeCurrentOpenMain(){
-		Music.music1.stopMusic();
 		cur.setVisible(false);
 		cur.dispose();
 		new MainMenuScreen();

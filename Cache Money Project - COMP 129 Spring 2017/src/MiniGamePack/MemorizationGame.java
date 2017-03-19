@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.ImageRelated;
 import InterfacePack.Sounds;
 
 public class MemorizationGame extends MiniGame{
@@ -44,8 +45,8 @@ public class MemorizationGame extends MiniGame{
 		}
 		int k = 0;
 		for (int i = 2; i < 6; i++){
-			for (int j = 3; j < 6; j++){
-				lblsForThis.get(k).setBounds(dpWidth * i/8, dpHeight * j/7, 30, 30);
+			for (int j = 2; j < 5; j++){
+				lblsForThis.get(k).setBounds(dpWidth * i/8, dpHeight * j/6, 50, 50);
 				k += 1;
 			}
 		}
@@ -113,7 +114,6 @@ public class MemorizationGame extends MiniGame{
 
 	private void displayGame() {
 		setVisibleForTitle(true);
-		
 		displayDots();
 		initGameSetting();
 		
@@ -126,6 +126,9 @@ public class MemorizationGame extends MiniGame{
 		hideDots();
 		addKeyListener(); // for after dots disappear
 		displayQuestionToAsk();
+		lblsForThis.get(1).setIcon(imgs.resizeImage(paths.getPieceImgPath() + owner.getPlayerNum() + owner.getPlayerNum() + ".png", 50, 50));
+		lblsForThis.get(10).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 50, 50));
+		lblsForThis.get(1).setVisible(true);
 		allowInput = true;
 		(new waitForUsersToEnterChars()).start();
 	}
@@ -134,11 +137,14 @@ public class MemorizationGame extends MiniGame{
 		turnNum += 1;
 		if (turnNum == 1){
 			Sounds.landedOnUnownedProperty.playSound();
+			lblsForThis.get(1).setVisible(false);
+			lblsForThis.get(10).setVisible(true);
 			displayQuestionToAsk();
 			restartCountdown();
 		}
 		else{
 			allowInput = false;
+			lblsForThis.get(1).setVisible(true);
 			determineWinner();
 		}
 		
@@ -179,10 +185,28 @@ public class MemorizationGame extends MiniGame{
 		playerAnswerCorrect[0] = isAnswerCorrect(colorCount, 0);
 		playerAnswerCorrect[1] = isAnswerCorrect(colorCount, 1);
 		
+		if (playerAnswerCorrect[0]){
+			lblsForThis.get(0).setText("<html><font color = '" + "green" + "'><span style='font-size:40px'>✓</span></font></html>");
+		}
+		else{
+			lblsForThis.get(0).setIcon(ImageRelated.getInstance().getWrongAnswer());
+		}
+		if (playerAnswerCorrect[1]){
+			lblsForThis.get(9).setText("<html><font color = '" + "green" + "'><span style='font-size:40px'>✓</span></font></html>");
+		}
+		else{
+			lblsForThis.get(9).setIcon(ImageRelated.getInstance().getWrongAnswer());
+		}
+		
+		
 		if (playerAnswerCorrect[0] && playerAnswerCorrect[1]){
 			// compare times here
 			//System.out.println("both were correct");
 			winner = playerTimes[0] < playerTimes[1];
+			lblsForThis.get(2).setText("" + (Double.parseDouble("" + playerTimes[0]) / 1000.0));
+			lblsForThis.get(11).setText("" + (Double.parseDouble("" + playerTimes[1]) / 1000.0));
+			lblsForThis.get(2).setVisible(true);
+			lblsForThis.get(11).setVisible(true);
 		}
 		else if (!(playerAnswerCorrect[0] || (playerAnswerCorrect[1]))){
 			// owner wins
@@ -193,12 +217,18 @@ public class MemorizationGame extends MiniGame{
 			//System.out.println(playerAnswerCorrect[0] ? "Owner Wins" : "Guest Wins");
 			winner = playerAnswerCorrect[0];
 		}
+		lblsForThis.get(0).setVisible(true);
+		lblsForThis.get(9).setVisible(true);
+		
 		displayWinner();	
 		forEnding();
 	}
 
 	private void displayWinner() {
 		lbls.get(1).setText((winner ? "Owner" : "Guest") + " Wins!");
+		
+		
+		
 		Sounds.waitingRoomJoin.playSound();
 	}
 	
@@ -226,7 +256,7 @@ public class MemorizationGame extends MiniGame{
 		default: 
 			break;
 		}
-		return sumOfColors == playerAnswers[1];
+		return sumOfColors == playerAnswers[turn];
 	}
 	
 	
@@ -385,6 +415,12 @@ public class MemorizationGame extends MiniGame{
 	}
 	
 	protected void cleanUp(){
+		for (int i = 0; i < NUM_TO_MEMORIZE; i++){
+			lblsForThis.get(i).setVisible(false);
+			lblsForThis.get(i).setIcon(null);
+			lblsForThis.get(i).setText("");
+		}
+		
 		removeKeyListner();
 		miniPanel.removeAll();
 		miniPanel.repaint();

@@ -20,7 +20,7 @@ import MultiplayerPack.UnicodeForServer;
 public class MiniGamePanel extends JPanel{
 	private final boolean DEBUG_SAME_MINIGAME = false;
 	private final int NUM_OF_MINIGAMES_AVAILABLE = 7;
-	private final int GAME_TO_START_ON = 5; // -1 FOR DEFAULT
+	private final int GAME_TO_START_ON = 0; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
