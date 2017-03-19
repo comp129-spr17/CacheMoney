@@ -20,7 +20,7 @@ public class BackButton extends JButton{
 	private void init(){
 		setText("<-");
 		setBackground(Color.orange);
-		setBounds(0,0,50,50);
+		setBounds(0,0,30,30);
 	}
 	private void addListener(){
 		addMouseListener(new MouseListener() {

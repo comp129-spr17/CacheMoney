@@ -25,12 +25,11 @@ public class MainMenuScreen {
 	private JButton MultiPButton;
 	private JLabel HelloThere;
 	private JButton ExitButton;
-	private JButton InstructionButton;
+	private JButton MiniGamesButton;
 	private Integer[] numPlayer = {2,3,4};
 	private JComboBox cmbNumP;
 	private Object[] messages;
 	private LoadingScreen loadingScreen;
-	private Timer gameThread;
 	private GameScreen gameScreen;
 	
 	public MainMenuScreen(){
@@ -55,6 +54,8 @@ public class MainMenuScreen {
 	}
 
 	private void init(){
+		
+		
 		scaleBoardToScreenSize();
 		mainfont = new Font("Serif", Font.PLAIN, 18);
 		mainPanel = new JPanel(null);
@@ -63,14 +64,14 @@ public class MainMenuScreen {
 		SinglePButton = new JButton("Single Player");
 		HelloThere = new JLabel("NEED A TITLE", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
-		InstructionButton = new JButton("Instructions");
+		MiniGamesButton = new JButton("Play Minigames");
 		cmbNumP = new JComboBox(numPlayer);
 		cmbNumP.setSelectedIndex(0);
 		messages = new Object[2];
 		messages[0] = "How many players would you like to play with:";
 		messages[1] = cmbNumP;
-		gameThread = new Timer();
 		initializeLoadingScreen();
+		
 		
 	}
 	private void scaleBoardToScreenSize() {
@@ -105,14 +106,14 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
-				gameThread.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						startSinglePlayer();
-					}
-				}, 0);
-				
-				
+				(new startSinglePlayer()).start();
+			}
+			
+			class startSinglePlayer extends Thread{
+				@Override
+				public void run(){
+					startSinglePlayer();
+				}
 			}
 
 		});
@@ -141,20 +142,19 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
-				gameThread.schedule(new TimerTask() {
-					
-					@Override
-					public void run() {
-						AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
-						displayHostOrClientDialogBox(mwr);
-					}
-				}, 0);
-				
-				
+				(new beginMultiplayer()).start();
+			}
+			
+			class beginMultiplayer extends Thread{
+				@Override
+				public void run(){
+					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+					displayHostOrClientDialogBox(mwr);
+				}
 			}
 
 		});
-		InstructionButton.addMouseListener(new MouseListener()
+		MiniGamesButton.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -178,10 +178,22 @@ public class MainMenuScreen {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				hideAndDisposeMainMenuScreen();
-				Sounds.register.playSound();
-				new InstructionsScreen();
+				Sounds.buttonConfirm.playSound();
+				(new playMinigames()).start();
 			}
+		
+			class playMinigames extends Thread{
+				@Override
+				public void run(){
+					hideAndDisposeMainMenuScreen();
+					loadingScreen.setVisible(true);
+					new MiniGamePractice();
+					hideAndDisposeLoadingScreen();
+					Sounds.waitingRoomJoin.playSound();
+				}
+			}
+		
+		
 		});
 		ExitButton.addMouseListener(new MouseListener() {
 			
@@ -238,9 +250,9 @@ public class MainMenuScreen {
 		MultiPButton.setFont(mainfont);
 		MultiPButton.setBounds(175,225,150,50);
 		mainPanel.add(MultiPButton);
-		InstructionButton.setFont(mainfont);
-		InstructionButton.setBounds(175,300,150,50);
-		mainPanel.add(InstructionButton);
+		MiniGamesButton.setFont(mainfont);
+		MiniGamesButton.setBounds(175,300,150,50);
+		mainPanel.add(MiniGamesButton);
 		ExitButton.setFont(mainfont);
 		ExitButton.setBounds(175,375,150,50);
 		mainPanel.add(ExitButton);

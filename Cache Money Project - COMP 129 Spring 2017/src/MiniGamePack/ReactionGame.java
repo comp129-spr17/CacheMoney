@@ -109,6 +109,8 @@ public class ReactionGame extends MiniGame {
 		wasGoMentioned = false;
 		lblsForThis.get(3).setBounds(dpWidth*7/16, dpHeight*3/7, dpWidth*1/2, dpHeight*3/7);
 		lblsForThis.get(0).setText("wait... wait... wait...");
+		lblsForThis.get(4).setText("");
+		lblsForThis.get(5).setText("");
 	}
 	
 	private void gameResult(){
@@ -122,7 +124,6 @@ public class ReactionGame extends MiniGame {
 		}
 	}
 	private void displayWinner() {
-		System.out.println("Owner : "+userTimes[0] + ", Guest : "+userTimes[1]);
 		lblsForThis.get(3).setBounds(userTimes[0] <= userTimes[1] ? dpWidth*1/20 : dpWidth*6/9, dpHeight*1/10,dpWidth*4/9 , dpHeight*4/7);
 		if (!someoneEnteredTooEarly){
 			lblsForThis.get(4).setText("Time: " + userTimes[0]);
@@ -130,7 +131,6 @@ public class ReactionGame extends MiniGame {
 		}
 		
 		lblsForThis.get(0).setText("");
-		
 		Sounds.waitingRoomJoin.playSound();
 		showTheWinner(userTimes[0] <= userTimes[1]);
 	}
@@ -175,7 +175,6 @@ public class ReactionGame extends MiniGame {
 				userTimes[num] = ((System.currentTimeMillis() - timeStarted) / 1000.0);
 			else
 				userTimes[num] = 5.1;
-			System.out.println("Time: " + userTimes[num] + " seconds.");
 			if(!isSingle)
 				sendMessageToServer(mPack.packReactionTime(isOwner ? unicode.REACTION_MINI_GAME_OWNER_END : unicode.REACTION_MINI_GAME_GUEST_END, userTimes[num]));
 		}

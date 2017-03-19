@@ -1,46 +1,57 @@
 package ScreenPack;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GamePack.Player;
-import GamePack.PropertySpace;
 import InterfacePack.Sounds;
 import MiniGamePack.*;
-import MultiplayerPack.MBytePack;
-import MultiplayerPack.UnicodeForServer;
 
 public class MiniGamePanel extends JPanel{
 	private final boolean DEBUG_SAME_MINIGAME = false;
-	private final int NUM_OF_MINIGAMES_AVAILABLE = 7;
+	public final static int NUM_OF_MINIGAMES_AVAILABLE = 7;
 	private final int GAME_TO_START_ON = 0; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
 	private boolean isSingle;
-	private DicePanel dicePanel;
+	private JPanel hostPanel; // FORMERLY CALLED dicePanel
 	private MiniGame[] mGames;
 	private PropertyInfoPanel pPanel;
 	private String curSpaceName;
 	private boolean isCurrent;
 	private int gameNum;
 	private boolean isPlayingMinigame;
+	private boolean isPracticingMode;
 	
-	public MiniGamePanel(boolean isSingle, DicePanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
+	public MiniGamePanel(boolean isSingle, JPanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
 	{
+		isPracticingMode = false;
 		init(isSingle,diceP,b, pPanel);
 	}
-	private void init(boolean isSingle, DicePanel diceP, BoardPanel b,PropertyInfoPanel pPanel){
+	
+	public MiniGamePanel(JPanel miniGamePlayer)
+	{
+		isPracticingMode = true;
+		initPractice();
+	}
+	
+	
+	private void initPractice() {
+		isPlayingMinigame = false;
+		isSingle = true;
+		setLayout(null);
+		setBounds(0, 0, 500, 500);
+		initMinigames();
+		setVisible(false);
+		gameNum = GAME_TO_START_ON;
+	}
+
+	private void init(boolean isSingle, JPanel diceP, BoardPanel b,PropertyInfoPanel pPanel){
 		isPlayingMinigame = false;
 		this.isSingle = isSingle;
-		dicePanel = diceP;
+		hostPanel = diceP;
 		this.boardPanel = b;
 		this.pPanel = pPanel;
 		boardPanel.add(this);
@@ -68,9 +79,12 @@ public class MiniGamePanel extends JPanel{
 		mGames[6] = new MemorizationGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
+		hostPanel.setVisible(false);
+		setupGame(owner, guest, myPlayerNum, isCurrent);
+	}
+
+	private void setupGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent) {
 		isPlayingMinigame = true;
-		
-		dicePanel.setVisible(false);
 		setVisible(true);
 		this.owner = owner;
 		this.guest = guest;
@@ -79,11 +93,17 @@ public class MiniGamePanel extends JPanel{
 		if (DEBUG_SAME_MINIGAME){
 			gameNum = GAME_TO_START_ON;
 		}
-		
-		
 		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
 		mGames[gameNum].addGame();
 	}
+	
+	public void openSelectedMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent, int miniGameNum){
+		gameNum = miniGameNum - 1;
+		setupGame(owner, guest, myPlayerNum, isCurrent);
+		
+	}
+	
+	
 	public void startMiniGame(String curSpaceName){
 		this.curSpaceName = curSpaceName;
 		
@@ -99,11 +119,9 @@ public class MiniGamePanel extends JPanel{
 	public void switchToOther(){
 		
 		if(isOwnerWin()){
-			Sounds.landedOnOwnedProperty.playSound();
 			switchToProperty();
 		}
 		else{
-			Sounds.gainMoney.playSound();
 			switchToDice();
 		}
 	}
@@ -144,11 +162,24 @@ public class MiniGamePanel extends JPanel{
 	}
 	public void switchToProperty(){
 		cleanup();
-		pPanel.executeSwitch(curSpaceName,guest,isCurrent);
+		if (!isPracticingMode){
+			Sounds.landedOnOwnedProperty.playSound();
+			pPanel.executeSwitch(curSpaceName,guest,isCurrent);
+		}
+		else{
+			Sounds.gainMoney.playSound();
+		}
+		
 	}
 	public void switchToDice(){
 		cleanup();
-		dicePanel.setVisible(true);
+		if (!isPracticingMode){
+			Sounds.gainMoney.playSound();
+			hostPanel.setVisible(true);
+		}
+		else{
+			Sounds.gainMoney.playSound();
+		}
 	}
 	public boolean isPlayingMinigame() {
 		return isPlayingMinigame;

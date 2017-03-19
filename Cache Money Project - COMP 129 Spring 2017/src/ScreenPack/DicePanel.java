@@ -728,7 +728,6 @@ public class DicePanel extends JPanel{
 
 	private void consolidateOwners(){
 		HashMap<String, PropertySpace> mappings = bPanel.getMappings();
-
 		Property WW = mappings.get("Water Works").getPropertyInfo();
 		Property EC = mappings.get("Electric Company").getPropertyInfo();
 		if(WW.getOwner() == EC.getOwner() && WW.getMultiplier() == 0 && EC.getMultiplier() == 0)
