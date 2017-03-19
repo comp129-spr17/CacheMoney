@@ -222,7 +222,6 @@ public class GameScreen extends JFrame{
 		for(int i=0; i<4; i++)
 		{
 			players[i] = Player.getInstance(i);
-			players[i].setplayerNum(i);
 		}
 	}
 	private void addButtonListeners()

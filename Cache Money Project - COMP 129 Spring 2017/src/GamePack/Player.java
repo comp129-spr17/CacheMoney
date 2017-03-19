@@ -21,14 +21,14 @@ public final class Player {
 	private int pastPositionNumber;
 	private int playerPositionNumber;
 	private boolean isOn;
-	private static final Player GlobalPlayer0 = new Player();
-	private static final Player GlobalPlayer1 = new Player();
-	private static final Player GlobalPlayer2 = new Player();
-	private static final Player GlobalPlayer3 = new Player();
+	private static final Player GlobalPlayer0 = new Player(0);
+	private static final Player GlobalPlayer1 = new Player(1);
+	private static final Player GlobalPlayer2 = new Player(2);
+	private static final Player GlobalPlayer3 = new Player(3);
 	private List<String> ownedProperties;
 //------------------------------------Default Constructor
 	
-	private Player() {
+	private Player(int playerNum) {
 		isAlive = true;
 		alreadyDead = false;
 		pastPositionNumber = -1;
@@ -42,6 +42,7 @@ public final class Player {
 		tens = 5;
 		fives = 5;
 		ones = 5;
+		setplayerNum(playerNum);
 		inJail = false;
 		ownedProperties = new ArrayList<String>();
 	}

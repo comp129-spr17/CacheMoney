@@ -8,16 +8,18 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import GamePack.SizeRelated;
+
 public class MiniGamePractice extends JFrame{
-	
 	public final static int WIDTH = 330;
 	public final static int HEIGHT = 400;
 	
+	private SizeRelated sizeRelated;
 	
 	public MiniGamePractice(){
-		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		sizeRelated = SizeRelated.getInstance();
 		
-		this.setBounds(screenSize.getDisplayMode().getWidth() / 2 - WIDTH / 2, screenSize.getDisplayMode().getHeight() / 2 - HEIGHT / 2, WIDTH, HEIGHT);
+		this.setBounds(sizeRelated.getScreenW() / 2 - WIDTH / 2, sizeRelated.getScreenH() / 2 - HEIGHT / 2, sizeRelated.getDicePanelWidth()+50, sizeRelated.getDicePanelHeight()+50);
 		MiniGameModePanel mgp = new MiniGameModePanel();
 		this.add(mgp);
 		this.setVisible(true);

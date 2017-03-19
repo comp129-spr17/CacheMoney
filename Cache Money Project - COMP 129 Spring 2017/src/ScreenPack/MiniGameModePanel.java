@@ -20,7 +20,6 @@ public class MiniGameModePanel extends JPanel{
 	private int miniGameToPlay;
 	private int keyListenerIterator;
 	
-	
 	public MiniGameModePanel(){
 		init();
 	}
@@ -31,7 +30,6 @@ public class MiniGameModePanel extends JPanel{
 		ownerPlaceholder = Player.getInstance(0);
 		guestPlaceholder = Player.getInstance(1);
 		gameButton = new JButton[MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE];
-		
 		this.setLocation(0, 0);
 		this.setLayout(null);
 		this.setVisible(true);
