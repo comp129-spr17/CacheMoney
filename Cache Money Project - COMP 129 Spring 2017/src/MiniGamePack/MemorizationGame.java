@@ -322,7 +322,7 @@ public class MemorizationGame extends MiniGame{
 			System.out.println("not supposed to be here");
 			break;
 		}
-		lblsForThis.get(index).setText("<html><font color = '" + color + "'><span style='font-size:40px'>•</span></font></html>");
+		lblsForThis.get(index).setText("<html><font color = '" + color + "'><span style='font-size:50px'>.</span></font></html>");
 	}
 	
 	private void hideDots(){

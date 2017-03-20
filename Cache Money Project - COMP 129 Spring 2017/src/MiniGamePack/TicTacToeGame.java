@@ -183,6 +183,9 @@ public class TicTacToeGame extends MiniGame{
 				if (allowInput){
 					lbls.get(1).setText(turnNum ? "Owner's Turn. Time: " + (currentTime - 1) : "Guest's Turn. Time: " + (currentTime - 1));
 				}
+				else{
+					return;
+				}
 			}
 			if (allowInput){
 				allowInput = false;
@@ -213,6 +216,7 @@ public class TicTacToeGame extends MiniGame{
 	}
 	
 	private void finishGame(boolean isTie){
+		allowInput = false;
 		lbls.get(1).setText((isTie ? "It's a tie. " : "") + (winner ? "OWNER" : "GUEST") + " WINS!");
 		Sounds.waitingRoomJoin.playSound();
 		forEnding();
@@ -228,7 +232,7 @@ public class TicTacToeGame extends MiniGame{
 	
 	private void removeKeyListner(){
 		miniPanel.removeKeyListener(listener);
-		miniPanel.setFocusable(false);
+		//miniPanel.setFocusable(false);
 	}
 	
 	public boolean getWinner(){
