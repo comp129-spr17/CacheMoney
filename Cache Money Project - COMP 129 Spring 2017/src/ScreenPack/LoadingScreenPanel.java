@@ -11,7 +11,7 @@ import GamePack.ImageRelated;
 
 public class LoadingScreenPanel extends JPanel{
 
-	private final int NUM_OF_RANDOM_MESSAGES_AVAILABLE = 23;
+	private final int NUM_OF_RANDOM_MESSAGES_AVAILABLE = 24;
 	private final static String FILE_PATH="Images/";
 	private ImageIcon loadingGif;
 	private ImageRelated imageRelated;
@@ -119,6 +119,9 @@ public class LoadingScreenPanel extends JPanel{
 			break;
 		case 22:
 			text = "Loading MLG Rolling Doubles...";
+			break;
+		case 23:
+			text = "I'm dead on the inside.";
 			break;
 		}
 		randomLoadingMessageLabel.setText("  " + text);
