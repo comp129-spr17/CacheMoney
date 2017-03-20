@@ -560,11 +560,9 @@ public class DicePanel extends JPanel{
 		} else {
 			numOfDoublesInRow = 0;
 		}
-
 		if (SERVER_DEBUG){
 			sum = 1;
 		}
-
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 

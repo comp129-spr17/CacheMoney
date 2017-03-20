@@ -1,4 +1,4 @@
-package ScreenPack;
+ package ScreenPack;
 
 import java.io.OutputStream;
 
@@ -10,8 +10,8 @@ import MiniGamePack.*;
 
 public class MiniGamePanel extends JPanel{
 	private final boolean DEBUG_SAME_MINIGAME = false;
-	public final static int NUM_OF_MINIGAMES_AVAILABLE = 7;
-	private final int GAME_TO_START_ON = 0; // -1 FOR DEFAULT
+	public final static int NUM_OF_MINIGAMES_AVAILABLE = 8;
+	private final int GAME_TO_START_ON = 7; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -77,6 +77,7 @@ public class MiniGamePanel extends JPanel{
 		mGames[4] = new EliminationGame(this, isSingle);
 		mGames[5] = new MathGame(this, isSingle);
 		mGames[6] = new MemorizationGame(this, isSingle);
+		mGames[7] = new TicTacToeGame(this, isSingle);
 	}
 	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
 		hostPanel.setVisible(false);

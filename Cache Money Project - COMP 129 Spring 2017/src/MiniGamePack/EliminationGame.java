@@ -70,7 +70,7 @@ public class EliminationGame extends MiniGame{
 	}
 	
 	private void startDisqualifyTimer(){
-		lblsForThis.get(0).setText("Do NOT take the rotten apple! Time: " + (disqualifyTimer));
+		lblsForThis.get(0).setText("Do NOT take the rotten apple! Time: " + MAXIMUM_TIME_REMAINING);
 		if (disqualifyTimer > 0){
 			disqualifyTimer = MAXIMUM_TIME_REMAINING;
 			return;
@@ -327,14 +327,6 @@ public class EliminationGame extends MiniGame{
 	private void multiplayerCheckRotten(int chosenApple){
 		if (chosenApple == chosenRotten + 1){
 			displayWinnerAndCleanUp();
-		}
-	}
-	
-	private void delayThread(int milliseconds){
-		try {
-			Thread.sleep(milliseconds);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 	

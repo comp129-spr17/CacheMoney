@@ -194,6 +194,9 @@ public class MiniGame{
 		case 6:
 			setInstructions("Memorization Game", "<html>Instructions: <br />Memorize how many of each color dot there are. Then answer a question on your turn.<br /><br />Controls:<br />Owner: Press a num key to enter and lock in a 1-digit answer. <br />Guest: Press a num key to enter and lock in a 1-digit answer.<html>");
 			break;
+		case 7:
+			setInstructions("Tic-Tac-Toe", "<html>Instructions: <br />Defeat your opponent in a tic-tac-toe match, but the game starts with 1 spot randomly filled! Tie favors the owner of the property.<br /><br />Controls:<br />Owner: Press a num key to place X on your turn. <br />Guest: Press a num key to place O on your turn.<html>");
+			break;
 		default:
 			break;
 		}
@@ -273,6 +276,15 @@ public class MiniGame{
 			System.out.println("WARNING: writer == null");
 		}
 	}
+	
+	protected void delayThread(int milliseconds){
+		try {
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	class GameEnding extends Thread{
 		public void run(){
 			readyToPlay = false;

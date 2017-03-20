@@ -226,9 +226,6 @@ public class MemorizationGame extends MiniGame{
 
 	private void displayWinner() {
 		lbls.get(1).setText((winner ? "Owner" : "Guest") + " Wins!");
-		
-		
-		
 		Sounds.waitingRoomJoin.playSound();
 	}
 	
@@ -274,7 +271,6 @@ public class MemorizationGame extends MiniGame{
 				forEnding();
 			}
 		}
-		
 	}
 	
 	private void restartCountdown(){
@@ -433,13 +429,7 @@ public class MemorizationGame extends MiniGame{
 		miniPanel.setFocusable(false);
 	}
 	
-	private void delayThread(int milliseconds){
-		try {
-			Thread.sleep(milliseconds);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+	
 	
 	
 	

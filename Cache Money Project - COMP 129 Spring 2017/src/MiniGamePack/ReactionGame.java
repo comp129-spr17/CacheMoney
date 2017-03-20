@@ -76,8 +76,6 @@ public class ReactionGame extends MiniGame {
 					waitForServerResult();
 					gameResult();
 				}
-				//t.cancel();
-				//t.purge();
 			}
 		}, timeUntilReact);
 	}
@@ -255,14 +253,6 @@ public class ReactionGame extends MiniGame {
 		miniPanel.repaint();
 		miniPanel.revalidate();
 		isGameEnded = true;
-	}
-	
-	private void delayThread(int milliseconds){
-		try {
-			Thread.sleep(milliseconds);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public boolean isGameEnded(){

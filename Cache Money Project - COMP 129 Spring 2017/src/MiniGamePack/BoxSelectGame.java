@@ -26,6 +26,7 @@ public class BoxSelectGame extends MiniGame{
 	private int turnNum;
 	private boolean isGameEnded;
 	private boolean winner;
+	private boolean allowInput;
 	private ArrayList<JLabel> lblsForThis;
 	private int disqualifyTimer;
 	
@@ -53,6 +54,7 @@ public class BoxSelectGame extends MiniGame{
 		initGameSetting();
 		manageMiniPanel();
 		startDisqualifyTimer();
+		allowInput = true;
 	}
 
 	private void resetVars() {
@@ -63,6 +65,7 @@ public class BoxSelectGame extends MiniGame{
 		chosenBox[1] = 0;
 		surpriseBoxes[0] = 0;
 		disqualifyTimer = 0;
+		
 	}
 
 	private void resetLabels() {
@@ -189,6 +192,7 @@ public class BoxSelectGame extends MiniGame{
 			lblsForThis.get(7).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
 			Sounds.landedOnUnownedProperty.playSound();
 			startDisqualifyTimer();
+			allowInput = true;
 		}
 		
 	}
@@ -282,7 +286,7 @@ public class BoxSelectGame extends MiniGame{
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(isSingle || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner)){
+				if(allowInput && (isSingle || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner))){
 					if (turnNum > 1 ){
 						return;
 					}
@@ -296,6 +300,7 @@ public class BoxSelectGame extends MiniGame{
 					}
 					if (chosenBoxNum > 0 && chosenBoxNum < 4 && chosenBox[0] != chosenBoxNum){
 						chosenBox[turnNum] = chosenBoxNum;
+						allowInput = false;
 						if (isSingle){
 							incrementTurn();
 						}
