@@ -1,6 +1,10 @@
 package ScreenPack;
 
 import java.awt.GridLayout;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -123,6 +127,21 @@ public class LoadingScreenPanel extends JPanel{
 		case 23:
 			text = "I'm dead on the inside.";
 			break;
+		}
+		Date date = new Date() ;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm") ;
+		dateFormat.format(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);  
+		int hours = cal.get(Calendar.HOUR_OF_DAY);
+		int minutes = cal.get(Calendar.MINUTE);
+		try {
+			if(dateFormat.parse(dateFormat.format(date)).after(dateFormat.parse("01:00")) && dateFormat.parse(dateFormat.format(date)).before(dateFormat.parse("07:00")))
+			{
+			    text = "It's " + hours + ":" + minutes +  " AM, go to bed Devin...";
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 		randomLoadingMessageLabel.setText("  " + text);
 		
