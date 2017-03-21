@@ -144,6 +144,22 @@ public final class MBytePack {
 		
 		return null;
 	}
+	public byte[] packIntArray(int requestCode, int[] arr){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(arr.length);
+			for (int i = 0; i < arr.length; i++){
+				dOutputStream.writeInt(arr[i]);
+			}
+			
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 	public byte[] packIntValue(int requestCode, int num){
 		try{
 			dOutputStream.writeInt(requestCode);

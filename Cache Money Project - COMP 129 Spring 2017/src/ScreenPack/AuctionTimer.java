@@ -13,11 +13,12 @@ public class AuctionTimer extends Timer{
 	private JLabel timeLabel;
 	private int timeCounter;
 	
-	public AuctionTimer(TimerTask task, int delay){
+	public AuctionTimer(TimerTask task, int delay, int labelW, int labelH){
 		timerStarted = false;
 		this.task = task;
 		this.delay = delay;
-		timeLabel = new JLabel();
+		timeLabel = new JLabel("3");
+		timeLabel.setBounds(labelW-(int)timeLabel.getPreferredSize().getWidth(), labelH-(int)timeLabel.getPreferredSize().getHeight(),30,30);
 		timeCounter = 5;
 	}
 	

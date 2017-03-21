@@ -143,7 +143,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players, this, bPanel);
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), isSingle, players, this, bPanel);
 		bPanel.add(propertyPanel);
 		mGamePanel = new MiniGamePanel(isSingle, this, bPanel,propertyPanel);
 		jailInfoScreen = new JailInfoPanel(this, isSingle, players, this, bPanel);
@@ -217,6 +217,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setMyPlayer(int p){
 		myPlayerNum = p;
+		propertyPanel.setMyPlayerNum(myPlayerNum);
 		showPlayer[0].setVisible(true);
 		showPlayer[1].setIcon(imageRelated.getPieceImg(p));
 		showPlayer[1].setVisible(true);
@@ -482,6 +483,12 @@ public class DicePanel extends JPanel{
 	}
 	public void actionForReceiveArray(int[] arr){
 		mGamePanel.actionForGame(arr);
+	}
+	public void actionForBiddingUpdate(int bid, int playerNum){
+		propertyPanel.actionToAuction(bid, playerNum);
+	}
+	public void actionForSwitchingToAuction(){
+		propertyPanel.actionToSwitchToAuction();
 	}
 	private void sendMessageToServer(byte[] msg, int byteSize){
 		if (outputStream != null){
