@@ -56,6 +56,7 @@ public class DicePanel extends JPanel{
 	private int current;
 	private DoubleCelebrate dCel;
 	private PropertyInfoPanel propertyPanel;
+	private JailInfoPanel jailInfoScreen;
 	private BoardPanel bPanel;
 	private boolean isDiceButtonPressed;
 	private OutputStream outputStream;
@@ -145,6 +146,7 @@ public class DicePanel extends JPanel{
 		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(),isSingle, players, this, bPanel);
 		bPanel.add(propertyPanel);
 		mGamePanel = new MiniGamePanel(isSingle, this, bPanel,propertyPanel);
+		jailInfoScreen = new JailInfoPanel(this, isSingle, players, this, bPanel);
 		this.board = board;
 	}
 	private void setDiceBackgroundColor() {
@@ -426,10 +428,15 @@ public class DicePanel extends JPanel{
 			propertyPanel.disableButtons();
 		}
 		else{
-			rollButton.setVisible(true);
-			if (setDebugVisible){
-				overrideDiceRoll.setVisible(true);
-				toggleDoubles.setVisible(true);
+			if(!players[current].isInJail()) {
+				rollButton.setVisible(true);
+				if (setDebugVisible){
+					overrideDiceRoll.setVisible(true);
+					toggleDoubles.setVisible(true);
+				}
+			} else {
+				//TODO
+				//jailInfoScreen
 			}
 		}
 	}
