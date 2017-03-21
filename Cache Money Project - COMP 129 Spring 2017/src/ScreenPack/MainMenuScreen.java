@@ -1,13 +1,22 @@
 package ScreenPack;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
+
+import GamePack.PathRelated;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.*;
+
+import com.sun.java.swing.plaf.windows.resources.windows;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +29,7 @@ import sun.util.resources.cldr.mr.TimeZoneNames_mr;
 public class MainMenuScreen {
 	private Font mainfont;
 	private JPanel mainPanel;
+	private BgPanel backgroundPanel;
 	private JFrame mainmenuframe;
 	private JButton SinglePButton;
 	private JButton MultiPButton;
@@ -31,6 +41,9 @@ public class MainMenuScreen {
 	private Object[] messages;
 	private LoadingScreen loadingScreen;
 	private GameScreen gameScreen;
+	private PathRelated pathRelated;
+	private JLabel backgroundpic;
+	
 	
 	public MainMenuScreen(){
 		init();
@@ -55,10 +68,15 @@ public class MainMenuScreen {
 
 	private void init(){
 		
+		mainPanel = new JPanel();
+		mainPanel.setLayout(null);
+		mainPanel.setOpaque(false);
+		backgroundPanel = new BgPanel();
+		backgroundPanel.setLayout(new BorderLayout());
+		backgroundPanel.add(mainPanel,BorderLayout.CENTER);
 		
 		scaleBoardToScreenSize();
 		mainfont = new Font("Serif", Font.PLAIN, 18);
-		mainPanel = new JPanel(null);
 		mainmenuframe = new JFrame("Main Menu");
 		MultiPButton = new JButton("Multiplayer");
 		SinglePButton = new JButton("Single Player");
@@ -237,10 +255,16 @@ public class MainMenuScreen {
 
 	public void createMenuWindow(){
 		setMenuBackgroundColor();
-		mainmenuframe.add(mainPanel);
+		mainmenuframe.setSize(500,500);
+		pathRelated = PathRelated.getInstance();
+//		backgroundpic = new JLabel(new ImageIcon(pathRelated.getImagePath() + "background.jpg"));
+//		System.out.println(mainmenuframe.getWidth() + " : " + mainmenuframe.getHeight());
+//		backgroundpic.setBounds(0, 0, mainmenuframe.getWidth(), mainmenuframe.getHeight());
+//		mainPanel.add(backgroundpic);
+		mainmenuframe.setResizable(false);
+		mainmenuframe.add(backgroundPanel);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
-		mainmenuframe.setSize(500,500);
 		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
 		HelloThere.setBounds(100,50,300,50);
 		mainPanel.add(HelloThere);
@@ -256,12 +280,38 @@ public class MainMenuScreen {
 		ExitButton.setFont(mainfont);
 		ExitButton.setBounds(175,375,150,50);
 		mainPanel.add(ExitButton);
+
+//		mainPanel.setComponentZOrder(backgroundpic, 0);
+//		mainPanel.setComponentZOrder(HelloThere, 1);
+//
+//		mainPanel.setComponentZOrder(SinglePButton, 1);
+//
+//		mainPanel.setComponentZOrder(MultiPButton, 1);
+//
+//		mainPanel.setComponentZOrder(MiniGamesButton, 1);
+//
+//		mainPanel.setComponentZOrder(ExitButton, 1);
+
+		mainPanel.repaint();
+		mainPanel.revalidate();
+		mainmenuframe.repaint();
+		mainmenuframe.revalidate();
 	}
 	
-
+	class BgPanel extends JPanel
+	{
+		PathRelated pathRelated= PathRelated.getInstance();
+		Image bgImage = new ImageIcon(pathRelated.getImagePath() + "background.jpg").getImage();
+		@Override
+		public void paintComponent(Graphics g)
+		{
+			g.drawImage(bgImage, 0,0,getWidth(),getHeight(),this);
+		}
+	}
+	
 	private void setMenuBackgroundColor() {
 		Color menuBackgroundColor = new Color(105, 177, 255); // LIGHT BLUE
-		mainPanel.setBackground(menuBackgroundColor);
+//		mainPanel.setBackground(menuBackgroundColor);
 	}
 	
 	private void startSinglePlayer() {
