@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -72,10 +73,12 @@ public class BoardPanel extends JPanel{
 	private Player[] players; 
 	private Wildcard chance;
 	private Wildcard communityChest;
-
-	public BoardPanel(Player[] player, DicePanel diceP){
+	private boolean isSingle;
+	private boolean myPlayerNum;
+	public BoardPanel(Player[] player, DicePanel diceP, boolean isSingle){
 		dicePanel = diceP;
 		players = player;
+		this.isSingle = isSingle;
 		sizeRelated = SizeRelated.getInstance();
 		COMMUNITY_X = sizeRelated.getDicePanelX()+sizeRelated.getDicePanelWidth()-30;
 		COMMUNITY_Y = sizeRelated.getDicePanelY()+sizeRelated.getDicePanelHeight()+10;
@@ -114,6 +117,9 @@ public class BoardPanel extends JPanel{
 
 		propertyInfo = new HashMap<String,PropertySpace>();
 		rand = new Random();
+	}
+	public void setMyPlayerNum(int myPlayerNum){
+		board.setMyPlayerNum(myPlayerNum);
 	}
 	private void importImgs(){
 		spaceImgs = new ImageIcon[40];
@@ -166,7 +172,7 @@ public class BoardPanel extends JPanel{
 							add(spaces[i*10+j]);
 							continue;
 						}else if (j == 2){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
+							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else if(j==4){
 							TaxSpace ts = new TaxSpace(spaceImgs[i*10+j], "Income Tax", 200);
@@ -175,7 +181,7 @@ public class BoardPanel extends JPanel{
 							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine())); 
 							spaces[i*10+j] = temp;
 						}else if(j == 7){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
+							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else{
 							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(100, standard.readLine()));
@@ -203,7 +209,7 @@ public class BoardPanel extends JPanel{
 							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine()));
 							spaces[i*10+j] = temp;
 						}else if (j == 7){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
+							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else{
 							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(200, standard.readLine()));
@@ -223,7 +229,7 @@ public class BoardPanel extends JPanel{
 							add(spaces[i*10+j]);
 							continue;
 						}else if(j == 2){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j],"Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
+							WildSpace ws = new WildSpace(spaceImgs[i*10+j],"Chance", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else if(j == 8){
 							temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Water Works"));
@@ -248,10 +254,10 @@ public class BoardPanel extends JPanel{
 							temp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine()));
 							spaces[i*10+j] = temp;
 						}else if (j == 3){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel);
+							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else if (j == 6){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace)spaces[0], spaces, this, dicePanel);
+							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace)spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else if(j == 8){
 							TaxSpace ts = new TaxSpace(spaceImgs[i*10+j],"Luxury Tax",100);
@@ -301,7 +307,14 @@ public class BoardPanel extends JPanel{
 		dicePanel.setBoard(this,board);
 		add(dicePanel);
 	}
-
+	public void setOutputStream(OutputStream outputStream){
+		for(int i=0; i<spaces.length; i++){
+			spaces[i].setOutputStream(outputStream);
+		}
+	}
+	public void actionForDrawnCards(int cardNum, int position){
+		spaces[position].actionForMultiplaying(cardNum);
+	}
 	public HashMap<String,PropertySpace> getMappings()
 	{
 		return propertyInfo;

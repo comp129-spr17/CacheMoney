@@ -16,7 +16,7 @@ public class GoToJailSpace extends Space {
 	}
 	
 	@Override
-	public int landOnSpace(Piece piece, int playerPosition) {
+	public int landOnSpace(Piece piece, int playerPosition,int myPlayerNum) {
 		super.removePiece(piece.getPlayer());
 		jailToSendBadPeopleTo.sendToJail(piece, piece.getPlayer());
 		return Board.JAIL;
