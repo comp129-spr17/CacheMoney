@@ -69,6 +69,7 @@ public class GameScreen extends JFrame{
 	private JButton btnExit;
 	private SizeRelated sizeRelated;
 	private PropertyDisplay pDisplay;
+	private JButton giveJailFreeCard;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -254,6 +255,34 @@ public class GameScreen extends JFrame{
 				
 			}
 		});
+		giveJailFreeCard.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				players[0].setJailFreeCard(1);
+				mLabels.reinitializeMoneyLabels();
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {	
+				
+			}
+		});
+		
 	}
 	
 	private void init(boolean isHost){
@@ -281,6 +310,7 @@ public class GameScreen extends JFrame{
 		addButtonListeners();
 		mainPanel.add(showInfo);
 		mainPanel.add(boardPanel);
+		mainPanel.add(giveJailFreeCard);
 		addMuteMusic();
 		addMuteSounds();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -419,6 +449,8 @@ public class GameScreen extends JFrame{
 		showInfo.add(BorderLayout.NORTH, buttonLabel1);
 		showInfo.add(BorderLayout.SOUTH, buttonLabel2);
 		showInfo.setVisible(true);
+		giveJailFreeCard = new JButton("GIVE JAIL-FREE CARD");
+		giveJailFreeCard.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 25, 200, 50);
 	}
 	
 //	public static void main(String[] args) {
