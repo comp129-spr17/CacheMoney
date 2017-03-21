@@ -80,7 +80,7 @@ public class MainMenuScreen {
 		mainmenuframe = new JFrame("Main Menu");
 		MultiPButton = new JButton("Multiplayer");
 		SinglePButton = new JButton("Single Player");
-		HelloThere = new JLabel("NEED A TITLE", SwingConstants.CENTER);
+		HelloThere = new JLabel("Cache Money", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		MiniGamesButton = new JButton("Play Minigames");
 		cmbNumP = new JComboBox(numPlayer);
