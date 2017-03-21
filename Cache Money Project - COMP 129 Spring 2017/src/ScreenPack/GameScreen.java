@@ -275,7 +275,7 @@ public class GameScreen extends JFrame{
 		loadingProgress = 10;
 		dicePanel = new DicePanel(isSingle, players, mLabels);
 		loadingProgress = 20;
-		boardPanel = new BoardPanel(players,dicePanel);
+		boardPanel = new BoardPanel(players,dicePanel, isSingle);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
 		addButtonListeners();

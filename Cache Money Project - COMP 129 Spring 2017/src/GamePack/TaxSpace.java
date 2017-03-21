@@ -16,7 +16,7 @@ public class TaxSpace extends Space {
 	}
 	
 	@Override
-	public int landOnSpace(Piece piece, int playerPosition) {
+	public int landOnSpace(Piece piece, int playerPosition, int myPlayerNum) {
 		piece.getPlayerClass().pay(tax);
 		return playerPosition;
 	}

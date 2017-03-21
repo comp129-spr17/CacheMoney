@@ -1,5 +1,6 @@
 package GamePack;
 
+import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,6 +30,7 @@ public class Board {
 	private Player[] players;
 	private boolean isDone;
 	private boolean[] propertyCheck;
+	private int myPlayerNum;
 	public Board(Space[] board, Player[] players) {
 		init(board,players);
 		
@@ -62,6 +64,9 @@ public class Board {
 			players[i].setIsOn(true);
 			placePieceToFirst(i);
 		}
+	}
+	public void setMyPlayerNum(int myPlayerNum){
+		this.myPlayerNum = myPlayerNum;
 	}
 	public void movePiece(int player, int diceResult) {
 		showMovingAnim(player, diceResult);
@@ -157,7 +162,7 @@ public class Board {
 					e.printStackTrace();
 				}
 				// PLAYER IS SENT TO JAIL HERE IF THEY LAND ON THAT SPACE
-				players[player].setPositionNumber(boardTracker[players[player].getPositionNumber()].landOnSpace(players[player].getPiece(), players[player].getPositionNumber()));
+				players[player].setPositionNumber(boardTracker[players[player].getPositionNumber()].landOnSpace(players[player].getPiece(), players[player].getPositionNumber(), myPlayerNum));
 				
 				
 			}

@@ -80,6 +80,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UNI.PROPERTY_SWITCH_TO_AUCTION, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
+		GetResults.put(UNI.STACK_CARD_DRAWN, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArrays(result);
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);

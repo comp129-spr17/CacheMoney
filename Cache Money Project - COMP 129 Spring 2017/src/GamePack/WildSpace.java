@@ -1,5 +1,7 @@
 package GamePack;
 
+import java.io.OutputStream;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -7,31 +9,40 @@ import ScreenPack.ChanceStack;
 import ScreenPack.CommunityStack;
 
 public class WildSpace extends Space {
-	private String name;
 	private String prompt;
 	private String command;
 	private ChanceStack chanceStack;
 	private CommunityStack communityStack;
 	private GoSpace go;
 	private Space spaces[];
-	
+	private boolean isSingle;
 	
 
-	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel, JPanel dicePanel) {
+	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel, JPanel dicePanel, boolean isSingle) {
 		super(img, name);
 		this.name = name;
-		chanceStack = new ChanceStack(boardPanel, dicePanel);
-		communityStack = new CommunityStack(boardPanel, dicePanel);
+		this.isSingle = isSingle;
+		chanceStack = new ChanceStack(boardPanel, dicePanel, isSingle);
+		communityStack = new CommunityStack(boardPanel, dicePanel, isSingle);
 		go  = (GoSpace) gospace;
 		spaces = s;
 	}
-	
+	public void setOutputStream(OutputStream outputStream){
+		chanceStack.setOutputStream(outputStream);
+		communityStack.setOutputStream(outputStream);
+	}
+	public void actionForMultiplaying(int nextNum){
+		if(name.equals("Chance"))
+			chanceStack.setNextCardNum(nextNum);
+		else
+			communityStack.setNextCardNum(nextNum);
+	}
 	@Override
-	public int landOnSpace(Piece piece, int playerPosition) {
+	public int landOnSpace(Piece piece, int playerPosition, int myPlayerNum) {
 		
 		
 		if(name == "Chance"){
-			command = chanceStack.getResultingCommand();
+			command = chanceStack.getResultingCommand(piece.getPlayer() == myPlayerNum, playerPosition);
 			System.out.println(command);
 			if(command == "Move0"){
 					System.out.println("Advance to go!");//small bug if you hit the send to go on first roll of game
@@ -134,7 +145,7 @@ public class WildSpace extends Space {
 		else if(name == "Community Chest"){
 			
 			
-			command = communityStack.getResultingCommand();
+			command = communityStack.getResultingCommand(piece.getPlayer() == myPlayerNum, playerPosition);
 			System.out.println(command);
 			
 			if(command == "Move0"){

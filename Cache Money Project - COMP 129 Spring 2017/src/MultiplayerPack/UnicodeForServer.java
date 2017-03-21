@@ -29,6 +29,7 @@ public final class UnicodeForServer {
 	public static final int MINI_GAME_START_CODE = 24;
 	public static final int PROPERTY_BIDDING = 25;
 	public static final int PROPERTY_SWITCH_TO_AUCTION = 26;
+	public static final int STACK_CARD_DRAWN = 27;
 	
 	private UnicodeForServer(){
 		

@@ -217,6 +217,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setMyPlayer(int p){
 		myPlayerNum = p;
+		bPanel.setMyPlayerNum(p);
 		propertyPanel.setMyPlayerNum(myPlayerNum);
 		showPlayer[0].setVisible(true);
 		showPlayer[1].setIcon(imageRelated.getPieceImg(p));
@@ -490,6 +491,9 @@ public class DicePanel extends JPanel{
 	public void actionForSwitchingToAuction(){
 		propertyPanel.actionToSwitchToAuction();
 	}
+	public void actionForDrawnStackCard(int cardNum, int position){
+		bPanel.actionForDrawnCards(cardNum, position);
+	}
 	private void sendMessageToServer(byte[] msg, int byteSize){
 		if (outputStream != null){
 			try {
@@ -716,6 +720,7 @@ public class DicePanel extends JPanel{
 		this.outputStream = outputStream;
 		propertyPanel.setOutputStream(outputStream);
 		mGamePanel.setOutputStream(outputStream);
+		bPanel.setOutputStream(outputStream);
 	}
 	public String getIp() {
 		return ip;

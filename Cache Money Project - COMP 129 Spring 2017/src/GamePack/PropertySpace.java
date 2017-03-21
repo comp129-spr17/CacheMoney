@@ -33,7 +33,7 @@ public class PropertySpace extends Space {
 	}
 	
 	@Override
-	public int landOnSpace(Piece piece, int playerPosition) {
+	public int landOnSpace(Piece piece, int playerPosition, int myPlayerNum) {
 		int player = piece.getPlayer();
 		
 		

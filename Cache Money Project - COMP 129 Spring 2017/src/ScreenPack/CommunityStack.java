@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -16,6 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import InterfacePack.Sounds;
+import MultiplayerPack.MBytePack;
+import MultiplayerPack.UnicodeForServer;
 
 public class CommunityStack extends JPanel{
 	Random rand = new Random();
@@ -30,13 +33,18 @@ public class CommunityStack extends JPanel{
 	JPanel boardPanel;
 	JPanel dicePanel;
 	JLabel card;
-	
-	
+	private boolean isSingle;
+	private boolean isReceived;
 	Map<String,String> deck = new HashMap<String, String>();
-	
-	public CommunityStack(JPanel bp, JPanel dp){
+	private MBytePack mPack;
+	private UnicodeForServer unicode;
+	private OutputStream outputStream;
+	public CommunityStack(JPanel bp, JPanel dp, boolean isSingle){
 		boardPanel = bp;
 		dicePanel = dp;
+		mPack = MBytePack.getInstance();
+		unicode = UnicodeForServer.getInstance();
+		this.isSingle = isSingle;
 		initStack();
 	}
 	
@@ -117,17 +125,51 @@ public class CommunityStack extends JPanel{
 		
 	
 	}
-	
+	public void setOutputStream(OutputStream outputStream){
+		this.outputStream = outputStream;
+	}
 	private int getNextCard(){
-		cardDrawn = rand.nextInt(18);//puts all cards in play 
 		//System.out.println(cardDrawn);
 		//cardDrawn = 0; //only puts go to go card in play
-		return cardDrawn;
+		return rand.nextInt(18);
 	}
 	
-	public String getResultingCommand() {
-		cardDrawn = getNextCard();
+	public String getResultingCommand(boolean isCurrentPlayer, int playerPosition) {
+		if(isSingle)
+			cardDrawn = getNextCard();
+		else {
+			if(isCurrentPlayer){
+				System.out.println("Sending:" + playerPosition);
+				sendMessageToServer(mPack.packIntArray(unicode.STACK_CARD_DRAWN, new int[]{getNextCard(), playerPosition}));
+			}
+			while(!isReceived){
+				System.out.println("Waiting");
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		isReceived = false;
 		return deck.get("command" + cardDrawn);
+	}
+	public void setNextCardNum(int cardNum){
+		System.out.println("Received:" + cardNum);
+		cardDrawn = cardNum;
+		isReceived = true;
+	}
+	private void sendMessageToServer(byte[] msg){
+		if (outputStream != null){
+			try {
+				outputStream.write(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else{
+			System.out.println("WARNING: writer == null");
+		}
 	}
 	
 }
