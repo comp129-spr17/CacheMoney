@@ -428,16 +428,16 @@ public class DicePanel extends JPanel{
 			propertyPanel.disableButtons();
 		}
 		else{
-			if(!players[current].isInJail()) {
+			//if(!players[current].isInJail()) {
 				rollButton.setVisible(true);
 				if (setDebugVisible){
 					overrideDiceRoll.setVisible(true);
 					toggleDoubles.setVisible(true);
 				}
-			} else {
+			//} else {
 				//TODO
 				//jailInfoScreen
-			}
+			//}
 		}
 	}
 	public void actionForPropertyPurchase(String propertyName, int buyingPrice, int playerNum){
