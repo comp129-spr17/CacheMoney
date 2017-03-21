@@ -34,6 +34,7 @@ public final class MoneyLabels {
 	private JLabel[] cash20;
 	private JLabel[] cash100;
 	private JLabel[] cash1;
+	private JLabel[] cash10;
 	private JLabel[] totalmonnies;
 	private JLabel[] fivehunneds;
 	private JLabel[] hunneds;
@@ -336,6 +337,7 @@ public final class MoneyLabels {
 				cash20[i].setText(Integer.toString(players[i].getTwennies()));
 				cash100[i].setText(Integer.toString(players[i].getHunneds()));
 				cash1[i].setText(Integer.toString(players[i].getOnes()));
+				//cash10[i].setText(Integer.toString(players[i].getTens()));
 				players[i].checkIfAlive();
 				if (players[i].getIsAlive() == false && players[i].getAlreadyDead() == false)
 				{
@@ -373,6 +375,7 @@ public final class MoneyLabels {
 		cash20 = new JLabel[4];
 		cash100 = new JLabel[4];
 		cash1 = new JLabel[4];
+		cash10 = new JLabel[4];
 		totalmonnies = new JLabel[4];
 		fivehunneds = new JLabel[4];
 		hunneds = new JLabel[4];
