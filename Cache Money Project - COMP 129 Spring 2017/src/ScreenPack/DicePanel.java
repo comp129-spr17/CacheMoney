@@ -147,6 +147,7 @@ public class DicePanel extends JPanel{
 		bPanel.add(propertyPanel);
 		mGamePanel = new MiniGamePanel(isSingle, this, bPanel,propertyPanel);
 		jailInfoScreen = new JailInfoPanel(this, isSingle, players, this, bPanel);
+		bPanel.add(jailInfoScreen);
 		this.board = board;
 	}
 	private void setDiceBackgroundColor() {
@@ -428,16 +429,16 @@ public class DicePanel extends JPanel{
 			propertyPanel.disableButtons();
 		}
 		else{
-			//if(!players[current].isInJail()) {
+			if(!players[current].isInJail()) {
 				rollButton.setVisible(true);
 				if (setDebugVisible){
 					overrideDiceRoll.setVisible(true);
 					toggleDoubles.setVisible(true);
 				}
-			//} else {
+			} else {
 				//TODO
-				//jailInfoScreen
-			//}
+				jailInfoScreen.executeSwitch(players[current], true);
+			}
 		}
 	}
 	public void actionForPropertyPurchase(String propertyName, int buyingPrice, int playerNum){
@@ -658,6 +659,8 @@ public class DicePanel extends JPanel{
 			}
 			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
 				Sounds.landedOnChanceOrCommunityChest.playSound();
+			} else if (curSpaceName == "Visiting Jail") {
+				
 			}
 		}
 		delayThread(600);
