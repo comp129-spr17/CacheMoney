@@ -1,6 +1,7 @@
 package GamePack;
 
 import java.awt.Container;
+import java.io.OutputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -9,8 +10,8 @@ import javax.swing.JLabel;
 public class Space extends JLabel{
 	private Piece[] onSpace;
 	private SizeRelated s;
-	private String name;
-	
+	protected String name;
+	protected OutputStream outputStream;
 	public Space() {
 		init();
 	}
@@ -42,15 +43,9 @@ public class Space extends JLabel{
 		return "No Name Associated";
 	}
 	
-//	public boolean isPieceOnSpace(String pieceName) {
-//		for(int i = 0; i < onSpace.length; i++) {
-//			if(onSpace[i] != null) {
-//				if(onSpace[i].getName().equals(pieceName)) return true;
-//			}
-//		}
-//		return false;
-//	}
-	
+	public void actionForMultiplaying(int cardNum){
+		
+	}
 	public void removePiece(int n) {
 		Container parent = onSpace[n].getParent();
 		remove(onSpace[n]);
@@ -70,8 +65,10 @@ public class Space extends JLabel{
 		}
 		
 	}
-	
-	public int landOnSpace(Piece piece, int playerPosition) {
+	public void setOutputStream(OutputStream outputStream){
+		this.outputStream = outputStream;
+	}
+	public int landOnSpace(Piece piece, int playerPosition, int myPlayerNumber) {
 		return playerPosition;
 	}
 }

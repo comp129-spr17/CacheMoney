@@ -4,6 +4,8 @@ import ScreenPack.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.swing.internal.plaf.basic.resources.basic;
+
 public final class Player {
 	private int totalmonies;
 	private int fivehunneds;
@@ -13,6 +15,7 @@ public final class Player {
 	private int tens;
 	private int fives;
 	private int ones;
+	private int jailFreeCard;
 	private boolean isAlive;
 	private boolean alreadyDead;
 	private Piece playerpiece;
@@ -33,6 +36,7 @@ public final class Player {
 		alreadyDead = false;
 		pastPositionNumber = -1;
 		playerPositionNumber = 0;
+	    jailFreeCard = 0;
 //		playerPositionNumber = 1; /// FOR SERVER DEBUGGING PURPOSE
 		totalmonies = 1500;
 		fivehunneds = 2;
@@ -112,9 +116,17 @@ public final class Player {
 	{
 		return alreadyDead;
 	}
+	public int getJailFreeCard()
+	{
+		return jailFreeCard;
+	}
 //----------------------------------------Sets
 	public void setTotalMonies(int newTotalMonies) {
 		totalmonies = newTotalMonies;
+	}
+	public void setJailFreeCard(int x)
+	{
+		jailFreeCard = 1;
 	}
 	void setFiveHunneds(int newFiveHunneds) {
 		fivehunneds = newFiveHunneds;

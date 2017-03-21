@@ -43,9 +43,10 @@ public final class MoneyLabels {
 	private JLabel[] fives;
 	private JLabel[] ones;
 	private JLabel[] playerLabels;
+	private JLabel[] jailCards;
 	private Insets insets;
 	private Font numberfont;
-	private ImageIcon[] moneyImages;
+	private JLabel[] moneyImages;
 	private final static MoneyLabels MONEY_LABELS = new MoneyLabels();
 	private SizeRelated sizerelated;
 	private ImageRelated imagerelated;
@@ -74,8 +75,9 @@ public final class MoneyLabels {
 		setPositionOfBalances();
 		createAndManageXMarkAndMoniesLabels();
 		addXMarkToPlayerInfo();
-		addLabelsToPlayerInfo();
 		initializePiecePictures();
+		setJailIcons();
+		addLabelsToPlayerInfo();
 		removeNonPlayers();
 	}
 	private void checkWinner()
@@ -248,6 +250,16 @@ public final class MoneyLabels {
 			totalmonnies[x].setBounds(75 + (200 * (x)),40, 300, 100);
 		}
 	}
+	
+	private void setJailIcons()
+	{
+		for (int q = 0; q < 4; q++)
+		{
+			jailCards[q] = new JLabel();
+			jailCards[q] = new JLabel(new ImageIcon(pathRelated.getImagePath() + "jailcard.jpg"));
+			jailCards[q].setBounds(playerPieceDisplay[q].getX() - 75,playerPieceDisplay[q].getY() + 75,200,100);
+		}
+	}
 	private void assignMoneyToLabels(int i) {
 		fivehunneds[i] = new JLabel(Integer.toString(players[i].getFiveHunneds()));
 		hunneds[i] = new JLabel(Integer.toString(players[i].getHunneds()));
@@ -311,6 +323,10 @@ public final class MoneyLabels {
 	{
 		for(int i = 0; i < 4; i++)
 		{
+			if (players[i].getJailFreeCard() == 1)
+			{
+				PlayerInfo.add(jailCards[i]);
+			}
 			if (totalmonnies[i].getText() != "OFFLINE")
 			{
 				totalmonnies[i].setText("$" + Integer.toString(players[i].getTotalMonies()));
@@ -366,6 +382,7 @@ public final class MoneyLabels {
 		fives = new JLabel[4];
 		ones = new JLabel[4];
 		playerLabels = new JLabel[4];
+		jailCards = new JLabel[4];
 		numberfont = new Font("Serif",Font.BOLD,18);
 	}
 	private void addLabelsToPlayerInfo() {
@@ -385,6 +402,10 @@ public final class MoneyLabels {
 			PlayerInfo.add(cash50image[j]);
 			PlayerInfo.add(cash100image[j]);
 			PlayerInfo.add(cash500image[j]);
+			if (players[j].getJailFreeCard() == 1)
+			{
+				PlayerInfo.add(jailCards[j]);
+			}
 		}
 	}
 	private void addXMarkToPlayerInfo() {

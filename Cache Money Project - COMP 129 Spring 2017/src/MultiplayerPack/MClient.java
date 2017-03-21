@@ -97,7 +97,10 @@ public class MClient {
 		doActions.put(unicode.MATH_MINI_GAME_RANDS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArraySingle(result);}});
 		doActions.put(unicode.MATH_MINI_GAME_ANS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveAnsForMath(result);}});
 		doActions.put(unicode.MINI_GAME_START_CODE, new DoAction(){public void doAction(ArrayList<Object> result){doStartMiniGame(result);}});
-		
+		doActions.put(unicode.PROPERTY_BIDDING, new DoAction(){public void doAction(ArrayList<Object> result){doBiddingUpdate(result);}});
+		doActions.put(unicode.PROPERTY_SWITCH_TO_AUCTION, new DoAction(){public void doAction(ArrayList<Object> result){doSwitchToAuction();}});
+		doActions.put(unicode.STACK_CARD_DRAWN, new DoAction(){public void doAction(ArrayList<Object> result){doDrawChanceStack(result);}});
+
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 		isConnected = false;
@@ -251,6 +254,15 @@ public class MClient {
 	}
 	private void doStartMiniGame(ArrayList<Object> result){
 		diceP.actionForStartMiniGame();
+	}
+	private void doBiddingUpdate(ArrayList<Object> result){
+		diceP.actionForBiddingUpdate((Integer)result.get(1), (Integer)result.get(2));
+	}
+	private void doSwitchToAuction(){
+		diceP.actionForSwitchingToAuction();
+	}
+	private void doDrawChanceStack(ArrayList<Object> result){
+		diceP.actionForDrawnStackCard((Integer)result.get(1), (Integer)result.get(2));
 	}
 	private void setPlayer(int i){
 		thisPlayNum = i;

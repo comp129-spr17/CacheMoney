@@ -49,6 +49,7 @@ public class PropertyInfoPanel extends JPanel{
 	private JPanel infoPanel;
 	private Player currentPlayer;
 	private MortgagePanel mPanel;
+	private int myPlayerNum;
 
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, BoardPanel b)
 	{
@@ -96,11 +97,14 @@ public class PropertyInfoPanel extends JPanel{
 
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
-
+	public void setMyPlayerNum(int myPlayerNum){
+		this.myPlayerNum = myPlayerNum;
+	}
 	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
 		AP = new AuctionPanel(property, players, this, isSingle);
+		AP.setOutputStream(outputStream);
 		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo);
 		bPanel.add(mPanel);
 		loadPropertyInfo(property);
@@ -111,7 +115,17 @@ public class PropertyInfoPanel extends JPanel{
 			enableButtons();
 		this.currentPlayer = currentPlayer;
 	}
-
+	public void actionToAuction(int bid, int playerNum){
+		AP.actionToAuction(bid, playerNum);
+	}
+	public void actionToSwitchToAuction(){
+		Sounds.landedOnOwnedProperty.playSound();					
+		if(!isSingle)
+			AP.setMyPlayerNum(myPlayerNum);
+		AP.switchtoAP();
+		
+		bPanel.add(AP);
+	}
 	private void hidePreviousPanel()
 	{
 		panelToSwitchFrom.setVisible(false);
@@ -238,10 +252,10 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled()){
-					Sounds.landedOnOwnedProperty.playSound();					
-					//TODO Add auction functionality
-					AP.switchtoAP();
-					bPanel.add(AP);
+					if(isSingle)
+						actionToSwitchToAuction();
+					else
+						sendMessageToServer(mPack.packSimpleRequest(unicode.PROPERTY_SWITCH_TO_AUCTION));
 				}
 
 			}
@@ -289,7 +303,6 @@ public class PropertyInfoPanel extends JPanel{
 			}
 		});
 	}
-
 	private void addHideButton()
 	{
 		hideButton.setBounds(this.getWidth()-75,10, 70, 30);
