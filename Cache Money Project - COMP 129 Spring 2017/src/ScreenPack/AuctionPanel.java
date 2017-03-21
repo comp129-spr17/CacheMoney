@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
 
 import GamePack.Player;
 import GamePack.Property;
@@ -55,7 +56,6 @@ public class AuctionPanel extends JPanel{
 		this.propertyPanel = propertyInfoPanel;
 		auctionPrice = 1;
 		curAuctionPrice = new JLabel(Integer.toString(auctionPrice));
-		
 		this.isSingle = isSingle;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
@@ -167,6 +167,8 @@ public class AuctionPanel extends JPanel{
 	}
 	private void addAuctionPrice(int cost, int playerNum)
 	{
+		if(!isSingle && myPlayerNum != playerNum)
+			bidPrice.get(playerNum).setSelectedItem(cost+"");
 		auctionPrice += cost;
 		curAuctionPrice.setText(Integer.toString(auctionPrice));
 		updateLocation();
