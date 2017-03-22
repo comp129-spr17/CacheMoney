@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import GamePack.Player;
 import InterfacePack.Sounds;
 import MiniGamePack.*;
+import MultiplayerPack.PlayingInfo;
 
 public class MiniGamePanel extends JPanel{
 	private final boolean DEBUG_SAME_MINIGAME = false;
@@ -15,7 +16,6 @@ public class MiniGamePanel extends JPanel{
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
-	private boolean isSingle;
 	private JPanel hostPanel; // FORMERLY CALLED dicePanel
 	private MiniGame[] mGames;
 	private PropertyInfoPanel pPanel;
@@ -24,23 +24,26 @@ public class MiniGamePanel extends JPanel{
 	private int gameNum;
 	private boolean isPlayingMinigame;
 	private boolean isPracticingMode;
+	private PlayingInfo pInfo;
 	
-	public MiniGamePanel(boolean isSingle, JPanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
+	public MiniGamePanel(JPanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
 	{
 		isPracticingMode = false;
-		init(isSingle,diceP,b, pPanel);
+		pInfo = PlayingInfo.getInstance();
+		init(diceP,b, pPanel);
 	}
 	
 	public MiniGamePanel(JPanel miniGamePlayer)
 	{
 		isPracticingMode = true;
+		pInfo = PlayingInfo.getInstance();
 		initPractice();
 	}
 	
 	
 	private void initPractice() {
 		isPlayingMinigame = false;
-		isSingle = true;
+		pInfo.setIsSingle(true);
 		setLayout(null);
 		setBounds(0, 0, 500, 500);
 		initMinigames();
@@ -48,9 +51,8 @@ public class MiniGamePanel extends JPanel{
 		gameNum = GAME_TO_START_ON;
 	}
 
-	private void init(boolean isSingle, JPanel diceP, BoardPanel b,PropertyInfoPanel pPanel){
+	private void init(JPanel diceP, BoardPanel b,PropertyInfoPanel pPanel){
 		isPlayingMinigame = false;
-		this.isSingle = isSingle;
 		hostPanel = diceP;
 		this.boardPanel = b;
 		this.pPanel = pPanel;
@@ -62,29 +64,24 @@ public class MiniGamePanel extends JPanel{
 		gameNum = GAME_TO_START_ON;
 		//gameNum = 3;
 	}
-	public void setOutputStream(OutputStream outputStream){
-		for (int i = 0; i < NUM_OF_MINIGAMES_AVAILABLE; ++i){
-			mGames[i].setOutputStream(outputStream);
-		}
-	}
 	private void initMinigames(){
 		// ADD MINIGAMES HERE
 		mGames = new MiniGame[NUM_OF_MINIGAMES_AVAILABLE];
-		mGames[0] = new SpammingGame(this,isSingle);
-		mGames[1] = new ReactionGame(this, isSingle);
-		mGames[2] = new BoxSelectGame(this, isSingle);
-		mGames[3] = new RockScissorPaperGame(this, isSingle);
-		mGames[4] = new EliminationGame(this, isSingle);
-		mGames[5] = new MathGame(this, isSingle);
-		mGames[6] = new MemorizationGame(this, isSingle);
-		mGames[7] = new TicTacToeGame(this, isSingle);
+		mGames[0] = new SpammingGame(this);
+		mGames[1] = new ReactionGame(this);
+		mGames[2] = new BoxSelectGame(this);
+		mGames[3] = new RockScissorPaperGame(this);
+		mGames[4] = new EliminationGame(this);
+		mGames[5] = new MathGame(this);
+		mGames[6] = new MemorizationGame(this);
+		mGames[7] = new TicTacToeGame(this);
 	}
-	public void openMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent){
+	public void openMiniGame(Player owner, Player guest, boolean isCurrent){
 		hostPanel.setVisible(false);
-		setupGame(owner, guest, myPlayerNum, isCurrent);
+		setupGame(owner, guest, isCurrent);
 	}
 
-	private void setupGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent) {
+	private void setupGame(Player owner, Player guest, boolean isCurrent) {
 		isPlayingMinigame = true;
 		setVisible(true);
 		this.owner = owner;
@@ -94,13 +91,13 @@ public class MiniGamePanel extends JPanel{
 		if (DEBUG_SAME_MINIGAME){
 			gameNum = GAME_TO_START_ON;
 		}
-		mGames[gameNum].setOwnerAndGuest(owner, guest,myPlayerNum);
+		mGames[gameNum].setOwnerAndGuest(owner, guest);
 		mGames[gameNum].addGame();
 	}
 	
 	public void openSelectedMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent, int miniGameNum){
 		gameNum = miniGameNum - 1;
-		setupGame(owner, guest, myPlayerNum, isCurrent);
+		setupGame(owner, guest, isCurrent);
 		
 	}
 	

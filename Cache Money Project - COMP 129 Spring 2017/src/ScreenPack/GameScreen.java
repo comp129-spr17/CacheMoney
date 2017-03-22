@@ -44,6 +44,7 @@ import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.MClient;
 import MultiplayerPack.MHost;
+import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
@@ -52,7 +53,6 @@ public class GameScreen extends JFrame{
 	private int myComp_height;
 	private DicePanel dicePanel;
 	private Player[] players;
-	private boolean isSingle;
 	private MoneyLabels mLabels;
 	private MClient client;
 	private MBytePack mPack;
@@ -70,12 +70,12 @@ public class GameScreen extends JFrame{
 	private SizeRelated sizeRelated;
 	private PropertyDisplay pDisplay;
 	private JButton giveJailFreeCard;
+	private PlayingInfo pInfo;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
-		this.isSingle = isSingle;
 		this.totalPlayers = totalplayers;
-		initEverything(true);
+		initEverything(true,isSingle);
 		if(!isSingle)
 			addHost();
 		setWindowVisible();
@@ -83,8 +83,7 @@ public class GameScreen extends JFrame{
 	}
 	// called if user is the client
 	public GameScreen(boolean isSingle, String ip, int port) throws UnknownHostException, IOException{
-		this.isSingle = isSingle;
-		initEverything(false);
+		initEverything(false,isSingle);
 		try{
 			addClient(ip,port);
 		}
@@ -108,7 +107,7 @@ public class GameScreen extends JFrame{
 			e.printStackTrace();
 		}
 		this.setVisible(true);
-		if (isSingle){
+		if (pInfo.isSingle()){
 			Sounds.waitingRoomJoin.playSound();
 		}
 		mainPanel.add(muteSounds);
@@ -117,9 +116,11 @@ public class GameScreen extends JFrame{
 		
 	}
 	
-	private void initEverything(boolean isHost){
+	private void initEverything(boolean isHost, boolean isSingle){
 		loadingProgress = 0;
 		mPack = MBytePack.getInstance();
+		pInfo = PlayingInfo.getInstance();
+		pInfo.setIsSingle(isSingle);
 		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
 		
@@ -130,7 +131,7 @@ public class GameScreen extends JFrame{
 	
 
 	private void exitSetting(boolean isHost){
-		if(isSingle)
+		if(pInfo.isSingle())
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		else
 			addActionListenerForExit(isHost);
@@ -164,14 +165,14 @@ public class GameScreen extends JFrame{
 //	        	host.writeToServer(mPack.packSimpleRequest(unicode.HOST_DISCONNECTED), mPack.getByteSize());
 	    		
 	    	}else{
-	    		while(client.getOutputStream() == null){
+	    		while(pInfo.getOutputStream() == null){
 	        		try {
 						Thread.sleep(1);
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
 	        	}
-	        	client.writeToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,client.getPlayerNum()), mPack.getByteSize());
+	        	pInfo.sendMessageToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,pInfo.getMyPlayerNum()));
 
 	    	}
 		}
@@ -206,7 +207,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				exitForServer(isSingle, isHost);
+				exitForServer(pInfo.isSingle(), isHost);
 			}
 		});
 	}
@@ -303,9 +304,9 @@ public class GameScreen extends JFrame{
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
 		loadingProgress = 10;
-		dicePanel = new DicePanel(isSingle, players, mLabels);
+		dicePanel = new DicePanel(players, mLabels);
 		loadingProgress = 20;
-		boardPanel = new BoardPanel(players,dicePanel, isSingle);
+		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
 		addButtonListeners();

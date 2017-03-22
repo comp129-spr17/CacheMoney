@@ -32,20 +32,16 @@ public class BoxSelectGame extends MiniGame{
 	
 	
 	
-	public BoxSelectGame(JPanel miniPanel, boolean isSingle) {
-		super(miniPanel, isSingle);
+	public BoxSelectGame(JPanel miniPanel) {
+		super(miniPanel);
 		initLabels();
 		initListener();
 		initOthers();
 	}
-	
-	public void setOutputStream(OutputStream outputStream){
-		this.outputStream = outputStream;
-	}
-	public void setOwnerAndGuest(Player owner, Player guest, int myPlayerNum){
+	@Override
+	public void setOwnerAndGuest(Player owner, Player guest){
 		this.owner = owner;
 		this.guest = guest;
-		this.myPlayerNum = myPlayerNum;
 	}
 	public void play(){
 		super.play();
@@ -178,12 +174,12 @@ public class BoxSelectGame extends MiniGame{
 			lblsForThis.get(chosenBox[1] + 3).setIcon(imgs.resizeImage(paths.getPieceImgPath() + guest.getPlayerNum() + guest.getPlayerNum() + ".png", 30, 30));
 			lblsForThis.get(7).setIcon(null);
 			surpriseBoxes = generateRandNumNoRep(surpriseBoxes.length);
-			if (isSingle){
+			if (pInfo.isSingle()){
 				assignLabelsToBoxes();
 				displayWinnerAndCleanUp(false);
 			}
 			else if (isOwner){
-				sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, surpriseBoxes, 1));
+				pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, surpriseBoxes, 1));
 			}
 		}
 		else{
@@ -286,7 +282,7 @@ public class BoxSelectGame extends MiniGame{
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(allowInput && (isSingle || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner))){
+				if(allowInput && (pInfo.isSingle() || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner))){
 					if (turnNum > 1 ){
 						return;
 					}
@@ -301,11 +297,11 @@ public class BoxSelectGame extends MiniGame{
 					if (chosenBoxNum > 0 && chosenBoxNum < 4 && chosenBox[0] != chosenBoxNum){
 						chosenBox[turnNum] = chosenBoxNum;
 						allowInput = false;
-						if (isSingle){
+						if (pInfo.isSingle()){
 							incrementTurn();
 						}
 						else{
-							sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, chosenBox, 0));
+							pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, chosenBox, 0));
 						}
 					}
 				}

@@ -152,12 +152,4 @@ public class MHost {
 		}, 0);
 		
 	}
-	public OutputStream getOutputStream(){
-		if(hostClient == null)
-			return null;
-		return hostClient.getOutputStream();
-	}
-	public void writeToServer(byte[] b, int len){
-		hostClient.writeToServer(b, len);
-	}
 }

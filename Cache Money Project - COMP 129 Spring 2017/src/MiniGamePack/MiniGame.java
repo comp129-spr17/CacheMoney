@@ -22,6 +22,7 @@ import GamePack.Player;
 import GamePack.SizeRelated;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
+import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 import ScreenPack.MiniGamePanel;
 // abstract class for MiniGames
@@ -35,9 +36,6 @@ public class MiniGame{
 	protected int dpWidth;
 	protected int dpHeight;
 	protected JPanel miniPanel;
-	protected boolean isSingle;
-	protected OutputStream outputStream;
-	protected int myPlayerNum;
 	protected MBytePack mPack;
 	protected UnicodeForServer unicode;
 	protected ImageRelated imgs;
@@ -49,16 +47,18 @@ public class MiniGame{
 	private JButton btnStart;
 	private boolean readyToPlay;
 	private JPanel startPanel;
-	public MiniGame(JPanel miniPanel, boolean isSingle){
-		init(miniPanel, isSingle);
+	protected PlayingInfo pInfo;
+	
+	public MiniGame(JPanel miniPanel){
+		init(miniPanel);
 	}
-	private void init(JPanel miniPanel, boolean isSingle){
+	private void init(JPanel miniPanel){
 		this.miniPanel = miniPanel;
+		pInfo = PlayingInfo.getInstance();
 		lbls = new ArrayList<>();
 		size = SizeRelated.getInstance();
 		dpWidth = size.getDicePanelWidth();
 		dpHeight = size.getDicePanelHeight();
-		this.isSingle = isSingle;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		imgs = ImageRelated.getInstance();
@@ -84,10 +84,10 @@ public class MiniGame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(btnStart.isEnabled()){
-					if(isSingle)
+					if(pInfo.isSingle())
 						actionForStart();
 					else
-						sendMessageToServer(mPack.packSimpleRequest(unicode.MINI_GAME_START_CODE));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.MINI_GAME_START_CODE));
 				}
 				
 			}
@@ -131,17 +131,13 @@ public class MiniGame{
 	protected void showTheWinner(boolean isOwner){
 		lbls.get(1).setText(isOwner? "Owner Wins!" : "Guest Wins!");
 	}
-	public void setOutputStream(OutputStream outputStream){
-		this.outputStream = outputStream;
-	}
-	public void setOwnerAndGuest(Player owner, Player guest, int myPlayerNum){
+	public void setOwnerAndGuest(Player owner, Player guest){
 		this.owner = owner;
 		this.guest = guest;
-		this.myPlayerNum = myPlayerNum;
 	}
 	protected void isOwnerSetting(){
-		isOwner = myPlayerNum == owner.getPlayerNum();
-		isGuest = myPlayerNum == guest.getPlayerNum();
+		isOwner = pInfo.isMyPlayerNum(owner.getPlayerNum());
+		isGuest = pInfo.isMyPlayerNum(guest.getPlayerNum());
 	}
 	public void play(){
 		isGameEnded = false;
@@ -154,15 +150,15 @@ public class MiniGame{
 		}
 	}
 	protected boolean isUnavailableToPlay(){
-		return myPlayerNum != owner.getPlayerNum() && myPlayerNum != guest.getPlayerNum();
+		return !pInfo.isMyPlayerNum(owner.getPlayerNum()) && !pInfo.isMyPlayerNum(guest.getPlayerNum());
 	}
 	
 	public void addGame(){
 		miniPanel.removeAll();
 		isOwnerSetting();
 		miniPanel.add(startPanel);
-		btnStart.setEnabled(isSingle || isOwner);
-		if (!isSingle){
+		btnStart.setEnabled(pInfo.isSingle() || isOwner);
+		if (!pInfo.isSingle()){
 			btnStart.setText(isOwner ? "Start Minigame!" : "Waiting For Owner to Start...");
 		}
 		setAppropriateMinigameTitleAndDescription(GAME_NUM);
@@ -264,18 +260,7 @@ public class MiniGame{
 		for(int i=0; i<lbls.size(); i++)
 			miniPanel.add(lbls.get(i));
 	}
-	protected void sendMessageToServer(byte[] msg){
-		if (outputStream != null){
-			try {
-				outputStream.write(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else{
-			System.out.println("WARNING: writer == null");
-		}
-	}
+	
 	
 	protected void delayThread(int milliseconds){
 		try {

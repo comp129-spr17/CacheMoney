@@ -23,8 +23,8 @@ public class SpammingGame extends MiniGame{
 	private KeyListener listener;
 	private ArrayList<JLabel> lblsForThis;
 	private int ownerC;
-	public SpammingGame(JPanel miniPanel, boolean isSingle){
-		super(miniPanel, isSingle);
+	public SpammingGame(JPanel miniPanel){
+		super(miniPanel);
 		initLabels();
 		initListener();
 		
@@ -42,19 +42,19 @@ public class SpammingGame extends MiniGame{
 			@Override
 			public void keyReleased(KeyEvent e) {
 				pressed = e.getKeyChar();
-				if(isSingle){
+				if(pInfo.isSingle()){
 					if(pressed == 'q' || pressed == 'Q')
 						addOwnerCount();
 					else if(pressed == 'p' || pressed == 'P')
 						addGuestCount();
 				}else{
 					if(isOwner && (pressed == 'q' || pressed == 'Q')){
-						sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_OWNER));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_OWNER));
 						ownerC++;
 						System.out.println(ownerC);
 					}
 					else if(!isOwner && (pressed == 'p' || pressed == 'P'))
-						sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_GUEST));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_GUEST));
 				}
 			}
 			@Override

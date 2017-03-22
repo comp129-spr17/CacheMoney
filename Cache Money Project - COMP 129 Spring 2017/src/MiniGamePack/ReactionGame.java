@@ -27,8 +27,8 @@ public class ReactionGame extends MiniGame {
 	private boolean receivedResultFromServer;
 	private ArrayList<JLabel> lblsForThis;
 	private int timeUntilReact;
-	public ReactionGame(JPanel miniPanel, boolean isSingle) {
-		super(miniPanel, isSingle);
+	public ReactionGame(JPanel miniPanel) {
+		super(miniPanel);
 		initOthers();
 		initListener();
 	}
@@ -70,7 +70,7 @@ public class ReactionGame extends MiniGame {
 				if (!someoneEnteredTooEarly){
 					waitForUsersToEnterChars();
 				}
-				if(isSingle)
+				if(pInfo.isSingle())
 					gameResult();
 				else{
 					waitForServerResult();
@@ -85,10 +85,10 @@ public class ReactionGame extends MiniGame {
 		
 		resetVars();
 		
-		if (!isSingle && isOwner){
-			sendMessageToServer(mPack.packIntValue(unicode.GENERIC_SEND_INTEGER, rand.nextInt(7777) + 1500));
+		if (!pInfo.isSingle() && isOwner){
+			pInfo.sendMessageToServer(mPack.packIntValue(unicode.GENERIC_SEND_INTEGER, rand.nextInt(7777) + 1500));
 		}
-		else if (isSingle){
+		else if (pInfo.isSingle()){
 			timeUntilReact = rand.nextInt(7777) + 1500;
 			beginReactionTimer();
 		}
@@ -173,15 +173,15 @@ public class ReactionGame extends MiniGame {
 				userTimes[num] = ((System.currentTimeMillis() - timeStarted) / 1000.0);
 			else
 				userTimes[num] = 5.1;
-			if(!isSingle)
-				sendMessageToServer(mPack.packReactionTime(isOwner ? unicode.REACTION_MINI_GAME_OWNER_END : unicode.REACTION_MINI_GAME_GUEST_END, userTimes[num]));
+			if(!pInfo.isSingle())
+				pInfo.sendMessageToServer(mPack.packReactionTime(isOwner ? unicode.REACTION_MINI_GAME_OWNER_END : unicode.REACTION_MINI_GAME_GUEST_END, userTimes[num]));
 		}
 		else{
-			if(isSingle){
+			if(pInfo.isSingle()){
 				actionForTooEarly(isOwner, num);
 			}else{
 				System.out.println("Sending now...");
-				sendMessageToServer(mPack.packSimpleRequest(isOwner?unicode.REACTION_MINI_GAME_OWNER_EARLY:unicode.REACTION_MINI_GAME_GUEST_EARLY));
+				pInfo.sendMessageToServer(mPack.packSimpleRequest(isOwner?unicode.REACTION_MINI_GAME_OWNER_EARLY:unicode.REACTION_MINI_GAME_GUEST_EARLY));
 			}
 			
 		}
@@ -220,7 +220,7 @@ public class ReactionGame extends MiniGame {
 				if (pressed != 'q' && pressed != 'p'){
 					return;
 				}
-				if (isSingle || (isOwner && pressed == 'q') || (isGuest && pressed == 'p')){
+				if (pInfo.isSingle() || (isOwner && pressed == 'q') || (isGuest && pressed == 'p')){
 					boolean tooEarlyPresser = pressed == 'q';
 					int userNum = tooEarlyPresser ? 0 : 1;
 					userPressedDoubleCheck[userNum] = true;

@@ -11,7 +11,6 @@ public class Space extends JLabel{
 	private Piece[] onSpace;
 	private SizeRelated s;
 	protected String name;
-	protected OutputStream outputStream;
 	public Space() {
 		init();
 	}
@@ -65,10 +64,7 @@ public class Space extends JLabel{
 		}
 		
 	}
-	public void setOutputStream(OutputStream outputStream){
-		this.outputStream = outputStream;
-	}
-	public int landOnSpace(Piece piece, int playerPosition, int myPlayerNumber) {
+	public int landOnSpace(Piece piece, int playerPosition) {
 		return playerPosition;
 	}
 }

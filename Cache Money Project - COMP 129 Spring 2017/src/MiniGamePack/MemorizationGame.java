@@ -27,8 +27,8 @@ public class MemorizationGame extends MiniGame{
 	
 	private ArrayList<JLabel> lblsForThis;
 	
-	public MemorizationGame(JPanel miniPanel, boolean isSingle) {
-		super(miniPanel, isSingle);
+	public MemorizationGame(JPanel miniPanel) {
+		super(miniPanel);
 		memorizeArray = new int[NUM_TO_MEMORIZE];
 		questionToAsk = new int[2];
 		playerTimes = new int[2];
@@ -59,7 +59,7 @@ public class MemorizationGame extends MiniGame{
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (!(allowInput && (isSingle || (isOwner && turnNum == 0) || (isGuest && turnNum == 1)))){
+				if (!(allowInput && (pInfo.isSingle() || (isOwner && turnNum == 0) || (isGuest && turnNum == 1)))){
 					return;
 				}
 				
@@ -74,11 +74,11 @@ public class MemorizationGame extends MiniGame{
 				}
 				playerTimes[turnNum] = (int) (System.currentTimeMillis() - timeStarted);
 				playerAnswers[turnNum] = numSelected;
-				if (isSingle){
+				if (pInfo.isSingle()){
 					incrementTurn();
 				}
 				else{
-					sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, playerAnswers, 2));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, playerAnswers, 2));
 				}
 				
 				
@@ -103,11 +103,11 @@ public class MemorizationGame extends MiniGame{
 		
 		// send memorizeArr to other users
 		// send type question to other users
-		if (isSingle){
+		if (pInfo.isSingle()){
 			displayGame();
 		}
 		else if (isOwner){
-			sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, memorizeArray, 0));
+			pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, memorizeArray, 0));
 		}
 		
 	}
@@ -155,7 +155,7 @@ public class MemorizationGame extends MiniGame{
 			case 0:
 				memorizeArray = arr;
 				if (isOwner){
-					sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, questionToAsk, 1));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, questionToAsk, 1));
 				}
 				break;
 			case 1:
@@ -165,7 +165,7 @@ public class MemorizationGame extends MiniGame{
 			case 2:
 				playerAnswers = arr;
 				if ((isOwner && turnNum == 0) || (isGuest && turnNum == 1)){
-					sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, playerTimes, 3));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, playerTimes, 3));
 				}
 				break;
 			case 3:
@@ -370,7 +370,7 @@ public class MemorizationGame extends MiniGame{
 	public void addGame(){
 		GAME_NUM = 6;
 		super.addGame();
-		if (isSingle || isOwner){
+		if (pInfo.isSingle() || isOwner){
 			randomizeArr();
 			questionToAsk[0] = rand.nextInt(6);
 			questionToAsk[1] = rand.nextInt(6);

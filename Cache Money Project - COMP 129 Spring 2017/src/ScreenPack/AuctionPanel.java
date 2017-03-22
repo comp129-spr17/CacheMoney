@@ -27,6 +27,7 @@ import GamePack.Player;
 import GamePack.Property;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
+import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class AuctionPanel extends JPanel{
@@ -40,23 +41,20 @@ public class AuctionPanel extends JPanel{
 	private JPanel pricePanel;
 	private AuctionTimer auctionTimer;
 	private Player curBuyer;
-	private boolean isSingle;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
-	private OutputStream outputStream;
-	private int myPlayerNum;
 	private Point[] playerLocation;
-	public AuctionPanel(Property property, Player player[], PropertyInfoPanel propertyInfoPanel, boolean isSingle)
+	private PlayingInfo pInfo;
+	public AuctionPanel(Property property, Player player[], PropertyInfoPanel propertyInfoPanel)
 	{
 		bidButtons = new ArrayList<JButton>(4);
 		bidPrice = new ArrayList<JComboBox>(4);
-		
+		pInfo = PlayingInfo.getInstance();
 		this.property = property;
 		this.player = player;
 		this.propertyPanel = propertyInfoPanel;
 		auctionPrice = 1;
 		curAuctionPrice = new JLabel(Integer.toString(auctionPrice));
-		this.isSingle = isSingle;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		init();
@@ -90,7 +88,7 @@ public class AuctionPanel extends JPanel{
 		String bids[] = {"5", "10", "15", "25", "50", "100", "200"};
 		JComboBox bidList = new JComboBox(bids); 
 		bidList.setSize(80, 20);
-		if(!isSingle && myPlayerNum != p){
+		if(!pInfo.isSingle() && !pInfo.isMyPlayerNum(p)){
 			temp.setEnabled(false);
 			bidList.setEnabled(false);
 		}
@@ -105,10 +103,10 @@ public class AuctionPanel extends JPanel{
 			public void mousePressed(MouseEvent e) {
 				
 				int bid = Integer.parseInt((String)bidList.getSelectedItem());
-				if(isSingle)
+				if(pInfo.isSingle())
 					actionToAuction(bid, p);
 				else
-					sendMessageToServer(mPack.packIntArray(unicode.PROPERTY_BIDDING, new int[]{bid,myPlayerNum}));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.PROPERTY_BIDDING, new int[]{bid,pInfo.getMyPlayerNum()}));
 
 
 			}
@@ -167,16 +165,13 @@ public class AuctionPanel extends JPanel{
 	}
 	private void addAuctionPrice(int cost, int playerNum)
 	{
-		if(!isSingle && myPlayerNum != playerNum)
+		if(!pInfo.isSingle() && !pInfo.isMyPlayerNum(playerNum))
 			bidPrice.get(playerNum).setSelectedItem(cost+"");
 		auctionPrice += cost;
 		curAuctionPrice.setText(Integer.toString(auctionPrice));
 		updateLocation();
 		curAuctionPrice.setLocation(playerLocation[playerNum]);
 		pricePanel.repaint();
-	}
-	public void setMyPlayerNum(int myPlayerNum){
-		this.myPlayerNum = myPlayerNum;
 	}
 	private void setPlayerLocation(){
 		playerLocation[0] = new Point(pricePanel.getWidth()/2-(int)curAuctionPrice.getMaximumSize().getWidth(), 0);
@@ -240,20 +235,5 @@ public class AuctionPanel extends JPanel{
 		property.setOwned(true);
 	}
 
-	private void sendMessageToServer(byte[] msg){
-		if (outputStream != null){
-			try {
-				outputStream.write(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else{
-			System.out.println("WARNING: writer == null");
-		}
-	}
 
-	public void setOutputStream(OutputStream outputStream){
-		this.outputStream = outputStream;
-	}
 }

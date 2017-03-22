@@ -19,8 +19,8 @@ public class RockScissorPaperGame extends MiniGame{
 	private boolean[] decided;
 	private ArrayList<JLabel> lblsForThis;
 	
-	public RockScissorPaperGame(JPanel miniPanel, boolean isSingle){
-		super(miniPanel,isSingle);
+	public RockScissorPaperGame(JPanel miniPanel) {
+		super(miniPanel);
 		initExtra();
 		initLabels();
 		initKeyListener();
@@ -79,10 +79,10 @@ public class RockScissorPaperGame extends MiniGame{
 	private void ifNotSelected(){
 		for(int i=0; i<2; i++)
 			if(!decided[i]){
-				if(isSingle)
+				if(pInfo.isSingle())
 					selectDecision(rand.nextInt(3)+1, i==0);
 				else
-					sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, rand.nextInt(3)+1, i==0));
+					pInfo.sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, rand.nextInt(3)+1, i==0));
 			}
 				
 	}
@@ -108,18 +108,18 @@ public class RockScissorPaperGame extends MiniGame{
 			@Override
 			public void keyReleased(KeyEvent e) {
 				enteredChar = Character.toLowerCase(e.getKeyChar());
-				if((enteredChar == 'q' || enteredChar == 'w' || enteredChar == 'e') && (isOwner || isSingle)){
+				if((enteredChar == 'q' || enteredChar == 'w' || enteredChar == 'e') && (isOwner || pInfo.isSingle())){
 					Sounds.buttonPress.playSound();
-					if(isSingle)
+					if(pInfo.isSingle())
 						selectDecision(ascii[enteredChar], true);
 					else
-						sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], true));
-				}else if((enteredChar == 'i' || enteredChar == 'o' || enteredChar == 'p') && (isGuest || isSingle)){
+						pInfo.sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], true));
+				}else if((enteredChar == 'i' || enteredChar == 'o' || enteredChar == 'p') && (isGuest || pInfo.isSingle())){
 					Sounds.buttonPress.playSound();
-					if(isSingle)
+					if(pInfo.isSingle())
 						selectDecision(ascii[enteredChar], false);
 					else
-						sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], false));
+						pInfo.sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], false));
 				}
 			}
 			@Override

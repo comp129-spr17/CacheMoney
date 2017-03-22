@@ -21,8 +21,8 @@ public class TicTacToeGame extends MiniGame{
 	private boolean winner;
 	private int currentTime;
 	
-	public TicTacToeGame(JPanel miniPanel, boolean isSingle){
-		super(miniPanel, isSingle);
+	public TicTacToeGame(JPanel miniPanel) {
+		super(miniPanel);
 		initLabels();
 		initListener();
 		gameGrid = new int[9];
@@ -43,7 +43,7 @@ public class TicTacToeGame extends MiniGame{
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (!(allowInput && (isSingle || (isOwner && turnNum) || (isGuest && !turnNum)))){
+				if (!(allowInput && (pInfo.isSingle() || (isOwner && turnNum) || (isGuest && !turnNum)))){
 					return;
 				}
 				int numSelected = -1;
@@ -61,11 +61,11 @@ public class TicTacToeGame extends MiniGame{
 					Sounds.movePiece.playSound();
 					gameGrid[numSelected - 1] = turnNum ? X : O;
 					allowInput = false;
-					if (isSingle){
+					if (pInfo.isSingle()){
 						actionsAfterMarkingASpace();
 					}
 					else{
-						sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, gameGrid, 1));
+						pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, gameGrid, 1));
 					}
 				}
 			}
@@ -140,13 +140,13 @@ public class TicTacToeGame extends MiniGame{
 	
 	public void play(){
 		super.play();
-		if (isSingle){
+		if (pInfo.isSingle()){
 			initGameGrid();
 			actionForStartGame();
 		}
 		else if (isOwner){
 			initGameGrid();
-			sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, gameGrid, 0));
+			pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, gameGrid, 0));
 		}
 	}
 	

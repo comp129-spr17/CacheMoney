@@ -23,6 +23,7 @@ import GamePack.PropertySpace;
 import GamePack.UtilityProperty;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
+import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class PropertyInfoPanel extends JPanel{
@@ -42,8 +43,6 @@ public class PropertyInfoPanel extends JPanel{
 	private Property property;
 	private AuctionPanel AP;
 	private HashMap<String,PropertySpace> propertyInfo;
-	private OutputStream outputStream;
-	private boolean isSingle;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 	private Player[] players;
@@ -52,13 +51,13 @@ public class PropertyInfoPanel extends JPanel{
 	private JPanel infoPanel;
 	private Player currentPlayer;
 	private MortgagePanel mPanel;
-	private int myPlayerNum;
+	private PlayingInfo pInfo;
 
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, boolean isSingle, Player[] player, DicePanel diceP, BoardPanel b)
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		infoPanel = new JPanel();
 		players = player;
-		this.isSingle = isSingle;
+		pInfo = PlayingInfo.getInstance();
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.propertyInfo = propertyInfo;
 		mPack = MBytePack.getInstance();
@@ -103,21 +102,17 @@ public class PropertyInfoPanel extends JPanel{
 		
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
-	public void setMyPlayerNum(int myPlayerNum){
-		this.myPlayerNum = myPlayerNum;
-	}
 	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
 	{
 		property = propertyInfo.get(name).getPropertyInfo();
-		AP = new AuctionPanel(property, players, this, isSingle);
-		AP.setOutputStream(outputStream);
+		AP = new AuctionPanel(property, players, this);
 		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo);
 		bPanel.add(mPanel);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
 		renderPropertyInfo(currentPlayer);
 		hidePreviousPanel();
-		if(isSingle || isCurrent)
+		if(pInfo.isSingle() || isCurrent)
 			enableButtons();
 		this.currentPlayer = currentPlayer;
 	}
@@ -125,9 +120,7 @@ public class PropertyInfoPanel extends JPanel{
 		AP.actionToAuction(bid, playerNum);
 	}
 	public void actionToSwitchToAuction(){
-		Sounds.landedOnOwnedProperty.playSound();					
-		if(!isSingle)
-			AP.setMyPlayerNum(myPlayerNum);
+		Sounds.landedOnOwnedProperty.playSound();		
 		AP.switchtoAP();
 		
 		bPanel.add(AP);
@@ -291,10 +284,10 @@ public class PropertyInfoPanel extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(auctionButton.isEnabled()){
-					if(isSingle)
+					if(pInfo.isSingle())
 						actionToSwitchToAuction();
 					else
-						sendMessageToServer(mPack.packSimpleRequest(unicode.PROPERTY_SWITCH_TO_AUCTION));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.PROPERTY_SWITCH_TO_AUCTION));
 				}
 
 			}
@@ -446,24 +439,9 @@ public class PropertyInfoPanel extends JPanel{
 		auctionButton.setEnabled(true);
 		payButton.setEnabled(true);
 	}
-	public void setOutputStream(OutputStream outputStream){
-		this.outputStream = outputStream;
-	}
-	private void sendMessageToServer(byte[] msg){
-		if (outputStream != null){
-			try {
-				outputStream.write(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else{
-			System.out.println("WARNING: writer == null");
-		}
-	}
 
 	private void dismissPropertyPanel() {
-		if(isSingle)
+		if(pInfo.isSingle())
 			endPropertyPanel();
 		else{
 			java.util.Timer newTimer = new java.util.Timer();
@@ -472,7 +450,7 @@ public class PropertyInfoPanel extends JPanel{
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+					pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
 				}
 			}, 1000);
 		}
@@ -480,19 +458,19 @@ public class PropertyInfoPanel extends JPanel{
 	}
 	private void purchaseProp(String propertyName, int buyingPrice, int playerNum){
 		disableButtons();
-		if(isSingle)
+		if(pInfo.isSingle())
 			purchaseProperty(propertyName,buyingPrice,playerNum);
 		else
-			sendMessageToServer(mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
+			pInfo.sendMessageToServer(mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
 
 	}
 
 	private void payForR(int amount, int owner){
 		disableButtons();
-		if(isSingle)
+		if(pInfo.isSingle())
 			payForRent(amount,owner);
 		else
-			sendMessageToServer(mPack.packPayRent(unicode.PROPERTY_RENT_PAY, amount,owner));
+			pInfo.sendMessageToServer(mPack.packPayRent(unicode.PROPERTY_RENT_PAY, amount,owner));
 	}
 	public void purchaseProperty(String propertyName, int buyingPrice, int playerNum){
 

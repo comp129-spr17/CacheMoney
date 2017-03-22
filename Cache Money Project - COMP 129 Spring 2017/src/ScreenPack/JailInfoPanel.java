@@ -40,7 +40,7 @@ public class JailInfoPanel extends JPanel {
 	private JPanel jailPanel;
 	private Player currentPlayer;
 	private JLabel jailName;
-	public JailInfoPanel(JPanel panelToSwitchFrom, boolean isSingle, Player[] player, DicePanel diceP, BoardPanel b)
+	public JailInfoPanel(JPanel panelToSwitchFrom, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		jailPanel = new JPanel();
 		players = player;

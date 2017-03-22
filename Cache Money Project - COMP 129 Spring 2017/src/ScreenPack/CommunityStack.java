@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
+import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class CommunityStack extends JPanel{
@@ -33,22 +34,22 @@ public class CommunityStack extends JPanel{
 	JPanel boardPanel;
 	JPanel dicePanel;
 	JLabel card;
-	private boolean isSingle;
 	private boolean isReceived;
 	Map<String,String> deck = new HashMap<String, String>();
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
-	private OutputStream outputStream;
-	public CommunityStack(JPanel bp, JPanel dp, boolean isSingle){
+	private PlayingInfo pInfo;
+	public CommunityStack(JPanel bp, JPanel dp){
 		boardPanel = bp;
 		dicePanel = dp;
-		mPack = MBytePack.getInstance();
-		unicode = UnicodeForServer.getInstance();
-		this.isSingle = isSingle;
+		
 		initStack();
 	}
 	
 	private void initStack(){
+		mPack = MBytePack.getInstance();
+		unicode = UnicodeForServer.getInstance();
+		pInfo = PlayingInfo.getInstance();
 		fillDeck();
 		setLayout(new GridBagLayout());
 		this.setSize(dicePanel.getSize());
@@ -125,9 +126,6 @@ public class CommunityStack extends JPanel{
 		
 	
 	}
-	public void setOutputStream(OutputStream outputStream){
-		this.outputStream = outputStream;
-	}
 	private int getNextCard(){
 		//System.out.println(cardDrawn);
 		//cardDrawn = 0; //only puts go to go card in play
@@ -135,12 +133,12 @@ public class CommunityStack extends JPanel{
 	}
 	
 	public String getResultingCommand(boolean isCurrentPlayer, int playerPosition) {
-		if(isSingle)
+		if(pInfo.isSingle())
 			cardDrawn = getNextCard();
 		else {
 			if(isCurrentPlayer){
 				System.out.println("Sending:" + playerPosition);
-				sendMessageToServer(mPack.packIntArray(unicode.STACK_CARD_DRAWN, new int[]{getNextCard(), playerPosition}));
+				pInfo.sendMessageToServer(mPack.packIntArray(unicode.STACK_CARD_DRAWN, new int[]{getNextCard(), playerPosition}));
 			}
 			while(!isReceived){
 				System.out.println("Waiting");
@@ -159,18 +157,7 @@ public class CommunityStack extends JPanel{
 		cardDrawn = cardNum;
 		isReceived = true;
 	}
-	private void sendMessageToServer(byte[] msg){
-		if (outputStream != null){
-			try {
-				outputStream.write(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else{
-			System.out.println("WARNING: writer == null");
-		}
-	}
+	
 	
 }
 

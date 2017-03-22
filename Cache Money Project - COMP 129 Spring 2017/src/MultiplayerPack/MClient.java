@@ -1,28 +1,17 @@
 package MultiplayerPack;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
-import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JOptionPane;
 
 import GamePack.Player;
 import InterfacePack.Sounds;
@@ -40,12 +29,11 @@ public class MClient {
 	private MByteUnpack mUnpack;
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
-	private Player thisPlayer;
 	private Player[] pList;
 	private int byteCount;
-	private OutputStream outputStream;
 	private int thisPlayNum;
 	private HashMap<Integer, DoAction> doActions;
+	private PlayingInfo playingInfo;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
 		this.pList = pList;
@@ -69,6 +57,7 @@ public class MClient {
 		connectToServer(ip, port, isHostClient);
     }
 	private void init(){
+		playingInfo = PlayingInfo.getInstance();
 		doActions = new HashMap<>();
 		mUnpack = MByteUnpack.getInstance();
 		mPack = MBytePack.getInstance();
@@ -133,11 +122,11 @@ public class MClient {
 		getMsg(socket, ip, port, isHostClient, optionBox.getName());
 	}
 	private void getMsg(Socket s, String ip, int port, boolean isHostClient, String name) throws IOException{
-		outputStream = s.getOutputStream();
+		
         InputStream inputStream = s.getInputStream();
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
-        diceP.setOutputStream(outputStream);
+        playingInfo.setOutputStream(s.getOutputStream());
         diceP.setIp(ip);	// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
         diceP.setPort(port);// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
         diceP.setStartGameButtonEnabled(isHostClient);
@@ -265,36 +254,10 @@ public class MClient {
 		diceP.actionForDrawnStackCard((Integer)result.get(1), (Integer)result.get(2));
 	}
 	private void setPlayer(int i){
-		thisPlayNum = i;
-		thisPlayer = pList[i];
+		playingInfo.setMyPlayerNum(i);
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;
 	}
-	public OutputStream getOutputStream(){
-		return outputStream;
-	}
-	public void writeToServer(byte[] b, int len){
-		try {
-			outputStream.write(b, 0, len);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	public int getPlayerNum(){
-		return thisPlayer.getPlayerNum();
-	}
-//	class CheckingPlayerTurn extends Thread{
-//		public void run(){
-//			while(true){
-//				diceP.actionForNotCurrentPlayer(thisPlayer.getPlayerNum());
-//				try {
-//					sleep(1);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//	}
 	
 }

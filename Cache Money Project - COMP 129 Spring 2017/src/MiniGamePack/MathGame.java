@@ -25,8 +25,8 @@ public class MathGame extends MiniGame{
 	private int ownerCount;
 	private int guestCount;
 	private int count;
-	public MathGame(JPanel miniPanel, boolean isSingle){
-		super(miniPanel,isSingle);
+	public MathGame(JPanel miniPanel) {
+		super(miniPanel);
 		initExtra();
 		initLabels();
 		initListeners();
@@ -40,7 +40,7 @@ public class MathGame extends MiniGame{
 		lblsForThis.add(new JLabel("0"));
 		lblsForThis.add(new JLabel("Time left : "));
 		lblsForThis.add(new JLabel("10"));
-		if(isSingle){
+		if(pInfo.isSingle()){
 			lblsForThis.add(new JLabel(""));
 			lblsForThis.get(7).setBounds(dpWidth*3/9, dpHeight*1/7-10, dpWidth-dpWidth*2/9, dpHeight*1/7);
 		}
@@ -82,7 +82,7 @@ public class MathGame extends MiniGame{
 	}
 	private void initMathProblems(){
 		didGetProblems = false;
-		if(isSingle){
+		if(pInfo.isSingle()){
 			for(int i=0; i<NUM_PROBLEMS; i++){
 				problems[i].setProblem();
 			}	
@@ -98,7 +98,7 @@ public class MathGame extends MiniGame{
 			for(int j=0; j<3; j++)
 				randNums[i*3+j] = temp[j];
 		}
-		sendMessageToServer(mPack.packIntArray(unicode.MATH_MINI_GAME_RANDS, randNums, 0));
+		pInfo.sendMessageToServer(mPack.packIntArray(unicode.MATH_MINI_GAME_RANDS, randNums, 0));
 	}
 	public void addActionToGame(int[] arr){
 		for(int i=0; i<NUM_PROBLEMS; i++)
@@ -118,7 +118,7 @@ public class MathGame extends MiniGame{
 			miniPanel.add(lblsForThis.get(i));
 
 		isGameEnded = false;
-		if(isSingle)
+		if(pInfo.isSingle())
 			isOwner = true;
 		if(!isUnavailableToPlay())
 			addListener();
@@ -169,10 +169,10 @@ public class MathGame extends MiniGame{
 		};
 	}
 	private void actionsForKeys(int i){
-		if(isSingle){
+		if(pInfo.isSingle()){
 			actionForSubmit(i, isOwner ? owner.getPlayerNum() : guest.getPlayerNum(), isOwner, problems[i].getEnteredVal());
 		}else{
-			sendMessageToServer(mPack.packMathGameAns(unicode.MATH_MINI_GAME_ANS, i, isOwner ? owner.getPlayerNum() : guest.getPlayerNum(), isOwner, problems[i].getEnteredVal()));
+			pInfo.sendMessageToServer(mPack.packMathGameAns(unicode.MATH_MINI_GAME_ANS, i, isOwner ? owner.getPlayerNum() : guest.getPlayerNum(), isOwner, problems[i].getEnteredVal()));
 		}
 	}
 	private void actionForSubmit(int i, int playerNum, boolean isOwner, int enteredVal){
@@ -208,7 +208,7 @@ public class MathGame extends MiniGame{
 	}
 
 	protected void forStarting(){
-		if(!isSingle && isGuest)
+		if(!pInfo.isSingle() && isGuest)
 			guestGetRandAndSendToOthers();
 	}
 	private void cleanProblems(){
@@ -237,7 +237,7 @@ public class MathGame extends MiniGame{
 	}
 	class PlayGame extends Thread{
 		public void run(){
-			if(!isSingle){
+			if(!pInfo.isSingle()){
 				while(!didGetProblems){
 					try {
 						Thread.sleep(1);
@@ -252,7 +252,7 @@ public class MathGame extends MiniGame{
 			
 			forEachTurn();
 			
-			if(isSingle){
+			if(pInfo.isSingle()){
 				forSingleGuestTurn();
 			}
 			

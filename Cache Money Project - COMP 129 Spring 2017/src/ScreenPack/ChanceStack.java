@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
+import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class ChanceStack extends JPanel{
@@ -33,22 +34,21 @@ public class ChanceStack extends JPanel{
 	JPanel boardPanel;
 	JPanel dicePanel;
 	JLabel card;
-	private boolean isSingle;
 	private MBytePack mPack;
 	Map<String,String> deck = new HashMap<String, String>();
 	private boolean isReceived;
 	private UnicodeForServer unicode;
-	private OutputStream outputStream;
-	public ChanceStack(JPanel bp, JPanel dp, boolean isSingle){
+	private PlayingInfo pInfo;
+	public ChanceStack(JPanel bp, JPanel dp){
 		boardPanel = bp;
-		dicePanel = dp;
-		mPack = MBytePack.getInstance();
-		unicode = UnicodeForServer.getInstance();
-		this.isSingle = isSingle;
+		dicePanel = dp;		
 		initStack();
 	}
 	
 	private void initStack(){
+		mPack = MBytePack.getInstance();
+		unicode = UnicodeForServer.getInstance();
+		pInfo = PlayingInfo.getInstance();
 		fillDeck();
 		setLayout(new GridBagLayout());
 		this.setSize(dicePanel.getSize());
@@ -131,15 +131,12 @@ public class ChanceStack extends JPanel{
 		return  rand.nextInt(17);
 	}
 
-	public void setOutputStream(OutputStream outputStream){
-		this.outputStream = outputStream;
-	}
 	public String getResultingCommand(boolean isCurrentPlayer, int playerPosition) {
-		if(isSingle)
+		if(pInfo.isSingle())
 			cardDrawn = getNextCard();
 		else{ 
 			if(isCurrentPlayer){
-				sendMessageToServer(mPack.packIntArray(unicode.STACK_CARD_DRAWN, new int[]{getNextCard(), playerPosition}));
+				pInfo.sendMessageToServer(mPack.packIntArray(unicode.STACK_CARD_DRAWN, new int[]{getNextCard(), playerPosition}));
 			}
 			while(!isReceived){
 				try {
@@ -155,18 +152,6 @@ public class ChanceStack extends JPanel{
 	public void setNextCardNum(int cardNum){
 		cardDrawn = cardNum;
 		isReceived = true;
-	}
-	private void sendMessageToServer(byte[] msg){
-		if (outputStream != null){
-			try {
-				outputStream.write(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else{
-			System.out.println("WARNING: writer == null");
-		}
 	}
 	
 }
