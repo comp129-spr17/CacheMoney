@@ -38,14 +38,14 @@ public final class Player {
 		playerPositionNumber = 0;
 	    jailFreeCard = 0;
 //		playerPositionNumber = 1; /// FOR SERVER DEBUGGING PURPOSE
-		totalmonies = 9999999;
-		fivehunneds = 2;
-		hunneds = 2;
-		fitties = 2;
-		twennies = 6;
-		tens = 5;
-		fives = 5;
-		ones = 5;
+		totalmonies = 1000000;
+		fivehunneds = 2000;
+		hunneds = 0;
+		fitties = 0;
+		twennies = 0;
+		tens = 0;
+		fives = 0;
+		ones = 0;
 		setplayerNum(playerNum);
 		inJail = false;
 		ownedProperties = new ArrayList<Property>();
