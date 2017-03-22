@@ -261,6 +261,7 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				players[0].setJailFreeCard(1);
 				mLabels.reinitializeMoneyLabels();
+				playerInfo.repaint();
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {

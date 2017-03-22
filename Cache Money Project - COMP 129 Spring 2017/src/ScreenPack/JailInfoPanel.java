@@ -39,6 +39,7 @@ public class JailInfoPanel extends JPanel {
 	private BoardPanel bPanel;
 	private JPanel jailPanel;
 	private Player currentPlayer;
+	private JLabel jailName;
 	public JailInfoPanel(JPanel panelToSwitchFrom, boolean isSingle, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		jailPanel = new JPanel();
@@ -66,9 +67,10 @@ public class JailInfoPanel extends JPanel {
 		rollButton = new JButton();
 		addListeners();
 	}
-	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
+	public void executeSwitch(Player currentPlayer, boolean isCurrent)
 	{
 		jailPanel.removeAll();
+		bPanel.add(jailPanel);
 		renderJailInfo();
 		hidePreviousPanel();
 		if(isSingle || isCurrent)
@@ -88,9 +90,13 @@ public class JailInfoPanel extends JPanel {
 	private void renderJailInfo()
 	{
 		//Create JLabels that tell the player they are in jail and can't leave
+		this.setBackground(Color.white);
+		jailName = new JLabel("Player's Name");
+		jailPanel.add(jailName);
 		addHideButton();
 		addRollButton();
 		addPayButton();
+		add(jailPanel);
 	}
 	public void endJailPanel()
 	{
@@ -159,7 +165,7 @@ public class JailInfoPanel extends JPanel {
 				dicePanel.rollDice(diceResults[0], diceResults[1]);
 				boolean doubles = dicePanel.isDoublesRolled();
 				if (doubles) {
-					
+					currentPlayer.setInJail(false);
 				}
 			}
 		});
@@ -192,12 +198,12 @@ public class JailInfoPanel extends JPanel {
 	private void addHideButton()
 	{
 		hideButton.setBounds(this.getWidth()-75,10, 70, 30);
-		add(hideButton); 
+		//add(hideButton); 
 	}
 
 	private void addRollButton()
 	{
-		rollButton.setText("BUY"); 
+		rollButton.setText("ROLL"); 
 		rollButton.setSize(100, 30);
 		rollButton.setBackground(Color.GREEN); 
 		rollButton.setLocation(this.getWidth()/4-rollButton.getWidth()/2, this.getHeight()/10*9-rollButton.getHeight()/2);
@@ -207,8 +213,8 @@ public class JailInfoPanel extends JPanel {
 
 	private void addPayButton()
 	{
-		payButton.setText("PAY"); 
-		payButton.setSize(100, 80);
+		payButton.setText("PAY FINE"); 
+		payButton.setSize(80, 80);
 		payButton.setLocation(this.getWidth()/2-payButton.getWidth()/2, this.getHeight()/4*3-payButton.getHeight()/2);
 		payButton.setBackground(Color.RED);
 		add(payButton);
