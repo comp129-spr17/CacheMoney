@@ -2,8 +2,8 @@ package GamePack;
 
 public class RailroadProperty extends Property{	
 	
-	public RailroadProperty(int cost, String name) {
-		super(cost, name);
+	public RailroadProperty(int cost, String name, int propertyFamilyIdentifier) {
+		super(cost, name, propertyFamilyIdentifier);
 	}
 	
 	@Override

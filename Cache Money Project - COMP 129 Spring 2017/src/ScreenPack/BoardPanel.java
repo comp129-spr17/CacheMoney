@@ -162,6 +162,7 @@ public class BoardPanel extends JPanel{
 			spaces[30] = GTJ;
 			spaces[30].setBounds(START_X + COL_SPACE_WIDTH + (NUM_R-1)*ROW_SPACE_WIDTH, START_Y,  COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
 			add(spaces[30]);
+			String[] reader;
 			for(int i=0; i<4;i++){
 				for(int j=0; j<10; j++){
 					temp = null;
@@ -178,13 +179,15 @@ public class BoardPanel extends JPanel{
 							TaxSpace ts = new TaxSpace(spaceImgs[i*10+j], "Income Tax", 200);
 							spaces[i*10+j] = ts;
 						}else if (j == 5){	//Railroad
-							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine())); 
+							reader = railroad.readLine().split("-");
+							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1]))); 
 							spaces[i*10+j] = temp;
 						}else if(j == 7){
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(100, standard.readLine(), (i + 1) * 50));
+							reader = standard.readLine().split("-");
+							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(100, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
 							spaces[i*10+j] = temp;
 						}
 						
@@ -203,16 +206,18 @@ public class BoardPanel extends JPanel{
 							continue;
 						}
 						if(j == 2){
-							temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Electric Company"));
+							temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Electric Company", 10));
 							spaces[i*10+j] = temp;
 						}else if (j == 5){
-							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine()));
+							reader = railroad.readLine().split("-");
+							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
 							spaces[i*10+j] = temp;
 						}else if (j == 7){
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(200, standard.readLine(), (i + 1) * 50));
+							reader = standard.readLine().split("-");
+							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(200, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
 							spaces[i*10+j] = temp;
 						}
 
@@ -232,13 +237,15 @@ public class BoardPanel extends JPanel{
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j],"Chance", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else if(j == 8){
-							temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Water Works"));
+							temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Water Works", 10));
 							spaces[i*10+j] = temp;
 						}else if (j == 5){	//Railroad
-							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine()));
+							reader = railroad.readLine().split("-");
+							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
 							spaces[i*10+j] = temp;
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty(300, standard.readLine(), (i + 1) * 50));
+							reader = standard.readLine().split("-");
+							temp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty(300, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
 							spaces[i*10+j] = temp;
 						}
 						if(temp != null)
@@ -251,7 +258,8 @@ public class BoardPanel extends JPanel{
 							continue;
 						}
 						else if (j == 5){
-							temp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine()));
+							reader = railroad.readLine().split("-");
+							temp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
 							spaces[i*10+j] = temp;
 						}else if (j == 3){
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel, isSingle);
@@ -263,7 +271,8 @@ public class BoardPanel extends JPanel{
 							TaxSpace ts = new TaxSpace(spaceImgs[i*10+j],"Luxury Tax",100);
 							spaces[i*10+j] = ts;							
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(400,standard.readLine(), (i + 1) * 50));
+							reader = standard.readLine().split("-");
+							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(400,reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
 							spaces[i*10+j] = temp;
 						}
 

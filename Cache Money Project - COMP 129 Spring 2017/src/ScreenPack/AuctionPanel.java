@@ -235,7 +235,7 @@ public class AuctionPanel extends JPanel{
 
 	public void purchaseProperty(){
 		Sounds.money.playSound();
-		curBuyer.purchaseProperty(property.getName(), auctionPrice);
+		curBuyer.purchaseProperty(property);
 		property.setOwner(curBuyer.getPlayerNum());
 		property.setOwned(true);
 	}

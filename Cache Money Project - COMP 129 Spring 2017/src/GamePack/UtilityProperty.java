@@ -1,11 +1,9 @@
 package GamePack;
 
-import ScreenPack.DicePanel;
-
 public class UtilityProperty extends Property {
 	
-	public UtilityProperty(int cost, String name) {
-		super(cost, name);
+	public UtilityProperty(int cost, String name, int propertyFamilyIdentifier) {
+		super(cost, name, propertyFamilyIdentifier);
 	}
 	
 	@Override

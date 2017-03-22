@@ -12,22 +12,25 @@ public abstract class Property {
 	protected boolean owned;
 	protected int numHouse;
 	protected int numHotel;
+	protected int propertyFamilyIdentifier;
 	protected int owner = -1;
 	protected String name;
 	
-	public Property(int cost, String name) // NEED TO CREATE HOUSING PRICE THING HERE
+	public Property(int cost, String name, int propertyFamilyIdentifier) // NEED TO CREATE HOUSING PRICE THING HERE
 	{
+		
 		buildHousePrice = 0;
-		constructorContents(cost, name);
+		constructorContents(cost, name, propertyFamilyIdentifier);
 	}
 
-	public Property(int cost, String name, int buildHouseCost){
+	public Property(int cost, String name, int buildHouseCost, int propertyFamilyIdentifier){
 		buildHousePrice = buildHouseCost;
-		constructorContents(cost, name);
+		constructorContents(cost, name, propertyFamilyIdentifier);
 	}
 	
 	
-	private void constructorContents(int cost, String name){
+	private void constructorContents(int cost, String name, int propertyFamilyIdentifier){
+		this.propertyFamilyIdentifier = propertyFamilyIdentifier;
 		this.buyingPrice = cost;
 		this.name = name;
 		mortgageValue = roundUp(buyingPrice,2);
@@ -110,6 +113,7 @@ public abstract class Property {
 	}
 	public void incNumHouse(){
 		numHouse++;
+		rentMultiplier += 1;
 		if (numHouse > 4){
 			numHouse = 0;
 			incNumHotel();
@@ -120,6 +124,7 @@ public abstract class Property {
 	}
 	public void decNumHouse(){
 		numHouse--;
+		rentMultiplier -= 1;
 		if (numHouse < 0 && numHotel > 0){
 			decNumHotel();
 			numHouse = 4;
@@ -137,5 +142,8 @@ public abstract class Property {
 	}
 	public int getBuildHouseCost(){
 		return buildHousePrice;
+	}
+	public int getPropertyFamilyIdentifier(){
+		return propertyFamilyIdentifier;
 	}
 }
