@@ -490,7 +490,9 @@ public class DicePanel extends JPanel{
 	public void actionForDrawnStackCard(int cardNum, int position){
 		bPanel.actionForDrawnCards(cardNum, position);
 	}
-
+	public void actionForBuildHouse(){
+		propertyPanel.actionForBuildHouse();
+	}
 	private void changeTurn(){
 		turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br /> Click the dice to roll! </html>");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));

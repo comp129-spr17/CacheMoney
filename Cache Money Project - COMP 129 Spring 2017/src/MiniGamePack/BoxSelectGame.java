@@ -179,7 +179,7 @@ public class BoxSelectGame extends MiniGame{
 				displayWinnerAndCleanUp(false);
 			}
 			else if (isOwner){
-				pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, surpriseBoxes, 1));
+				pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, surpriseBoxes, 1));
 			}
 		}
 		else{
@@ -301,7 +301,7 @@ public class BoxSelectGame extends MiniGame{
 							incrementTurn();
 						}
 						else{
-							pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, chosenBox, 0));
+							pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, chosenBox, 0));
 						}
 					}
 				}

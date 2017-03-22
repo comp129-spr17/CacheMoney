@@ -62,6 +62,7 @@ public class PropertyInfoPanel extends JPanel{
 		UnicodeForServer.getInstance();
 		dicePanel = diceP;
 		this.bPanel = b;
+		pInfo = PlayingInfo.getInstance();
 		init();
 	}
 
@@ -116,7 +117,7 @@ public class PropertyInfoPanel extends JPanel{
 		bPanel.add(mPanel);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
-		renderPropertyInfo(currentPlayer);
+		renderPropertyInfo(currentPlayer, isCurrent);
 		hidePreviousPanel();
 		if(pInfo.isSingle() || isCurrent)
 			enableButtons();
@@ -137,7 +138,7 @@ public class PropertyInfoPanel extends JPanel{
 		this.setVisible(true);
 	}
 
-	private void renderPropertyInfo(Player currentPlayer)
+	private void renderPropertyInfo(Player currentPlayer, boolean isCurrent)
 	{
 		infoPanel.add(this.name);
 		this.setBackground(Color.white);
@@ -145,8 +146,7 @@ public class PropertyInfoPanel extends JPanel{
 		//Set up them buttons
 		if(property.isOwned()){
 			if (property.getOwner() == currentPlayer.getPlayerNum()){
-				
-				if (checkIfUserCanBuyHouses() && property.getBuildHouseCost() > 0){
+				if (checkIfUserCanBuyHouses() && property.getBuildHouseCost() > 0 && isCurrent){
 					addBuyHousesButton();
 				}
 				addReturnButton();
@@ -196,7 +196,7 @@ public class PropertyInfoPanel extends JPanel{
 		}
 //		System.out.println("propertyFamilyMembers: " + propertyFamilyMembers);
 //		System.out.println("canPlaceMoreHouses: " + canPlaceMoreHouses);
-		return (((property.getPropertyFamilyIdentifier() == 1 || property.getPropertyFamilyIdentifier() == 8) && propertyFamilyMembers == 2) || propertyFamilyMembers == 3) && canPlaceMoreHouses && property.getMultiplier() < 5;
+		return (((property.getPropertyFamilyIdentifier() == 1 || property.getPropertyFamilyIdentifier() == 8) && propertyFamilyMembers == 2) || propertyFamilyMembers == 3) && canPlaceMoreHouses && property.getMultiplier() < 5 && currentPlayer.getTotalMonies() >= property.getBuildHouseCost();
 	}
 
 	private void addBuyHousesButton(){
@@ -364,20 +364,14 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (property.getNumHotel() > 0){
-					 buyHouseButton.setEnabled(false);
-					 return;
-				 }
-				 if(currentPlayer.getTotalMonies() >= property.getBuildHouseCost()){
-					 currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - property.getBuildHouseCost());
-					 Sounds.money.playSound();
-					 rentValues.get(property.getMultiplier()).setText("Rent Value: " + property.getRentRange().get(property.getMultiplier()));
-					 property.incNumHouse();
-					 rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
-					 buyHouseButton.setVisible(checkIfUserCanBuyHouses());
-				 }
+				if (pInfo.isSingle()){
+					actionForBuildHouse();
+				}
+				else{
+					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.BUILD_HOUSE));
+				}
+				 
 			}
-
 			@Override
 			public void mousePressed(MouseEvent e) {
 			}
@@ -414,6 +408,16 @@ public class PropertyInfoPanel extends JPanel{
 			
 		});
 	}
+	
+	public void actionForBuildHouse() {
+		Sounds.money.playSound();
+		currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - property.getBuildHouseCost());
+		rentValues.get(property.getMultiplier()).setText("Rent Value: " + property.getRentRange().get(property.getMultiplier()));
+		property.incNumHouse();
+		rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
+		buyHouseButton.setVisible(checkIfUserCanBuyHouses());
+	}
+	
 	private void addHideButton()
 	{
 		hideButton.setBounds(this.getWidth()-75,10, 70, 30);

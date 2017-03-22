@@ -92,7 +92,7 @@ public class EliminationGame extends MiniGame{
 					displayWinnerAndCleanUp();
 				}
 				else{
-					pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, apples, chosenRotten + 1));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, chosenRotten + 1));
 				}
 				t.cancel();
 				t.purge();
@@ -218,7 +218,7 @@ public class EliminationGame extends MiniGame{
 	public void addSyncedRandomNumber(int num){
 		chosenRotten = num;
 		if (isOwner){
-			pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, apples, -1));
+			pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, -1));
 		}
 	}
 	
@@ -281,7 +281,7 @@ public class EliminationGame extends MiniGame{
 						removeApple(chosenApple);
 					}
 					else if (isOwner == turnNum){
-						pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, apples, chosenApple));
+						pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, chosenApple));
 					}
 					break;
 				case ROTTEN_APPLE:
@@ -290,7 +290,7 @@ public class EliminationGame extends MiniGame{
 						displayWinnerAndCleanUp();
 					}
 					else if (isOwner == turnNum){
-						pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, apples, chosenApple));
+						pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, chosenApple));
 					}
 					break;
 				case SELECTED_APPLE:

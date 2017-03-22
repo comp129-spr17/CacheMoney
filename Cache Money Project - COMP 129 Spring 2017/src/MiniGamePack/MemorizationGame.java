@@ -78,7 +78,7 @@ public class MemorizationGame extends MiniGame{
 					incrementTurn();
 				}
 				else{
-					pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, playerAnswers, 2));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, playerAnswers, 2));
 				}
 				
 				
@@ -107,7 +107,7 @@ public class MemorizationGame extends MiniGame{
 			displayGame();
 		}
 		else if (isOwner){
-			pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, memorizeArray, 0));
+			pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, memorizeArray, 0));
 		}
 		
 	}
@@ -155,7 +155,7 @@ public class MemorizationGame extends MiniGame{
 			case 0:
 				memorizeArray = arr;
 				if (isOwner){
-					pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, questionToAsk, 1));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, questionToAsk, 1));
 				}
 				break;
 			case 1:
@@ -165,7 +165,7 @@ public class MemorizationGame extends MiniGame{
 			case 2:
 				playerAnswers = arr;
 				if ((isOwner && turnNum == 0) || (isGuest && turnNum == 1)){
-					pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, playerTimes, 3));
+					pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, playerTimes, 3));
 				}
 				break;
 			case 3:

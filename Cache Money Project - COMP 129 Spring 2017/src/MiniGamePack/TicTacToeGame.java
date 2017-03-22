@@ -65,7 +65,7 @@ public class TicTacToeGame extends MiniGame{
 						actionsAfterMarkingASpace();
 					}
 					else{
-						pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, gameGrid, 1));
+						pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, gameGrid, 1));
 					}
 				}
 			}
@@ -146,7 +146,7 @@ public class TicTacToeGame extends MiniGame{
 		}
 		else if (isOwner){
 			initGameGrid();
-			pInfo.sendMessageToServer(mPack.packIntArray(unicode.BOX_MINI_GAME_SELECTED_BOXES, gameGrid, 0));
+			pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, gameGrid, 0));
 		}
 	}
 	

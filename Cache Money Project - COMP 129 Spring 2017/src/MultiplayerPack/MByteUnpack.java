@@ -30,57 +30,59 @@ public final class MByteUnpack {
 		initUnicodeToMethod();
 	}
 	private void initUnicodeToMethod(){
-		GetResults.put(UNI.DICE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackDiceResult(result);
+		GetResults.put(UnicodeForServer.DICE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackDiceResult(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyResult(result);
+		GetResults.put(UnicodeForServer.PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyResult(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.PLAYER_NUM, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPlayerNumberResult(result);
+		GetResults.put(UnicodeForServer.PLAYER_NUM, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPlayerNumberResult(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.END_TURN, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.END_TURN, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.START_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.START_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.END_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.END_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPlayerNumberResult(result);
+		GetResults.put(UnicodeForServer.DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPlayerNumberResult(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.HOST_DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.HOST_DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.START_GAME_REPLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackGameStartResult(result);
+		GetResults.put(UnicodeForServer.START_GAME_REPLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackGameStartResult(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.PROPERTY_PURCHASE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyPurchase(result);
+		GetResults.put(UnicodeForServer.PROPERTY_PURCHASE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyPurchase(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.PROPERTY_RENT_PAY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPayRent(result);
+		GetResults.put(UnicodeForServer.PROPERTY_RENT_PAY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPayRent(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.SPAM_MINI_GAME_GUEST, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.SPAM_MINI_GAME_GUEST, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.SPAM_MINI_GAME_OWNER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.SPAM_MINI_GAME_OWNER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.REACTION_MINI_GAME_OWNER_EARLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.REACTION_MINI_GAME_OWNER_EARLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.REACTION_MINI_GAME_GUEST_EARLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.REACTION_MINI_GAME_GUEST_EARLY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.REACTION_MINI_GAME_OWNER_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);
+		GetResults.put(UnicodeForServer.REACTION_MINI_GAME_OWNER_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.REACTION_MINI_GAME_GUEST_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);	
+		GetResults.put(UnicodeForServer.REACTION_MINI_GAME_GUEST_END, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackReactionTime(result);	
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.BOX_MINI_GAME_SELECTED_BOXES, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArray(result);
+		GetResults.put(UnicodeForServer.GENERIC_SEND_INT_ARRAY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArray(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.RSP_MINI_GAME_DECISION, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntBoolean(result);
+		GetResults.put(UnicodeForServer.RSP_MINI_GAME_DECISION, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntBoolean(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.GENERIC_SEND_INTEGER, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackInteger(result);
+		GetResults.put(UnicodeForServer.GENERIC_SEND_INTEGER, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackInteger(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.MATH_MINI_GAME_RANDS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArray(result);
+		GetResults.put(UnicodeForServer.MATH_MINI_GAME_RANDS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArray(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.MATH_MINI_GAME_ANS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackMiniGameAns(result);
+		GetResults.put(UnicodeForServer.MATH_MINI_GAME_ANS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackMiniGameAns(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.MINI_GAME_START_CODE, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.MINI_GAME_START_CODE, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.PROPERTY_BIDDING, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArrays(result);
+		GetResults.put(UnicodeForServer.PROPERTY_BIDDING, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArrays(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.PROPERTY_SWITCH_TO_AUCTION, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.PROPERTY_SWITCH_TO_AUCTION, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UNI.STACK_CARD_DRAWN, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArrays(result);
+		GetResults.put(UnicodeForServer.STACK_CARD_DRAWN, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArrays(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.BUILD_HOUSE, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
@@ -235,11 +237,11 @@ public final class MByteUnpack {
 	public int isSpecalCode(int result){
 		
 //		try {
-			if(UNI.DISCONNECTED == result)
+			if(UnicodeForServer.DISCONNECTED == result)
 				return 1;
-			else if(UNI.HOST_DISCONNECTED==result)
+			else if(UnicodeForServer.HOST_DISCONNECTED==result)
 				return 2;
-			else if(UNI.START_GAME == result)
+			else if(UnicodeForServer.START_GAME == result)
 				return 3;
 			
 				

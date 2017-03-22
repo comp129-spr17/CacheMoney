@@ -18,8 +18,6 @@ import InterfacePack.Sounds;
 import ScreenPack.*;
 
 public class MClient {
-	private final static String IP_ADDRESS = "10.15.154.147"; // If you do not enter an IP address in the console, this one will be used by default.
-	private static int PORT_NUM;
 	private static ClientEntranceBox optionBox;
 	private static boolean isServerUp;
 	private static boolean isConnected;
@@ -66,30 +64,30 @@ public class MClient {
 		initDoActions();
 	}
 	private void initDoActions(){ // ADD ACTIONS HERE 
-		doActions.put(unicode.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
-		doActions.put(unicode.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
-		doActions.put(unicode.START_GAME_REPLY, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame(result);}});
-		doActions.put(unicode.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
-		doActions.put(unicode.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
-		doActions.put(unicode.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
-		doActions.put(unicode.PROPERTY_PURCHASE, new DoAction(){public void doAction(ArrayList<Object> result){doPurchaseProperty(result);}});
-		doActions.put(unicode.PROPERTY_RENT_PAY, new DoAction(){public void doAction(ArrayList<Object> result){doPayRent(result);}});
-		doActions.put(unicode.SPAM_MINI_GAME_GUEST, new DoAction(){public void doAction(ArrayList<Object> result){doSpamGuestAction();}});
-		doActions.put(unicode.SPAM_MINI_GAME_OWNER, new DoAction(){public void doAction(ArrayList<Object> result){doSpamOwnerAction();}});
-		doActions.put(unicode.REACTION_MINI_GAME_OWNER_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(true);}});
-		doActions.put(unicode.REACTION_MINI_GAME_GUEST_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(false);}});
-		doActions.put(unicode.REACTION_MINI_GAME_OWNER_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(true,result);}});
-		doActions.put(unicode.REACTION_MINI_GAME_GUEST_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(false,result);}});
-		doActions.put(unicode.BOX_MINI_GAME_SELECTED_BOXES, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArray(result);}});
-		doActions.put(unicode.RSP_MINI_GAME_DECISION, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntBoolean(result);}});
-		doActions.put(unicode.GENERIC_SEND_INTEGER, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveInteger(result);}});
-		doActions.put(unicode.MATH_MINI_GAME_RANDS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArraySingle(result);}});
-		doActions.put(unicode.MATH_MINI_GAME_ANS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveAnsForMath(result);}});
-		doActions.put(unicode.MINI_GAME_START_CODE, new DoAction(){public void doAction(ArrayList<Object> result){doStartMiniGame(result);}});
-		doActions.put(unicode.PROPERTY_BIDDING, new DoAction(){public void doAction(ArrayList<Object> result){doBiddingUpdate(result);}});
-		doActions.put(unicode.PROPERTY_SWITCH_TO_AUCTION, new DoAction(){public void doAction(ArrayList<Object> result){doSwitchToAuction();}});
-		doActions.put(unicode.STACK_CARD_DRAWN, new DoAction(){public void doAction(ArrayList<Object> result){doDrawChanceStack(result);}});
-
+		doActions.put(UnicodeForServer.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
+		doActions.put(UnicodeForServer.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
+		doActions.put(UnicodeForServer.START_GAME_REPLY, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame(result);}});
+		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
+		doActions.put(UnicodeForServer.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
+		doActions.put(UnicodeForServer.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
+		doActions.put(UnicodeForServer.PROPERTY_PURCHASE, new DoAction(){public void doAction(ArrayList<Object> result){doPurchaseProperty(result);}});
+		doActions.put(UnicodeForServer.PROPERTY_RENT_PAY, new DoAction(){public void doAction(ArrayList<Object> result){doPayRent(result);}});
+		doActions.put(UnicodeForServer.SPAM_MINI_GAME_GUEST, new DoAction(){public void doAction(ArrayList<Object> result){doSpamGuestAction();}});
+		doActions.put(UnicodeForServer.SPAM_MINI_GAME_OWNER, new DoAction(){public void doAction(ArrayList<Object> result){doSpamOwnerAction();}});
+		doActions.put(UnicodeForServer.REACTION_MINI_GAME_OWNER_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(true);}});
+		doActions.put(UnicodeForServer.REACTION_MINI_GAME_GUEST_EARLY, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEarlyAction(false);}});
+		doActions.put(UnicodeForServer.REACTION_MINI_GAME_OWNER_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(true,result);}});
+		doActions.put(UnicodeForServer.REACTION_MINI_GAME_GUEST_END, new DoAction(){public void doAction(ArrayList<Object> result){doReactionEndAction(false,result);}});
+		doActions.put(UnicodeForServer.GENERIC_SEND_INT_ARRAY, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArray(result);}});
+		doActions.put(UnicodeForServer.RSP_MINI_GAME_DECISION, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntBoolean(result);}});
+		doActions.put(UnicodeForServer.GENERIC_SEND_INTEGER, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveInteger(result);}});
+		doActions.put(UnicodeForServer.MATH_MINI_GAME_RANDS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveIntArraySingle(result);}});
+		doActions.put(UnicodeForServer.MATH_MINI_GAME_ANS, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveAnsForMath(result);}});
+		doActions.put(UnicodeForServer.MINI_GAME_START_CODE, new DoAction(){public void doAction(ArrayList<Object> result){doStartMiniGame(result);}});
+		doActions.put(UnicodeForServer.PROPERTY_BIDDING, new DoAction(){public void doAction(ArrayList<Object> result){doBiddingUpdate(result);}});
+		doActions.put(UnicodeForServer.PROPERTY_SWITCH_TO_AUCTION, new DoAction(){public void doAction(ArrayList<Object> result){doSwitchToAuction();}});
+		doActions.put(UnicodeForServer.STACK_CARD_DRAWN, new DoAction(){public void doAction(ArrayList<Object> result){doDrawChanceStack(result);}});
+		doActions.put(UnicodeForServer.BUILD_HOUSE, new DoAction(){public void doAction(ArrayList<Object> result){doBuildHouse(result);}});
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 		isConnected = false;
@@ -140,14 +138,11 @@ public class MClient {
 			@Override
 			public void run() {
 				ArrayList<Object> result;
-				int count;
 				try {
-					
 					byteCount = inputStream.read(msgs);
 					result = mUnpack.getResult(msgs);
 					setPlayer((Integer)result.get(1));
 					diceP.setMyPlayer(thisPlayNum);
-//					(new CheckingPlayerTurn()).start();
 					Sounds.waitingRoomJoin.playSound();
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -253,6 +248,10 @@ public class MClient {
 	private void doDrawChanceStack(ArrayList<Object> result){
 		diceP.actionForDrawnStackCard((Integer)result.get(1), (Integer)result.get(2));
 	}
+	private void doBuildHouse(ArrayList<Object> result){
+		diceP.actionForBuildHouse();
+	}
+	
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);
 	}

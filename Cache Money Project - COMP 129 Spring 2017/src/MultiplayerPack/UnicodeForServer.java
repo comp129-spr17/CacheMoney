@@ -20,7 +20,7 @@ public final class UnicodeForServer {
 	public static final int REACTION_MINI_GAME_GUEST_END = 15;
 	public static final int REACTION_MINI_GAME_OWNER_END = 16;
 	public static final int RANDOM_NUM = 17;
-	public static final int BOX_MINI_GAME_SELECTED_BOXES = 18;
+	public static final int GENERIC_SEND_INT_ARRAY = 18;
 	public static final int BOX_MINI_GAME_SURPRISE_BOXES = 19;
 	public static final int RSP_MINI_GAME_DECISION = 20;
 	public static final int GENERIC_SEND_INTEGER = 21;
@@ -30,6 +30,7 @@ public final class UnicodeForServer {
 	public static final int PROPERTY_BIDDING = 25;
 	public static final int PROPERTY_SWITCH_TO_AUCTION = 26;
 	public static final int STACK_CARD_DRAWN = 27;
+	public static final int BUILD_HOUSE = 28;
 	
 	private UnicodeForServer(){
 		
