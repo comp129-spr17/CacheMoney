@@ -655,7 +655,7 @@ public class DicePanel extends JPanel{
 			String curSpaceName = board.getSpacePlayerLandedOn(previous);
 			if (board.isPlayerInPropertySpace(previous)){
 				if(propertyPanel.isPropertyOwned(curSpaceName) && propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
-
+					propertyPanel.executeSwitch(curSpaceName, players[current], current == myPlayerNum);
 				}else{
 					if(propertyPanel.isPropertyOwned(curSpaceName)){
 						if(!propertyPanel.isPropertyMortgaged(curSpaceName)){

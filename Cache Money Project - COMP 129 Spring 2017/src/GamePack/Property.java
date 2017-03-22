@@ -6,6 +6,7 @@ public abstract class Property {
 	ArrayList<Integer> rentValues;
 	protected int mortgageValue;
 	protected int buyingPrice;
+	protected int buildHousePrice;
 	protected int rentMultiplier;
 	protected boolean mortgaged;
 	protected boolean owned;
@@ -14,8 +15,19 @@ public abstract class Property {
 	protected int owner = -1;
 	protected String name;
 	
-	public Property(int cost, String name)
+	public Property(int cost, String name) // NEED TO CREATE HOUSING PRICE THING HERE
 	{
+		buildHousePrice = 0;
+		constructorContents(cost, name);
+	}
+
+	public Property(int cost, String name, int buildHouseCost){
+		buildHousePrice = buildHouseCost;
+		constructorContents(cost, name);
+	}
+	
+	
+	private void constructorContents(int cost, String name){
 		this.buyingPrice = cost;
 		this.name = name;
 		mortgageValue = roundUp(buyingPrice,2);
@@ -23,7 +35,9 @@ public abstract class Property {
 		mortgaged = false;
 		init();
 	}
-
+	
+	
+	
 	protected abstract void init();
 		
 	protected int roundUp(int dividend, int divisor)
@@ -96,12 +110,21 @@ public abstract class Property {
 	}
 	public void incNumHouse(){
 		numHouse++;
+		if (numHouse > 4){
+			numHouse = 0;
+			incNumHotel();
+		}
 	}
 	public void incNumHotel(){
 		numHotel++;
 	}
 	public void decNumHouse(){
 		numHouse--;
+		if (numHouse < 0 && numHotel > 0){
+			decNumHotel();
+			numHouse = 4;
+		}
+		
 	}
 	public void decNumHotel(){
 		numHotel--;
@@ -112,5 +135,7 @@ public abstract class Property {
 	public int getNumHotel(){
 		return numHotel;
 	}
-
+	public int getBuildHouseCost(){
+		return buildHousePrice;
+	}
 }

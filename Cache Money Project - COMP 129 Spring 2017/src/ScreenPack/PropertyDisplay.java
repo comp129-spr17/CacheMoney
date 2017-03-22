@@ -43,6 +43,8 @@ public final class PropertyDisplay extends JPanel{
 		labels.add(new JLabel("0"));
 		labels.add(new JLabel("Is Mortgaged:"));
 		labels.add(new JLabel("Yes"));
+//		labels.add(new JLabel("House Construction Cost:"));
+//		labels.add(new JLabel("0"));
 		labels.get(0).setBounds(width/11, width / 11, width, width / 11);
 		add(labels.get(0));
 		for(int i=1; i<labels.size(); i+=2){
@@ -73,5 +75,6 @@ public final class PropertyDisplay extends JPanel{
 		labels.get(4).setText(info.getNumHouse()+"");
 		labels.get(6).setText(info.getNumHotel()+"");
 		labels.get(8).setText(info.isMortgaged() ? "Yes" : "No");
+		//labels.get(10).setText(info.getBuildHouseCost() + "");
 	}
 }

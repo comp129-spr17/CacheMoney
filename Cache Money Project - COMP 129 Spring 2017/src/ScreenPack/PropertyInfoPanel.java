@@ -32,10 +32,13 @@ public class PropertyInfoPanel extends JPanel{
 	private JLabel name;
 	private JLabel buyingPrice;
 	private JLabel mortgagePrice;
+	private JLabel buyHousePrice;
 	private JButton buyButton;
 	private JButton auctionButton;
 	private JButton hideButton;
 	private JButton payButton;
+	private JButton buyHouseButton;
+	private JButton returnButton;
 	private Property property;
 	private AuctionPanel AP;
 	private HashMap<String,PropertySpace> propertyInfo;
@@ -79,6 +82,8 @@ public class PropertyInfoPanel extends JPanel{
 		buyButton = new JButton();
 		auctionButton = new JButton();
 		payButton = new JButton();
+		buyHouseButton = new JButton();
+		returnButton = new JButton();
 		addListeners();
 	}
 	// ADD LOCATIONS/SIZE TO THEM
@@ -94,7 +99,8 @@ public class PropertyInfoPanel extends JPanel{
 
 		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
 		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
-
+		buyHousePrice = new JLabel("Build House: " + property.getBuildHouseCost());
+		
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
 	public void setMyPlayerNum(int myPlayerNum){
@@ -109,7 +115,7 @@ public class PropertyInfoPanel extends JPanel{
 		bPanel.add(mPanel);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
-		renderPropertyInfo();
+		renderPropertyInfo(currentPlayer);
 		hidePreviousPanel();
 		if(isSingle || isCurrent)
 			enableButtons();
@@ -132,15 +138,22 @@ public class PropertyInfoPanel extends JPanel{
 		this.setVisible(true);
 	}
 
-	private void renderPropertyInfo()
+	private void renderPropertyInfo(Player currentPlayer)
 	{
-
 		infoPanel.add(this.name);
 		this.setBackground(Color.white);
 
 		//Set up them buttons
 		if(property.isOwned()){
-			addPayButton();
+			if (property.getOwner() == currentPlayer.getPlayerNum()){
+				if (property.getBuildHouseCost() > 0){
+					addBuyHousesButton();
+				}
+				addReturnButton();
+			}
+			else{
+				addPayButton();
+			}
 			//Sounds.landedOnOwnedProperty.playSound();
 		}else{
 			addBuyButton();
@@ -155,10 +168,36 @@ public class PropertyInfoPanel extends JPanel{
 			infoPanel.add(a);
 		}
 		mortgagePrice.setHorizontalAlignment(JLabel.CENTER);
+		buyHousePrice.setHorizontalAlignment(JLabel.CENTER);
 		infoPanel.add(mortgagePrice);
+		
+		if (property.getBuildHouseCost() > 0){
+			infoPanel.add(buyHousePrice);
+		}
+		
+		
+		
 		add(infoPanel);
 	}
 
+	private void addBuyHousesButton(){
+		buyHouseButton.setText("BUY HOUSE");
+		buyHouseButton.setSize(150, 40);
+		buyHouseButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/6*4-auctionButton.getHeight()/2);
+		add(buyHouseButton);
+		if (property.getNumHotel() > 0){
+			buyHouseButton.setEnabled(false);
+		}
+		
+	}
+	
+	private void addReturnButton(){
+		returnButton.setText("Dismiss");
+		returnButton.setSize(150, 40);
+		returnButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/6*5-auctionButton.getHeight()/3);
+		add(returnButton);
+	}
+	
 	public void endPropertyPanel()
 	{
 		AP = null;
@@ -301,6 +340,60 @@ public class PropertyInfoPanel extends JPanel{
 					}
 				}
 			}
+		});
+	
+		buyHouseButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (property.getNumHotel() > 0){
+					 buyHouseButton.setEnabled(false);
+					 return;
+				 }
+				 if(currentPlayer.getTotalMonies() >= property.getBuildHouseCost()){
+					 currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - property.getBuildHouseCost());
+					 Sounds.money.playSound();
+					 property.incNumHouse();
+					 if (property.getNumHotel() > 0){
+						 buyHouseButton.setEnabled(false);
+					 }
+				 }
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+		});
+		returnButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
+				dismissPropertyPanel();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
 		});
 	}
 	private void addHideButton()

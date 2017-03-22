@@ -4,13 +4,14 @@ public class StandardProperty extends Property{
 	private int housePrice;
 	private int hotelPrice;
 	
-	public StandardProperty(int cost, String name) {
-		super(cost, name);		
+	public StandardProperty(int cost, String name, int buildHouseCost) {
+		super(cost, name, buildHouseCost);		
 	}
 	
 	@Override
 	protected void init()
 	{
+		//buildHouseCost
 		rentMultiplier = 0;
 		housePrice = roundUp(6*buyingPrice,10);
 		hotelPrice = (5*housePrice);		

@@ -184,7 +184,7 @@ public class BoardPanel extends JPanel{
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(100, standard.readLine()));
+							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(100, standard.readLine(), (i + 1) * 50));
 							spaces[i*10+j] = temp;
 						}
 						
@@ -212,7 +212,7 @@ public class BoardPanel extends JPanel{
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel, isSingle);
 							spaces[i*10+j] = ws;
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(200, standard.readLine()));
+							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(200, standard.readLine(), (i + 1) * 50));
 							spaces[i*10+j] = temp;
 						}
 
@@ -238,7 +238,7 @@ public class BoardPanel extends JPanel{
 							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, railroad.readLine()));
 							spaces[i*10+j] = temp;
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty(300, standard.readLine()));
+							temp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty(300, standard.readLine(), (i + 1) * 50));
 							spaces[i*10+j] = temp;
 						}
 						if(temp != null)
@@ -263,7 +263,7 @@ public class BoardPanel extends JPanel{
 							TaxSpace ts = new TaxSpace(spaceImgs[i*10+j],"Luxury Tax",100);
 							spaces[i*10+j] = ts;							
 						}else{
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(400,standard.readLine()));
+							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(400,standard.readLine(), (i + 1) * 50));
 							spaces[i*10+j] = temp;
 						}
 
