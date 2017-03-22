@@ -6,7 +6,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -16,6 +15,7 @@ import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
 
+@SuppressWarnings("serial")
 public class MortgagePanel extends JPanel {
 	
 	private Player[] players;
@@ -58,16 +58,16 @@ public class MortgagePanel extends JPanel {
 	{
 		mortgageButtons = new ArrayList<JButton>();
 		
-		List<String> temp = curPlayer.getOwnedProperties();
+		List<Property> temp = curPlayer.getOwnedProperties();
 		
-		for(String l:temp)
+		for(Property l:temp)
 		{
 			JButton jb = new JButton();
 			
 			Property p = propertyInfo.get(l).getPropertyInfo();
-			jb.setText(l + '\n' + Integer.toString(p.getMortgageValue()));
+			jb.setText(l.getName() + '\n' + Integer.toString(p.getMortgageValue()));
 			jb.setSize(60, 70);
-			jb.setName(l);
+			jb.setName(l.getName());
 			jb.setBackground(Color.PINK);
 			jb.addMouseListener(new MouseListener() {
 

@@ -1,22 +1,22 @@
-Mediterranean Avenue
-Baltic Avenue
-Oriental Avenue
-Vermont Avenue
-Connecticut Avenue
-St. Charles Place
-States Avenue
-Virginia Avenue
-St. James Place
-Tennessee Avenue
-New York Avenue
-Kentucky Avenue
-Indiana Avenue
-Illinois Avenue
-Atlantic Avenue
-Ventnor Avenue
-Marvin Gardens
-Pacific Avenue
-North Carolina Avenue
-Pennsylvania Avenue
-Park Place
-Boardwalk
+Mediterranean Avenue-1
+Baltic Avenue-1
+Oriental Avenue-2
+Vermont Avenue-2
+Connecticut Avenue-2
+St. Charles Place-3
+States Avenue-3
+Virginia Avenue-3
+St. James Place-4
+Tennessee Avenue-4
+New York Avenue-4
+Kentucky Avenue-5
+Indiana Avenue-5
+Illinois Avenue-5
+Atlantic Avenue-6
+Ventnor Avenue-6
+Marvin Gardens-6
+Pacific Avenue-7
+North Carolina Avenue-7
+Pennsylvania Avenue-7
+Park Place-8
+Boardwalk-8

@@ -1,6 +1,7 @@
 package ScreenPack;
 
 import java.awt.Color;
+import java.awt.List;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -14,9 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.sun.glass.ui.Timer;
-import com.sun.media.jfxmedia.events.PlayerStateEvent.PlayerState;
-
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
@@ -26,6 +24,7 @@ import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
+@SuppressWarnings("serial")
 public class PropertyInfoPanel extends JPanel{
 	private JPanel panelToSwitchFrom;
 	//private PropertySpace info;
@@ -44,7 +43,6 @@ public class PropertyInfoPanel extends JPanel{
 	private AuctionPanel AP;
 	private HashMap<String,PropertySpace> propertyInfo;
 	private MBytePack mPack;
-	private UnicodeForServer unicode;
 	private Player[] players;
 	private DicePanel dicePanel;
 	private BoardPanel bPanel;
@@ -57,11 +55,11 @@ public class PropertyInfoPanel extends JPanel{
 	{
 		infoPanel = new JPanel();
 		players = player;
-		pInfo = PlayingInfo.getInstance();
+		PlayingInfo.getInstance();
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.propertyInfo = propertyInfo;
 		mPack = MBytePack.getInstance();
-		unicode = UnicodeForServer.getInstance();
+		UnicodeForServer.getInstance();
 		dicePanel = diceP;
 		this.bPanel = b;
 		init();
@@ -88,22 +86,30 @@ public class PropertyInfoPanel extends JPanel{
 	// ADD LOCATIONS/SIZE TO THEM
 	private void loadPropertyInfo(Property info)
 	{
-		rentValues = new ArrayList<JLabel>();
-		for(Integer a:info.getRentRange())
-		{
-			rentValues.add(new JLabel("Rent Value:"  + a.toString()));
-		}
-
-		name = new JLabel(info.getName());
-
 		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
 		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
 		buyHousePrice = new JLabel("Build House: " + property.getBuildHouseCost());
+		
+		rentValues = new ArrayList<JLabel>();
+		for(Integer a:info.getRentRange())
+		{
+			rentValues.add(new JLabel("Rent Value: "  + a.toString()));
+		}
+		if (property.isOwned()){
+			rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
+		}
+		else{
+			buyingPrice.setText("<html><b>" + buyingPrice.getText() + "</b></html>");
+		}
+		name = new JLabel(info.getName());
+
+		
 		
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
 	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
 	{
+		this.currentPlayer = currentPlayer;
 		property = propertyInfo.get(name).getPropertyInfo();
 		AP = new AuctionPanel(property, players, this);
 		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo);
@@ -114,7 +120,7 @@ public class PropertyInfoPanel extends JPanel{
 		hidePreviousPanel();
 		if(pInfo.isSingle() || isCurrent)
 			enableButtons();
-		this.currentPlayer = currentPlayer;
+		
 	}
 	public void actionToAuction(int bid, int playerNum){
 		AP.actionToAuction(bid, playerNum);
@@ -139,7 +145,8 @@ public class PropertyInfoPanel extends JPanel{
 		//Set up them buttons
 		if(property.isOwned()){
 			if (property.getOwner() == currentPlayer.getPlayerNum()){
-				if (property.getBuildHouseCost() > 0){
+				
+				if (checkIfUserCanBuyHouses() && property.getBuildHouseCost() > 0){
 					addBuyHousesButton();
 				}
 				addReturnButton();
@@ -147,7 +154,6 @@ public class PropertyInfoPanel extends JPanel{
 			else{
 				addPayButton();
 			}
-			//Sounds.landedOnOwnedProperty.playSound();
 		}else{
 			addBuyButton();
 			addAuctionButton();
@@ -173,14 +179,32 @@ public class PropertyInfoPanel extends JPanel{
 		add(infoPanel);
 	}
 
+	private boolean checkIfUserCanBuyHouses() {
+		int propertyFamilyMembers = 0;
+		boolean canPlaceMoreHouses = true;
+		int numProperties = currentPlayer.getNumPropertiesOwned();
+		java.util.List<Property> playerOwnedProperties = currentPlayer.getOwnedProperties();
+		Property playerProperty = null;
+		for (int i = 0; i < numProperties; i++){
+			playerProperty = playerOwnedProperties.get(i);
+			if (playerProperty.getPropertyFamilyIdentifier() == property.getPropertyFamilyIdentifier()){
+				propertyFamilyMembers += 1;
+				if (playerProperty.getMultiplier() < property.getMultiplier()){
+					canPlaceMoreHouses = false;
+				}
+			}
+		}
+//		System.out.println("propertyFamilyMembers: " + propertyFamilyMembers);
+//		System.out.println("canPlaceMoreHouses: " + canPlaceMoreHouses);
+		return (((property.getPropertyFamilyIdentifier() == 1 || property.getPropertyFamilyIdentifier() == 8) && propertyFamilyMembers == 2) || propertyFamilyMembers == 3) && canPlaceMoreHouses && property.getMultiplier() < 5;
+	}
+
 	private void addBuyHousesButton(){
 		buyHouseButton.setText("BUY HOUSE");
 		buyHouseButton.setSize(150, 40);
 		buyHouseButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/6*4-auctionButton.getHeight()/2);
 		add(buyHouseButton);
-		if (property.getNumHotel() > 0){
-			buyHouseButton.setEnabled(false);
-		}
+		buyHouseButton.setVisible(true);
 		
 	}
 	
@@ -287,7 +311,8 @@ public class PropertyInfoPanel extends JPanel{
 					if(pInfo.isSingle())
 						actionToSwitchToAuction();
 					else
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.PROPERTY_SWITCH_TO_AUCTION));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.PROPERTY_SWITCH_TO_AUCTION));
+
 				}
 
 			}
@@ -346,10 +371,10 @@ public class PropertyInfoPanel extends JPanel{
 				 if(currentPlayer.getTotalMonies() >= property.getBuildHouseCost()){
 					 currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - property.getBuildHouseCost());
 					 Sounds.money.playSound();
+					 rentValues.get(property.getMultiplier()).setText("Rent Value: " + property.getRentRange().get(property.getMultiplier()));
 					 property.incNumHouse();
-					 if (property.getNumHotel() > 0){
-						 buyHouseButton.setEnabled(false);
-					 }
+					 rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
+					 buyHouseButton.setVisible(checkIfUserCanBuyHouses());
 				 }
 			}
 
@@ -449,8 +474,7 @@ public class PropertyInfoPanel extends JPanel{
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.END_PROPERTY));
+					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_PROPERTY));
 				}
 			}, 1000);
 		}
@@ -461,7 +485,7 @@ public class PropertyInfoPanel extends JPanel{
 		if(pInfo.isSingle())
 			purchaseProperty(propertyName,buyingPrice,playerNum);
 		else
-			pInfo.sendMessageToServer(mPack.packPropertyPurchase(unicode.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
+			pInfo.sendMessageToServer(mPack.packPropertyPurchase(UnicodeForServer.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
 
 	}
 
@@ -470,12 +494,12 @@ public class PropertyInfoPanel extends JPanel{
 		if(pInfo.isSingle())
 			payForRent(amount,owner);
 		else
-			pInfo.sendMessageToServer(mPack.packPayRent(unicode.PROPERTY_RENT_PAY, amount,owner));
+			pInfo.sendMessageToServer(mPack.packPayRent(UnicodeForServer.PROPERTY_RENT_PAY, amount,owner));
 	}
 	public void purchaseProperty(String propertyName, int buyingPrice, int playerNum){
 
 		Sounds.money.playSound();
-		currentPlayer.purchaseProperty(propertyName, buyingPrice);
+		currentPlayer.purchaseProperty(property);
 		property.setOwner(playerNum);
 		property.setOwned(true);
 	}

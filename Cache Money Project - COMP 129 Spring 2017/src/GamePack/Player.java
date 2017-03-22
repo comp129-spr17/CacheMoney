@@ -28,7 +28,7 @@ public final class Player {
 	private static final Player GlobalPlayer1 = new Player(1);
 	private static final Player GlobalPlayer2 = new Player(2);
 	private static final Player GlobalPlayer3 = new Player(3);
-	private List<String> ownedProperties;
+	private List<Property> ownedProperties;
 //------------------------------------Default Constructor
 	
 	private Player(int playerNum) {
@@ -48,7 +48,7 @@ public final class Player {
 		ones = 5;
 		setplayerNum(playerNum);
 		inJail = false;
-		ownedProperties = new ArrayList<String>();
+		ownedProperties = new ArrayList<Property>();
 	}
 	public static Player getInstance(int i)
 	{
@@ -97,7 +97,7 @@ public final class Player {
 	{
 		return playerNum;
 	}
-	public List<String> getOwnedProperties()
+	public List<Property> getOwnedProperties()
 	{
 		return ownedProperties;
 	}
@@ -203,10 +203,10 @@ public final class Player {
 		}
 		pastPositionNumber = playerPositionNumber;
 	}
-	public void purchaseProperty(String propertyName, int cost)
+	public void purchaseProperty(Property p)
 	{
-		ownedProperties.add(propertyName);
-		pay(cost);
+		ownedProperties.add(p);
+		pay(p.getBuyingPrice());
 		//Subtract the cost of the property using the pay function right below.
 	}
 	public void pay(int cost) {
