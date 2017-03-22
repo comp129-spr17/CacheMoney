@@ -27,6 +27,7 @@ public final class MoneyLabels {
 	private JLabel[] cash20image;
 	private JLabel[] cash100image;
 	private JLabel[] cash1image;
+	private JLabel[] cash10image;
 	private JLabel[] xmark;
 	private JLabel[] cash500;
 	private JLabel[] cash50;
@@ -109,7 +110,7 @@ public final class MoneyLabels {
 		{
 			if (x >= totalPlayers)
 			{
-				for (int p = 6 * x; p < 6 * (x+1) ; p ++)
+				for (int p = 7 * x; p < 7 * (x+1) ; p ++)
 				{
 					PlayerInfo.remove(xmark[p]);
 				}
@@ -119,6 +120,8 @@ public final class MoneyLabels {
 				PlayerInfo.remove(cash500[x]);
 				PlayerInfo.remove(cash20[x]);
 				PlayerInfo.remove(cash50[x]);
+				PlayerInfo.remove(cash10[x]);
+				PlayerInfo.remove(cash10image[x]);
 				PlayerInfo.remove(cash100image[x]);
 				PlayerInfo.remove(cash1image[x]);
 				PlayerInfo.remove(cash5image[x]);
@@ -132,7 +135,7 @@ public final class MoneyLabels {
 		}
 	}
 	private void createAndManageXMarkAndMoniesLabels() {
-		for(int b=0; b < 24; b++)
+		for(int b=0; b < 28; b++)
 		{
 			addXMarkLabel(b);
 			setBoundsOfXMark(b);
@@ -150,47 +153,54 @@ public final class MoneyLabels {
 		}
 	}
 	private void setPositionOfCashLabelsBasedOnXMarkPosition(int b) {
-		if (b == 0 || b == 6 || b == 12 || b == 18 )
+		if (b == 0 || b == 7 || b == 14 || b == 21 )
 		{
-			cash500[b / 6].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
-			cash500image[b / 6].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32,65);
-			cash500[b / 6].setForeground(new Color(218,165,0));
-			cash500[b/6].setVisible(true);
+			cash500[b / 7].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
+			cash500image[b / 7].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32,65);
+			cash500[b / 7].setForeground(new Color(218,165,0));
+			cash500[b/7].setVisible(true);
 		}
-		else if (b == 1 || b == 7 || b == 13 || b == 19 )
+		else if (b == 1 || b == 8 || b == 15 || b == 22 )
 		{
-			cash100[(b- 1) / 6].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
-			cash100image[(b-1) / 6].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
-			cash100[(b-1) / 6].setForeground(new Color(238,221,130));
-			cash100[(b-1)/6].setVisible(true);
+			cash100[(b- 1) / 7].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
+			cash100image[(b-1) / 7].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
+			cash100[(b-1) / 7].setForeground(new Color(238,221,130));
+			cash100[(b-1)/7].setVisible(true);
 		}
-		else if (b == 2 || b == 8 || b == 14 || b == 20 )
+		else if (b == 2 || b == 9 || b == 16 || b == 23 )
 		{
-			cash50[(b- 2) / 6].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
-			cash50image[(b-2) / 6].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
-			cash50[(b-1) / 6].setForeground(new Color(135,206,250));
-			cash50[(b-2)/6].setVisible(true);
+			cash50[(b- 2) / 7].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
+			cash50image[(b-2) / 7].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
+			cash50[(b-1) / 7].setForeground(new Color(135,206,250));
+			cash50[(b-2)/7].setVisible(true);
 		}
-		else if (b == 3 || b == 9 || b == 15 || b == 21 )
+		else if (b == 3 || b == 10 || b == 17 || b == 24 )
 		{
-			cash20[(b- 3) / 6].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
-			cash20image[(b-3) / 6].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
-			cash20[(b-3) / 6].setForeground(new Color(102,205,170));
-			cash20[(b-3)/6].setVisible(true);
+			cash20[(b- 3) / 7].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
+			cash20image[(b-3) / 7].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
+			cash20[(b-3) /7].setForeground(new Color(102,205,170));
+			cash20[(b-3)/7].setVisible(true);
 		}
-		else if (b == 4 || b == 10 || b == 16 || b == 22 )
+		else if (b == 4 || b == 11 || b == 18 || b == 25 )
 		{
-			cash5[(b- 4) / 6].setBounds(xmark[b].getX() + 50 +  insets.left, xmark[b].getY() + insets.top, 100, 100);
-			cash5image[(b-4) / 6].setBounds(xmark[b].getX() - 50 +  insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
-			cash5[(b-4) / 6].setForeground(new Color(250,128,114));
-			cash5[(b-4)%6].setVisible(true);
+			cash10[(b- 4) / 7].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
+			cash10image[(b-4) / 7].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
+			cash10[(b-4) / 7].setForeground(new Color(210,210,0));
+			cash10[(b-4)/7].setVisible(true);
 		}
-		else
+		else if (b == 5 || b == 12 || b == 19 || b == 26 )
 		{
-			cash1[(b- 5) / 6].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
-			cash1image[(b-5) / 6].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
-			cash1[(b-5)/6].setVisible(true);
-			cash1[(b-5) / 6].setForeground(new Color(105,105,105));
+			cash5[(b- 5) / 7].setBounds(xmark[b].getX() + 50 +  insets.left, xmark[b].getY() + insets.top, 100, 100);
+			cash5image[(b-5) / 7].setBounds(xmark[b].getX() - 50 +  insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
+			cash5[(b-5) / 7].setForeground(new Color(250,128,114));
+			cash5[(b-5)%7].setVisible(true);
+		}
+		else if (b == 6 || b == 13 || b == 20 || b == 27 )
+		{
+			cash1[(b- 6) / 7].setBounds(xmark[b].getX() + 50 + insets.left, xmark[b].getY() + insets.top, 100, 100);
+			cash1image[(b-6) / 7].setBounds(xmark[b].getX() - 50 + insets.left, xmark[b].getY() + insets.top + 18, 32, 65);
+			cash1[(b-6)/7].setVisible(true);
+			cash1[(b-6) / 7].setForeground(new Color(105,105,105));
 		}
 	}
 	private void addXMarkLabel(int b) {
@@ -198,12 +208,12 @@ public final class MoneyLabels {
 		xmark[b].setFont(new Font("Serif",Font.BOLD,20));
 	}
 	private void setBoundsOfXMark(int b) {
-		if (b > 11)
+		if (b > 13)
 		{
-			if(b > 17)
+			if(b > 20)
 			{
-				xmark[b].setBounds(700, 40 + (60*(b-17)),100,100);
-				if (b == 18)
+				xmark[b].setBounds(700, 40 + (60*(b-20)),100,100);
+				if (b == 21)
 				{
 					playerLabels[3].setBounds(xmark[b].getX() - 40, 0, 200, 100);
 					playerLabels[3].setFont(new Font("Serif",Font.BOLD,28));
@@ -212,8 +222,8 @@ public final class MoneyLabels {
 			}
 			else
 			{
-				xmark[b].setBounds(500, 40 + (60*(b-11)),100,100);
-				if (b == 12)
+				xmark[b].setBounds(500, 40 + (60*(b-13)),100,100);
+				if (b == 14)
 				{
 					playerLabels[2].setBounds(xmark[b].getX() - 40,0, 200, 100);
 					playerLabels[2].setFont(new Font("Serif",Font.BOLD,28));
@@ -223,10 +233,10 @@ public final class MoneyLabels {
 		}
 		else
 		{
-			if (b > 5)
+			if (b > 6)
 			{
-				xmark[b].setBounds(300, 40 + (60*(b-5)),100,100);
-				if (b == 6)
+				xmark[b].setBounds(300, 40 + (60*(b-6)),100,100);
+				if (b == 7)
 				{
 					playerLabels[1].setBounds(xmark[b].getX() - 40,0, 200, 100);
 					playerLabels[1].setFont(new Font("Serif",Font.BOLD,28));
@@ -268,6 +278,7 @@ public final class MoneyLabels {
 		twennies[i] = new JLabel(Integer.toString(players[i].getTwennies()));
 		fives[i] = new JLabel(Integer.toString(players[i].getFives()));
 		ones[i] = new JLabel(Integer.toString(players[i].getOnes()));
+		tens[i] = new JLabel(Integer.toString(players[i].getTens()));
 	}
 	private void addImagesToLabels(int i) {
 		cash500image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/500.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
@@ -276,7 +287,7 @@ public final class MoneyLabels {
 		cash20image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/20.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
 		cash100image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/100.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
 		cash1image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/1.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
-
+		cash10image[i] = new JLabel(imagerelated.resizeImage("src/MoneyImages/10.png", sizerelated.getMoneyIconWidth(), sizerelated.getMoneyIconHeight()));
 		//cash1image[i].setBounds(200, 500, 32, 65);
 		//cash20image[i].setBounds(200, 600, 32, 65);
 		//cash100image[i].setBounds(200, 700, 32, 65);
@@ -292,12 +303,11 @@ public final class MoneyLabels {
 		for (int x = 0; x < 4; x++)
 		{
 			playerPieceDisplay[x] = new JLabel(imagerelated.resizeImage(pathRelated.getPieceImgPath() + x+x + ".png", sizerelated.getMoneyPieceWidth(), sizerelated.getMoneyPieceHeight()));
-			playerPieceDisplay[x].setBounds(0,500,sizerelated.getMoneyPieceWidth(),sizerelated.getMoneyPieceHeight());
 			PlayerInfo.add(playerPieceDisplay[x]);
 		}
 			for (int j = 0; j < 4; j++)
 			{
-				playerPieceDisplay[j].setBounds(xmark[5 + (6*j)].getX() - 10, xmark[5 + (6*j)].getY() + xmark[5 + (6*j)].getHeight() - 20, sizerelated.getMoneyPieceWidth(), sizerelated.getMoneyPieceHeight());
+				playerPieceDisplay[j].setBounds(xmark[5 + (7*j)].getX() - 10, xmark[6 + (7*j)].getY() + xmark[5 + (7*j)].getHeight() - 20, sizerelated.getMoneyPieceWidth(), sizerelated.getMoneyPieceHeight());
 			}
 		}
 	private void setFontOfMoniesAndLabels(int i) {
@@ -309,6 +319,7 @@ public final class MoneyLabels {
 		cash20[i].setFont(numberfont);
 		cash100[i].setFont(numberfont);
 		cash1[i].setFont(numberfont);
+		cash10[i].setFont(numberfont);
 	}
 	private void distributeCashToPlayers(int i) {
 		totalmonnies[i] = new JLabel("$" + Integer.toString(players[i].getTotalMonies()));
@@ -319,6 +330,7 @@ public final class MoneyLabels {
 		cash20[i] = new JLabel(Integer.toString(players[i].getTwennies()));
 		cash100[i] = new JLabel(Integer.toString(players[i].getHunneds()));
 		cash1[i] = new JLabel(Integer.toString(players[i].getOnes()));
+		cash10[i] = new JLabel(Integer.toString(players[i].getTens()));
 	}
 	public void reinitializeMoneyLabels()
 	{
@@ -337,6 +349,7 @@ public final class MoneyLabels {
 				cash20[i].setText(Integer.toString(players[i].getTwennies()));
 				cash100[i].setText(Integer.toString(players[i].getHunneds()));
 				cash1[i].setText(Integer.toString(players[i].getOnes()));
+				cash10[i].setText(Integer.toString(players[i].getTens()));
 				//cash10[i].setText(Integer.toString(players[i].getTens()));
 				players[i].checkIfAlive();
 				if (players[i].getIsAlive() == false && players[i].getAlreadyDead() == false)
@@ -349,6 +362,7 @@ public final class MoneyLabels {
 					PlayerInfo.remove(cash20[i]);
 					PlayerInfo.remove(cash100[i]);
 					PlayerInfo.remove(cash1[i]);
+					PlayerInfo.remove(cash10[i]);
 					players[i].setAlreadyDead(true);
 					for (int h = (6 * i); h < (6 * i); h++)
 					{
@@ -368,7 +382,8 @@ public final class MoneyLabels {
 		cash20image = new JLabel[4];
 		cash100image = new JLabel[4];
 		cash1image = new JLabel[4];
-		xmark = new JLabel[24];
+		cash10image = new JLabel[4];
+		xmark = new JLabel[28];
 		cash500 = new JLabel[4];
 		cash50 = new JLabel[4];
 		cash5 = new JLabel[4];
@@ -395,6 +410,7 @@ public final class MoneyLabels {
 			PlayerInfo.add(cash50[j]);
 			PlayerInfo.add(cash1[j]);
 			PlayerInfo.add(cash100[j]);
+			PlayerInfo.add(cash10[j]);
 			PlayerInfo.add(cash5[j]);
 			PlayerInfo.add(cash20[j]);
 			PlayerInfo.add(totalmonnies[j]);
@@ -405,6 +421,7 @@ public final class MoneyLabels {
 			PlayerInfo.add(cash50image[j]);
 			PlayerInfo.add(cash100image[j]);
 			PlayerInfo.add(cash500image[j]);
+			PlayerInfo.add(cash10image[j]);
 			if (players[j].getJailFreeCard() == 1)
 			{
 				PlayerInfo.add(jailCards[j]);
@@ -412,7 +429,7 @@ public final class MoneyLabels {
 		}
 	}
 	private void addXMarkToPlayerInfo() {
-		for (int k = 0; k < 24; k++)
+		for (int k = 0; k < 28; k++)
 		{
 			PlayerInfo.add(xmark[k]);
 		}
