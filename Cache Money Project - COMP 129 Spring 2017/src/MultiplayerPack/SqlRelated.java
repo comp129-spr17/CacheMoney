@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public final class SqlRelated {
 	private static SqlRelated sqlRelated = new SqlRelated();
-	private static final String IP_ADDRESS = "localhost";
+	private static final String IP_ADDRESS = "www.cachemoney.com";
 	private static final String PORT_NUM = "3306";
 	private static final String DATABASE = "cachemoneydb";
-	private static final String USER_ID = "root";
-	private static final String USER_PW = "";
+	private static final String USER_ID = "devinlim";
+	private static final String USER_PW = "1234";
 	private Statement statement;
 	private Connection connection;
 	private static ArrayList<ResultSet> resultSets;
@@ -26,12 +26,14 @@ public final class SqlRelated {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection("jdbc:mysql://"+IP_ADDRESS
-					+ ":" + PORT_NUM + "/" + DATABASE, USER_ID , USER_PW);
+					+ ":" + PORT_NUM 
+					+ "/" + DATABASE 
+					+ "?useSSL=false", USER_ID , USER_PW);
 			initResultSets();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-//			e.printStackTrace();
-			System.out.println("Connection to SQL failed");
+			e.printStackTrace();
+//			System.out.println("Connection to SQL failed");
 		}	
 	}
 	private void initResultSets() throws SQLException{
