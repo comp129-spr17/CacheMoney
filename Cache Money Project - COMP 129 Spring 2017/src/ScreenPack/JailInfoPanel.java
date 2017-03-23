@@ -40,6 +40,8 @@ public class JailInfoPanel extends JPanel {
 	private JPanel jailPanel;
 	private Player currentPlayer;
 	private JLabel jailName;
+	private int[] turnsInJail;
+	private int current;
 	public JailInfoPanel(JPanel panelToSwitchFrom, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		jailPanel = new JPanel();
@@ -49,7 +51,13 @@ public class JailInfoPanel extends JPanel {
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		dicePanel = diceP;
+		current = -1;
 		this.bPanel = b;
+		turnsInJail = new int[4];
+		turnsInJail[0] = 0;
+		turnsInJail[1] = 0;
+		turnsInJail[2] = 0;
+		turnsInJail[3] = 0;
 		init();
 	}
 	private void init()
@@ -67,9 +75,10 @@ public class JailInfoPanel extends JPanel {
 		rollButton = new JButton();
 		addListeners();
 	}
-	public void executeSwitch(Player currentPlayer, boolean isCurrent)
+	public void executeSwitch(Player currentPlayer, boolean isCurrent, int current)
 	{
 		jailPanel.removeAll();
+		this.current = current;
 		bPanel.add(jailPanel);
 		renderJailInfo();
 		hidePreviousPanel();
@@ -166,9 +175,18 @@ public class JailInfoPanel extends JPanel {
 				boolean doubles = dicePanel.isDoublesRolled();
 				if (doubles) {
 					currentPlayer.setInJail(false);
+					turnsInJail[current] = 0;
+				} else {
+					turnsInJail[current] += 1;
 				}
-				
-				dismissJailInfoPanel();
+				if (turnsInJail[current] >= 3) {
+					currentPlayer.pay(50);
+					currentPlayer.setInJail(false);
+					endJailPanel();
+					dicePanel.displayEndTurnButton();
+				} else {
+					dismissJailInfoPanel();
+				}
 			}
 		});
 		payButton.addMouseListener(new MouseListener() {

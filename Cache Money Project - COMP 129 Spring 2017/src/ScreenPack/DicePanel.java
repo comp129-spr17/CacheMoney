@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false;
+	private final boolean SERVER_DEBUG = true;
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -241,6 +241,9 @@ public class DicePanel extends JPanel{
 		endTurnButton.setVisible(false);
 	}
 
+	public void setIsSame(boolean p) {
+		isSame = p;
+	}
 
 	private void initDiceTimer(){
 		diceTimer = new Timer();
@@ -434,7 +437,7 @@ public class DicePanel extends JPanel{
 				}
 			} else {
 				//TODO
-				jailInfoScreen.executeSwitch(players[current], true);
+				jailInfoScreen.executeSwitch(players[current], true, current);
 			}
 		}
 	}
@@ -571,11 +574,13 @@ public class DicePanel extends JPanel{
 			sum = Integer.parseInt(overrideDiceRoll.getText());
 
 		}
+		
 		if (movementAllowed){
 			board.movePiece(isSame ? previous : current, sum);
 		} else {
-			movementAllowed = true;
+			movementAllowed = false;
 		}
+		
 		previous = current;
 		//System.out.println(previous+":"+current+":"+isSame);
 		isSame = result[0] == result[1];
@@ -642,27 +647,27 @@ public class DicePanel extends JPanel{
 			if (board.isPlayerInPropertySpace(previous)){
 				if(propertyPanel.isPropertyOwned(curSpaceName) && propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
 					propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current));
-				}else{
+				} else {
 					if(propertyPanel.isPropertyOwned(curSpaceName)){
 						if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
 							mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current));
 							mGamePanel.startMiniGame(curSpaceName);
 						}
-					}else{
+					} else {
 						propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current));
 					}
 				}
 			}
 			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
 				Sounds.landedOnChanceOrCommunityChest.playSound();
-			} else if (curSpaceName == "Visiting Jail") {
-				
-			}
+			} else if (curSpaceName == "Visiting Jail" && players[current].isInJail()) {
+				isSame = false;
+			} 
 		}
 		delayThread(600);
 		mLabel.reinitializeMoneyLabels();
-		if (!isSame || numOfDoublesInRow >= 3){
-			endTurnButton.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
+		if (!isSame || numOfDoublesInRow >= 3 || !movementAllowed || players[current].isInJail()){
+			endTurnButton.setVisible(pInfo.isSingle() || players[current].isInJail() ? true : pInfo.isMyPlayerNum(current));
 		}
 		else{
 			rollButton.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
@@ -675,6 +680,22 @@ public class DicePanel extends JPanel{
 
 	}
 
+	public void displayEndTurnButton() {
+		while(!board.isDoneAnimating() || isCelebrating){
+			delayThread(1);
+		}
+		endTurnButton.setVisible(true);
+		rollButton.setVisible(false);
+		overrideDiceRoll.setVisible(false);
+		toggleDoubles.setVisible(false);
+		turnLabel.setVisible(false);
+	}
+	
+	public void displayEndTurnButton(JPanel previousPanel) {
+		previousPanel.setVisible(false);
+		displayEndTurnButton();
+	}
+	
 	public boolean isDoublesRolled() {
 		return isSame;
 	}
