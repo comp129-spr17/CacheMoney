@@ -100,8 +100,8 @@ public class JailInfoPanel extends JPanel {
 	}
 	public void endJailPanel()
 	{
-		this.removeAll();
-		this.setVisible(false);
+		removeAll();
+		setVisible(false);
 		panelToSwitchFrom.setVisible(true);
 	}
 	private void addListeners(){
@@ -167,6 +167,8 @@ public class JailInfoPanel extends JPanel {
 				if (doubles) {
 					currentPlayer.setInJail(false);
 				}
+				dicePanel.setMovementAllowed(true);
+				dismissJailInfoPanel();
 			}
 		});
 		payButton.addMouseListener(new MouseListener() {
@@ -192,6 +194,9 @@ public class JailInfoPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				//TODO
 				//Pay fine to get out of jail
+				currentPlayer.pay(50);
+				currentPlayer.setInJail(false);
+				dismissJailInfoPanel();
 			}
 		});
 	}
