@@ -176,11 +176,6 @@ public final class Player {
 	{
 		playerPositionNumber = newPosition;
 	}
-	
-	public void earnMonies(int amount)
-	{
-		totalmonies += amount;
-	}
 	public void setIsAlive(boolean TF)
 	{
 		isAlive = TF;
@@ -209,7 +204,7 @@ public final class Player {
 		pay(p.getBuyingPrice());
 		//Subtract the cost of the property using the pay function right below.
 	}
-	public void earnMoney(int cost)
+	public void earnMonies(int cost)
 	{
 		int modMoney = 0; //Yes, this stupid thing is back again :^)
 		totalmonies += cost;
