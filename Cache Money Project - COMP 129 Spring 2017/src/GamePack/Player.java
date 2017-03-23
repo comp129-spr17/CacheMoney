@@ -209,6 +209,60 @@ public final class Player {
 		pay(p.getBuyingPrice());
 		//Subtract the cost of the property using the pay function right below.
 	}
+	public void earnMoney(int cost)
+	{
+		int modMoney = 0; //Yes, this stupid thing is back again :^)
+		totalmonies += cost;
+		//FiveHunneds
+		modMoney = cost / 500;
+		if (modMoney >= 1)
+		{
+			cost -= modMoney * 500;
+			fivehunneds += modMoney;
+		}
+		//Hunneds
+		modMoney = cost / 100;
+		if (modMoney >= 1)
+		{
+			cost -= modMoney * 100;
+			hunneds += modMoney;
+		}
+		//Fitties
+		modMoney = cost / 50;
+		if (modMoney >= 1)
+		{
+			cost -= modMoney * 50;
+			fitties += modMoney;
+		}
+		//Twennies
+		modMoney = cost / 20;
+		if (modMoney >= 1)
+		{
+			cost -= modMoney * 20;
+			twennies += modMoney;
+		}
+		//Tens
+		modMoney = cost / 10;
+		if (modMoney >= 1)
+		{
+			cost -= modMoney * 10;
+			tens += modMoney;
+		}
+		//Fives
+		modMoney = cost / 5;
+		if (modMoney >= 1)
+		{
+			cost -= modMoney * 5;
+			fives += modMoney;
+		}
+		//Ones
+		modMoney = cost;
+		if (modMoney >= 1)
+		{
+			cost -= modMoney;
+			ones += modMoney;
+		}
+	}
 	public void pay(int cost) {
 		int modMoney = 0;
 		if (totalmonies >= cost)
