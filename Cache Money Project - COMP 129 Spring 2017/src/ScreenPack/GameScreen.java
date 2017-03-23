@@ -45,6 +45,7 @@ import MultiplayerPack.MBytePack;
 import MultiplayerPack.MClient;
 import MultiplayerPack.MHost;
 import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.SqlRelated;
 import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
@@ -71,6 +72,7 @@ public class GameScreen extends JFrame{
 	private PropertyDisplay pDisplay;
 	private JButton giveJailFreeCard;
 	private PlayingInfo pInfo;
+	private SqlRelated sqlRelated;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -118,6 +120,7 @@ public class GameScreen extends JFrame{
 	
 	private void initEverything(boolean isHost, boolean isSingle){
 		loadingProgress = 0;
+		sqlRelated = SqlRelated.getInstance();
 		mPack = MBytePack.getInstance();
 		pInfo = PlayingInfo.getInstance();
 		pInfo.setIsSingle(isSingle);

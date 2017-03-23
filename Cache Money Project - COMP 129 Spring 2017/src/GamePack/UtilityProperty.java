@@ -1,9 +1,14 @@
 package GamePack;
 
+import MultiplayerPack.SqlRelated;
+
 public class UtilityProperty extends Property {
 	
 	public UtilityProperty(int cost, String name, int propertyFamilyIdentifier) {
 		super(cost, name, propertyFamilyIdentifier);
+	}
+	public UtilityProperty() {
+		super();
 	}
 	
 	@Override
@@ -15,6 +20,15 @@ public class UtilityProperty extends Property {
 		rentMultiplier = 0;
 		rentValues.add(4);
 		rentValues.add(10);
+		
+//		SqlRelated.getNextP(2);
+//		this.propertyFamilyIdentifier = SqlRelated.getPFamilyId(2);
+//		this.buyingPrice = SqlRelated.getPBuyingPrice(2);
+//		this.name = SqlRelated.getPName(2);
+//		mortgageValue = SqlRelated.getPMortgage(2);
+//		for(int i=0; i<2; i++)
+//			rentValues.add(SqlRelated.getUtilityRentModifier(i));
+		
 	}
 	
 }

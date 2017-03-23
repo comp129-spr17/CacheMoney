@@ -2,6 +2,8 @@ package GamePack;
 
 import java.util.ArrayList;
 
+import MultiplayerPack.SqlRelated;
+
 public abstract class Property {
 	ArrayList<Integer> rentValues;
 	protected int mortgageValue;
@@ -15,7 +17,6 @@ public abstract class Property {
 	protected int propertyFamilyIdentifier;
 	protected int owner = -1;
 	protected String name;
-	
 	public Property(int cost, String name, int propertyFamilyIdentifier) // NEED TO CREATE HOUSING PRICE THING HERE
 	{
 		
@@ -27,14 +28,22 @@ public abstract class Property {
 		buildHousePrice = buildHouseCost;
 		constructorContents(cost, name, propertyFamilyIdentifier);
 	}
-	
-	
+	public Property(){
+		constructorContents();
+	}
+	private void constructorContents(){
+		
+		rentValues = new ArrayList<Integer>();
+
+		mortgaged = false;
+		init();
+	}
 	private void constructorContents(int cost, String name, int propertyFamilyIdentifier){
 		this.propertyFamilyIdentifier = propertyFamilyIdentifier;
 		this.buyingPrice = cost;
 		this.name = name;
 		mortgageValue = roundUp(buyingPrice,2);
-		rentValues = new ArrayList<Integer>(5);
+		rentValues = new ArrayList<Integer>();
 		mortgaged = false;
 		init();
 	}
