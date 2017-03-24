@@ -320,6 +320,7 @@ public class MainMenuScreen {
 		Sounds.buttonConfirm.playSound();
 		gNumP = (Integer)cmbNumP.getSelectedItem();
 		hideAndDisposeMainMenuScreen();
+		loadingScreen.setResizable(false);
 		loadingScreen.setVisible(true);
 		gameScreen = new GameScreen(true, gNumP);
 		gameScreen.setNumPlayer(gNumP);

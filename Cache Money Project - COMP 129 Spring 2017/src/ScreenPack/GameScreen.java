@@ -28,6 +28,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -60,6 +61,7 @@ public class GameScreen extends JFrame{
 	private UnicodeForServer unicode;
 	private BoardPanel boardPanel;
 	private JDialog playerInfo;
+	private JButton showMortgage;
 	private JButton showInfo;
 	private Insets insets;
 	private JCheckBox muteMusic;
@@ -72,7 +74,11 @@ public class GameScreen extends JFrame{
 	private PropertyDisplay pDisplay;
 	private JButton giveJailFreeCard;
 	private PlayingInfo pInfo;
+	private JDialog mortgageWindow;
 	private SqlRelated sqlRelated;
+	private JComboBox selectMortgage;
+	private JButton sellConfirm;
+	private JButton sellCancel;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -287,6 +293,32 @@ public class GameScreen extends JFrame{
 				
 			}
 		});
+		showMortgage.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				mortgageWindow.setVisible(true);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {	
+				
+			}
+		});
 		
 	}
 	
@@ -312,8 +344,10 @@ public class GameScreen extends JFrame{
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
+		addMortgageButton();
 		addButtonListeners();
 		mainPanel.add(showInfo);
+		mainPanel.add(showMortgage);
 		mainPanel.add(boardPanel);
 		mainPanel.add(giveJailFreeCard);
 		addMuteMusic();
@@ -443,6 +477,11 @@ public class GameScreen extends JFrame{
 		playerInfo.setSize(850,1000);
         playerInfo.setTitle("Player Info!");
         insets = playerInfo.getInsets();
+        
+        mortgageWindow = new JDialog();
+        mortgageWindow.setLayout(null);
+        mortgageWindow.setSize(400,300);
+        mortgageWindow.setTitle("Mortgage Property!");
 	}
 	public void addShowMoneyButton()
 	{
@@ -456,6 +495,13 @@ public class GameScreen extends JFrame{
 		showInfo.setVisible(true);
 		giveJailFreeCard = new JButton("GIVE JAIL-FREE CARD");
 		giveJailFreeCard.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 25, 200, 50);
+	}
+	public void addMortgageButton()
+	{
+		showMortgage = new JButton("Mortgage Property!");
+		showMortgage.setLayout(new BorderLayout());
+		showMortgage.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 + 50, 150, 50);
+		showMortgage.setVisible(true);
 	}
 	
 //	public static void main(String[] args) {
