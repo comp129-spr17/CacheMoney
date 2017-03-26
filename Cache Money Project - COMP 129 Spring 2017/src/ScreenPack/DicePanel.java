@@ -325,7 +325,8 @@ public class DicePanel extends JPanel{
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if (e.getButton() == 1 && isPressed){
+				
+				if (isPressed){
 					numberOfExits += 1;
 					if (numberOfExits == 1){
 						
