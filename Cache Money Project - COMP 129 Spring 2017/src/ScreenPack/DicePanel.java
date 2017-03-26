@@ -299,7 +299,7 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseReleased(MouseEvent e) {	
 				if (e.getButton() == 1){
-					if (!mGamePanel.isPlayingMinigame() && numberOfExits > 1){
+					if (!mGamePanel.isPlayingMinigame() && numberOfExits > 0){
 						Sounds.shakeDice.stopSound();
 						beginDiceRoll();
 					}
@@ -327,7 +327,7 @@ public class DicePanel extends JPanel{
 			public void mouseExited(MouseEvent e) {
 				if (e.getButton() == 1 && isPressed){
 					numberOfExits += 1;
-					if (numberOfExits == 2){
+					if (numberOfExits == 1){
 						
 						turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Release to roll!<br /></html>");
 						rollButton.setIcon(spinningDiceIcon);
