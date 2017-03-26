@@ -32,112 +32,128 @@ public enum Sounds {
 	fuse,
 	bomb,
 	minigameBegin,
-	quickDisplay
+	quickDisplay,
+	shakeDice
 	;
 	
+	private static final SoundAndMusicPlayer AUDIO_PLAYER = SoundAndMusicPlayer.getInstance();
 	private Random rand = new Random();
 	private final int NUM_OF_DICE_ROLL_SOUNDS = 5;
 	private final int NUM_OF_MOVING_PIECE_SOUNDS = 4;
+	private final int NUM_OF_DICE_SHAKE_SOUNDS = 3;
 	private int movePiecePreviousSound = 0;
+	private int shakeSoundNum = 0;
 	
 	
 	public void playSound(){
 		switch (this){
 		case buttonConfirm:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "buttonConfirm.wav");
+			AUDIO_PLAYER.playSound("audio", "buttonConfirm.wav");
 			return;
 		case buttonPress:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "buttonPress.wav");
+			AUDIO_PLAYER.playSound("audio", "buttonPress.wav");
 			return;
 		case register:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "register.mp3");
+			AUDIO_PLAYER.playSound("audio", "register.mp3");
 			return;
 		case buttonCancel:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "buttonCancel.wav");
+			AUDIO_PLAYER.playSound("audio", "buttonCancel.wav");
 			return;
 		case diceRoll1:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll1.wav");
+			AUDIO_PLAYER.playSound("audio", "diceRoll1.wav");
 			return;
 		case diceRoll2:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll2.wav");
+			AUDIO_PLAYER.playSound("audio", "diceRoll2.wav");
 			return;
 		case diceRoll3:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll3.wav");
+			AUDIO_PLAYER.playSound("audio", "diceRoll3.wav");
 			return;
 		case diceRoll4:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll4.wav");
+			AUDIO_PLAYER.playSound("audio", "diceRoll4.wav");
 			return;
 		case diceRoll5:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRoll5.wav");
+			AUDIO_PLAYER.playSound("audio", "diceRoll5.wav");
 			return;
 		case landedOnJail:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnJail.wav");
+			AUDIO_PLAYER.playSound("audio", "landedOnJail.wav");
 			return;
 		case turnBegin:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "turnBegin.wav");
+			AUDIO_PLAYER.playSound("audio", "turnBegin.wav");
 			return;
 		case randomDice:
-			SoundAndMusicPlayer.getInstance().playSound("audio", randomizeDiceFilename());
+			AUDIO_PLAYER.playSound("audio", randomizeDiceFilename());
 			return;
 		case landedOnFreeParking:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnFreeParking.wav");
+			AUDIO_PLAYER.playSound("audio", "landedOnFreeParking.wav");
 			return;
 		case landedOnRailroad:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnRailroad.wav");
+			AUDIO_PLAYER.playSound("audio", "landedOnRailroad.wav");
 			return;
 		case landedOnChanceOrCommunityChest:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnChanceOrCommunityChest.wav");
+			AUDIO_PLAYER.playSound("audio", "landedOnChanceOrCommunityChest.wav");
 			return;
 		case landedOnUnownedProperty:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnUnownedProperty.wav");
+			AUDIO_PLAYER.playSound("audio", "landedOnUnownedProperty.wav");
 			return;
 		case landedOnOwnedProperty:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "landedOnOwnedProperty.wav");
+			AUDIO_PLAYER.playSound("audio", "landedOnOwnedProperty.wav");
 			return;
 		case buildingHouse:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "buildingHouse.wav");
+			AUDIO_PLAYER.playSound("audio", "buildingHouse.wav");
 			return;
 		case diceRollConfirmed:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "diceRollConfirmed.wav");
+			AUDIO_PLAYER.playSound("audio", "diceRollConfirmed.wav");
 			return;
 		case money:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "money.wav");
+			AUDIO_PLAYER.playSound("audio", "money.wav");
 			return;
 		case doublesCelebrateSound:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "doublesCelebrateSound.wav");
+			AUDIO_PLAYER.playSound("audio", "doublesCelebrateSound.wav");
 			return;
 		case movePiece:
-			SoundAndMusicPlayer.getInstance().playSound("audio", movePieceFilename());
+			AUDIO_PLAYER.playSound("audio", movePieceFilename());
 			return;
 		case buyProperty:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "buyProperty.wav");
+			AUDIO_PLAYER.playSound("audio", "buyProperty.wav");
 			return;
 		case gainMoney:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "gainMoney.wav");
+			AUDIO_PLAYER.playSound("audio", "gainMoney.wav");
 			return;
 		case waitingRoomJoin:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "waitingRoomJoin.wav");
+			AUDIO_PLAYER.playSound("audio", "waitingRoomJoin.wav");
 			return;
 		case winGame:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "winGame.wav");
+			AUDIO_PLAYER.playSound("audio", "winGame.wav");
 			return;
 		case fuse:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "fuse.wav");
+			AUDIO_PLAYER.playSound("audio", "fuse.wav");
 			return;
 		case bomb:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "bomb.wav");
+			AUDIO_PLAYER.playSound("audio", "bomb.wav");
 			return;
 		case minigameBegin:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "minigameBegin.wav");
+			AUDIO_PLAYER.playSound("audio", "minigameBegin.wav");
 			return;
 		case quickDisplay:
-			SoundAndMusicPlayer.getInstance().playSound("audio", "quickDisplay.wav");
+			AUDIO_PLAYER.playSound("audio", "quickDisplay.wav");
+			return;
+		case shakeDice:
+			AUDIO_PLAYER.playSound("audio", randomizeDiceShakeFilename());
 			return;
 		default:
 			System.out.println("Sound Error");
 			break;
+		}	
+	}
+	
+	public void stopSound(){
+		switch (this){
+		case shakeDice:
+			stopDiceShake();
+			return;
+		default:
+			break;
 		}
-		
 	}
 	
 	
@@ -159,11 +175,20 @@ public enum Sounds {
 	}
 	
 	public void toggleMuteSounds(){
-		SoundAndMusicPlayer.getInstance().muteSounds();
+		AUDIO_PLAYER.muteSounds();
 	}
 	
 	public boolean getIsMuted(){
-		return SoundAndMusicPlayer.getInstance().isSoundMuted();
+		return AUDIO_PLAYER.isSoundMuted();
+	}
+	
+	private String randomizeDiceShakeFilename(){
+		shakeSoundNum = rand.nextInt(NUM_OF_DICE_SHAKE_SOUNDS);
+		return "diceShake" + Integer.toString(shakeSoundNum) + ".wav";
+	}
+	
+	private void stopDiceShake(){
+		AUDIO_PLAYER.stopSound("audio", "diceShake" + shakeSoundNum + ".wav");
 	}
 	
 }
