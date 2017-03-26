@@ -14,6 +14,7 @@ public class LoadingScreen extends JFrame {
 		setSize(WIDTH, HEIGHT);
 		setLocation(x - (WIDTH / 2), y - (HEIGHT / 2));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 		init();
 		setVisible(false);
 	}
