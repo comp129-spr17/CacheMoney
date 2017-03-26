@@ -126,7 +126,7 @@ public class GameScreen extends JFrame{
 	
 	private void initEverything(boolean isHost, boolean isSingle){
 		loadingProgress = 0;
-		sqlRelated = SqlRelated.getInstance();
+//		sqlRelated = SqlRelated.getInstance();
 		mPack = MBytePack.getInstance();
 		pInfo = PlayingInfo.getInstance();
 		pInfo.setIsSingle(isSingle);
