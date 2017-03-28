@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false;
+	private final boolean SERVER_DEBUG = true;
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -657,33 +657,12 @@ public class DicePanel extends JPanel{
 			delayThread(1);
 		}
 		if(numOfDoublesInRow >= 3) {
-			numOfDoublesInRow = 0;
-			isSame = false;
-			Space[] boardTracker = board.getBoardTracker();
-			Player curPlayer = players[current];
-			JailSpace jail = (JailSpace) boardTracker[Board.JAIL];
-			boardTracker[curPlayer.getPositionNumber()].removePiece(current);
-			curPlayer.setPositionNumber(Board.JAIL);
-			jail.sendToJail(curPlayer.getPiece(), current);
+			threeDoublesPunishment();
 		} else {
-			String curSpaceName = board.getSpacePlayerLandedOn(previous);
 			if (board.isPlayerInPropertySpace(previous)){
-				if(propertyPanel.isPropertyOwned(curSpaceName) && propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
-					propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current));
-				} else {
-					if(propertyPanel.isPropertyOwned(curSpaceName)){
-						if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
-							mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current));
-							mGamePanel.startMiniGame(curSpaceName);
-						}
-					} else {
-						propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current));
-					}
-				}
+				handlePropertySpaceAction(board.getSpacePlayerLandedOn(previous));
 			}
-			else if (curSpaceName == "Chance" || curSpaceName == "Community Chest"){
-				Sounds.landedOnChanceOrCommunityChest.playSound();
-			} else if (curSpaceName == "Visiting Jail" && players[current].isInJail()) {
+			else if (board.getSpacePlayerLandedOn(previous) == "Visiting Jail" && players[current].isInJail()) {
 				isSame = false;
 			} 
 		}
@@ -701,6 +680,33 @@ public class DicePanel extends JPanel{
 			
 		}
 
+	}
+	private void handlePropertySpaceAction(String curSpaceName) {
+		if (propertyPanel.isPropertyOwned(curSpaceName)){
+			checkForPlayerPropertyAction(curSpaceName);
+		}
+		else{
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current));
+		}
+	}
+	private void checkForPlayerPropertyAction(String curSpaceName) {
+		if (propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current));
+		}
+		else if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
+			mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current));
+			mGamePanel.startMiniGame(curSpaceName);
+		}
+	}
+	private void threeDoublesPunishment() {
+		numOfDoublesInRow = 0;
+		isSame = false;
+		Space[] boardTracker = board.getBoardTracker();
+		Player curPlayer = players[current];
+		JailSpace jail = (JailSpace) boardTracker[Board.JAIL];
+		boardTracker[curPlayer.getPositionNumber()].removePiece(current);
+		curPlayer.setPositionNumber(Board.JAIL);
+		jail.sendToJail(curPlayer.getPiece(), current);
 	}
 
 	public void displayEndTurnButton() {
