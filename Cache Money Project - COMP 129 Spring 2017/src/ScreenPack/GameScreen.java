@@ -24,6 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -80,6 +81,7 @@ public class GameScreen extends JFrame{
 	private JButton sellConfirm;
 	private JButton sellCancel;
 	private JLabel pleaseSelectMortgage;
+	private DefaultComboBoxModel tempComboBox;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -298,6 +300,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				updateMortgage();
 				mortgageWindow.setVisible(true);
 			}
 			@Override
@@ -320,7 +323,60 @@ public class GameScreen extends JFrame{
 				
 			}
 		});
-		
+		sellConfirm.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				updateMortgage();
+				mortgageWindow.setVisible(false);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {	
+				
+			}
+		});
+		sellCancel.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				updateMortgage();
+				mortgageWindow.setVisible(false);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {	
+				
+			}
+		});
 	}
 	
 	private void init(boolean isHost){
@@ -337,7 +393,8 @@ public class GameScreen extends JFrame{
 		mainPanel.add(btnExit);
 		addExitListener(isHost);
 		initUserInfoWindow();
-		selectMortgage = new JComboBox();
+		tempComboBox = new DefaultComboBoxModel();
+		selectMortgage = new JComboBox(tempComboBox);
 		sellConfirm = new JButton("Mortgage");
 		sellCancel = new JButton("Cancel");
 		pleaseSelectMortgage =  new JLabel("Please select a property to mortgage:");
@@ -504,9 +561,41 @@ public class GameScreen extends JFrame{
 	
 	public void setupMortgage()
 	{
-		for (int g = 0; g < players[0].getOwnedProperties().size(); g++)	//NEED TO GET PLAYER VALUE
+		if (pInfo.isSingle())
 		{
-			selectMortgage.addItem(players[0].getOwnedProperties().get(g).getName());	//NEED TO GET PLAYER VALUE
+			for (int g = 0; g < players[0].getOwnedProperties().size(); g++)
+			{
+				selectMortgage.addItem(players[0].getOwnedProperties().get(g).getName());
+			}
+		}
+		else
+		{
+			for (int g = 0; g < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); g++)	
+			{
+				selectMortgage.addItem(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(g).getName());	
+			}
+		}
+	}
+	public void updateMortgage()
+	{
+		if (pInfo.isSingle())
+		{
+			for (int j = 0; j < players[0].getOwnedProperties().size(); j++)
+			{
+				if (tempComboBox.getIndexOf(players[0].getOwnedProperties().get(j).getName()) == -1)
+				{
+					tempComboBox.addElement(players[0].getOwnedProperties().get(j).getName());
+				}
+			}
+		}
+		else{
+			for (int j = 0; j < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); j++)
+			{
+				if (tempComboBox.getIndexOf(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getName()) == -1)
+				{
+					tempComboBox.addElement(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getName());
+				}
+			}
 		}
 	}
 	public void addShowMoneyButton()
