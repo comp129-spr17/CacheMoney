@@ -677,7 +677,6 @@ public class DicePanel extends JPanel{
 				overrideDiceRoll.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
 				toggleDoubles.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
 			}
-			
 		}
 
 	}
@@ -701,10 +700,9 @@ public class DicePanel extends JPanel{
 	private void threeDoublesPunishment() {
 		numOfDoublesInRow = 0;
 		isSame = false;
-		Space[] boardTracker = board.getBoardTracker();
 		Player curPlayer = players[current];
-		JailSpace jail = (JailSpace) boardTracker[Board.JAIL];
-		boardTracker[curPlayer.getPositionNumber()].removePiece(current);
+		JailSpace jail = (JailSpace) board.getSpaceAt(Board.JAIL);
+		board.getSpaceAt(curPlayer.getPositionNumber()).removePiece(current);
 		curPlayer.setPositionNumber(Board.JAIL);
 		jail.sendToJail(curPlayer.getPiece(), current);
 	}
