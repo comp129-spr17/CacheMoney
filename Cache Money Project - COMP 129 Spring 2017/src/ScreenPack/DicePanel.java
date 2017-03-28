@@ -18,6 +18,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -66,6 +67,7 @@ public class DicePanel extends JPanel{
 	private boolean setDebugVisible;
 	private PlayingInfo pInfo;
 	private Icon spinningDiceIcon;
+	private JComboBox properties;
 	private Icon stationaryDiceIcon;
 	
 	public DicePanel(Player[] player, MoneyLabels MLabels){
@@ -138,7 +140,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), players, this, bPanel);
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), players, this, bPanel, properties);
 		bPanel.add(propertyPanel);
 		mGamePanel = new MiniGamePanel(this, bPanel,propertyPanel);
 		jailInfoScreen = new JailInfoPanel(this, players, this, bPanel);

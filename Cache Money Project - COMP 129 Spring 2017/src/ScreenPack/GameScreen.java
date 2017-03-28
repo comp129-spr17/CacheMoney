@@ -270,7 +270,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				players[0].setJailFreeCard(1);
+				players[0].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
 				mLabels.reinitializeMoneyLabels();
 				playerInfo.repaint();
 			}
@@ -362,6 +362,7 @@ public class GameScreen extends JFrame{
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
 		addMortgageButton();
+		setupMortgage();
 		addButtonListeners();
 		mainPanel.add(showInfo);
 		mainPanel.add(showMortgage);
@@ -499,6 +500,14 @@ public class GameScreen extends JFrame{
         mortgageWindow.setLayout(null);
         mortgageWindow.setSize(400,200);
         mortgageWindow.setTitle("Mortgage Property!");
+	}
+	
+	public void setupMortgage()
+	{
+		for (int g = 0; g < players[0].getOwnedProperties().size(); g++)	//NEED TO GET PLAYER VALUE
+		{
+			selectMortgage.addItem(players[0].getOwnedProperties().get(g).getName());	//NEED TO GET PLAYER VALUE
+		}
 	}
 	public void addShowMoneyButton()
 	{

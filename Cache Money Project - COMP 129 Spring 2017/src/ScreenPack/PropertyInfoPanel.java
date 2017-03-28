@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -50,8 +51,9 @@ public class PropertyInfoPanel extends JPanel{
 	private Player currentPlayer;
 	private MortgagePanel mPanel;
 	private PlayingInfo pInfo;
+	private JComboBox propertyList;
 
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b)
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b, JComboBox properties)
 	{
 		infoPanel = new JPanel();
 		players = player;
@@ -278,6 +280,7 @@ public class PropertyInfoPanel extends JPanel{
 
 					if(currentPlayer.getTotalMonies() >= property.getBuyingPrice()) {
 						purchaseProp(property.getName(), property.getBuyingPrice(), currentPlayer.getPlayerNum());
+						
 
 					}
 

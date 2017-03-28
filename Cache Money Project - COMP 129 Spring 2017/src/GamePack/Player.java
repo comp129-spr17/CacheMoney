@@ -61,6 +61,10 @@ public final class Player {
 		return null;
 	}
 //-------------------------------------Gets	
+	public List<Property> getProperties()
+	{
+		return ownedProperties;
+	}
 	public int getTotalMonies() {
 		return totalmonies;
 	}
@@ -204,6 +208,7 @@ public final class Player {
 		pay(p.getBuyingPrice());
 		//Subtract the cost of the property using the pay function right below.
 	}
+	
 	public void earnMonies(int cost)
 	{
 		int modMoney = 0; //Yes, this stupid thing is back again :^)
