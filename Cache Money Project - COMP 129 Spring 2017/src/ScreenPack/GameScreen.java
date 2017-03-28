@@ -79,6 +79,7 @@ public class GameScreen extends JFrame{
 	private JComboBox selectMortgage;
 	private JButton sellConfirm;
 	private JButton sellCancel;
+	private JLabel pleaseSelectMortgage;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -336,6 +337,22 @@ public class GameScreen extends JFrame{
 		mainPanel.add(btnExit);
 		addExitListener(isHost);
 		initUserInfoWindow();
+		selectMortgage = new JComboBox();
+		sellConfirm = new JButton("Mortgage");
+		sellCancel = new JButton("Cancel");
+		pleaseSelectMortgage =  new JLabel("Please select a property to mortgage:");
+		pleaseSelectMortgage.setBounds(75,20,250,20);	//SUBJECT TO CHANGE/////////////////////////////////////	
+		pleaseSelectMortgage.setFont(new Font("Serif",Font.BOLD,16));
+		selectMortgage.setBounds(90, 50, 200, 20);  //SUBJECT TO CHANGE/////////////////////////////////////
+		sellConfirm.setBounds(30,100,120,30); 	//SUBJECT TO CHANGE/////////////////////////////////////
+		sellCancel.setBounds(230, 100, 120, 30); //SUBJECT TO CHANGE/////////////////////////////////////
+		sellConfirm.setFont(new Font("Serif",Font.BOLD,16));
+		sellCancel.setFont(new Font("Serif",Font.BOLD,16));
+		mortgageWindow.add(sellConfirm);
+		mortgageWindow.add(pleaseSelectMortgage);
+		mortgageWindow.add(selectMortgage);
+		mortgageWindow.add(sellCancel);
+		//mortgageWindow
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
 		loadingProgress = 10;
@@ -480,7 +497,7 @@ public class GameScreen extends JFrame{
         
         mortgageWindow = new JDialog();
         mortgageWindow.setLayout(null);
-        mortgageWindow.setSize(400,300);
+        mortgageWindow.setSize(400,200);
         mortgageWindow.setTitle("Mortgage Property!");
 	}
 	public void addShowMoneyButton()
