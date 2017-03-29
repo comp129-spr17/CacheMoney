@@ -122,7 +122,7 @@ public class PropertyInfoPanel extends JPanel{
 		renderPropertyInfo(currentPlayer, isCurrent);
 		hidePreviousPanel();
 		if(pInfo.isSingle() || isCurrent)
-			enableButtons();
+			setButtonsEnabled(true);
 		
 	}
 	public void actionToAuction(int bid, int playerNum){
@@ -172,11 +172,9 @@ public class PropertyInfoPanel extends JPanel{
 		buyHousePrice.setHorizontalAlignment(JLabel.CENTER);
 		infoPanel.add(mortgagePrice);
 		
-		if (property.getBuildHouseCost() > 0){
+		if (property.getBuildHouseCost() > 0){ // checks if it's a standard property you can build a house on
 			infoPanel.add(buyHousePrice);
 		}
-		
-		
 		
 		add(infoPanel);
 	}
@@ -196,8 +194,6 @@ public class PropertyInfoPanel extends JPanel{
 				}
 			}
 		}
-//		System.out.println("propertyFamilyMembers: " + propertyFamilyMembers);
-//		System.out.println("canPlaceMoreHouses: " + canPlaceMoreHouses);
 		return (((property.getPropertyFamilyIdentifier() == 1 || property.getPropertyFamilyIdentifier() == 8) && propertyFamilyMembers == 2) || propertyFamilyMembers == 3) && canPlaceMoreHouses && property.getMultiplier() < 5 && currentPlayer.getTotalMonies() >= property.getBuildHouseCost();
 	}
 
@@ -280,8 +276,6 @@ public class PropertyInfoPanel extends JPanel{
 
 					if(currentPlayer.getTotalMonies() >= property.getBuyingPrice()) {
 						purchaseProp(property.getName(), property.getBuyingPrice(), currentPlayer.getPlayerNum());
-						
-
 					}
 
 					dismissPropertyPanel();
@@ -367,18 +361,17 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (pInfo.isSingle()){
-					actionForBuildHouse();
+				if (buyHouseButton.isEnabled()){
+					if (pInfo.isSingle()){
+						actionForBuildHouse();
+					}
+					else{
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.BUILD_HOUSE));
+					}
 				}
-				else{
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.BUILD_HOUSE));
-				}
-				 
 			}
 			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
+			public void mousePressed(MouseEvent e) {}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 
@@ -393,8 +386,10 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonCancel.playSound();
-				dismissPropertyPanel();
+				if (returnButton.isEnabled()){
+					Sounds.buttonCancel.playSound();
+					dismissPropertyPanel();
+				}
 			}
 
 			@Override
@@ -414,6 +409,7 @@ public class PropertyInfoPanel extends JPanel{
 	
 	public void actionForBuildHouse() {
 		Sounds.money.playSound();
+		Sounds.buildingHouse.playSound();
 		currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - property.getBuildHouseCost());
 		rentValues.get(property.getMultiplier()).setText("Rent Value: " + property.getRentRange().get(property.getMultiplier()));
 		property.incNumHouse();
@@ -455,21 +451,13 @@ public class PropertyInfoPanel extends JPanel{
 		payButton.setBackground(Color.RED);
 		add(payButton);
 	}
-
-	public void disableButtons(){
-		if(hideButton!=null){
-			hideButton.setEnabled(false);
-			buyButton.setEnabled(false);
-			auctionButton.setEnabled(false);
-			payButton.setEnabled(false);
-		}
-
-	}
-	public void enableButtons(){
-		hideButton.setEnabled(true);
-		buyButton.setEnabled(true);
-		auctionButton.setEnabled(true);
-		payButton.setEnabled(true);
+	public void setButtonsEnabled(boolean visible){
+		hideButton.setEnabled(visible);
+		buyButton.setEnabled(visible);
+		auctionButton.setEnabled(visible);
+		payButton.setEnabled(visible);
+		buyHouseButton.setEnabled(visible);
+		returnButton.setEnabled(visible);
 	}
 
 	private void dismissPropertyPanel() {
@@ -488,23 +476,25 @@ public class PropertyInfoPanel extends JPanel{
 
 	}
 	private void purchaseProp(String propertyName, int buyingPrice, int playerNum){
-		disableButtons();
+		
+		setButtonsEnabled(false);
 		if(pInfo.isSingle())
 			purchaseProperty(propertyName,buyingPrice,playerNum);
 		else
 			pInfo.sendMessageToServer(mPack.packPropertyPurchase(UnicodeForServer.PROPERTY_PURCHASE, propertyName,buyingPrice,playerNum));
-
 	}
 
+	
+
 	private void payForR(int amount, int owner){
-		disableButtons();
+		setButtonsEnabled(false);
 		if(pInfo.isSingle())
 			payForRent(amount,owner);
 		else
 			pInfo.sendMessageToServer(mPack.packPayRent(UnicodeForServer.PROPERTY_RENT_PAY, amount,owner));
 	}
 	public void purchaseProperty(String propertyName, int buyingPrice, int playerNum){
-
+		
 		Sounds.money.playSound();
 		currentPlayer.purchaseProperty(property);
 		property.setOwner(playerNum);

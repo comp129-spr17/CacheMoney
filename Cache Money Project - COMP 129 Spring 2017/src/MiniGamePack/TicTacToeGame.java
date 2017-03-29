@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import InterfacePack.Sounds;
+import MultiplayerPack.UnicodeForServer;
 
 public class TicTacToeGame extends MiniGame{
 	private final int UNINITIALIZED = 0;
@@ -65,7 +66,7 @@ public class TicTacToeGame extends MiniGame{
 						actionsAfterMarkingASpace();
 					}
 					else{
-						pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, gameGrid, 1));
+						pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, gameGrid, 1));
 					}
 				}
 			}
@@ -146,7 +147,7 @@ public class TicTacToeGame extends MiniGame{
 		}
 		else if (isOwner){
 			initGameGrid();
-			pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, gameGrid, 0));
+			pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, gameGrid, 0));
 		}
 	}
 	

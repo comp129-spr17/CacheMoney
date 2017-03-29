@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
 	private final boolean SERVER_DEBUG = true;
+	private final int DEBUG_MOVEMENT_VALUE = 5;
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -425,7 +426,7 @@ public class DicePanel extends JPanel{
 		changeTurn();
 		dices[0].hideDice();
 		dices[1].hideDice();
-		propertyPanel.enableButtons();
+		propertyPanel.setButtonsEnabled(true);
 		actionForPlayers();
 
 	}
@@ -441,7 +442,7 @@ public class DicePanel extends JPanel{
 			endTurnButton.setVisible(false);
 			revalidate();
 			repaint();
-			propertyPanel.disableButtons();
+			propertyPanel.setButtonsEnabled(false);
 		}
 		else{
 			if(!players[current].isInJail()) {
@@ -591,7 +592,7 @@ public class DicePanel extends JPanel{
 			numOfDoublesInRow = 0;
 		}
 		if (SERVER_DEBUG){
-			sum = 1;
+			sum = DEBUG_MOVEMENT_VALUE;
 		}
 		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
 			sum = Integer.parseInt(overrideDiceRoll.getText());
