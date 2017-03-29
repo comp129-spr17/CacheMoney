@@ -1,18 +1,14 @@
 package ScreenPack;
 
 import java.awt.Color;
-import java.awt.List;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -28,7 +24,6 @@ import MultiplayerPack.UnicodeForServer;
 @SuppressWarnings("serial")
 public class PropertyInfoPanel extends JPanel{
 	private JPanel panelToSwitchFrom;
-	//private PropertySpace info;
 	private ArrayList<JLabel> rentValues;
 	private JLabel name;
 	private JLabel buyingPrice;
@@ -51,20 +46,19 @@ public class PropertyInfoPanel extends JPanel{
 	private Player currentPlayer;
 	private MortgagePanel mPanel;
 	private PlayingInfo pInfo;
-	private JComboBox propertyList;
 
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b, JComboBox properties)
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b)
 	{
-		infoPanel = new JPanel();
-		players = player;
-		PlayingInfo.getInstance();
+		infoPanel = new JPanel();	
+		pInfo = PlayingInfo.getInstance();
+		mPack = MBytePack.getInstance();
+
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.propertyInfo = propertyInfo;
-		mPack = MBytePack.getInstance();
-		UnicodeForServer.getInstance();
-		dicePanel = diceP;
 		this.bPanel = b;
-		pInfo = PlayingInfo.getInstance();
+		this.dicePanel = diceP;
+		this.players = player;
+		
 		init();
 	}
 
@@ -74,17 +68,25 @@ public class PropertyInfoPanel extends JPanel{
 		this.setSize(panelToSwitchFrom.getSize());
 		this.setLocation(panelToSwitchFrom.getLocation());
 		this.setVisible(false);	
+		configureInfoPanel();
+		initializeButtons();
+		addListeners();
+	}
+
+	private void configureInfoPanel() {
 		infoPanel.setSize(getWidth()-75, getHeight()/4*3-30);
 		infoPanel.setLocation(getWidth()/2-infoPanel.getWidth()/2, 0);
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 		infoPanel.setBackground(Color.WHITE);
+	}
+
+	private void initializeButtons() {
 		hideButton = new JButton("Back");
 		buyButton = new JButton();
 		auctionButton = new JButton();
 		payButton = new JButton();
 		buyHouseButton = new JButton();
 		returnButton = new JButton();
-		addListeners();
 	}
 	// ADD LOCATIONS/SIZE TO THEM
 	private void loadPropertyInfo(Property info)
@@ -105,9 +107,6 @@ public class PropertyInfoPanel extends JPanel{
 			buyingPrice.setText("<html><b>" + buyingPrice.getText() + "</b></html>");
 		}
 		name = new JLabel(info.getName());
-
-		
-		
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
 	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
@@ -181,7 +180,6 @@ public class PropertyInfoPanel extends JPanel{
 
 	private boolean checkIfUserCanBuyHouses() {
 		int propertyFamilyMembers = 0;
-		boolean canPlaceMoreHouses = true;
 		int numProperties = currentPlayer.getNumPropertiesOwned();
 		java.util.List<Property> playerOwnedProperties = currentPlayer.getOwnedProperties();
 		Property playerProperty = null;
@@ -190,11 +188,11 @@ public class PropertyInfoPanel extends JPanel{
 			if (playerProperty.getPropertyFamilyIdentifier() == property.getPropertyFamilyIdentifier()){
 				propertyFamilyMembers += 1;
 				if (playerProperty.getMultiplier() < property.getMultiplier()){
-					canPlaceMoreHouses = false;
+					return false;
 				}
 			}
 		}
-		return (((property.getPropertyFamilyIdentifier() == 1 || property.getPropertyFamilyIdentifier() == 8) && propertyFamilyMembers == 2) || propertyFamilyMembers == 3) && canPlaceMoreHouses && property.getMultiplier() < 5 && currentPlayer.getTotalMonies() >= property.getBuildHouseCost();
+		return (((property.getPropertyFamilyIdentifier() == 1 || property.getPropertyFamilyIdentifier() == 8) && propertyFamilyMembers == 2) || propertyFamilyMembers == 3) && property.getMultiplier() < 5 && currentPlayer.getTotalMonies() >= property.getBuildHouseCost();
 	}
 
 	private void addBuyHousesButton(){

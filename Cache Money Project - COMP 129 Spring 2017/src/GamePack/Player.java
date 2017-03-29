@@ -212,7 +212,7 @@ public final class Player {
 	
 	private void railroadPurchaseCase(Property p) {
 		int numRailroadsOwned = 0;
-		int[] indexOfRailroads = {-1, -1, -1};
+		int[] indexOfRailroads = {-1, -1, -1, -1};
 		for (int i = 0; i < getOwnedProperties().size(); ++i){
 			if (getOwnedProperties().get(i).getPropertyFamilyIdentifier() == 9){
 				indexOfRailroads[numRailroadsOwned] = i;

@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,15 +17,14 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true;
-	private final int DEBUG_MOVEMENT_VALUE = 5;
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final int DEBUG_MOVEMENT_VALUE = 5; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -68,7 +66,6 @@ public class DicePanel extends JPanel{
 	private boolean setDebugVisible;
 	private PlayingInfo pInfo;
 	private Icon spinningDiceIcon;
-	private JComboBox properties;
 	private Icon stationaryDiceIcon;
 	
 	public DicePanel(Player[] player, MoneyLabels MLabels){
@@ -141,7 +138,7 @@ public class DicePanel extends JPanel{
 	}
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), players, this, bPanel, properties);
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), players, this, bPanel);
 		bPanel.add(propertyPanel);
 		mGamePanel = new MiniGamePanel(this, bPanel,propertyPanel);
 		jailInfoScreen = new JailInfoPanel(this, players, this, bPanel);
@@ -200,7 +197,6 @@ public class DicePanel extends JPanel{
 		add(rollButton);
 		spinningDiceIcon = imageRelated.getGIFImage(this, "DiceImages/" +"spinningDice.gif");
 		stationaryDiceIcon = img;
-		
 	}
 	private void addOverrideDiceRoll() {
 		this.overrideDiceRoll = new JTextField();
@@ -317,7 +313,7 @@ public class DicePanel extends JPanel{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (e.getButton() == 1){
+				if (e.getButton() == 1 && !isPressed){
 					Sounds.shakeDice.playSound();
 					numberOfExits = 0;
 					turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Click and hold the dice, then shake!<br /></html>");
@@ -332,7 +328,6 @@ public class DicePanel extends JPanel{
 				if (isPressed){
 					numberOfExits += 1;
 					if (numberOfExits == 1){
-						
 						turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Release to roll!<br /></html>");
 						rollButton.setIcon(spinningDiceIcon);
 						rollButton.setPressedIcon(spinningDiceIcon);
@@ -377,7 +372,7 @@ public class DicePanel extends JPanel{
 			}
 			private void endTurnButtonPressed() {
 				endTurnButton.setVisible(false);
-				consolidateOwners();
+				//consolidateOwners();
 				if(pInfo.isSingle())
 					actionForDiceEnd();
 				else
@@ -771,16 +766,16 @@ public class DicePanel extends JPanel{
 		return result[0]+result[1];
 	}
 
-	private void consolidateOwners(){
-		HashMap<String, PropertySpace> mappings = bPanel.getMappings();
-		Property WW = mappings.get("Water Works").getPropertyInfo();
-		Property EC = mappings.get("Electric Company").getPropertyInfo();
-		if(WW.getOwner() == EC.getOwner() && WW.getMultiplier() == 0 && EC.getMultiplier() == 0)
-		{
-			WW.incrementMultiplier();
-			EC.incrementMultiplier();
-		}
-	}
+//	private void consolidateOwners(){
+//		HashMap<String, PropertySpace> mappings = bPanel.getMappings();
+//		Property WW = mappings.get("Water Works").getPropertyInfo();
+//		Property EC = mappings.get("Electric Company").getPropertyInfo();
+//		if(WW.getOwner() == EC.getOwner() && WW.getMultiplier() == 0 && EC.getMultiplier() == 0)
+//		{
+//			WW.incrementMultiplier();
+//			EC.incrementMultiplier();
+//		}
+//	}
 	
 	private void delayThread(int milliseconds){
 		try {
