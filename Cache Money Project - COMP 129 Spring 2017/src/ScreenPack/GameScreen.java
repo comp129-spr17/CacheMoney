@@ -272,9 +272,17 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				players[0].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
-				mLabels.reinitializeMoneyLabels();
-				playerInfo.repaint();
+				if (pInfo.isSingle() == true)
+				{
+					players[pInfo.getMyPlayerNum()].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
+					mLabels.reinitializeMoneyLabels();
+					playerInfo.repaint();
+				}
+				else{
+					players[0].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
+					mLabels.reinitializeMoneyLabels();
+					playerInfo.repaint();
+				}
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -327,6 +335,28 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (selectMortgage.getSelectedItem() != "")
+				{
+					for (int h = 0; h < players[0].getOwnedProperties().size(); h++) {
+						if (pInfo.isSingle() == true)
+						{
+							if(players[0].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+							{
+								players[0].earnMonies(players[0].getOwnedProperties().get(h).getMortgageValue());
+								players[0].getOwnedProperties().remove(h);
+								selectMortgage.remove(selectMortgage.getSelectedIndex());
+							}
+						}
+						else{
+							if(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+							{
+								players[pInfo.getMyPlayerNum()].earnMonies(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getMortgageValue());
+								players[pInfo.getMyPlayerNum()].getOwnedProperties().remove(h);
+								selectMortgage.remove(selectMortgage.getSelectedIndex());
+							}
+						}
+					}
+				}
 				updateMortgage();
 				mortgageWindow.setVisible(false);
 			}
