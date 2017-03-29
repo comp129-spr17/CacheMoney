@@ -85,6 +85,10 @@ public abstract class Property {
 		rentMultiplier++;
 	}
 	
+	public void setMultiplier(int rm){
+		rentMultiplier = rm;
+	}
+	
 	public String getName(){
 		return name;
 	}

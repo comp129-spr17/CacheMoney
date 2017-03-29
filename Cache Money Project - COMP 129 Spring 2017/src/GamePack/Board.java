@@ -71,6 +71,9 @@ public class Board {
 	private void setBoardTrack(Space[] board){
 		boardTracker = board;
 	}
+	public Space getSpaceAt(int curPlayerPos){
+		return boardTracker[curPlayerPos];
+	}
 	public boolean isDoneAnimating(){
 		return isDone;
 	}

@@ -249,7 +249,7 @@ public class BoardPanel extends JPanel{
 						else if (j == 5){
 							reader = railroad.readLine().split("-");
 							temp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
-							temp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
+							//cctemp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
 							spaces[i*10+j] = temp;
 						}else if (j == 3){
 							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel);

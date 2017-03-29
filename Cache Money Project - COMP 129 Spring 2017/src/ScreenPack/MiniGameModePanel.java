@@ -2,6 +2,7 @@ package ScreenPack;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -19,6 +20,7 @@ public class MiniGameModePanel extends JPanel{
 	private BackButton backButton;
 	private int miniGameToPlay;
 	private int keyListenerIterator;
+	private Random rand;
 	
 	public MiniGameModePanel(){
 		init();
@@ -29,7 +31,8 @@ public class MiniGameModePanel extends JPanel{
 		miniGamePanel = new MiniGamePanel(this);
 		ownerPlaceholder = Player.getInstance(0);
 		guestPlaceholder = Player.getInstance(1);
-		gameButton = new JButton[MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE];
+		gameButton = new JButton[MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE + 1];
+		rand = new Random();
 		this.setLocation(0, 0);
 		this.setLayout(null);
 		this.setVisible(true);
@@ -61,6 +64,7 @@ public class MiniGameModePanel extends JPanel{
 		gameButton[5] = new JButton("Math Game");
 		gameButton[6] = new JButton("Memorization Game");
 		gameButton[7] = new JButton("Tic-Tac-Toe Game");
+		gameButton[8] = new JButton("Random");
 		
 		addButtonListeners();
 		setButtonBounds();
@@ -92,23 +96,42 @@ public class MiniGameModePanel extends JPanel{
 				
 			});
 		}
+		gameButton[keyListenerIterator].addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				miniGameToPlay = rand.nextInt(MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE);
+				playMinigame();
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+		});
 	}
 	
 	private void setButtonBounds(){
-		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE; i++){
+		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE + 1; i++){
 			gameButton[i].setBounds(MiniGamePractice.WIDTH / 6, 10 + (i + 1)*30, 200, 25);
 		}
 	}
 	
 	private void setButtonVisibility(boolean visible){
-		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE; i++){
+		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE + 1; i++){
 			gameButton[i].setVisible(visible);
 		}
 		
 	}
 	
 	private void addGameButtonsToPanel(){
-		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE; i++){
+		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE + 1; i++){
 			add(gameButton[i]);
 		}
 	}

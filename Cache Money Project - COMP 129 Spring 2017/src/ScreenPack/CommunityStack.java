@@ -111,7 +111,7 @@ public class CommunityStack extends JPanel{
 		
 		this.setVisible(true);
 		//Sounds.quickDisplay.playSound();
-		
+		Sounds.landedOnChanceOrCommunityChest.playSound();
 		try {
 		    Thread.sleep(4000);
 		} catch(InterruptedException ex) {

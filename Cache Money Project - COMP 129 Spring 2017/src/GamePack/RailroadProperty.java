@@ -29,5 +29,7 @@ public class RailroadProperty extends Property{
 //			rentValues.add(SqlRelated.getRailRoadRentOwned(i));
 		
 	}
+	
+	
 
 }

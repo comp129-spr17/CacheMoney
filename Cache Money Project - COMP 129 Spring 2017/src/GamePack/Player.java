@@ -200,10 +200,32 @@ public final class Player {
 	}
 	public void purchaseProperty(Property p)
 	{
+		
 		ownedProperties.add(p);
 		pay(p.getBuyingPrice());
+		
+		if (p.getPropertyFamilyIdentifier() == 9){ // if the property belongs to the railroad family
+			railroadPurchaseCase(p);
+		}
 		//Subtract the cost of the property using the pay function right below.
 	}
+	
+	private void railroadPurchaseCase(Property p) {
+		int numRailroadsOwned = 0;
+		int[] indexOfRailroads = {-1, -1, -1};
+		for (int i = 0; i < getOwnedProperties().size(); ++i){
+			if (getOwnedProperties().get(i).getPropertyFamilyIdentifier() == 9){
+				indexOfRailroads[numRailroadsOwned] = i;
+				numRailroadsOwned += 1;
+			}
+		}
+		for (int i : indexOfRailroads){
+			if (i >= 0)
+				getOwnedProperties().get(i).setMultiplier(numRailroadsOwned - 1);
+		}
+	}
+	
+	
 	public void earnMonies(int cost)
 	{
 		int modMoney = 0; //Yes, this stupid thing is back again :^)

@@ -108,6 +108,7 @@ public class ChanceStack extends JPanel{
 		boardPanel.add(this);
 		
 		this.setVisible(true);
+		Sounds.landedOnChanceOrCommunityChest.playSound();
 		//Sounds.quickDisplay.playSound();
 		
 		try {
