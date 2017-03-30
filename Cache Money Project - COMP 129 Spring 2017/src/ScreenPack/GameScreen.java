@@ -486,7 +486,7 @@ public class GameScreen extends JFrame{
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
 		tWindow = TestingWindow.getInstance();
-		tWindow.initLabels(testInfo, insets, players, totalPlayers);
+		tWindow.initLabels(testInfo, insets, players, totalPlayers, mLabels);
 		loadingProgress = 10;
 		dicePanel = new DicePanel(players, mLabels);
 		loadingProgress = 20;

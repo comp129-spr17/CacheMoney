@@ -33,6 +33,7 @@ public final class TestingWindow {
 	private JDialog tInfo;
 	private JLabel playerSelect;
 	private JLabel moneySelect;
+	private MoneyLabels mLabels;
 	private final static TestingWindow TESTING_WINDOW = new TestingWindow();
 	
 	
@@ -43,10 +44,11 @@ public final class TestingWindow {
 	public static TestingWindow getInstance(){
 		return TESTING_WINDOW;
 	}
-	public void initLabels(JDialog gameScreen, Insets inset, Player[] players, int playerCount){
+	public void initLabels(JDialog gameScreen, Insets inset, Player[] players, int playerCount, MoneyLabels mLabels){
 		this.players = players;
 		this.playerCount = playerCount;
 		this.tInfo = gameScreen;
+		this.mLabels = mLabels;
 		init();
 	}
 	private void init(){
@@ -85,7 +87,30 @@ public final class TestingWindow {
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				char[] charArray;
+				String secondString;
+				if (selectMoney.getText() != "")
+				{
+					charArray = selectMoney.getText().toCharArray();
+					secondString = selectMoney.getText().substring(1);
+					if (charArray[0] == '-')
+					{
+						if (secondString.matches("[0-9]+") && secondString.length() > 0)
+						{
+							players[selectPlayer.getSelectedIndex()].pay(Integer.parseInt(secondString));
+							mLabels.reinitializeMoneyLabels();
+						}
+					}
+					else
+					{
+						if (selectMoney.getText().matches("[0-9]+") && selectMoney.getText().length() > 0)
+						{
+							System.out.print(selectPlayer.getSelectedIndex());
+							players[selectPlayer.getSelectedIndex()].earnMonies(Integer.parseInt(selectMoney.getText()));
+							mLabels.reinitializeMoneyLabels();
+						}
+					}
+				}
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
