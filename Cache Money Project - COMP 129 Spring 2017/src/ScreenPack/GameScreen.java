@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
@@ -141,7 +142,7 @@ public class GameScreen extends JFrame{
 		
 		createPlayers();
 		init(isHost);
-		setGameScreenBackgroundColor();
+		//setGameScreenBackgroundColor();
 	}
 	
 
@@ -427,30 +428,19 @@ public class GameScreen extends JFrame{
 			}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 			
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 			
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseClicked(MouseEvent e) {}
 		});
 	}
+	
 	
 	private void init(boolean isHost){
 		// 10
@@ -460,6 +450,10 @@ public class GameScreen extends JFrame{
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
 		mainPanel.add(pDisplay);
+		
+		
+		
+		
 		pDisplay.setVisible(false);
 		btnExit = new JButton("X");
 		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
@@ -513,6 +507,17 @@ public class GameScreen extends JFrame{
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
 		
+		BackgroundPanel background = new BackgroundPanel("gamescreenBackgroundImage.png");
+		background.setLayout(null);
+		background.add(boardPanel, BorderLayout.CENTER);
+		this.add(background);
+		
+		
+		
+		
+		
+		this.repaint();
+		this.revalidate();
 		
 	}
 	private void addMuteMusic() {

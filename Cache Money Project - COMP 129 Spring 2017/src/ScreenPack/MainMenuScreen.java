@@ -29,7 +29,6 @@ import sun.util.resources.cldr.mr.TimeZoneNames_mr;
 public class MainMenuScreen {
 	private Font mainfont;
 	private JPanel mainPanel;
-	private BgPanel backgroundPanel;
 	private JFrame mainmenuframe;
 	private JButton SinglePButton;
 	private JButton MultiPButton;
@@ -43,6 +42,7 @@ public class MainMenuScreen {
 	private GameScreen gameScreen;
 	private PathRelated pathRelated;
 	private JLabel backgroundpic;
+	private BackgroundPanel background;
 	
 	
 	public MainMenuScreen(){
@@ -71,9 +71,9 @@ public class MainMenuScreen {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 		mainPanel.setOpaque(false);
-		backgroundPanel = new BgPanel();
-		backgroundPanel.setLayout(new BorderLayout());
-		backgroundPanel.add(mainPanel,BorderLayout.CENTER);
+		background = new BackgroundPanel("background.jpg");
+		background.setLayout(new BorderLayout());
+		background.add(mainPanel, BorderLayout.CENTER);
 		
 		scaleBoardToScreenSize();
 		mainfont = new Font("Serif", Font.PLAIN, 18);
@@ -261,10 +261,11 @@ public class MainMenuScreen {
 //		System.out.println(mainmenuframe.getWidth() + " : " + mainmenuframe.getHeight());
 //		backgroundpic.setBounds(0, 0, mainmenuframe.getWidth(), mainmenuframe.getHeight());
 //		mainPanel.add(backgroundpic);
+		mainmenuframe.add(background);
 		mainmenuframe.setResizable(false);
-		mainmenuframe.add(backgroundPanel);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
+		
 		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
 		HelloThere.setBounds(100,50,300,50);
 		mainPanel.add(HelloThere);
@@ -296,17 +297,6 @@ public class MainMenuScreen {
 		mainPanel.revalidate();
 		mainmenuframe.repaint();
 		mainmenuframe.revalidate();
-	}
-	
-	class BgPanel extends JPanel
-	{
-		PathRelated pathRelated= PathRelated.getInstance();
-		Image bgImage = new ImageIcon(pathRelated.getImagePath() + "background.jpg").getImage();
-		@Override
-		public void paintComponent(Graphics g)
-		{
-			g.drawImage(bgImage, 0,0,getWidth(),getHeight(),this);
-		}
 	}
 	
 	private void setMenuBackgroundColor() {

@@ -205,7 +205,6 @@ public class DicePanel extends JPanel{
 			overrideDiceRoll.setEnabled(false);
 			overrideDiceRoll.setEditable(false);
 		}
-
 		add(overrideDiceRoll);
 	}
 
@@ -237,7 +236,6 @@ public class DicePanel extends JPanel{
 		endTurnButton.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()/2, 100, 50);
 		endTurnButton.setBackground(Color.RED);
 		add(endTurnButton);
-
 		endTurnButton.setVisible(false);
 	}
 
@@ -254,13 +252,11 @@ public class DicePanel extends JPanel{
 	}
 	private void addListeners(){		
 		startGameButton.addMouseListener(new MouseListener(){
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 3){
 					setDebugVisible = false;
 				}
-				
 				if (startGameButton.isEnabled()){
 					if(pInfo.isSingle()){
 						actionForStart();
@@ -268,35 +264,22 @@ public class DicePanel extends JPanel{
 					else
 						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME));
 				}
-
 			}
-
 			@Override
-			public void mousePressed(MouseEvent e) {
-
-			}
-
+			public void mousePressed(MouseEvent e) {}
 			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+			public void mouseEntered(MouseEvent e) {}
 			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
+			public void mouseExited(MouseEvent e) {}
 		});
 		rollButton.addMouseListener(new MouseListener() {
 			int numberOfExits = 0;
 			boolean isPressed = false;
 			@Override
 			public void mouseReleased(MouseEvent e) {	
+				System.out.println("released");
 				if (e.getButton() == 1){
 					if (!mGamePanel.isPlayingMinigame() && numberOfExits > 0){
 						Sounds.shakeDice.stopSound();
@@ -309,8 +292,6 @@ public class DicePanel extends JPanel{
 					isPressed = false;
 				}
 			}
-
-			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (e.getButton() == 1 && !isPressed){
@@ -321,7 +302,6 @@ public class DicePanel extends JPanel{
 				}
 				
 			}
-
 			@Override
 			public void mouseExited(MouseEvent e) {
 				
@@ -372,7 +352,6 @@ public class DicePanel extends JPanel{
 			}
 			private void endTurnButtonPressed() {
 				endTurnButton.setVisible(false);
-				//consolidateOwners();
 				if(pInfo.isSingle())
 					actionForDiceEnd();
 				else
@@ -381,16 +360,12 @@ public class DicePanel extends JPanel{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {}
-
 			@Override
 			public void mouseReleased(MouseEvent e) {}
-
 			@Override
 			public void mouseEntered(MouseEvent e) {}
-
 			@Override
 			public void mouseExited(MouseEvent e) {}
-
 		});
 	}
 	public void actionForStart(){

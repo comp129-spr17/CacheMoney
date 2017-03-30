@@ -1,6 +1,8 @@
 package ScreenPack;
 
 import MultiplayerPack.*;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -73,6 +75,7 @@ public class BoardPanel extends JPanel{
 	private Player[] players; 
 	private Wildcard chance;
 	private Wildcard communityChest;
+	
 	public BoardPanel(Player[] player, DicePanel diceP){
 		dicePanel = diceP;
 		players = player;
@@ -89,6 +92,8 @@ public class BoardPanel extends JPanel{
 		addDiceBoard();
 
 		//addDiceBoard();
+		
+		
 	}
 
 
