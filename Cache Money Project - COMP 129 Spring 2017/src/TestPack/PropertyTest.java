@@ -1,8 +1,10 @@
-package GamePack;
+package TestPack;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import GamePack.StandardProperty;
 
 public class PropertyTest {
 	StandardProperty property = new StandardProperty(500, "Testing", 100, 9);

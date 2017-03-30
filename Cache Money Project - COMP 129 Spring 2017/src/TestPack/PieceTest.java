@@ -1,8 +1,12 @@
-package GamePack;
+package TestPack;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import GamePack.Piece;
+import GamePack.Player;
+import GamePack.SizeRelated;
 
 public class PieceTest {
 	SizeRelated sizeRelated = SizeRelated.getInstance();
