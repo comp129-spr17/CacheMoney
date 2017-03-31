@@ -100,7 +100,7 @@ public class BoardPanel extends JPanel{
 	}
 	
 	private void addBackground(){
-		add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "background.jpg", this.getWidth(), this.getHeight()));
+		add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "boardPanelBackground.png", this.getWidth(), this.getHeight()));
 	}
 
 	private void setBoardBackgroundColor() {

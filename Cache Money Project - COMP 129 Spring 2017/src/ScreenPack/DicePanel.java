@@ -1,6 +1,7 @@
 package ScreenPack;
 import GamePack.*;
 import MultiplayerPack.*;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
 
 import java.awt.Color;
@@ -105,7 +106,7 @@ public class DicePanel extends JPanel{
 		initDiceTimer();
 		addListeners();
 		addHands();
-		setDiceBackgroundColor();
+		setBackground();
 
 		rollButton.setVisible(false);
 		overrideDiceRoll.setVisible(false);
@@ -145,9 +146,10 @@ public class DicePanel extends JPanel{
 		bPanel.add(jailInfoScreen);
 		this.board = board;
 	}
-	private void setDiceBackgroundColor() {
+	private void setBackground() {
 		Color boardBackgroundColor = new Color(180, 240, 255); // VERY LIGHT BLUE
 		this.setBackground(boardBackgroundColor);
+		//this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 	}
 
 	private void addToggleDoubles(){

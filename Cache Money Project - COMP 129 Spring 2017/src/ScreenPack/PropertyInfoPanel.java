@@ -12,10 +12,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
 import GamePack.UtilityProperty;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
@@ -46,13 +48,13 @@ public class PropertyInfoPanel extends JPanel{
 	private Player currentPlayer;
 	private MortgagePanel mPanel;
 	private PlayingInfo pInfo;
+	private BackgroundImage bi;
 
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		infoPanel = new JPanel();	
 		pInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
-
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.propertyInfo = propertyInfo;
 		this.bPanel = b;
@@ -71,13 +73,14 @@ public class PropertyInfoPanel extends JPanel{
 		configureInfoPanel();
 		initializeButtons();
 		addListeners();
+		bi = new BackgroundImage(PathRelated.getInstance().getImagePath() + "propertyBackground.png", this.getWidth(), this.getHeight());
 	}
 
 	private void configureInfoPanel() {
 		infoPanel.setSize(getWidth()-75, getHeight()/4*3-30);
 		infoPanel.setLocation(getWidth()/2-infoPanel.getWidth()/2, 0);
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-		infoPanel.setBackground(Color.WHITE);
+		infoPanel.setOpaque(false);
 	}
 
 	private void initializeButtons() {
@@ -124,6 +127,15 @@ public class PropertyInfoPanel extends JPanel{
 			setButtonsEnabled(true);
 		
 	}
+	
+	private void addBackground(){
+		this.add(bi);
+	}
+	
+	private void removeBackground(){
+		this.remove(bi);
+	}
+	
 	public void actionToAuction(int bid, int playerNum){
 		AP.actionToAuction(bid, playerNum);
 	}
@@ -142,8 +154,7 @@ public class PropertyInfoPanel extends JPanel{
 	private void renderPropertyInfo(Player currentPlayer, boolean isCurrent)
 	{
 		infoPanel.add(this.name);
-		this.setBackground(Color.white);
-
+		
 		//Set up them buttons
 		if(property.isOwned()){
 			if (property.getOwner() == currentPlayer.getPlayerNum()){
@@ -176,6 +187,7 @@ public class PropertyInfoPanel extends JPanel{
 		}
 		
 		add(infoPanel);
+		addBackground();
 	}
 
 	private boolean checkIfUserCanBuyHouses() {
@@ -459,6 +471,7 @@ public class PropertyInfoPanel extends JPanel{
 	}
 
 	private void dismissPropertyPanel() {
+		removeBackground();
 		if(pInfo.isSingle())
 			endPropertyPanel();
 		else{

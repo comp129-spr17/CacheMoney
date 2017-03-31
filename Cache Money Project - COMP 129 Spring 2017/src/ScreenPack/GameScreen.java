@@ -1,32 +1,21 @@
 package ScreenPack;
 
-import java.awt.Dialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
-import java.awt.TextField;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,12 +24,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JWindow;
-
-import com.sun.glass.events.WindowEvent;
-import com.sun.prism.Image;
-
 import GamePack.*;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
@@ -451,10 +434,6 @@ public class GameScreen extends JFrame{
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
 		mainPanel.add(pDisplay);
-		
-		
-		
-		
 		pDisplay.setVisible(false);
 		btnExit = new JButton("X");
 		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
@@ -505,11 +484,12 @@ public class GameScreen extends JFrame{
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
 		
-		this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
+		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		
 		
-		this.repaint();
-		this.revalidate();
+		this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight()));
+		this.add(mainPanel);
+		
 		
 	}
 	private void addButtonsToFrame() {
@@ -520,6 +500,7 @@ public class GameScreen extends JFrame{
 		add(displayTestWindow);
 		add(muteMusic);
 		add(muteSounds);
+		
 	}
 	private void initMuteMusic() {
 		ImageIcon imgOn, imgOff;
@@ -529,6 +510,8 @@ public class GameScreen extends JFrame{
 		muteMusic = new JCheckBox(imgOff); 	// DEBUG
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
+		muteMusic.setVisible(true);
+		muteMusic.setContentAreaFilled(false);
 		
 		muteMusic.addMouseListener(new MouseListener(){
 
@@ -544,6 +527,7 @@ public class GameScreen extends JFrame{
 						muteMusic.setIcon(imgOn);
 					}
 					muteMusic.setBorder(null);
+					muteMusic.setContentAreaFilled(false);
 				}
 				else if (e.getButton() == 3){ // right click
 					scheduledMusic = (scheduledMusic + 1) % NUMBER_OF_MUSIC;
@@ -584,8 +568,10 @@ public class GameScreen extends JFrame{
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
 		muteSounds = new JCheckBox(imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
+		muteSounds.setVisible(true);
+		muteSounds.setBorder(null);
+		muteSounds.setContentAreaFilled(false);
 		muteSounds.addMouseListener(new MouseListener(){
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 1){
@@ -596,6 +582,8 @@ public class GameScreen extends JFrame{
 					else{
 						muteSounds.setIcon(imgOn);
 					}
+					muteSounds.setContentAreaFilled(false);
+					muteSounds.setBorder(null);
 				}
 				else if (e.getButton() == 3){
 					Sounds.landedOnJail.playSound();
