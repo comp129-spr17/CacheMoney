@@ -18,7 +18,6 @@ public class MBytePackTest {
 
 	@Test
 	public void testPackSimpleRequest() {
-		System.out.println(Arrays.toString(mPack.packSimpleRequest(UnicodeForServer.START_GAME)));
 		assertArrayEquals(new byte[]{0,0,0,4}, mPack.packSimpleRequest(UnicodeForServer.START_GAME));
 	}
 
