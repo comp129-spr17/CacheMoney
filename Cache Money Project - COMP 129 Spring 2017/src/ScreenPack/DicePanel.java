@@ -181,7 +181,7 @@ public class DicePanel extends JPanel{
 		hand[1].setBounds(sizeRelated.getDicePanelWidth()/2, sizeRelated.getDicePanelHeight()/2, 200, 200);
 	}
 	private void addTurnLabel() {
-		turnLabel = new JLabel("<html> Player 1's Turn! <br /> Click and hold the dice, then shake! <br /> </html>");
+		turnLabel = new JLabel("<html> Player 1's Turn! <br /> Click to roll! <br /> </html>");
 		turnLabel.setBounds(sizeRelated.getDicePanelWidth()*0/16, sizeRelated.getDicePanelHeight()*4/5, 400, 50);
 		add(turnLabel);
 	}
@@ -275,54 +275,22 @@ public class DicePanel extends JPanel{
 			public void mouseExited(MouseEvent e) {}
 		});
 		rollButton.addMouseListener(new MouseListener() {
-			int numberOfExits = 0;
-			boolean isPressed = false;
 			@Override
-			public void mouseReleased(MouseEvent e) {	
-				System.out.println("released");
-				if (e.getButton() == 1){
-					if (!mGamePanel.isPlayingMinigame() && numberOfExits > 0){
-						Sounds.shakeDice.stopSound();
-						beginDiceRoll();
-					}
-					else{
-						turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Click and hold the dice, then shake! <br /><b>What kind of a roll was that?</b> </html>");
-					}
-					numberOfExits = 0;
-					isPressed = false;
-				}
-			}
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mousePressed(MouseEvent e) {
-				if (e.getButton() == 1 && !isPressed){
-					Sounds.shakeDice.playSound();
-					numberOfExits = 0;
-					turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Click and hold the dice, then shake!<br /></html>");
-					isPressed = true;
-				}
-				
-			}
+			public void mousePressed(MouseEvent e) {}
 			@Override
-			public void mouseExited(MouseEvent e) {
-				
-				if (isPressed){
-					numberOfExits += 1;
-					if (numberOfExits == 1){
-						turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Release to roll!<br /></html>");
-						rollButton.setIcon(spinningDiceIcon);
-						rollButton.setPressedIcon(spinningDiceIcon);
-						rollButton.setBorder(null);
-						rollButton.setBackground(null);
-					}
-				}
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {}
 
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				if (!mGamePanel.isPlayingMinigame()){
+					beginDiceRoll();
+				}
+			}
 			private void beginDiceRoll() {
 				diceRes = getDiceRoll();
 				if (toggleDoubles.isSelected()){ // DEBUG ONLY
@@ -491,7 +459,7 @@ public class DicePanel extends JPanel{
 		propertyPanel.actionForBuildHouse();
 	}
 	private void changeTurn(){
-		turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Click and hold the dice, then shake! <br /> </html>");
+		turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Click to roll! <br /> </html>");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){

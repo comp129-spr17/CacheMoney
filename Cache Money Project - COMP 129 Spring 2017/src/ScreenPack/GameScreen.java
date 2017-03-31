@@ -242,7 +242,7 @@ public class GameScreen extends JFrame{
 			players[i] = Player.getInstance(i);
 		}
 	}
-	private void addButtonListeners()
+	private void initButtonListeners()
 	{
 		showInfo.addMouseListener(new MouseListener()
 		{
@@ -486,18 +486,15 @@ public class GameScreen extends JFrame{
 		loadingProgress = 20;
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
-		addShowMoneyButton();
-		addMortgageButton();
-		addTestingButton();
-		setupMortgage();
-		addButtonListeners();
-		mainPanel.add(showInfo);
-		mainPanel.add(showMortgage);
-		mainPanel.add(boardPanel);
-		mainPanel.add(giveJailFreeCard);
-		mainPanel.add(displayTestWindow);
-		addMuteMusic();
-		addMuteSounds();
+		initShowMoneyButton();
+		initMortgageButton();
+		initTestingButton();
+		initpMortgage();
+		initButtonListeners();
+		initMuteMusic();
+		initMuteSounds();
+		
+		addButtonsToFrame();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
@@ -507,20 +504,26 @@ public class GameScreen extends JFrame{
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
 		
-		BackgroundPanel background = new BackgroundPanel("gamescreenBackgroundImage.png");
+		BackgroundPanel background = new BackgroundPanel("background.jpg");
 		background.setLayout(null);
 		background.add(boardPanel, BorderLayout.CENTER);
 		this.add(background);
-		
-		
-		
 		
 		
 		this.repaint();
 		this.revalidate();
 		
 	}
-	private void addMuteMusic() {
+	private void addButtonsToFrame() {
+		add(showInfo);
+		add(showMortgage);
+		add(boardPanel);
+		add(giveJailFreeCard);
+		add(displayTestWindow);
+		add(muteMusic);
+		add(muteSounds);
+	}
+	private void initMuteMusic() {
 		ImageIcon imgOn, imgOff;
 		imgOn = new ImageIcon("src/Images/music_on.png");
 		imgOff = new ImageIcon("src/Images/music_off.png");
@@ -528,7 +531,7 @@ public class GameScreen extends JFrame{
 		muteMusic = new JCheckBox(imgOff); 	// DEBUG
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
-		mainPanel.add(muteMusic);
+		
 		muteMusic.addMouseListener(new MouseListener(){
 
 			@Override
@@ -576,14 +579,13 @@ public class GameScreen extends JFrame{
 		});
 	}
 	
-	private void addMuteSounds(){
+	private void initMuteSounds(){
 		ImageIcon imgOn, imgOff;
 		imgOn = new ImageIcon("src/Images/sound_on.png");
 		imgOff = new ImageIcon("src/Images/sound_off.png");
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
 		muteSounds = new JCheckBox(imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
-		mainPanel.add(muteSounds);
 		muteSounds.addMouseListener(new MouseListener(){
 
 			@Override
@@ -646,7 +648,7 @@ public class GameScreen extends JFrame{
         testInfo.setTitle("Testing!");
 	}
 	
-	public void setupMortgage()
+	public void initpMortgage()
 	{
 		if (pInfo.isSingle())
 		{
@@ -685,7 +687,7 @@ public class GameScreen extends JFrame{
 			}
 		}
 	}
-	public void addShowMoneyButton()
+	public void initShowMoneyButton()
 	{
 		JLabel buttonLabel1 = new JLabel("SHOW ME");
 		JLabel buttonLabel2 = new JLabel("THE $$$");
@@ -698,14 +700,14 @@ public class GameScreen extends JFrame{
 		giveJailFreeCard = new JButton("GIVE JAIL-FREE CARD");
 		giveJailFreeCard.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 25, 200, 50);
 	}
-	public void addMortgageButton()
+	public void initMortgageButton()
 	{
 		showMortgage = new JButton("Mortgage Property!");
 		showMortgage.setLayout(new BorderLayout());
 		showMortgage.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 + 50, 150, 50);
 		showMortgage.setVisible(true);
 	}
-	public void addTestingButton()
+	public void initTestingButton()
 	{
 		displayTestWindow = new JButton("Testing Window");
 		displayTestWindow.setLayout(new BorderLayout());
