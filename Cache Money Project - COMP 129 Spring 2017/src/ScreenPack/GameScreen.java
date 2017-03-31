@@ -42,6 +42,7 @@ import com.sun.glass.events.WindowEvent;
 import com.sun.prism.Image;
 
 import GamePack.*;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
@@ -504,10 +505,7 @@ public class GameScreen extends JFrame{
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
 		
-		BackgroundPanel background = new BackgroundPanel("background.jpg");
-		background.setLayout(null);
-		background.add(boardPanel, BorderLayout.CENTER);
-		this.add(background);
+		this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 		
 		
 		this.repaint();

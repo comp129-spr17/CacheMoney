@@ -4,7 +4,9 @@ import MultiplayerPack.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -43,6 +45,7 @@ import GamePack.TaxSpace;
 import GamePack.UtilityProperty;
 import GamePack.WildSpace;
 import GamePack.Wildcard;
+import InterfacePack.BackgroundImage;
 
 
 public class BoardPanel extends JPanel{
@@ -84,19 +87,21 @@ public class BoardPanel extends JPanel{
 		COMMUNITY_Y = sizeRelated.getDicePanelY()+sizeRelated.getDicePanelHeight()+10;
 		CHANCE_X = sizeRelated.getDicePanelX()-WILDCARD_SIZE_X+30;
 		CHANCE_Y = sizeRelated.getDicePanelY()-WILDCARD_SIZE_Y-10;
+		
 		setSize();
 		init();
+		
 		importImgs();
 		board = new Board(spaces, players);
-		setBoardBackgroundColor();
+		//setBoardBackgroundColor();
 		addDiceBoard();
-
-		//addDiceBoard();
-		
+		addBackground();
 		
 	}
-
-
+	
+	private void addBackground(){
+		add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "background.jpg", this.getWidth(), this.getHeight()));
+	}
 
 	private void setBoardBackgroundColor() {
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
@@ -112,13 +117,14 @@ public class BoardPanel extends JPanel{
 
 		paths = PathRelated.getInstance();
 		imageRelated = ImageRelated.getInstance();
-		setBackground(new Color(202, 232, 224));
 		setBounds(sizeRelated.getBoardStartX(),sizeRelated.getBoardStartY(),START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT);
 
 		setLayout(null);
 
 		propertyInfo = new HashMap<String,PropertySpace>();
 		rand = new Random();
+		
+		
 	}
 	private void importImgs(){
 		spaceImgs = new ImageIcon[40];

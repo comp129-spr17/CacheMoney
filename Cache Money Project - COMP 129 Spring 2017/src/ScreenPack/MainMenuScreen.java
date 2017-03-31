@@ -22,6 +22,7 @@ import java.util.TimerTask;
 
 import GamePack.ImageRelated;
 import GamePack.SizeRelated;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
 import MultiplayerPack.*;
 import sun.util.resources.cldr.mr.TimeZoneNames_mr;
@@ -42,7 +43,6 @@ public class MainMenuScreen {
 	private GameScreen gameScreen;
 	private PathRelated pathRelated;
 	private JLabel backgroundpic;
-	private BackgroundPanel background;
 	
 	
 	public MainMenuScreen(){
@@ -71,9 +71,6 @@ public class MainMenuScreen {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 		mainPanel.setOpaque(false);
-		background = new BackgroundPanel("background.jpg");
-		background.setLayout(new BorderLayout());
-		background.add(mainPanel, BorderLayout.CENTER);
 		
 		scaleBoardToScreenSize();
 		mainfont = new Font("Serif", Font.PLAIN, 18);
@@ -261,10 +258,12 @@ public class MainMenuScreen {
 //		System.out.println(mainmenuframe.getWidth() + " : " + mainmenuframe.getHeight());
 //		backgroundpic.setBounds(0, 0, mainmenuframe.getWidth(), mainmenuframe.getHeight());
 //		mainPanel.add(backgroundpic);
-		mainmenuframe.add(background);
+		
 		mainmenuframe.setResizable(false);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
+		
+		
 		
 		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
 		HelloThere.setBounds(100,50,300,50);
@@ -281,7 +280,8 @@ public class MainMenuScreen {
 		ExitButton.setFont(mainfont);
 		ExitButton.setBounds(175,375,150,50);
 		mainPanel.add(ExitButton);
-
+		mainmenuframe.add(mainPanel);
+		mainPanel.add(new BackgroundImage(pathRelated.getImagePath() + "background.jpg", mainmenuframe.getWidth(), mainmenuframe.getHeight()));
 //		mainPanel.setComponentZOrder(backgroundpic, 0);
 //		mainPanel.setComponentZOrder(HelloThere, 1);
 //
