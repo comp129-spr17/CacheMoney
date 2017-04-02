@@ -95,13 +95,14 @@ public class BoardPanel extends JPanel{
 		board = new Board(spaces, players);
 		//setBoardBackgroundColor();
 		addDiceBoard();
-		addBackground();
+		setBoardBackgroundColor();
+		//addBackground();
 		
 	}
 	
-	private void addBackground(){
-		add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "boardPanelBackground.png", this.getWidth(), this.getHeight()));
-	}
+//	private void addBackground(){
+//		add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "boardPanelBackground.png", this.getWidth(), this.getHeight()));
+//	}
 
 	private void setBoardBackgroundColor() {
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN

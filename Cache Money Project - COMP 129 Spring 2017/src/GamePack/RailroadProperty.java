@@ -14,19 +14,25 @@ public class RailroadProperty extends Property{
 	@Override
 	protected void init()
 	{
-		rentMultiplier = 0;
-		rentValues.add(25);
-		rentValues.add(2*rentValues.get(0));
-		rentValues.add(4*rentValues.get(0));
-		rentValues.add(8*rentValues.get(0));
+		if (isSQLEnabled){
+			SqlRelated.getNextP(1);
+			this.propertyFamilyIdentifier = SqlRelated.getPFamilyId(1);
+			this.buyingPrice = SqlRelated.getPBuyingPrice(1);
+			this.name = SqlRelated.getPName(1);
+			mortgageValue = SqlRelated.getPMortgage(1);
+			for(int i=0; i<4; i++)
+				rentValues.add(SqlRelated.getRailRoadRentOwned(i));
+		}
+		else{
+			rentMultiplier = 0;
+			rentValues.add(25);
+			rentValues.add(2*rentValues.get(0));
+			rentValues.add(4*rentValues.get(0));
+			rentValues.add(8*rentValues.get(0));
+		}
 		
-//		SqlRelated.getNextP(1);
-//		this.propertyFamilyIdentifier = SqlRelated.getPFamilyId(1);
-//		this.buyingPrice = SqlRelated.getPBuyingPrice(1);
-//		this.name = SqlRelated.getPName(1);
-//		mortgageValue = SqlRelated.getPMortgage(1);
-//		for(int i=0; i<4; i++)
-//			rentValues.add(SqlRelated.getRailRoadRentOwned(i));
+		
+
 		
 	}
 	

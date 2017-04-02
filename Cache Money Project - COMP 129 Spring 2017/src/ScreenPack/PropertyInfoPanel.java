@@ -99,9 +99,11 @@ public class PropertyInfoPanel extends JPanel{
 		buyHousePrice = new JLabel("Build House: " + property.getBuildHouseCost());
 		
 		rentValues = new ArrayList<JLabel>();
+		int houseNum = 0;
 		for(Integer a:info.getRentRange())
 		{
-			rentValues.add(new JLabel("Rent Value: "  + a.toString()));
+			rentValues.add(new JLabel("<html>" + rentValueText(houseNum) + a.toString() + "</html>"));
+			houseNum += 1;
 		}
 		if (property.isOwned()){
 			rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
@@ -112,6 +114,29 @@ public class PropertyInfoPanel extends JPanel{
 		name = new JLabel(info.getName());
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
+	
+	private String rentValueText(int houseNum){
+		if (houseNum == 0){
+			return "Rent Cost: ";
+		}
+		switch (property.getPropertyFamilyIdentifier()){
+		case 9:
+			return "- with " + (houseNum + 1) + " railroads: ";
+		case 10:
+			return "- with 2 utilities: ";
+		default:
+			if (houseNum == 5){
+				return "- with hotel: ";
+			}
+			else if (houseNum == 1){
+				return "- with " + houseNum + " house: ";
+			}
+			else{
+				return "- with " + houseNum + " houses: ";
+			}
+		}
+	}
+	
 	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
 	{
 		this.currentPlayer = currentPlayer;
@@ -172,10 +197,10 @@ public class PropertyInfoPanel extends JPanel{
 			Sounds.landedOnUnownedProperty.playSound();
 		}
 		addHideButton();
-		buyingPrice.setHorizontalAlignment(JLabel.CENTER);
+		//buyingPrice.setHorizontalAlignment(JLabel.LEFT);
 		infoPanel.add(buyingPrice);
 		for(JLabel a:rentValues){
-			a.setHorizontalAlignment(JLabel.CENTER);
+			//a.setHorizontalAlignment(JLabel.LEFT);
 			infoPanel.add(a);
 		}
 		mortgagePrice.setHorizontalAlignment(JLabel.CENTER);
@@ -421,7 +446,7 @@ public class PropertyInfoPanel extends JPanel{
 		Sounds.money.playSound();
 		Sounds.buildingHouse.playSound();
 		currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - property.getBuildHouseCost());
-		rentValues.get(property.getMultiplier()).setText("Rent Value: " + property.getRentRange().get(property.getMultiplier()));
+		rentValues.get(property.getMultiplier()).setText(rentValueText(property.getMultiplier()) + property.getRentRange().get(property.getMultiplier()));
 		property.incNumHouse();
 		rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
 		buyHouseButton.setVisible(checkIfUserCanBuyHouses());

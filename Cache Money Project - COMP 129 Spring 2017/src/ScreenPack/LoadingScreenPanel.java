@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GamePack.ImageRelated;
+import GamePack.Property;
 
 public class LoadingScreenPanel extends JPanel{
 
@@ -41,8 +42,9 @@ public class LoadingScreenPanel extends JPanel{
 		JLabel iconLabel = new JLabel();
 		iconLabel.setIcon(loadingGif);
 		loadingGif.setImageObserver(iconLabel);
+		JLabel loadingText = new JLabel();
+		loadingText.setText(Property.isSQLEnabled ? "<html>&nbsp;&nbsp;&nbsp;&nbsp;Loading the game from SQL <br/>&nbsp;databases. This may take a while...</html>" : "    Loading the game. Please wait...");
 		
-		JLabel loadingText = new JLabel("    Loading the game. Please wait...");
 		loadingText.setVisible(true);
 
 		add(loadingText);

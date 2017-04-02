@@ -96,7 +96,7 @@ public class GameScreen extends JFrame{
 	}
 	public void setNumPlayer(int numPlayer){
 		boardPanel.PlacePiecesToBaord(numPlayer);
-		System.out.print(numPlayer);
+		//System.out.print(numPlayer);
 		totalPlayers = numPlayer;
 	}
 	private void setWindowVisible(){
@@ -117,7 +117,15 @@ public class GameScreen extends JFrame{
 	
 	private void initEverything(boolean isHost, boolean isSingle){
 		loadingProgress = 0;
-//		sqlRelated = SqlRelated.getInstance();
+		if (Property.isSQLEnabled){
+			try{
+				sqlRelated = SqlRelated.getInstance();
+			}
+			catch (Exception e){
+				System.out.println("***********************\nCONNECTION TO SQL FAILED.\nCheck to see if you are connected to the VPN or PacificNet, and then try again.\nDisable SQL in Property.java to load the game from text files.\n***********************");
+				System.exit(1);
+			}
+		}
 		mPack = MBytePack.getInstance();
 		pInfo = PlayingInfo.getInstance();
 		pInfo.setIsSingle(isSingle);
@@ -734,14 +742,10 @@ public class GameScreen extends JFrame{
 			@Override
 			public void run() {
 				try {
-
 					new MHost(dicePanel,players);
-					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 			}
 
 		}, 0);

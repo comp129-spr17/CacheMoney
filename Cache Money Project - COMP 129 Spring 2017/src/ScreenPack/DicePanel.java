@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 5; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
@@ -216,9 +216,9 @@ public class DicePanel extends JPanel{
 		add(startGameButton);
 	}
 	public void setMyPlayer(int p){
-		showPlayer[0].setVisible(true);
-		showPlayer[1].setIcon(imageRelated.getPieceImg(p));
-		showPlayer[1].setVisible(true);
+//		showPlayer[0].setVisible(true);
+//		showPlayer[1].setIcon(imageRelated.getPieceImg(p));
+//		showPlayer[1].setVisible(true);
 	}
 
 	public void setStartGameButtonEnabled(boolean enabled){
@@ -348,9 +348,9 @@ public class DicePanel extends JPanel{
 		}
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		showPlayer[2].setVisible(true);
+//		showPlayer[2].setVisible(true);
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
-		showPlayer[3].setVisible(true);
+//		showPlayer[3].setVisible(true);
 		if(!pInfo.isSingle())
 			actionForPlayers();
 

@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public final class SqlRelated {
-	private static SqlRelated sqlRelated = new SqlRelated();
+	//private static SqlRelated sqlRelated = new SqlRelated();
 	private static final String IP_ADDRESS = "www.cachemoney.com";
 	private static final String PORT_NUM = "3306";
 	private static final String DATABASE = "cachemoneydb";
@@ -17,24 +17,18 @@ public final class SqlRelated {
 	private Statement statement;
 	private Connection connection;
 	private static ArrayList<ResultSet> resultSets;
-	public static SqlRelated getInstance(){
-		return sqlRelated;
+	public static SqlRelated getInstance() throws Exception{
+		return new SqlRelated();
 	}
-	private SqlRelated(){
+	private SqlRelated() throws Exception{
 		statement = null;
 		resultSets = new ArrayList<>();
-		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection("jdbc:mysql://"+IP_ADDRESS
 					+ ":" + PORT_NUM 
 					+ "/" + DATABASE 
 					+ "?useSSL=false", USER_ID , USER_PW);
-			initResultSets();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-//			System.out.println("Connection to SQL failed");
-		}	
+			initResultSets();	
 	}
 	private void initResultSets() throws SQLException{
 		statement = connection.createStatement();
