@@ -7,7 +7,16 @@ import org.junit.Test;
 import MultiplayerPack.SqlRelated;
 
 public class SqlRelatedTest {
-	SqlRelated sqlRelated = SqlRelated.getInstance();
+	SqlRelated sqlRelated;
+	public SqlRelatedTest(){
+		try {
+			sqlRelated = SqlRelated.getInstance();
+		} catch (Exception e) {
+			System.out.println("***********************\nCONNECTION TO SQL FAILED.\nCheck to see if you are connected to the VPN or PacificNet, and then try again.\nDisable SQL in Property.java to load the game from text files.\n***********************");
+			System.exit(1);
+		}
+	}
+	
 	@Test
 	public void testGetPName() {
 		sqlRelated.getNextP(0);

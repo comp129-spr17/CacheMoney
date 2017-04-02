@@ -498,6 +498,8 @@ public class GameScreen extends JFrame{
 		this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight()));
 		this.add(mainPanel);
 		
+		this.repaint();
+		this.revalidate();
 		
 	}
 	private void addButtonsToFrame() {

@@ -34,20 +34,6 @@ public class PropertySpace extends Space {
 	
 	@Override
 	public int landOnSpace(Piece piece, int playerPosition) {
-		int player = piece.getPlayer();
-		
-		
-		//Not sure if we need this section in landOnSpace anymore since PropertyInfoPanel is handling it now
-		if(info.isOwned()){
-			if(info.getOwner() == player){
-				//Check for multiple space and ask to build houses
-			}else{
-				//Make user pay
-			}
-		}else{
-			//Ask to buy
-		}
-		
 		return playerPosition;
 	}
 	
@@ -57,6 +43,7 @@ public class PropertySpace extends Space {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				pDisplay.setVisible(false);
+				repaint();
 			}
 			
 			@Override
@@ -64,6 +51,7 @@ public class PropertySpace extends Space {
 				pDisplay.setProperty(info);
 				pDisplay.setVisible(true);
 				setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
+				repaint();
 			}
 			
 			@Override
