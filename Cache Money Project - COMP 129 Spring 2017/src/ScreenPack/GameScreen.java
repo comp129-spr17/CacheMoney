@@ -489,6 +489,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(displayTestWindow);
 		addMuteMusic();
 		addMuteSounds();
+		initButtonListeners();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
