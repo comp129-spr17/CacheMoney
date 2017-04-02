@@ -168,129 +168,132 @@ public class BoardPanel extends JPanel{
 			spaces[30] = GTJ;
 			spaces[30].setBounds(START_X + COL_SPACE_WIDTH + (NUM_R-1)*ROW_SPACE_WIDTH, START_Y,  COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
 			add(spaces[30]);
-			String[] reader;
-			for(int i=0; i<4;i++){
-				for(int j=0; j<10; j++){
-					temp = null;
-					if(i == 0){
-						if(j==0){
-							spaces[i*10+j] = new GoSpace(spaceImgs[i*10+j]); //GO
-							spaces[i*10+j].setBounds(START_X+ COL_SPACE_WIDTH + (NUM_R-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-							add(spaces[i*10+j]);
-							continue;
-						}else if (j == 2){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
-							spaces[i*10+j] = ws;
-						}else if(j==4){
-							TaxSpace ts = new TaxSpace(spaceImgs[i*10+j], "Income Tax", 200);
-							spaces[i*10+j] = ts;
-						}else if (j == 5){	//Railroad
-							reader = railroad.readLine().split("-");
-							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1]))); 
-							//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty()); 
-							spaces[i*10+j] = temp;
-						}else if(j == 7){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
-							spaces[i*10+j] = ws;
-						}else{
-							reader = standard.readLine().split("-");
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(100, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty());
-							spaces[i*10+j] = temp;
-						}
-						spaces[i*10+j].setBounds(START_X+ COL_SPACE_WIDTH + (NUM_R-j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-					}
-					else if(i==1){
-						if(j==0){
-							spaces[i*10+j] = new JailSpace(spaceImgs[i*10+j]); //Jail
-							GTJ.setJailSpace(spaces[i*10+j]);
-							spaces[i*10+j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-							add(spaces[i*10+j]);
-							continue;
-						}
-						if(j == 2){
-							temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Electric Company", 10));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty());
-							spaces[i*10+j] = temp;
-						}else if (j == 5){
-							reader = railroad.readLine().split("-");
-							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
-							spaces[i*10+j] = temp;
-						}else if (j == 7){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
-							spaces[i*10+j] = ws;
-						}else{
-							reader = standard.readLine().split("-");
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(200, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty());
-							spaces[i*10+j] = temp;
-						}
-						spaces[i*10+j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (NUM_R - j-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
-					}
-					else if(i == 2){
-						if(j==0){
-							spaces[i*10+j] = new Space(spaceImgs[i*10+j],"Free Parking"); //Free Parking
-							spaces[i*10+j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-							add(spaces[i*10+j]);
-							continue;
-						}else if(j == 2){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j],"Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
-							spaces[i*10+j] = ws;
-						}else if(j == 8){
-							temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Water Works", 10));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty());
-							spaces[i*10+j] = temp;
-						}else if (j == 5){	//Railroad
-							reader = railroad.readLine().split("-");
-							temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
-							spaces[i*10+j] = temp;
-						}else{
-							reader = standard.readLine().split("-");
-							temp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty(300, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty());
-							spaces[i*10+j] = temp;
-						}
-						spaces[i*10+j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
-					}
-					else if(i == 3){
-						if(j==0){	//go to Jail
-							continue;
-						}
-						else if (j == 5){
-							reader = railroad.readLine().split("-");
-							temp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
-							//cctemp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
-							spaces[i*10+j] = temp;
-						}else if (j == 3){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel);
-							spaces[i*10+j] = ws;
-						}else if (j == 6){
-							WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace)spaces[0], spaces, this, dicePanel);
-							spaces[i*10+j] = ws;
-						}else if(j == 8){
-							TaxSpace ts = new TaxSpace(spaceImgs[i*10+j],"Luxury Tax",100);
-							spaces[i*10+j] = ts;							
-						}else{
-							reader = standard.readLine().split("-");
-							temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(400,reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
-							//cctemp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty());
-							spaces[i*10+j] = temp;
-						}
-						spaces[i*10+j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (j-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
-					}
-					if(temp != null)
-						propertyInfo.put(spaces[i*10+j].getName(), temp);
-					add(spaces[i*10+j]);
-				}
-			}
+			String[] reader = null;
+			initializeSpaces(standard, railroad, reader, temp, GTJ);
 		} catch (IOException e) {
 			System.out.println("BufferedReader failed to read from file");
 			e.printStackTrace();
 		}
 		//add(chance);
 		//add(communityChest);
+	}
+	private void initializeSpaces(BufferedReader standard, BufferedReader railroad, String[] reader, PropertySpace temp, GoToJailSpace GTJ) throws IOException{
+		for(int i=0; i<4;i++){
+			for(int j=0; j<10; j++){
+				temp = null;
+				if(i == 0){
+					if(j==0){
+						spaces[i*10+j] = new GoSpace(spaceImgs[i*10+j]); //GO
+						spaces[i*10+j].setBounds(START_X+ COL_SPACE_WIDTH + (NUM_R-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						add(spaces[i*10+j]);
+						continue;
+					}else if (j == 2){
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
+						spaces[i*10+j] = ws;
+					}else if(j==4){
+						TaxSpace ts = new TaxSpace(spaceImgs[i*10+j], "Income Tax", 200);
+						spaces[i*10+j] = ts;
+					}else if (j == 5){	//Railroad
+						reader = railroad.readLine().split("-");
+						temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1]))); 
+						//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty()); 
+						spaces[i*10+j] = temp;
+					}else if(j == 7){
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
+						spaces[i*10+j] = ws;
+					}else{
+						reader = standard.readLine().split("-");
+						temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(100, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty());
+						spaces[i*10+j] = temp;
+					}
+					spaces[i*10+j].setBounds(START_X+ COL_SPACE_WIDTH + (NUM_R-j-1)*ROW_SPACE_WIDTH, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+				}
+				else if(i==1){
+					if(j==0){
+						spaces[i*10+j] = new JailSpace(spaceImgs[i*10+j]); //Jail
+						GTJ.setJailSpace(spaces[i*10+j]);
+						spaces[i*10+j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						add(spaces[i*10+j]);
+						continue;
+					}
+					if(j == 2){
+						temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Electric Company", 10));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty());
+						spaces[i*10+j] = temp;
+					}else if (j == 5){
+						reader = railroad.readLine().split("-");
+						temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
+						spaces[i*10+j] = temp;
+					}else if (j == 7){
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
+						spaces[i*10+j] = ws;
+					}else{
+						reader = standard.readLine().split("-");
+						temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(200, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty());
+						spaces[i*10+j] = temp;
+					}
+					spaces[i*10+j].setBounds(START_X, START_Y + ROW_SPACE_HEIGHT + (NUM_R - j-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
+				}
+				else if(i == 2){
+					if(j==0){
+						spaces[i*10+j] = new Space(spaceImgs[i*10+j],"Free Parking"); //Free Parking
+						spaces[i*10+j].setBounds(START_X, START_Y, COL_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+						add(spaces[i*10+j]);
+						continue;
+					}else if(j == 2){
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j],"Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
+						spaces[i*10+j] = ws;
+					}else if(j == 8){
+						temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Water Works", 10));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty());
+						spaces[i*10+j] = temp;
+					}else if (j == 5){	//Railroad
+						reader = railroad.readLine().split("-");
+						temp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
+						spaces[i*10+j] = temp;
+					}else{
+						reader = standard.readLine().split("-");
+						temp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty(300, reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j], new StandardProperty());
+						spaces[i*10+j] = temp;
+					}
+					spaces[i*10+j].setBounds(START_X + COL_SPACE_WIDTH + (j-1)*ROW_SPACE_WIDTH, START_Y, ROW_SPACE_WIDTH, ROW_SPACE_HEIGHT);
+				}
+				else if(i == 3){
+					if(j==0){	//go to Jail
+						continue;
+					}
+					else if (j == 5){
+						reader = railroad.readLine().split("-");
+						temp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty(200, reader[0], Integer.parseInt(reader[1])));
+						//cctemp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
+						spaces[i*10+j] = temp;
+					}else if (j == 3){
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel);
+						spaces[i*10+j] = ws;
+					}else if (j == 6){
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace)spaces[0], spaces, this, dicePanel);
+						spaces[i*10+j] = ws;
+					}else if(j == 8){
+						TaxSpace ts = new TaxSpace(spaceImgs[i*10+j],"Luxury Tax",100);
+						spaces[i*10+j] = ts;							
+					}else{
+						reader = standard.readLine().split("-");
+						temp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty(400,reader[0], (i + 1) * 50, Integer.parseInt(reader[1])));
+						//cctemp = new PropertySpace(spaceImgs[i*10+j],new StandardProperty());
+						spaces[i*10+j] = temp;
+					}
+					spaces[i*10+j].setBounds(START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9, START_Y + ROW_SPACE_HEIGHT + (j-1)*COL_SPACE_HEIGHT, COL_SPACE_WIDTH, COL_SPACE_HEIGHT);
+				}
+				if(temp != null)
+					propertyInfo.put(spaces[i*10+j].getName(), temp);
+				add(spaces[i*10+j]);
+			}
+		}
 	}
 	private ImageIcon resizedImgs(String path, int type){
 		int width,height;

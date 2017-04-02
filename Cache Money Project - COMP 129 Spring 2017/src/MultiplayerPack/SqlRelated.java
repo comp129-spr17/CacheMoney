@@ -14,6 +14,11 @@ public final class SqlRelated {
 	private static final String DATABASE = "cachemoneydb";
 	private static final String USER_ID = "devinlim";
 	private static final String USER_PW = "1234";
+//	private static final String IP_ADDRESS = "localhost";
+//	private static final String PORT_NUM = "3306";
+//	private static final String DATABASE = "cachemoneydb";
+//	private static final String USER_ID = "root";
+//	private static final String USER_PW = "";
 	private Statement statement;
 	private Connection connection;
 	private static ArrayList<ResultSet> resultSets;
