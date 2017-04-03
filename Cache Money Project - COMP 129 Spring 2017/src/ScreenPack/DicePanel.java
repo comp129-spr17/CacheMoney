@@ -604,11 +604,7 @@ public class DicePanel extends JPanel{
 			if (board.isPlayerInPropertySpace(previous)){
 				handlePropertySpaceAction(board.getSpacePlayerLandedOn(previous));
 			}
-			else if (board.getSpacePlayerLandedOn(previous) == "Visiting Jail" && players[current].isInJail()) {
-				isSame = false;
-				numOfDoublesInRow = 0;
-			} 
-			else if (board.getSpacePlayerLandedOn(previous) == "Go to Jail"){
+			else if ((board.getSpacePlayerLandedOn(previous) == "Visiting Jail" || board.getSpacePlayerLandedOn(previous) == "Go to Jail") && players[current].isInJail()) {
 				isSame = false;
 				numOfDoublesInRow = 0;
 			}
