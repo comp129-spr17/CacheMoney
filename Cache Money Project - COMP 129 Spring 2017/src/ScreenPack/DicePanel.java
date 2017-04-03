@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 5; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
@@ -122,9 +122,8 @@ public class DicePanel extends JPanel{
 		showPlayer[1].setIcon(imageRelated.getPieceImg(0));
 		showPlayer[2].setText("Current Player Piece");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(1));
-
- 
 	}
+	
 	public void setPlayerPiecesUp(JPanel Game, int x){
 		showPlayer[0].setBounds(x, 30, 120, 40);
 		showPlayer[1].setBounds(x, 75, 100, 100);
@@ -134,9 +133,8 @@ public class DicePanel extends JPanel{
 			Game.add(showPlayer[i]);
 			showPlayer[i].setVisible(false);
 		}
-
-
 	}
+	
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
 		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), players, this, bPanel);
@@ -532,6 +530,8 @@ public class DicePanel extends JPanel{
 		} else {
 			numOfDoublesInRow = 0;
 		}
+		
+		
 		if (SERVER_DEBUG){
 			sum = DEBUG_MOVEMENT_VALUE;
 		}
@@ -552,7 +552,7 @@ public class DicePanel extends JPanel{
 		if(!isSame)
 		{
 			Sounds.diceRollConfirmed.playSound();
-			//			current = current == 3 ? 0 : current+1 ;
+			//current = current == 3 ? 0 : current+1 ;
 
 		}
 
@@ -606,7 +606,12 @@ public class DicePanel extends JPanel{
 			}
 			else if (board.getSpacePlayerLandedOn(previous) == "Visiting Jail" && players[current].isInJail()) {
 				isSame = false;
+				numOfDoublesInRow = 0;
 			} 
+			else if (board.getSpacePlayerLandedOn(previous) == "Go to Jail"){
+				isSame = false;
+				numOfDoublesInRow = 0;
+			}
 		}
 		delayThread(600);
 		mLabel.reinitializeMoneyLabels();
