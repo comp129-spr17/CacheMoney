@@ -71,7 +71,6 @@ public final class MoneyLabels {
 	private void init(){
 		sizerelated = SizeRelated.getInstance();
 		imagerelated = ImageRelated.getInstance();
-
 		createMoniesLabels();
 		createAndAssignValuesToMoniesLabels();
 		setPositionOfBalances();
@@ -363,8 +362,18 @@ public final class MoneyLabels {
 					PlayerInfo.remove(cash100[i]);
 					PlayerInfo.remove(cash1[i]);
 					PlayerInfo.remove(cash10[i]);
+					
+					PlayerInfo.remove(cash500image[i]);
+					PlayerInfo.remove(cash50image[i]);
+					PlayerInfo.remove(cash5image[i]);
+					PlayerInfo.remove(cash20image[i]);
+					PlayerInfo.remove(cash100image[i]);
+					PlayerInfo.remove(cash1image[i]);
+					PlayerInfo.remove(cash10image[i]);
+					playerPieceDisplay[i].setLocation(totalmonnies[i].getX(), totalmonnies[i].getY() + 100);
+					
 					players[i].setAlreadyDead(true);
-					for (int h = (6 * i); h < (6 * i); h++)
+					for (int h = (7 * i); h < (7 * (i+1)); h++)
 					{
 						PlayerInfo.remove(xmark[h]);
 					}
