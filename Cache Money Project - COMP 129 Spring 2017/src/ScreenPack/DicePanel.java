@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 5; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
@@ -56,7 +56,7 @@ public class DicePanel extends JPanel{
 	private PropertyInfoPanel propertyPanel;
 	private JailInfoPanel jailInfoScreen;
 	private BoardPanel bPanel;
-	private boolean isDiceButtonPressed;
+	private boolean isAbleToRollDice;
 	private MBytePack mPack;
 	private String ip;
 	private int port;
@@ -88,7 +88,7 @@ public class DicePanel extends JPanel{
 		setLayout(null);
 		addStartGameButton();
 		rand = new Random();
-		isDiceButtonPressed = false;
+		isAbleToRollDice = true;
 		
 		dCel = new DoubleCelebrate();
 		dCel.setSize(this.getSize());
@@ -358,6 +358,7 @@ public class DicePanel extends JPanel{
 	}
 	// In board, run thread to determine which function to perform.
 	public void actionForDiceEnd(){
+		isAbleToRollDice = true;
 		endTurnButton.setVisible(false);
 		mLabel.reinitializeMoneyLabels();
 		Sounds.turnBegin.playSound();
@@ -371,7 +372,7 @@ public class DicePanel extends JPanel{
 
 	}
 	public void actionForDiceRoll(int diceRes1, int diceRes2){
-		if (!isDiceButtonPressed){
+		if (isAbleToRollDice && !mGamePanel.isPlayingMinigame()){
 			rollDice(diceRes1, diceRes2);
 		}
 
@@ -476,7 +477,7 @@ public class DicePanel extends JPanel{
 	}
 	public void rollDice(int diceRes1, int diceRes2){
 		setDiceResult(diceRes1, diceRes2);
-		isDiceButtonPressed = true;
+		isAbleToRollDice = false;
 		dices[0].showDice();
 		dices[1].showDice();
 		Sounds.randomDice.playSound();
@@ -503,7 +504,7 @@ public class DicePanel extends JPanel{
 		diceTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				isDiceButtonPressed = false;
+				
 				for(int i=0; i<2; i++)
 					hand[i].setVisible(false);
 				hand[0].setLocation(sizeRelated.getDicePanelWidth()/10, sizeRelated.getDicePanelHeight()/2);

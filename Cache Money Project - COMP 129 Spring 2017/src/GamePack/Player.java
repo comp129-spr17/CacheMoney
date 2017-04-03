@@ -38,8 +38,10 @@ public final class Player {
 		playerPositionNumber = 0;
 	    jailFreeCard = 0;
 //		playerPositionNumber = 1; /// FOR SERVER DEBUGGING PURPOSE
-		totalmonies = 1000000;
-		fivehunneds = 2000;
+		//totalmonies = 1000000;
+		totalmonies = 1500;
+	    //fivehunneds = 2000;
+		fivehunneds = 3;
 		hunneds = 0;
 		fitties = 0;
 		twennies = 0;
