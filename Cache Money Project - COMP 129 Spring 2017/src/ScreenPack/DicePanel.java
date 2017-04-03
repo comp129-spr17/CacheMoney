@@ -614,6 +614,7 @@ public class DicePanel extends JPanel{
 			endTurnButton.setVisible(pInfo.isSingle() || players[current].isInJail() ? true : pInfo.isMyPlayerNum(current));
 		}
 		else{
+			isAbleToRollDice = true;
 			setRollButtonVisible();
 			if (setDebugVisible){
 				overrideDiceRoll.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
