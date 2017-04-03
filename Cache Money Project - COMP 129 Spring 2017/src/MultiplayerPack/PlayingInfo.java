@@ -7,6 +7,8 @@ public final class PlayingInfo {
 	private boolean isSingle;
 	private OutputStream outputStream;
 	private int myPlayerNum;
+	private boolean isLoggedIn;
+	private String loggedInId;
 	private static final PlayingInfo PLAYING_INFO = new PlayingInfo();
 	private PlayingInfo(){
 		
@@ -46,5 +48,17 @@ public final class PlayingInfo {
 	}
 	public OutputStream getOutputStream(){
 		return outputStream;
+	}
+	public void setLoggedIn(){
+		isLoggedIn = true;
+	}
+	public void setLoggedInId(String id){
+		loggedInId = id;
+	}
+	public boolean isLoggedIn(){
+		return isLoggedIn;
+	}
+	public String getLoggedInId(){
+		return loggedInId;
 	}
 }
