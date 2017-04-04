@@ -107,7 +107,7 @@ public class SignUpDialog extends JDialog {
 		createUser.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (goodPassword() && CredentialManager.createUser(getFirstName(),getLastName(),getUsername(), getPassword())) {
+				if (goodUsername() && goodPassword() && CredentialManager.createUser(getFirstName(),getLastName(),getUsername(), getPassword())) {
 					JOptionPane.showMessageDialog(SignUpDialog.this,
 							"Hi " + getUsername() + "! Your account has ben created!.",
 							"Login",
@@ -162,6 +162,11 @@ public class SignUpDialog extends JDialog {
  
     private String getPassword() {
         return new String(pass.getPassword());
+    }
+    
+    private boolean goodUsername(){
+    	//TODO SQL to check that username already exists or not
+    	return true;
     }
     
     private boolean goodPassword(){
