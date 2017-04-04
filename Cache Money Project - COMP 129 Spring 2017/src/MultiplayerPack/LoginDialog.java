@@ -25,6 +25,7 @@ public class LoginDialog extends JDialog {
 	private JLabel passLabel;
 	private JButton login;
 	private JButton cancel;
+	private JButton createAccount;
 	private boolean succeeded;
 
 
@@ -92,9 +93,20 @@ public class LoginDialog extends JDialog {
                 dispose();
             }
         });
+        createAccount = new JButton("Create Account");
+        createAccount.addActionListener(new ActionListener() {
+ 
+            public void actionPerformed(ActionEvent e) {
+                SignUpDialog SUD = new SignUpDialog(succeeded);
+                dispose();
+                SUD.setVisible(true);
+            }
+        });
+        
         JPanel bp = new JPanel();
         bp.add(login);
         bp.add(cancel);
+        bp.add(createAccount);
  
         getContentPane().add(panel, BorderLayout.CENTER);
         getContentPane().add(bp, BorderLayout.PAGE_END);

@@ -11,5 +11,12 @@ public class CredentialManager {
         return false;
     }
 	
+	//TODO Send new account data to DB
+	public static boolean createUser(String firstName, String lastName, String username, String password){
+		if(true){
+			return true;
+		}
+		return false;
+	}
 	
 }
