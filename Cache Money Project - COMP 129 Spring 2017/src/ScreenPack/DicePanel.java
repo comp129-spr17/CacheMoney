@@ -377,7 +377,7 @@ public class DicePanel extends JPanel{
 	}
 	public void actionForPlayers(){
 		if (players[current].isInJail()){
-			jailInfoScreen.executeSwitch(players[current], true, current);
+			jailInfoScreen.executeSwitch(players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), current);
 		}
 		else{
 			if(!pInfo.isMyPlayerNum(current) && !pInfo.isSingle()){
@@ -659,7 +659,7 @@ public class DicePanel extends JPanel{
 		while(!board.isDoneAnimating() || isCelebrating){
 			delayThread(1);
 		}
-		endTurnButton.setVisible(true);
+		endTurnButton.setVisible(pInfo.isSingle() || players[current].isInJail() ? true : pInfo.isMyPlayerNum(current));
 		rollButton.setVisible(false);
 		overrideDiceRoll.setVisible(false);
 		toggleDoubles.setVisible(false);

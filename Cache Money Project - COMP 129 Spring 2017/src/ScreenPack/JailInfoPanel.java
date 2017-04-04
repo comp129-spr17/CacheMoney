@@ -86,8 +86,11 @@ public class JailInfoPanel extends JPanel {
 		bPanel.add(jailPanel);
 		renderJailInfo();
 		hidePreviousPanel();
-		if(isSingle || isCurrent)
+		if(pInfo.isSingle() || isCurrent)
 			enableButtons();
+		else{
+			disableButtons();
+		}
 		this.currentPlayer = currentPlayer;
 	}
 
@@ -171,28 +174,30 @@ public class JailInfoPanel extends JPanel {
 				//TODO
 				// Switch panels to dice screen and get result but don't move any piece, just check if they are doubles 
 				// Remain in Jail if not third turn in jail or else pay fine
-				hideThisPanelShowDice();
-				dicePanel.setMovementAllowed(false);
-				int[] diceResults = new int[2];
-				diceResults = dicePanel.getDiceRoll();
-				dicePanel.rollDice(diceResults[0], diceResults[1]);
-				boolean doubles = dicePanel.isDoublesRolled();
-				if (doubles) {
-					currentPlayer.setInJail(false);
-					turnsInJail[current] = 0;
-				} else {
-					turnsInJail[current] += 1;
-				}
-				if (turnsInJail[current] >= 3) {
-					if (pInfo.isSingle()){
-						actionForGetOutOfJail();
+				if (rollButton.isEnabled()){
+					hideThisPanelShowDice();
+					dicePanel.setMovementAllowed(false);
+					int[] diceResults = new int[2];
+					diceResults = dicePanel.getDiceRoll();
+					dicePanel.rollDice(diceResults[0], diceResults[1]);
+					boolean doubles = dicePanel.isDoublesRolled();
+					if (doubles) {
+						currentPlayer.setInJail(false);
+						turnsInJail[current] = 0;
+					} else {
+						turnsInJail[current] += 1;
 					}
-					else{
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
+					if (turnsInJail[current] >= 3) {
+						if (pInfo.isSingle()){
+							actionForGetOutOfJail();
+						}
+						else{
+							pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
+						}
+						
+					} else {
+						dismissJailInfoPanel();
 					}
-					
-				} else {
-					dismissJailInfoPanel();
 				}
 			}
 		});
@@ -217,15 +222,14 @@ public class JailInfoPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//TODO
-				//Pay fine to get out of jail
-				if (pInfo.isSingle()){
-					actionForGetOutOfJail();
+				if (payButton.isEnabled()){
+					if (pInfo.isSingle()){
+						actionForGetOutOfJail();
+					}
+					else{
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
+					}
 				}
-				else{
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
-				}
-				
 			}
 		});
 	}
