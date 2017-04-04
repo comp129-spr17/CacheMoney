@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
 	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
-	private final int DEBUG_MOVEMENT_VALUE = 5; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
+	private final int DEBUG_MOVEMENT_VALUE = 15; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -376,22 +376,23 @@ public class DicePanel extends JPanel{
 
 	}
 	public void actionForPlayers(){
-		if(!pInfo.isMyPlayerNum(current) && !pInfo.isSingle()){
-			rollButton.setVisible(false);
-			endTurnButton.setVisible(false);
-			revalidate();
-			repaint();
-			propertyPanel.setButtonsEnabled(false);
+		if (players[current].isInJail()){
+			jailInfoScreen.executeSwitch(players[current], true, current);
 		}
 		else{
-			if(!players[current].isInJail()) {
+			if(!pInfo.isMyPlayerNum(current) && !pInfo.isSingle()){
+				rollButton.setVisible(false);
+				endTurnButton.setVisible(false);
+				revalidate();
+				repaint();
+				propertyPanel.setButtonsEnabled(false);
+			}
+			else{
 				setRollButtonVisible();
 				if (setDebugVisible){
 					overrideDiceRoll.setVisible(true);
 					toggleDoubles.setVisible(true);
 				}
-			} else {
-				jailInfoScreen.executeSwitch(players[current], true, current);
 			}
 		}
 	}
@@ -437,6 +438,9 @@ public class DicePanel extends JPanel{
 	}
 	public void actionForReceiveInteger(int num){
 		mGamePanel.actionForGame(num);
+	}
+	public void actionForGotOutOfJail(){
+		jailInfoScreen.actionForGetOutOfJail();
 	}
 	public void actionForReceiveAnswer(int ith, int playerN, boolean isOwner, int enteredAns){
 		mGamePanel.actionForGame(ith, playerN, isOwner, enteredAns);
@@ -604,7 +608,7 @@ public class DicePanel extends JPanel{
 			if (board.isPlayerInPropertySpace(previous)){
 				handlePropertySpaceAction(board.getSpacePlayerLandedOn(previous));
 			}
-			else if ((board.getSpacePlayerLandedOn(previous) == "Visiting Jail" || board.getSpacePlayerLandedOn(previous) == "Go to Jail") && players[current].isInJail()) {
+			else if (board.getSpacePlayerLandedOn(previous) == "Go to Jail"){
 				isSame = false;
 				numOfDoublesInRow = 0;
 			}

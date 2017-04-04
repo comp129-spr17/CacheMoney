@@ -31,6 +31,7 @@ public final class UnicodeForServer {
 	public static final int PROPERTY_SWITCH_TO_AUCTION = 26;
 	public static final int STACK_CARD_DRAWN = 27;
 	public static final int BUILD_HOUSE = 28;
+	public static final int GOT_OUT_OF_JAIL = 29;
 	
 	private UnicodeForServer(){
 		

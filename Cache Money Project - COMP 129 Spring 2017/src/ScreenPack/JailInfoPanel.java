@@ -23,6 +23,7 @@ import GamePack.PropertySpace;
 import GamePack.UtilityProperty;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
+import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class JailInfoPanel extends JPanel {
@@ -42,8 +43,11 @@ public class JailInfoPanel extends JPanel {
 	private JLabel jailName;
 	private int[] turnsInJail;
 	private int current;
+	private PlayingInfo pInfo;
+	
 	public JailInfoPanel(JPanel panelToSwitchFrom, Player[] player, DicePanel diceP, BoardPanel b)
 	{
+		pInfo = PlayingInfo.getInstance();
 		jailPanel = new JPanel();
 		players = player;
 		this.isSingle = isSingle;
@@ -180,11 +184,13 @@ public class JailInfoPanel extends JPanel {
 					turnsInJail[current] += 1;
 				}
 				if (turnsInJail[current] >= 3) {
-					currentPlayer.pay(50);
-					currentPlayer.setInJail(false);
-					endJailPanel();
-					dicePanel.displayEndTurnButton();
-					turnsInJail[current] = 0;
+					if (pInfo.isSingle()){
+						actionForGetOutOfJail();
+					}
+					else{
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
+					}
+					
 				} else {
 					dismissJailInfoPanel();
 				}
@@ -213,10 +219,13 @@ public class JailInfoPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				//TODO
 				//Pay fine to get out of jail
-				currentPlayer.pay(50);
-				currentPlayer.setInJail(false);
-				endJailPanel();
-				dicePanel.displayEndTurnButton();
+				if (pInfo.isSingle()){
+					actionForGetOutOfJail();
+				}
+				else{
+					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
+				}
+				
 			}
 		});
 	}
@@ -268,6 +277,14 @@ public class JailInfoPanel extends JPanel {
 		}
 			
 	}
+	
+	public void actionForGetOutOfJail(){
+		currentPlayer.pay(50);
+		currentPlayer.setInJail(false);
+		endJailPanel();
+		dicePanel.displayEndTurnButton();
+		turnsInJail[current] = 0;
+	}
 	public void enableButtons(){
 		hideButton.setEnabled(true);
 		rollButton.setEnabled(true);
@@ -275,17 +292,5 @@ public class JailInfoPanel extends JPanel {
 	}
 	public void setOutputStream(OutputStream outputStream){
 		this.outputStream = outputStream;
-	}
-	private void sendMessageToServer(byte[] msg){
-		if (outputStream != null){
-			try {
-				outputStream.write(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		else{
-			System.out.println("WARNING: writer == null");
-		}
 	}
 }

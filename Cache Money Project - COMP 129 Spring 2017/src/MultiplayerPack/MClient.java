@@ -107,6 +107,8 @@ public class MClient {
 			return "STACK_CARD_DRAWN";
 		case 28:
 			return "BUILD_HOUSE";
+		case 29:
+			return "GOT_OUT_OF_JAIL";
 		default:
 			return "UNIMPLEMENTED CODE: PLEASE GOTO MCLIENT.JAVA AND ADD THE UNICODE FOR SERVER STRING AT THE SWITCH STATEMENT!!";
 		}
@@ -154,6 +156,8 @@ public class MClient {
 		doActions.put(UnicodeForServer.PROPERTY_SWITCH_TO_AUCTION, new DoAction(){public void doAction(ArrayList<Object> result){doSwitchToAuction();}});
 		doActions.put(UnicodeForServer.STACK_CARD_DRAWN, new DoAction(){public void doAction(ArrayList<Object> result){doDrawChanceStack(result);}});
 		doActions.put(UnicodeForServer.BUILD_HOUSE, new DoAction(){public void doAction(ArrayList<Object> result){doBuildHouse(result);}});
+		doActions.put(UnicodeForServer.GOT_OUT_OF_JAIL, new DoAction(){public void doAction(ArrayList<Object> result){doGotOutOfJail(result);}});
+	
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 		isConnected = false;
@@ -292,6 +296,9 @@ public class MClient {
 	private void doReceiveInteger(ArrayList<Object> result){
 		diceP.actionForReceiveInteger((Integer)result.get(1));
 	}
+	private void doGotOutOfJail(ArrayList<Object> result) {
+		diceP.actionForGotOutOfJail();
+	};
 	private void doReceiveIntArraySingle(ArrayList<Object> result){
 		int[] arr = new int[result.size()-2];
 		for (int i = 2; i < result.size(); i++){
