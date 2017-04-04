@@ -543,7 +543,7 @@ public class DicePanel extends JPanel{
 		if (movementAllowed){
 			board.movePiece(isSame ? previous : current, sum);
 		} else {
-			movementAllowed = false;
+			movementAllowed = true;
 		}
 		
 		previous = current;

@@ -100,7 +100,7 @@ public class JailInfoPanel extends JPanel {
 	{
 		//Create JLabels that tell the player they are in jail and can't leave
 		this.setBackground(Color.white);
-		jailName = new JLabel("Player's Name");
+		jailName = new JLabel("Player " + Integer.toString(this.current+1) + "'s Turn");
 		jailPanel.add(jailName);
 		addHideButton();
 		addRollButton();
@@ -184,6 +184,7 @@ public class JailInfoPanel extends JPanel {
 					currentPlayer.setInJail(false);
 					endJailPanel();
 					dicePanel.displayEndTurnButton();
+					turnsInJail[current] = 0;
 				} else {
 					dismissJailInfoPanel();
 				}
