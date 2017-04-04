@@ -279,9 +279,7 @@ public class BoxSelectGame extends MiniGame{
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {}
-			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				if(allowInput && (pInfo.isSingle() || (turnNum == 0 && isOwner) || (turnNum == 1 && !isOwner))){
 					if (turnNum > 1 ){
 						return;
@@ -305,6 +303,10 @@ public class BoxSelectGame extends MiniGame{
 						}
 					}
 				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
 			}
 			
 			@Override

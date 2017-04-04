@@ -2,18 +2,12 @@ package MiniGamePack;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import GamePack.ImageRelated;
-import GamePack.PathRelated;
-import GamePack.Player;
 import InterfacePack.Sounds;
+import MultiplayerPack.UnicodeForServer;
 
 public class SpammingGame extends MiniGame{
 
@@ -37,10 +31,7 @@ public class SpammingGame extends MiniGame{
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				pressed = e.getKeyChar();
 				if(pInfo.isSingle()){
 					if(pressed == 'q' || pressed == 'Q')
@@ -49,13 +40,18 @@ public class SpammingGame extends MiniGame{
 						addGuestCount();
 				}else{
 					if(isOwner && (pressed == 'q' || pressed == 'Q')){
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_OWNER));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.SPAM_MINI_GAME_OWNER));
 						ownerC++;
 						System.out.println(ownerC);
 					}
 					else if(!isOwner && (pressed == 'p' || pressed == 'P'))
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_GUEST));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.SPAM_MINI_GAME_GUEST));
 				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
 			}
 			@Override
 			public void keyPressed(KeyEvent e) {}

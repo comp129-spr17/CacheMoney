@@ -3,12 +3,12 @@ package MiniGamePack;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import InterfacePack.Sounds;
+import MultiplayerPack.UnicodeForServer;
 
 public class RockScissorPaperGame extends MiniGame{
 	private RockScissorPaper rsp;
@@ -82,7 +82,7 @@ public class RockScissorPaperGame extends MiniGame{
 				if(pInfo.isSingle())
 					selectDecision(rand.nextInt(3)+1, i==0);
 				else
-					pInfo.sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, rand.nextInt(3)+1, i==0));
+					pInfo.sendMessageToServer(mPack.packIntBoolean(UnicodeForServer.RSP_MINI_GAME_DECISION, rand.nextInt(3)+1, i==0));
 			}
 				
 	}
@@ -103,24 +103,26 @@ public class RockScissorPaperGame extends MiniGame{
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				enteredChar = Character.toLowerCase(e.getKeyChar());
 				if((enteredChar == 'q' || enteredChar == 'w' || enteredChar == 'e') && (isOwner || pInfo.isSingle())){
 					Sounds.buttonPress.playSound();
 					if(pInfo.isSingle())
 						selectDecision(ascii[enteredChar], true);
 					else
-						pInfo.sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], true));
+						pInfo.sendMessageToServer(mPack.packIntBoolean(UnicodeForServer.RSP_MINI_GAME_DECISION, ascii[enteredChar], true));
 				}else if((enteredChar == 'i' || enteredChar == 'o' || enteredChar == 'p') && (isGuest || pInfo.isSingle())){
 					Sounds.buttonPress.playSound();
 					if(pInfo.isSingle())
 						selectDecision(ascii[enteredChar], false);
 					else
-						pInfo.sendMessageToServer(mPack.packIntBoolean(unicode.RSP_MINI_GAME_DECISION, ascii[enteredChar], false));
+						pInfo.sendMessageToServer(mPack.packIntBoolean(UnicodeForServer.RSP_MINI_GAME_DECISION, ascii[enteredChar], false));
 				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
 			}
 			@Override
 			public void keyPressed(KeyEvent e) {}

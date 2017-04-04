@@ -3,16 +3,14 @@ package MiniGamePack;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GamePack.ImageRelated;
-import GamePack.PathRelated;
 import InterfacePack.Sounds;
+import MultiplayerPack.UnicodeForServer;
 
 public class ReactionGame extends MiniGame {
 
@@ -86,7 +84,7 @@ public class ReactionGame extends MiniGame {
 		resetVars();
 		
 		if (!pInfo.isSingle() && isOwner){
-			pInfo.sendMessageToServer(mPack.packIntValue(unicode.GENERIC_SEND_INTEGER, rand.nextInt(7777) + 1500));
+			pInfo.sendMessageToServer(mPack.packIntValue(UnicodeForServer.GENERIC_SEND_INTEGER, rand.nextInt(7777) + 1500));
 		}
 		else if (pInfo.isSingle()){
 			timeUntilReact = rand.nextInt(7777) + 1500;
@@ -174,14 +172,14 @@ public class ReactionGame extends MiniGame {
 			else
 				userTimes[num] = 5.1;
 			if(!pInfo.isSingle())
-				pInfo.sendMessageToServer(mPack.packReactionTime(isOwner ? unicode.REACTION_MINI_GAME_OWNER_END : unicode.REACTION_MINI_GAME_GUEST_END, userTimes[num]));
+				pInfo.sendMessageToServer(mPack.packReactionTime(isOwner ? UnicodeForServer.REACTION_MINI_GAME_OWNER_END : UnicodeForServer.REACTION_MINI_GAME_GUEST_END, userTimes[num]));
 		}
 		else{
 			if(pInfo.isSingle()){
 				actionForTooEarly(isOwner, num);
 			}else{
 				System.out.println("Sending now...");
-				pInfo.sendMessageToServer(mPack.packSimpleRequest(isOwner?unicode.REACTION_MINI_GAME_OWNER_EARLY:unicode.REACTION_MINI_GAME_GUEST_EARLY));
+				pInfo.sendMessageToServer(mPack.packSimpleRequest(isOwner?UnicodeForServer.REACTION_MINI_GAME_OWNER_EARLY:UnicodeForServer.REACTION_MINI_GAME_GUEST_EARLY));
 			}
 			
 		}
@@ -212,10 +210,7 @@ public class ReactionGame extends MiniGame {
 		listener = new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent e) {}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				pressed = e.getKeyChar();
 				if (pressed != 'q' && pressed != 'p'){
 					return;
@@ -226,6 +221,12 @@ public class ReactionGame extends MiniGame {
 					userPressedDoubleCheck[userNum] = true;
 					checkIfTooEarlyOrOk(tooEarlyPresser, userNum);
 				}
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
 			}
 			
 			@Override
