@@ -290,8 +290,8 @@ public class JailInfoPanel extends JPanel {
 		turnsInJail[current] = 0;
 	}
 	public void enableButtons(){
-		hideButton.setEnabled(true);
-		rollButton.setEnabled(true);
+		hideButton.setEnabled(true); 
+		rollButton.setEnabled(false); // TODO: DEBUG, ROLL DOESN'T WORK WITH MULTIPLAYER YET 
 		payButton.setEnabled(true);
 	}
 	public void setOutputStream(OutputStream outputStream){
