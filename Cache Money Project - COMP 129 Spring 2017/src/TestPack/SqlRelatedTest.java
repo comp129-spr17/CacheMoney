@@ -57,4 +57,10 @@ public class SqlRelatedTest {
 		assertTrue(sqlRelated.isIdExisting("TeST1"));
 		assertFalse(sqlRelated.isIdExisting("TeST1@"));
 	}
+	@Test
+	public void testCheckingLogin(){
+		assertTrue(sqlRelated.checkingLogin("dlim","123"));
+		assertFalse(sqlRelated.checkingLogin("dliM","1a23"));
+	}
+	
 }
