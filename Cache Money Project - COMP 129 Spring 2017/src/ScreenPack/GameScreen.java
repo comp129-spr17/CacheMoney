@@ -118,13 +118,7 @@ public class GameScreen extends JFrame{
 	private void initEverything(boolean isHost, boolean isSingle){
 		loadingProgress = 0;
 		if (Property.isSQLEnabled){
-			try{
-				sqlRelated = SqlRelated.getInstance();
-			}
-			catch (Exception e){
-				System.out.println("***********************\nCONNECTION TO SQL FAILED.\nCheck to see if you are connected to the VPN or PacificNet, and then try again.\nDisable SQL in Property.java to load the game from text files.\n***********************");
-				System.exit(1);
-			}
+			sqlRelated = SqlRelated.getInstance();
 		}
 		mPack = MBytePack.getInstance();
 		pInfo = PlayingInfo.getInstance();

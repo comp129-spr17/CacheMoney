@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public final class SqlRelated {
-	//private static SqlRelated sqlRelated = new SqlRelated();
+	private static SqlRelated sqlRelated = new SqlRelated();
 	private static final String IP_ADDRESS = "www.cachemoney.com";
 	private static final String PORT_NUM = "3306";
 	private static final String DATABASE = "cachemoneydb";
@@ -19,21 +19,28 @@ public final class SqlRelated {
 //	private static final String DATABASE = "cachemoneydb";
 //	private static final String USER_ID = "root";
 //	private static final String USER_PW = "";
-	private Statement statement;
-	private Connection connection;
+	private static Statement statement;
+	private static Connection connection;
 	private static ArrayList<ResultSet> resultSets;
-	public static SqlRelated getInstance() throws Exception{
+	private static ResultSet rSet;
+	public static SqlRelated getInstance(){
 		return new SqlRelated();
 	}
-	private SqlRelated() throws Exception{
+	private SqlRelated(){
 		statement = null;
 		resultSets = new ArrayList<>();
+		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection("jdbc:mysql://"+IP_ADDRESS
 					+ ":" + PORT_NUM 
 					+ "/" + DATABASE 
 					+ "?useSSL=false", USER_ID , USER_PW);
 			initResultSets();	
+		} catch (Exception e) {
+			System.out.println("***********************\nCONNECTION TO SQL FAILED.\nCheck to see if you are connected to the VPN or PacificNet, and then try again.\nDisable SQL in Property.java to load the game from text files.\n***********************");
+			System.exit(1);
+		}
+			
 	}
 	private void initResultSets() throws SQLException{
 		statement = connection.createStatement();
@@ -168,5 +175,64 @@ public final class SqlRelated {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	public static void insertNewUser(String user_id, String user_pw, String f_name, String l_name){
+		try {
+			statement = connection.createStatement();
+			statement.executeUpdate("INSERT INTO user_info (user_id, user_pw, f_name, l_name)"
+					+ "VALUES ('"+user_id+"','"+user_pw+"', '"+f_name+"', '"+l_name+"')");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void updateWinOrLose(String user_id, boolean isWin){
+		try{
+			statement = connection.createStatement();
+			statement.executeUpdate("UPDATE user_info "
+					+ "SET " + getWinOrLose(isWin) + " = " + getWinOrLose(isWin) + " + 1 "
+					+ "WHERE user_id = '" + user_id + "';");
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+	}
+	private static String getWinOrLose(boolean isWin){
+		return isWin?"win" : "lose";
+	}
+	public static void addFriend(String my_user_id, String other_user_id){
+		try {
+			statement = connection.createStatement();
+			statement.executeUpdate("INSERT INTO friend_list "
+					+ "VALUES ('"+my_user_id+"','"+other_user_id+"', CURRENT_TIMESTAMP);");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static boolean isIdExisting(String user_id){
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT COUNT(user_id) AS num "
+					+ "FROM user_info "
+					+ "WHERE user_id='"+user_id+"';");
+			rSet.next();
+			if(rSet.getInt(1) > 0)
+				return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public static boolean checkingLogin(String user_id, String user_pw){
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT COUNT(user_id) "
+						+ "FROM user_info "
+						+ "WHERE user_id='"+user_id+"' AND BINARY user_pw='"+user_pw+"';");
+			rSet.next();
+			if(rSet.getInt(1) > 0)
+				return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
