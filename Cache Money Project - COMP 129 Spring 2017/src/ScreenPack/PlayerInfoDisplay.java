@@ -39,11 +39,11 @@ public final class PlayerInfoDisplay extends JPanel{
 		labels.get(0).setBounds(width/11, width / 11, width, width / 11);
 		add(labels.get(0));
 		for(int i=1; i<labels.size(); i+=2){
-			labels.get(i).setBounds(width/7, width*(i+2) / 11, width * 3/5, width / 11);
+			labels.get(i).setBounds(width/10, width*(i+2) / 11, width * 3/5, width / 11);
 			add(labels.get(i));
 		}
 		for(int i=2; i<labels.size(); i+=2){
-			labels.get(i).setBounds(width / 7 + width*3/5, width*(i+1) / 11, width * 2/5, width / 11);
+			labels.get(i).setBounds(width*3/10, width*(i+1) / 11, width * 9/10, width / 11);
 			add(labels.get(i));
 		}
 	}
@@ -53,10 +53,10 @@ public final class PlayerInfoDisplay extends JPanel{
 	public int getStartY(int y){
 		return y < sizeRelated.getScreenH()/2 ? y : y-width;
 	}
-	public void setPlayerInfo(String user_id){
+	public void setPlayerInfo(String user_id, String user_name, int user_win, int user_lose){
 		labels.get(0).setText(user_id);
-//		labels.get(4).setText(info.getNumHouse()+"");
-//		labels.get(6).setText(info.getNumHotel()+"");
-//		labels.get(8).setText(info.isMortgaged() ? "Yes" : "No");
+		labels.get(2).setText(user_name);
+		labels.get(4).setText(user_win+"");
+		labels.get(6).setText(user_lose+"");
 	}
 }

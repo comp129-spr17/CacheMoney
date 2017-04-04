@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
 
+import MultiplayerPack.PlayingInfo;
 import ScreenPack.PlayerInfoDisplay;
 
 public class Piece extends JLabel{
@@ -14,11 +15,16 @@ public class Piece extends JLabel{
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
 	private String user_id;
+	private String user_name;
+	private int user_win;
+	private int user_lose;
 	private PlayerInfoDisplay pInfoDisplay;
+	private PlayingInfo pInfo;
 	public Piece(int player, Player playerClass) {
 		this.player = player;
 		this.playerClass = playerClass;
 		pInfoDisplay = PlayerInfoDisplay.getInstance();
+		pInfo = PlayingInfo.getInstance();
 		init();
 	}
 	public int getPlayer(){
@@ -34,10 +40,11 @@ public class Piece extends JLabel{
 		imageRelated = ImageRelated.getInstance();
 		setIcon(imageRelated.resizeImage(pathRelated.getPieceImgPath()+player+".png", sizeRelated.getPieceWidth(), sizeRelated.getPieceHeight()));
 		setBounds(sizeRelated.getPieceXAndY(player, 0), sizeRelated.getPieceXAndY(player, 1), sizeRelated.getPieceWidth(), sizeRelated.getPieceHeight());
-
-		setClickListener();
+		if(!pInfo.isSingle())
+			setClickListener();
 	}
 	private void setClickListener(){
+		
 		addMouseListener(new MouseListener() {
 			
 			@Override
@@ -49,7 +56,7 @@ public class Piece extends JLabel{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("pressed");
-				pInfoDisplay.setPlayerInfo(user_id);
+				pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose);
 				pInfoDisplay.setVisible(true);
 				setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
 				repaint();
@@ -70,6 +77,15 @@ public class Piece extends JLabel{
 	}
 	public void setUserId(String user_id){
 		this.user_id = user_id;
+	}
+	public void setUserName(String user_name){
+		this.user_name = user_name;
+	}
+	public void setUserWin(int user_win){
+		this.user_win = user_win;
+	}
+	public void setUserLose(int user_lose){
+		this.user_lose = user_lose;
 	}
 	private void setDisplayLocation(int x, int y){
 		pInfoDisplay.setLocation(pInfoDisplay.getStartX(x), pInfoDisplay.getStartY(y));

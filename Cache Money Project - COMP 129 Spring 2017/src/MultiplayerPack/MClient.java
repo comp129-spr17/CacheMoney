@@ -223,8 +223,8 @@ public class MClient {
 		}
 		
 		diceP.actionForStart();
-
-		playingInfo.sendMessageToServer(mPack.packStringInt(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(), playingInfo.getMyPlayerNum()));
+		SqlRelated.generateUserInfo(playingInfo.getLoggedInId());
+		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));
         
 	}
 	private void doRemoveProperty(){
@@ -302,7 +302,11 @@ public class MClient {
 	}
 	
 	private void doSetUserId(ArrayList<Object> result){
-		pList[(Integer)result.get(2)].setUserId((String)result.get(1));
+		int pos = (Integer)result.get(3);
+		pList[pos].setUserId((String)result.get(1));
+		pList[pos].setUserName((String)result.get(2));
+		pList[pos].setNumWin((Integer)result.get(4));
+		pList[pos].setNumLose((Integer)result.get(5));
 	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);

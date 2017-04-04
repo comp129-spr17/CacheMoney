@@ -235,4 +235,39 @@ public final class SqlRelated {
 		}
 		return false;
 	}
+	public static void generateUserInfo(String user_id){
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT CONCAT(f_name,\" \",l_name) AS full_name, win, lose "
+						+ "FROM user_info "
+						+ "WHERE user_id = '"+user_id+"';");
+			rSet.next();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static String getUserName(){
+		try {
+			return rSet.getString(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	public static int getWin(){
+		try {
+			return rSet.getInt(2);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public static int getLose(){
+		try {
+			return rSet.getInt(3);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }

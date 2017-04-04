@@ -202,11 +202,15 @@ public final class MBytePack {
 		
 		return null;
 	}
-	public byte[] packStringInt(int requestCode, String str, int playerNum){
+	public byte[] packStringIntArray(int requestCode, String str, String name, int[] arr){
 		try{
 			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeUTF(str);
-			dOutputStream.writeInt(playerNum);
+			dOutputStream.writeUTF(name);
+			dOutputStream.writeInt(arr.length);
+			for (int i = 0; i < arr.length; i++){
+				dOutputStream.writeInt(arr[i]);
+			}
 			return packResult();
 		}
 		catch (IOException e){

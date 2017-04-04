@@ -220,7 +220,10 @@ public final class MByteUnpack {
 	public void unpackStringInt(byte[] result){
 		try{
 			resultList.add(dInputStream.readUTF());
-			resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readUTF());
+			sizeOfArray = dInputStream.readInt();
+			for(int i=0; i<sizeOfArray; i++)
+				resultList.add(dInputStream.readInt());
 		}
 		catch(IOException e){
 			e.printStackTrace();

@@ -24,7 +24,10 @@ public final class Player {
 	private int pastPositionNumber;
 	private int playerPositionNumber;
 	private String user_id;
+	private String user_Name;
 	private boolean isOn;
+	private int win;
+	private int lose;
 	private static final Player GlobalPlayer0 = new Player(0);
 	private static final Player GlobalPlayer1 = new Player(1);
 	private static final Player GlobalPlayer2 = new Player(2);
@@ -423,6 +426,27 @@ public final class Player {
 	}
 	public String getUserId(){
 		return user_id;
+	}
+	public void setUserName(String user_Name){
+		this.user_Name = user_Name;
+		playerpiece.setUserName(user_Name);
+	}
+	public String getUserName(){
+		return user_Name;
+	}
+	public void setNumWin(int win){
+		this.win = win;
+		playerpiece.setUserWin(win);
+	}
+	public int getNumWin(){
+		return win;
+	}
+	public void setNumLose(int lose){
+		this.lose = lose;
+		playerpiece.setUserLose(lose);
+	}
+	public int getNumLose(){
+		return lose;
 	}
 	
 	public int getNumPropertiesOwned(){
