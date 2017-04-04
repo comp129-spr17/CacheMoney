@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 15; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
@@ -397,8 +397,8 @@ public class DicePanel extends JPanel{
 		}
 	}
 	private void setRollButtonVisible() {
-		rollButton.setIcon(stationaryDiceIcon);
-		rollButton.setPressedIcon(stationaryDiceIcon);
+		rollButton.setIcon(spinningDiceIcon);
+		rollButton.setPressedIcon(spinningDiceIcon);
 		rollButton.setBorder(null);
 		rollButton.setBackground(null);
 		rollButton.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
