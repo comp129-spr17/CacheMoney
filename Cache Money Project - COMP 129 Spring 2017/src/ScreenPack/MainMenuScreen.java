@@ -43,35 +43,36 @@ public class MainMenuScreen {
 	private GameScreen gameScreen;
 	private PathRelated pathRelated;
 	private JLabel backgroundpic;
-	
-	
+	private JButton loginBtn;
+
+
 	public MainMenuScreen(){
 		init();
 		createMenuWindow();
 		Sounds.register.playSound();
 		addMouseListen();
-		
-		
+
+
 	}
-	
+
 	private void initializeLoadingScreen(){
 		if (loadingScreen == null){
 			GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
 		}
 	}
-	
+
 	private void hideAndDisposeLoadingScreen(){
 		loadingScreen.setVisible(false);
 		loadingScreen.dispose();
 	}
 
 	private void init(){
-		
+
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 		mainPanel.setOpaque(false);
-		
+
 		scaleBoardToScreenSize();
 		mainfont = new Font("Serif", Font.PLAIN, 18);
 		mainmenuframe = new JFrame("Main Menu");
@@ -86,44 +87,45 @@ public class MainMenuScreen {
 		messages[0] = "How many players would you like to play with:";
 		messages[1] = cmbNumP;
 		initializeLoadingScreen();
-		
-		
+
+		loginBtn = new JButton("Login");
+
 	}
 	private void scaleBoardToScreenSize() {
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		SizeRelated sizeRelated = SizeRelated.getInstance();
 		sizeRelated.setScreen_Width_Height((int)screenSize.getDisplayMode().getWidth(), (int)screenSize.getDisplayMode().getHeight());
 	}
-	
+
 	private void addMouseListen(){
 		SinglePButton.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e){
 
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
 				(new startSinglePlayer()).start();
 			}
-			
+
 			class startSinglePlayer extends Thread{
 				@Override
 				public void run(){
@@ -133,33 +135,33 @@ public class MainMenuScreen {
 
 		});
 		MultiPButton.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e){
 
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
 				(new beginMultiplayer()).start();
 			}
-			
+
 			class beginMultiplayer extends Thread{
 				@Override
 				public void run(){
@@ -173,30 +175,30 @@ public class MainMenuScreen {
 		{
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e){
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
 				(new playMinigames()).start();
 			}
-		
+
 			class playMinigames extends Thread{
 				@Override
 				public void run(){
@@ -207,30 +209,30 @@ public class MainMenuScreen {
 					Sounds.waitingRoomJoin.playSound();
 				}
 			}
-		
-		
+
+
 		});
 		ExitButton.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e){
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Timer t = new Timer();
@@ -240,70 +242,105 @@ public class MainMenuScreen {
 					public void run() {
 						System.exit(0);
 					}
-					
+
 				}, 1500);
 				Sounds.landedOnJail.playSound();
 				hideAndDisposeMainMenuScreen();
 			}
 		});
-		
+		loginBtn.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e){
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(loginBtn.isEnabled()){
+					LoginDialog loginDialog = new LoginDialog(mainmenuframe);
+					loginDialog.setVisible(true);
+					if(loginDialog.isSucceeded()){
+						loginBtn.setText("Hi " + loginDialog.getUsername() + "!");
+						loginBtn.setEnabled(false);
+					}
+				}
+			}
+		});
 	}
-	
+
 
 	public void createMenuWindow(){
 		setMenuBackgroundColor();
 		mainmenuframe.setSize(500,500);
 		pathRelated = PathRelated.getInstance();
-//		backgroundpic = new JLabel(new ImageIcon(pathRelated.getImagePath() + "background.jpg"));
-//		System.out.println(mainmenuframe.getWidth() + " : " + mainmenuframe.getHeight());
-//		backgroundpic.setBounds(0, 0, mainmenuframe.getWidth(), mainmenuframe.getHeight());
-//		mainPanel.add(backgroundpic);
-		
+		//		backgroundpic = new JLabel(new ImageIcon(pathRelated.getImagePath() + "background.jpg"));
+		//		System.out.println(mainmenuframe.getWidth() + " : " + mainmenuframe.getHeight());
+		//		backgroundpic.setBounds(0, 0, mainmenuframe.getWidth(), mainmenuframe.getHeight());
+		//		mainPanel.add(backgroundpic);
+
 		mainmenuframe.setResizable(false);
 		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainmenuframe.setVisible(true);
-		
-		
-		
+
+
+
 		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
 		HelloThere.setBounds(100,50,300,50);
 		mainPanel.add(HelloThere);
 		SinglePButton.setFont(mainfont);
-		SinglePButton.setBounds(175,150,150,50);
+		SinglePButton.setBounds(175,125,150,50);
 		mainPanel.add(SinglePButton);
 		MultiPButton.setFont(mainfont);
-		MultiPButton.setBounds(175,225,150,50);
+		MultiPButton.setBounds(175,185,150,50);
 		mainPanel.add(MultiPButton);
 		MiniGamesButton.setFont(mainfont);
-		MiniGamesButton.setBounds(175,300,150,50);
+		MiniGamesButton.setBounds(175,245,150,50);
 		mainPanel.add(MiniGamesButton);
 		ExitButton.setFont(mainfont);
-		ExitButton.setBounds(175,375,150,50);
+		loginBtn.setBounds(175,305,150,50);
+		loginBtn.setFont(mainfont);
+		mainPanel.add(loginBtn);
+		ExitButton.setBounds(175,365,150,50);
 		mainPanel.add(ExitButton);
 		mainmenuframe.add(mainPanel);
 		mainPanel.add(new BackgroundImage(pathRelated.getImagePath() + "background.jpg", mainmenuframe.getWidth(), mainmenuframe.getHeight()));
-//		mainPanel.setComponentZOrder(backgroundpic, 0);
-//		mainPanel.setComponentZOrder(HelloThere, 1);
-//
-//		mainPanel.setComponentZOrder(SinglePButton, 1);
-//
-//		mainPanel.setComponentZOrder(MultiPButton, 1);
-//
-//		mainPanel.setComponentZOrder(MiniGamesButton, 1);
-//
-//		mainPanel.setComponentZOrder(ExitButton, 1);
+		//		mainPanel.setComponentZOrder(backgroundpic, 0);
+		//		mainPanel.setComponentZOrder(HelloThere, 1);
+		//
+		//		mainPanel.setComponentZOrder(SinglePButton, 1);
+		//
+		//		mainPanel.setComponentZOrder(MultiPButton, 1);
+		//
+		//		mainPanel.setComponentZOrder(MiniGamesButton, 1);
+		//
+		//		mainPanel.setComponentZOrder(ExitButton, 1);
 
 		mainPanel.repaint();
 		mainPanel.revalidate();
 		mainmenuframe.repaint();
 		mainmenuframe.revalidate();
 	}
-	
+
 	private void setMenuBackgroundColor() {
 		Color menuBackgroundColor = new Color(105, 177, 255); // LIGHT BLUE
-//		mainPanel.setBackground(menuBackgroundColor);
+		//		mainPanel.setBackground(menuBackgroundColor);
 	}
-	
+
 	private void startSinglePlayer() {
 		int gNumP;
 		getNumPlayers();
@@ -325,8 +362,8 @@ public class MainMenuScreen {
 		mainmenuframe.setVisible(false);
 		mainmenuframe.dispose();
 	}
-	
-	
+
+
 	private void displayHostOrClientDialogBox(AskUserMultiplayerDialogBox mwr) {
 		switch (mwr.askUserHostOrClient()){
 		case 0:
@@ -366,11 +403,11 @@ public class MainMenuScreen {
 			setupClient(mwr);
 		}
 	}
-	
-	
+
+
 	public static void main(String[] args){
 		new MainMenuScreen();
 	}
-	
+
 }
 

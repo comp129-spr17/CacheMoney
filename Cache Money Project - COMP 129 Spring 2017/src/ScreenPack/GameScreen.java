@@ -119,6 +119,7 @@ public class GameScreen extends JFrame{
 		loadingProgress = 0;
 		if (Property.isSQLEnabled){
 			sqlRelated = SqlRelated.getInstance();
+
 		}
 		mPack = MBytePack.getInstance();
 		pInfo = PlayingInfo.getInstance();

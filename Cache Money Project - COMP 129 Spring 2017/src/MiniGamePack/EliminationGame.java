@@ -2,28 +2,21 @@ package MiniGamePack;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import GamePack.ImageRelated;
-import GamePack.PathRelated;
 import GamePack.Player;
-import GamePack.SizeRelated;
 import InterfacePack.Sounds;
-import MultiplayerPack.MBytePack;
 import MultiplayerPack.UnicodeForServer;
 
 public class EliminationGame extends MiniGame{
 
 	private final int MAXIMUM_TIME_REMAINING = 10;
-	private final int NUM_APPLES_AVAILABLE = 9;
+	private final int NUM_APPLES_AVAILABLE = 8;
 	private final int APPLE = 0;
 	private final int ROTTEN_APPLE = 1;
 	private final int SELECTED_APPLE = 2;
@@ -92,7 +85,7 @@ public class EliminationGame extends MiniGame{
 					displayWinnerAndCleanUp();
 				}
 				else{
-					pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, chosenRotten + 1));
+					pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, apples, chosenRotten + 1));
 				}
 				t.cancel();
 				t.purge();
@@ -136,7 +129,7 @@ public class EliminationGame extends MiniGame{
 			setAppleArrayAndIcons();
 		}
 		else if (isOwner){
-			pInfo.sendMessageToServer(mPack.packIntValue(unicode.GENERIC_SEND_INTEGER, rand.nextInt(apples.length)));
+			pInfo.sendMessageToServer(mPack.packIntValue(UnicodeForServer.GENERIC_SEND_INTEGER, rand.nextInt(apples.length)));
 		}
 		else{
 			delayThread(200);
@@ -218,7 +211,7 @@ public class EliminationGame extends MiniGame{
 	public void addSyncedRandomNumber(int num){
 		chosenRotten = num;
 		if (isOwner){
-			pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, -1));
+			pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, apples, -1));
 		}
 	}
 	
@@ -247,11 +240,7 @@ public class EliminationGame extends MiniGame{
 		listener = new KeyListener(){
 
 			@Override
-			public void keyTyped(KeyEvent e) {}
-			@Override
-			public void keyPressed(KeyEvent e) {}
-			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				if (!allowInput || (turnNum != isOwner && !pInfo.isSingle())){
 					return;
 				}
@@ -265,7 +254,7 @@ public class EliminationGame extends MiniGame{
 							changeTurn();
 						}
 						else{
-							pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.SPAM_MINI_GAME_GUEST));
+							pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.SPAM_MINI_GAME_GUEST));
 						}
 					}
 					return;
@@ -281,7 +270,7 @@ public class EliminationGame extends MiniGame{
 						removeApple(chosenApple);
 					}
 					else if (isOwner == turnNum){
-						pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, chosenApple));
+						pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, apples, chosenApple));
 					}
 					break;
 				case ROTTEN_APPLE:
@@ -290,12 +279,18 @@ public class EliminationGame extends MiniGame{
 						displayWinnerAndCleanUp();
 					}
 					else if (isOwner == turnNum){
-						pInfo.sendMessageToServer(mPack.packIntArray(unicode.GENERIC_SEND_INT_ARRAY, apples, chosenApple));
+						pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, apples, chosenApple));
 					}
 					break;
 				case SELECTED_APPLE:
 					break;
 				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
 			}
 		};
 	}
