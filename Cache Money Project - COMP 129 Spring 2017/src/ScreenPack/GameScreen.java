@@ -70,6 +70,7 @@ public class GameScreen extends JFrame{
 	private JLabel pleaseSelectMortgage;
 	private DefaultComboBoxModel tempComboBox;
 	private JButton displayTestWindow;
+	private PlayerInfoDisplay pInfoDisplay;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -433,15 +434,17 @@ public class GameScreen extends JFrame{
 		// 10
 		sizeRelated = SizeRelated.getInstance();
 		pDisplay = PropertyDisplay.getInstance();
+		pInfoDisplay = PlayerInfoDisplay.getInstance();
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
 		mainPanel.add(pDisplay);
-		
+		mainPanel.add(pInfoDisplay);
 		repaint();
 		
 		
 		pDisplay.setVisible(false);
+		pInfoDisplay.setVisible(false);
 		btnExit = new JButton("X");
 		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
 		mainPanel.add(btnExit);

@@ -32,6 +32,7 @@ public class MClient {
 	private int thisPlayNum;
 	private HashMap<Integer, DoAction> doActions;
 	private PlayingInfo playingInfo;
+	private ArrayList<String> variableCodeString;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
 		this.pList = pList;
@@ -44,74 +45,42 @@ public class MClient {
 		void doAction(ArrayList<Object> result);
 	}
 	public void doAction(ArrayList<Object> result){
-		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString((Integer)result.get(0)));
+		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString.get((Integer)result.get(0)));
 		doActions.get((Integer)result.get(0)).doAction(result);
 	}
-	private String variableCodeString(int code){
-		switch (code){
-		case 0:
-			return "DICE";
-		case 1:
-			return "PROPERTY";
-		case 2:
-			return "PLAYER_NUM";
-		case 3:
-			return "END_TURN";
-		case 4:
-			return "START_GAME";
-		case 5:
-			return "END_PROPERTY";
-		case 6:
-			return "DISCONNECTED";
-		case 7:
-			return "HOST_DISCONNECTED";
-		case 8:
-			return "START_GAME_REPLY";
-		case 9:
-			return "PROPERTY_PURCHASE";
-		case 10:
-			return "PROPERTY_RENT_PAY";
-		case 11:
-			return "SPAM_MINI_GAME_GUEST";
-		case 12:
-			return "SPAM_MINI_GAME_OWNER";
-		case 13:
-			return "REACTION_MINI_GAME_GUEST_EARLY";
-		case 14:
-			return "REACTION_MINI_GAME_OWNER_EARLY";
-		case 15:
-			return "REACTION_MINI_GAME_GUEST_END";
-		case 16:
-			return "REACTION_MINI_GAME_OWNER_END";
-		case 17:
-			return "RANDOM_NUM";
-		case 18:
-			return "GENERIC_SEND_INT_ARRAY";
-		case 19:
-			return "BOX_MINI_GAME_SURPRISE_BOXES";
-		case 20:
-			return "RSP_MINI_GAME_DECISION";
-		case 21:
-			return "GENERIC_SEND_INTEGER";
-		case 22:
-			return "MATH_MINI_GAME_RANDS";
-		case 23:
-			return "MATH_MINI_GAME_ANS";
-		case 24:
-			return "MINI_GAME_START_CODE";
-		case 25:
-			return "PROPERTY_BIDDING";
-		case 26:
-			return "PROPERTY_SWITCH_TO_AUCTION";
-		case 27:
-			return "STACK_CARD_DRAWN";
-		case 28:
-			return "BUILD_HOUSE";
-		case 29:
-			return "GOT_OUT_OF_JAIL";
-		default:
-			return "UNIMPLEMENTED CODE: PLEASE GOTO MCLIENT.JAVA AND ADD THE UNICODE FOR SERVER STRING AT THE SWITCH STATEMENT!!";
-		}
+	private void initVariableCodeString(){
+		variableCodeString.add(new String("DICE"));
+		variableCodeString.add(new String("PROPERTY"));
+		variableCodeString.add(new String("PLAYER_NUM"));
+		variableCodeString.add(new String("END_TURN"));
+		variableCodeString.add(new String("START_GAME"));
+		variableCodeString.add(new String("END_PROPERTY"));
+		variableCodeString.add(new String("DISCONNECTED"));
+		variableCodeString.add(new String("HOST_DISCONNECTED"));
+		variableCodeString.add(new String("START_GAME_REPLY"));
+		variableCodeString.add(new String("PROPERTY_PURCHASE"));
+		variableCodeString.add(new String("PROPERTY_RENT_PAY"));
+		variableCodeString.add(new String("SPAM_MINI_GAME_GUEST"));
+		variableCodeString.add(new String("SPAM_MINI_GAME_OWNER"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_EARLY"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_EARLY"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_END"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_END"));
+		variableCodeString.add(new String("RANDOM_NUM"));
+		variableCodeString.add(new String("GENERIC_SEND_INT_ARRAY"));
+		variableCodeString.add(new String("BOX_MINI_GAME_SURPRISE_BOXES"));
+		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
+		variableCodeString.add(new String("GENERIC_SEND_INTEGER"));
+		variableCodeString.add(new String("MATH_MINI_GAME_RANDS"));
+		variableCodeString.add(new String("MATH_MINI_GAME_ANS"));
+		variableCodeString.add(new String("MINI_GAME_START_CODE"));
+		variableCodeString.add(new String("PROPERTY_BIDDING"));
+		variableCodeString.add(new String("PROPERTY_SWITCH_TO_AUCTION"));
+		variableCodeString.add(new String("STACK_CARD_DRAWN"));
+		variableCodeString.add(new String("BUILD_HOUSE"));
+		variableCodeString.add(new String("GOT_OUT_OF_JAIL"));
+		variableCodeString.add(new String("SEND_USER_ID"));
+	
 	}
 	
 	
@@ -124,6 +93,8 @@ public class MClient {
     }
 	private void init(){
 		playingInfo = PlayingInfo.getInstance();
+		variableCodeString = new ArrayList<>();
+		initVariableCodeString();
 		doActions = new HashMap<>();
 		mUnpack = MByteUnpack.getInstance();
 		mPack = MBytePack.getInstance();
@@ -157,7 +128,8 @@ public class MClient {
 		doActions.put(UnicodeForServer.STACK_CARD_DRAWN, new DoAction(){public void doAction(ArrayList<Object> result){doDrawChanceStack(result);}});
 		doActions.put(UnicodeForServer.BUILD_HOUSE, new DoAction(){public void doAction(ArrayList<Object> result){doBuildHouse(result);}});
 		doActions.put(UnicodeForServer.GOT_OUT_OF_JAIL, new DoAction(){public void doAction(ArrayList<Object> result){doGotOutOfJail(result);}});
-	
+		doActions.put(UnicodeForServer.SEND_USER_ID, new DoAction(){public void doAction(ArrayList<Object> result){doSetUserId(result);}});
+		
 	}
 	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 		isConnected = false;
@@ -249,7 +221,11 @@ public class MClient {
 			pList[k].setIsOn(true);
 			diceP.placePlayerToBoard(k);
 		}
+		
 		diceP.actionForStart();
+
+		playingInfo.sendMessageToServer(mPack.packStringInt(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(), playingInfo.getMyPlayerNum()));
+        
 	}
 	private void doRemoveProperty(){
 		diceP.actionForRemovePropertyPanel();
@@ -325,6 +301,9 @@ public class MClient {
 		diceP.actionForBuildHouse();
 	}
 	
+	private void doSetUserId(ArrayList<Object> result){
+		pList[(Integer)result.get(2)].setUserId((String)result.get(1));
+	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);
 	}

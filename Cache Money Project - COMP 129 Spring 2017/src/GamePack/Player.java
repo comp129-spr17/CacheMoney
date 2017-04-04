@@ -23,6 +23,7 @@ public final class Player {
 	private int playerNum;
 	private int pastPositionNumber;
 	private int playerPositionNumber;
+	private String user_id;
 	private boolean isOn;
 	private static final Player GlobalPlayer0 = new Player(0);
 	private static final Player GlobalPlayer1 = new Player(1);
@@ -415,6 +416,13 @@ public final class Player {
 		{
 			System.out.print("You owe more money than you have!"); //Need to implement mortgage backup stuff
 		}
+	}
+	public void setUserId(String user_id){
+		this.user_id = user_id;
+		playerpiece.setUserId(user_id);
+	}
+	public String getUserId(){
+		return user_id;
 	}
 	
 	public int getNumPropertiesOwned(){

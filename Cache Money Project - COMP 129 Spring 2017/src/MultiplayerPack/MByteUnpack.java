@@ -85,7 +85,9 @@ public final class MByteUnpack {
 		GetResults.put(UnicodeForServer.BUILD_HOUSE, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.GOT_OUT_OF_JAIL, new GetResult(){public ArrayList<Object> getResult(byte[] result){
-			return cleanUpAndReturn();}});
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.SEND_USER_ID, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringInt(result);
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
@@ -209,6 +211,15 @@ public final class MByteUnpack {
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readBoolean());
+			resultList.add(dInputStream.readInt());
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackStringInt(byte[] result){
+		try{
+			resultList.add(dInputStream.readUTF());
 			resultList.add(dInputStream.readInt());
 		}
 		catch(IOException e){

@@ -202,6 +202,20 @@ public final class MBytePack {
 		
 		return null;
 	}
+	public byte[] packStringInt(int requestCode, String str, int playerNum){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeUTF(str);
+			dOutputStream.writeInt(playerNum);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	
 	public byte[] packSimpleRequest(int requestCode){
 		try{

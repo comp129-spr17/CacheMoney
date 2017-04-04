@@ -13,7 +13,6 @@ import GamePack.SizeRelated;
 public final class PropertyDisplay extends JPanel{
 	private SizeRelated sizeRelated;
 	private static final PropertyDisplay pDisplay = new PropertyDisplay();
-	private Property info;
 	private ArrayList<JLabel> labels;
 	private int width;
 	private ImageRelated imageRelated;

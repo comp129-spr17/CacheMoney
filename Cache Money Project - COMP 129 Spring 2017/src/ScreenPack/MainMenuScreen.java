@@ -77,6 +77,7 @@ public class MainMenuScreen {
 		mainfont = new Font("Serif", Font.PLAIN, 18);
 		mainmenuframe = new JFrame("Main Menu");
 		MultiPButton = new JButton("Multiplayer");
+		MultiPButton.setEnabled(false);
 		SinglePButton = new JButton("Single Player");
 		HelloThere = new JLabel("Cache Money", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
@@ -158,8 +159,11 @@ public class MainMenuScreen {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
-				(new beginMultiplayer()).start();
+				if(MultiPButton.isEnabled()){
+					Sounds.buttonConfirm.playSound();
+					(new beginMultiplayer()).start();
+				}
+				
 			}
 
 			class beginMultiplayer extends Thread{
@@ -277,6 +281,7 @@ public class MainMenuScreen {
 					if(loginDialog.isSucceeded()){
 						loginBtn.setText("Hi " + loginDialog.getUsername() + "!");
 						loginBtn.setEnabled(false);
+						MultiPButton.setEnabled(true);
 					}
 				}
 			}
@@ -403,7 +408,7 @@ public class MainMenuScreen {
 			setupClient(mwr);
 		}
 	}
-
+	
 
 	public static void main(String[] args){
 		new MainMenuScreen();

@@ -32,7 +32,7 @@ public final class UnicodeForServer {
 	public static final int STACK_CARD_DRAWN = 27;
 	public static final int BUILD_HOUSE = 28;
 	public static final int GOT_OUT_OF_JAIL = 29;
-	
+	public static final int SEND_USER_ID = 30;
 	private UnicodeForServer(){
 		
 	}
