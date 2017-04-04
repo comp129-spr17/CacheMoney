@@ -8,5 +8,11 @@ public class CredentialManager {
         return SqlRelated.checkingLogin(username, password);
     }
 	
+	//TODO Send new account data to DB
+	public static boolean createUser(String firstName, String lastName, String username, String password){
+		//TODO SQL method to return whether successful or not?
+		SqlRelated.insertNewUser(username, password, firstName, lastName);
+		return true;
+	}
 	
 }
