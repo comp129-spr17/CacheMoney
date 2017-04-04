@@ -9,12 +9,7 @@ import MultiplayerPack.SqlRelated;
 public class SqlRelatedTest {
 	SqlRelated sqlRelated;
 	public SqlRelatedTest(){
-		try {
-			sqlRelated = SqlRelated.getInstance();
-		} catch (Exception e) {
-			System.out.println("***********************\nCONNECTION TO SQL FAILED.\nCheck to see if you are connected to the VPN or PacificNet, and then try again.\nDisable SQL in Property.java to load the game from text files.\n***********************");
-			System.exit(1);
-		}
+		sqlRelated = SqlRelated.getInstance();
 	}
 	
 	@Test
@@ -43,5 +38,29 @@ public class SqlRelatedTest {
 		sqlRelated.getNextP(0);
 		assertTrue(sqlRelated.getPropertyRentBase() == 4);
 	}
-
+	@Test
+	public void testInsertNewUser(){
+//		sqlRelated.insertNewUser("test1", "123", "dev", "li");
+	}
+	@Test
+	public void testUpdateWinOrLose(){
+//		sqlRelated.updateWinOrLose("test1", true);
+//		sqlRelated.updateWinOrLose("test1", false);
+	}
+//	@Test
+//	public void testAddFriend(){
+//		sqlRelated.addFriend("dlim", "test1");
+//	}
+	@Test
+	public void testIsIdExisting(){
+		assertTrue(sqlRelated.isIdExisting("DliM"));
+		assertTrue(sqlRelated.isIdExisting("TeST1"));
+		assertFalse(sqlRelated.isIdExisting("TeST1@"));
+	}
+	@Test
+	public void testCheckingLogin(){
+		assertTrue(sqlRelated.checkingLogin("dlim","123"));
+		assertFalse(sqlRelated.checkingLogin("dliM","1a23"));
+	}
+	
 }

@@ -27,13 +27,14 @@ public class LoginDialog extends JDialog {
 	private JButton cancel;
 	private JButton createAccount;
 	private boolean succeeded;
+	private PlayingInfo playingInfo;
 
 
 	public LoginDialog(Frame parent){
 		super(parent,"Login",true);
 		JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
- 
+        playingInfo = PlayingInfo.getInstance();
         constraints.fill = GridBagConstraints.HORIZONTAL;
  
         uNameLabel = new JLabel("Username: ");
@@ -72,6 +73,8 @@ public class LoginDialog extends JDialog {
                             "Login",
                             JOptionPane.INFORMATION_MESSAGE);
                     succeeded = true;
+                    playingInfo.setLoggedInId(getUsername());
+                    playingInfo.setLoggedIn();
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(LoginDialog.this,
