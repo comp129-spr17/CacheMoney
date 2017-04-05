@@ -146,10 +146,9 @@ public class PropertyInfoPanel extends JPanel{
 		bPanel.add(mPanel);
 		loadPropertyInfo(property);
 		infoPanel.removeAll();
+		setButtonsEnabled((pInfo.isSingle() || isCurrent)); 
 		renderPropertyInfo(currentPlayer, isCurrent);
 		hidePreviousPanel();
-		if(pInfo.isSingle() || isCurrent)
-			setButtonsEnabled(true);
 		
 	}
 	
@@ -194,6 +193,7 @@ public class PropertyInfoPanel extends JPanel{
 		}else{
 			addBuyButton();
 			addAuctionButton();
+			buyButton.setEnabled(property.getBuyingPrice() < this.currentPlayer.getTotalMonies());
 			Sounds.landedOnUnownedProperty.playSound();
 		}
 		addHideButton();
@@ -423,6 +423,7 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if (returnButton.isEnabled()){
 					Sounds.buttonCancel.playSound();
+					returnButton.setEnabled(false);
 					dismissPropertyPanel();
 				}
 			}
