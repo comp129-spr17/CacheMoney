@@ -291,6 +291,7 @@ public class JailInfoPanel extends JPanel {
 	
 	public void actionForGetOutOfJail(){
 		currentPlayer.pay(50);
+		Sounds.money.playSound();
 		currentPlayer.setInJail(false);
 		endJailPanel();
 		dicePanel.displayEndTurnButton();
