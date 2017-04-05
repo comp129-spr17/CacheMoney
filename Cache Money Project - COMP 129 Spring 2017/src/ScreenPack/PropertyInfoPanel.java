@@ -193,7 +193,7 @@ public class PropertyInfoPanel extends JPanel{
 		}else{
 			addBuyButton();
 			addAuctionButton();
-			buyButton.setEnabled(property.getBuyingPrice() < this.currentPlayer.getTotalMonies());
+			buyButton.setEnabled(property.getBuyingPrice() < this.currentPlayer.getTotalMonies() && (pInfo.isSingle() || isCurrent));
 			Sounds.landedOnUnownedProperty.playSound();
 		}
 		addHideButton();
