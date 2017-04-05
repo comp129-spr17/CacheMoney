@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 
+import org.junit.experimental.theories.Theories;
+
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
@@ -68,6 +70,9 @@ public final class MoneyLabels {
 		this.totalPlayers = playerCount;
 		init();
 	}
+	public void setNumPlayer(int playerNum){
+		totalPlayers = playerNum;
+	}
 	private void init(){
 		sizerelated = SizeRelated.getInstance();
 		imagerelated = ImageRelated.getInstance();
@@ -79,7 +84,7 @@ public final class MoneyLabels {
 		initializePiecePictures();
 		setJailIcons();
 		addLabelsToPlayerInfo();
-		removeNonPlayers();
+		
 	}
 	private void checkWinner()
 	{
@@ -103,7 +108,7 @@ public final class MoneyLabels {
 	
 		
 	}
-	private void removeNonPlayers()
+	public void removeNonPlayers()
 	{
 		for (int x = 0; x < 4; x ++)
 		{
