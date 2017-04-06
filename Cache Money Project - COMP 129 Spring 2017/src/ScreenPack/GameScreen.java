@@ -469,6 +469,10 @@ public class GameScreen extends JFrame{
 		//mortgageWindow
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
+		if (pInfo.isSingle())
+		{
+			mLabels.removeNonPlayers();
+		}
 		tWindow = TestingWindow.getInstance();
 		tWindow.initLabels(testInfo, insets, players, totalPlayers, mLabels);
 		loadingProgress = 10;

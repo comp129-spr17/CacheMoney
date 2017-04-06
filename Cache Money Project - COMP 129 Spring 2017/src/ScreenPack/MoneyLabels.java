@@ -84,7 +84,6 @@ public final class MoneyLabels {
 		initializePiecePictures();
 		setJailIcons();
 		addLabelsToPlayerInfo();
-		
 	}
 	private void checkWinner()
 	{
