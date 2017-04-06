@@ -11,7 +11,7 @@ import MultiplayerPack.PlayingInfo;
 
 public class MiniGamePanel extends JPanel{
 	private final boolean DEBUG_SAME_MINIGAME = false;
-	public final static int NUM_OF_MINIGAMES_AVAILABLE = 8;
+	public final static int NUM_OF_MINIGAMES_AVAILABLE = 9;
 	private final int GAME_TO_START_ON = 7; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
@@ -75,6 +75,7 @@ public class MiniGamePanel extends JPanel{
 		mGames[5] = new MathGame(this);
 		mGames[6] = new MemorizationGame(this);
 		mGames[7] = new TicTacToeGame(this);
+		mGames[8] = new UtilityGame(this);
 	}
 	public void openMiniGame(Player owner, Player guest, boolean isCurrent){
 		hostPanel.setVisible(false);

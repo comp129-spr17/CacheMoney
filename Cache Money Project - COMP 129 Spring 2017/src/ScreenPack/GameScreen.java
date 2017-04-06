@@ -131,6 +131,8 @@ public class GameScreen extends JFrame{
 		createPlayers();
 		init(isHost);
 		//setGameScreenBackgroundColor();
+		
+		
 	}
 	
 
@@ -491,8 +493,8 @@ public class GameScreen extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
-		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
-		
+//		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
+//		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 		
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);

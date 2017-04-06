@@ -18,6 +18,7 @@ public final class PathRelated {
 	private final static String MINI_BOX_IMG_PATH = MINI_IMG_PATH + "box/";
 	private final static String MINI_MATH_IMG_PATH = MINI_IMG_PATH + "math/";
 	private final static String MINI_ELIMINATION_PATH = MINI_IMG_PATH + "elimination/";
+	private final static String MINI_UTILITY_PATH = MINI_IMG_PATH + "utility/";
 	private PathRelated(){
 		
 	}
@@ -68,5 +69,8 @@ public final class PathRelated {
 	}
 	public String getMiniEliminationPath() {
 		return MINI_ELIMINATION_PATH;
+	}
+	public String getUtilityPath() {
+		return MINI_UTILITY_PATH;
 	}
 }

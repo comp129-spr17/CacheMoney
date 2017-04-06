@@ -64,7 +64,8 @@ public class MiniGameModePanel extends JPanel{
 		gameButton[5] = new JButton("Math Game");
 		gameButton[6] = new JButton("Memorization Game");
 		gameButton[7] = new JButton("Tic-Tac-Toe Game");
-		gameButton[8] = new JButton("Random");
+		gameButton[8] = new JButton("Utility Game");
+		gameButton[9] = new JButton("Random");
 		
 		addButtonListeners();
 		setButtonBounds();

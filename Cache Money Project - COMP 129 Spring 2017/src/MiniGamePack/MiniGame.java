@@ -199,6 +199,9 @@ public class MiniGame{
 		case 7:
 			setInstructions("Tic-Tac-Toe", "<html>Instructions: <br />Defeat your opponent in a tic-tac-toe match, but the game starts with 1 spot randomly filled! Tie favors the owner of the property.<br /><br />Controls:<br />Owner: Press a num key to place X on your turn. <br />Guest: Press a num key to place O on your turn.<html>");
 			break;
+		case 8:
+			setInstructions("Utility Game", "<html>Instructions: <br />You have 10 seconds to make sure all of the lights are turned off, but some of the light switches have reversed functionality!<br /><br />Controls:<br />Guest: Press a num key to flip the respective light switch.<html>");
+			break;
 		default:
 			break;
 		}
