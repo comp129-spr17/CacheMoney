@@ -88,7 +88,7 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
-		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
+		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE - 1;
 		if (DEBUG_SAME_MINIGAME){
 			gameNum = GAME_TO_START_ON;
 		}
