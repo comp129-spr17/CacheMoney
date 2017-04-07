@@ -17,6 +17,8 @@ public class UtilityGame extends MiniGame {
 	private final int OFF = 0;
 	private final int ON = 1;
 	private final int GRID_LENGTH = 9;
+	private final int LOWER_BOUND = 4;
+	private final int UPPER_BOUND = 6;
 	
 	private int[] trueGrid;
 	private int[] switchGrid;
@@ -87,7 +89,7 @@ public class UtilityGame extends MiniGame {
 	
 	private void fillGrids(){
 		numSwitchesReversed = 0;
-		while (numSwitchesReversed < 2 || numSwitchesReversed > 5){
+		while (numSwitchesReversed <= LOWER_BOUND || numSwitchesReversed > UPPER_BOUND){
 			numSwitchesReversed = 0;
 			for (int i = 0; i < GRID_LENGTH; i++){
 				trueGrid[i] = rand.nextInt(2);
@@ -158,7 +160,7 @@ public class UtilityGame extends MiniGame {
 	
 	private void finishGame(){
 		winner = true;
-		Sounds.landedOnOwnedProperty.playSound();
+		Sounds.waitingRoomJoin.playSound();
 		forEnding();
 	}
 	
@@ -173,7 +175,7 @@ public class UtilityGame extends MiniGame {
 				gridLbls[i].setIcon(lightDisplay[OFF]);
 			}
 			Sounds.buttonPress.playSound();
-			delayThread(300);
+			delayThread(200);
 		}
 		//printGrid(switchGrid);
 		
