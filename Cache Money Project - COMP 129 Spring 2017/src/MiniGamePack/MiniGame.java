@@ -160,7 +160,7 @@ public class MiniGame{
 		miniPanel.removeAll();
 		isOwnerSetting();
 		miniPanel.add(startPanel);
-		btnStart.setEnabled(pInfo.isSingle() || isOwner);
+		btnStart.setEnabled(pInfo.isSingle() || (isOwner && GAME_NUM != 8) || (isGuest && GAME_NUM == 8));
 		if (!pInfo.isSingle()){
 			btnStart.setText(isOwner ? "Start Minigame!" : "Waiting For Owner to Start...");
 		}

@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import InterfacePack.Sounds;
+import MultiplayerPack.UnicodeForServer;
 import javafx.scene.image.Image;
 
 public class UtilityGame extends MiniGame {
@@ -52,14 +53,16 @@ public class UtilityGame extends MiniGame {
 					// do nothing here
 					return;
 				}
-				if (numSelected == 0 || !allowInput){
+				if (numSelected == 0 || !allowInput || !isGuest){
 					return;
 				}
-				Sounds.movePiece.playSound();
-				numSelected -= 1;
-				switchGrid[numSelected] = (switchGrid[numSelected] + 1) % 2;
+				if (pInfo.isSingle()){
+					actionForFlipSwitch(numSelected);
+				}
+				else {
+					pInfo.sendMessageToServer(mPack.packIntValue(UnicodeForServer.GENERIC_SEND_INTEGER, numSelected + 10));
+				}
 				
-				gridLbls[numSelected].setIcon(lightSwitchIcon[switchGrid[numSelected]]);
 				
 			}
 
@@ -73,6 +76,13 @@ public class UtilityGame extends MiniGame {
 		
 	}
 
+	private void actionForFlipSwitch(int numSelected){
+		Sounds.movePiece.playSound();
+		numSelected -= 1;
+		switchGrid[numSelected] = (switchGrid[numSelected] + 1) % 2;
+		gridLbls[numSelected].setIcon(lightSwitchIcon[switchGrid[numSelected]]);
+	}
+	
 	private void initGrids() {
 		trueGrid = new int[GRID_LENGTH];
 		switchGrid = new int[GRID_LENGTH];
@@ -88,17 +98,7 @@ public class UtilityGame extends MiniGame {
 	}
 	
 	private void fillGrids(){
-		numSwitchesReversed = 0;
-		while (numSwitchesReversed <= LOWER_BOUND || numSwitchesReversed > UPPER_BOUND){
-			numSwitchesReversed = 0;
-			for (int i = 0; i < GRID_LENGTH; i++){
-				trueGrid[i] = rand.nextInt(2);
-				numSwitchesReversed += trueGrid[i];
-				
-	//			gridLbls[i] = new JLabel();
-	//			gridLbls[i].setIcon(lightSwitchIcon[OFF]); // 108x152
-			}
-		}
+		
 		int x = 0;
 		for (int i = 1; i < 4; i++){
 			for (int j = 1; j < 4; j++){
@@ -112,6 +112,20 @@ public class UtilityGame extends MiniGame {
 		}
 		//printGrid(trueGrid);
 	}
+
+	private void fillTrueGrid() {
+		numSwitchesReversed = 0;
+		while (numSwitchesReversed <= LOWER_BOUND || numSwitchesReversed > UPPER_BOUND){
+			numSwitchesReversed = 0;
+			for (int i = 0; i < GRID_LENGTH; i++){
+				trueGrid[i] = rand.nextInt(2);
+				numSwitchesReversed += trueGrid[i];
+				
+	//			gridLbls[i] = new JLabel();
+	//			gridLbls[i].setIcon(lightSwitchIcon[OFF]); // 108x152
+			}
+		}
+	}
 	
 	public void addGame(){
 		GAME_NUM = 8;
@@ -120,12 +134,53 @@ public class UtilityGame extends MiniGame {
 		isGameEnded = false;
 		timeRemaining = 10;
 		lightsOn = 0;
+		allowInput = false;
+		
 		fillGrids();
+		
+		
+	}
+	
+	public void addActionToGame(int[] arr, int keyNum) {
+		switch (keyNum){
+		case 0:
+			trueGrid = arr;
+			if (isOwner){
+				pInfo.sendMessageToServer(mPack.packIntValue(UnicodeForServer.GENERIC_SEND_INTEGER, numSwitchesReversed));
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void addSyncedRandomNumber(int num) {
+		if (num >= 10){
+			num -= 10;
+			actionForFlipSwitch(num);
+		}
+		else{
+			numSwitchesReversed = num;
+			actionAfterGridsFilled();
+		}
+		
 	}
 	
 	
 	public void play(){
 		super.play();
+		if (pInfo.isSingle()){
+			fillTrueGrid();
+			actionAfterGridsFilled();
+		}
+		else if (isOwner){
+			fillTrueGrid();
+			pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, trueGrid, 0));
+		}
+		
+	}
+
+	private void actionAfterGridsFilled() {
 		initGameSetting();
 		allowInput = true;
 		(new timeUntilExpire()).start();
@@ -154,7 +209,6 @@ public class UtilityGame extends MiniGame {
 			calculateResult();
 			finishGame();
 		}
-		
 	}
 	
 	
@@ -182,13 +236,13 @@ public class UtilityGame extends MiniGame {
 		lbls.get(1).setText("You left " + lightsOn + " lights on!");
 		
 	}
-	
-	private void printGrid(int[] grid){
-		for (int i = 0; i < grid.length; i++){
-			System.out.print(grid[i] + " ,");
-		}
-		System.out.print("\n");
-	}
+//	
+//	private void printGrid(int[] grid){
+//		for (int i = 0; i < grid.length; i++){
+//			System.out.print(grid[i] + " ,");
+//		}
+//		System.out.print("\n");
+//	}
 
 	protected void cleanUp(){
 		removeKeyListner();

@@ -10,9 +10,9 @@ import MiniGamePack.*;
 import MultiplayerPack.PlayingInfo;
 
 public class MiniGamePanel extends JPanel{
-	private final boolean DEBUG_SAME_MINIGAME = false;
+	private final boolean DEBUG_SAME_MINIGAME = true;
 	public final static int NUM_OF_MINIGAMES_AVAILABLE = 9;
-	private final int GAME_TO_START_ON = 7; // -1 FOR DEFAULT
+	private final int GAME_TO_START_ON = 8; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
