@@ -252,7 +252,7 @@ public class MiniGame{
 	}
 	private void actionForStart(){
 		miniPanel.remove(startPanel);
-		startPanel.removeAll();
+		//startPanel.removeAll();
 		miniPanel.revalidate();
 		miniPanel.repaint();
 		Sounds.minigameBegin.playSound();
