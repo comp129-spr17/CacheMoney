@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -28,15 +30,17 @@ public class SignUpDialog extends JDialog {
 	private JLabel confirmPassLabel;
 	private JLabel firstName;
 	private JLabel lastName;
-	private boolean succeeded;
+	private JLabel uNameOK;
+	private String inputUName;
+	private boolean uNameExists;
 	private JButton createUser;
 	private JButton cancel;
 
-	public SignUpDialog(boolean lDialogSucceeded)
+	public SignUpDialog()
 	{
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
-		succeeded = lDialogSucceeded;
+		inputUName = "";
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 
@@ -76,6 +80,65 @@ public class SignUpDialog extends JDialog {
 		constraints.gridwidth = 2;
 		panel.add(uName, constraints);
 
+		uName.addKeyListener(new KeyListener(){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode() == 8)		//User hits backspace
+		        {
+		        	//Use Substring to remove letters that were already typed in to the display when user hits backspace
+		        	if (!inputUName.isEmpty())
+		        	{
+		        		if(inputUName.length() != uName.getText().length()){
+		        			inputUName = "";
+		        			uName.setText("");
+		        		}else{
+		        			inputUName = inputUName.substring(0, inputUName.length()-1);
+		        		}
+		        	}
+		        }
+		        else if (e.getKeyCode() >= 32 && e.getKeyCode() <= 122 )		//Legal keys from A-Z
+		        {
+		        	inputUName += e.getKeyChar();
+		        }
+		        else
+		        {
+		        	//Do nothing if user hits any other illegal keys
+		        }
+				
+				uNameExists = SqlRelated.isIdExisting(inputUName);
+				System.out.println(inputUName + " " + uNameExists + " " + inputUName.isEmpty());
+				
+				if(uNameExists || inputUName.isEmpty()){
+					uNameOK.setText(":(");
+					createUser.setEnabled(false);
+				}
+				else{
+					uNameOK.setText(":)");
+					createUser.setEnabled(true);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
+		uNameOK = new JLabel("");
+		constraints.gridx = 3;
+		constraints.gridy = 2;
+		constraints.gridwidth = 1;
+		panel.add(uNameOK, constraints);
+
 		passLabel = new JLabel("Password: ");
 		constraints.gridx = 0;
 		constraints.gridy = 3;
@@ -103,7 +166,7 @@ public class SignUpDialog extends JDialog {
 		panel.setBorder(new LineBorder(Color.GRAY));
 
 		createUser = new JButton("Cache In!");
-
+		createUser.setEnabled(false);
 		createUser.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -112,7 +175,6 @@ public class SignUpDialog extends JDialog {
 							"Hi " + getUsername() + "! Your account has ben created!.",
 							"Login",
 							JOptionPane.INFORMATION_MESSAGE);
-					succeeded = true;
 					dispose();
 				} else {
 					JOptionPane.showMessageDialog(SignUpDialog.this,
@@ -125,7 +187,6 @@ public class SignUpDialog extends JDialog {
 					uName.setText("");
 					pass.setText("");
 					confirmPass.setText("");
-					succeeded = false;
 
 				}
 			}
@@ -147,40 +208,40 @@ public class SignUpDialog extends JDialog {
 		pack();
 		setResizable(false);
 	}
-	
+
 	private String getFirstName(){
-    	return fName.getText().trim();
-    }
-	
+		return fName.getText().trim();
+	}
+
 	private String getLastName(){
 		return lName.getText().trim();
 	}
-	
+
 	private String getUsername() {
-        return uName.getText().trim();
-    }
- 
-    private String getPassword() {
-        return new String(pass.getPassword());
-    }
-    
-    private boolean goodUsername(){
-    	//TODO SQL to check that username already exists or not
-    	return true;
-    }
-    
-    private boolean goodPassword(){
-    	String temp = new String(pass.getPassword());
-    	String temp2 = new String(confirmPass.getPassword());
-    	if(temp.equals(temp2))
-    		return true;
-    	
-    	
-    	JOptionPane.showMessageDialog(SignUpDialog.this,
+		return uName.getText().trim();
+	}
+
+	private String getPassword() {
+		return new String(pass.getPassword());
+	}
+
+	private boolean goodUsername(){
+		//TODO SQL to check that username already exists or not
+		return true;
+	}
+
+	private boolean goodPassword(){
+		String temp = new String(pass.getPassword());
+		String temp2 = new String(confirmPass.getPassword());
+		if(temp.equals(temp2))
+			return true;
+
+
+		JOptionPane.showMessageDialog(SignUpDialog.this,
 				"The passwords given are not the same!",
 				"Login",
 				JOptionPane.ERROR_MESSAGE);
-    	return false;
-    }
-    
+		return false;
+	}
+
 }

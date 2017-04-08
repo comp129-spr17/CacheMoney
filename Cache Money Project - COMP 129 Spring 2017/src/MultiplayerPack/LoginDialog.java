@@ -100,7 +100,7 @@ public class LoginDialog extends JDialog {
         createAccount.addActionListener(new ActionListener() {
  
             public void actionPerformed(ActionEvent e) {
-                SignUpDialog SUD = new SignUpDialog(succeeded);
+                SignUpDialog SUD = new SignUpDialog();
                 dispose();
                 SUD.setVisible(true);
             }
