@@ -14,5 +14,9 @@ public class CredentialManager {
 		SqlRelated.insertNewUser(username, password, firstName, lastName);
 		return true;
 	}
+	public static boolean checkIfUserIsLoggedIn(String username){
+		//TODO SQL method to return whether user is logged in already
+		return SqlRelated.isLoggedInAlready(username);
+	}
 	
 }

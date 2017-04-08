@@ -42,7 +42,7 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.END_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPlayerNumberResult(result);
+		GetResults.put(UnicodeForServer.DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.HOST_DISCONNECTED, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
@@ -88,6 +88,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.SEND_USER_ID, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringInt(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CREATE_ROOM, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
@@ -131,9 +133,7 @@ public final class MByteUnpack {
 	}
 	public void unpackGameStartResult(byte[] result){
 		try{
-			int a = dInputStream.readInt();
-			for(int i=0; i<a; i++)
-				resultList.add(dInputStream.readInt());
+			resultList.add(dInputStream.readInt());
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -229,7 +229,14 @@ public final class MByteUnpack {
 			e.printStackTrace();
 		}
 	}
-	
+	public void unpackString(byte[] result){
+		try{
+			resultList.add(dInputStream.readUTF());
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 	public ArrayList<Object> getResult(byte[] result){
 	
 		resetAndReceive(result);

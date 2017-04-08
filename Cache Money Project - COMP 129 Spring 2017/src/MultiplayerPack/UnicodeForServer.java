@@ -15,10 +15,10 @@ public final class UnicodeForServer {
 	public static final int PROPERTY_RENT_PAY = 10;
 	public static final int SPAM_MINI_GAME_GUEST = 11;
 	public static final int SPAM_MINI_GAME_OWNER = 12;
-	public static final int REACTION_MINI_GAME_GUEST_EARLY = 13;
-	public static final int REACTION_MINI_GAME_OWNER_EARLY = 14;
-	public static final int REACTION_MINI_GAME_GUEST_END = 15;
-	public static final int REACTION_MINI_GAME_OWNER_END = 16;
+	public static final int CREATE_ROOM = 13;
+	public static final int JOIN_ROOM = 14;
+	public static final int HOST_LEAVE_ROOM = 15;
+	public static final int LEAVE_ROOM = 16;
 	public static final int RANDOM_NUM = 17;
 	public static final int GENERIC_SEND_INT_ARRAY = 18;
 	public static final int BOX_MINI_GAME_SURPRISE_BOXES = 19;
@@ -33,6 +33,10 @@ public final class UnicodeForServer {
 	public static final int BUILD_HOUSE = 28;
 	public static final int GOT_OUT_OF_JAIL = 29;
 	public static final int SEND_USER_ID = 30;
+	public static final int REACTION_MINI_GAME_GUEST_EARLY = 31;
+	public static final int REACTION_MINI_GAME_OWNER_EARLY = 32;
+	public static final int REACTION_MINI_GAME_GUEST_END = 33;
+	public static final int REACTION_MINI_GAME_OWNER_END = 34;
 	private UnicodeForServer(){
 		
 	}

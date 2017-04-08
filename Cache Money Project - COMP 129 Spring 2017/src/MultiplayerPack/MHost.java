@@ -55,7 +55,7 @@ public class MHost {
 		System.out.println("Server successfully created!\n\n---------\n");		
 		System.out.println("Server IP Address: " + ip);
 		System.out.println("Server Port: " + listener.getLocalPort());
-		createHostClient(ip, listener.getLocalPort(),p);
+//		createHostClient(ip, listener.getLocalPort(),p);
 		
 		
         usersOutput = new ArrayList<>();
@@ -66,19 +66,19 @@ public class MHost {
         
 
         while(true){
-        	try{
-            	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum, startPlayers);
-            	if (playerJoined > 0){
-            		Sounds.waitingRoomJoin.playSound();
-            	}
-            	playerJoined++;
-            	runningClients.add(aChatThread);
-                aChatThread.start();
-
-        	}
-        	catch (IOException e){
-        		break;
-        	}
+//        	try{
+////            	MThread aChatThread = new MThread(listener.accept(), usersOutput, ip, playerNum, startPlayers);
+//            	if (playerJoined > 0){
+//            		Sounds.waitingRoomJoin.playSound();
+//            	}
+//            	playerJoined++;
+////            	runningClients.add(aChatThread);
+////                aChatThread.start();
+//
+//        	}
+//        	catch (IOException e){
+//        		break;
+//        	}
         }
 	}
 	
@@ -132,24 +132,24 @@ public class MHost {
 	public int getCurPlayer(){
 		return playerJoined;
 	}
-	private static void createHostClient(String ip, int port, Player[] player){
-		Timer t = new Timer();
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				try {
-					hostClient = new MClient(ip, port, true, diceP, player);
-					while (hostClient.getIsServerUp()){
-						//nothing
-					}
-//					closeServer();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
-		}, 0);
-		
-	}
+//	private static void createHostClient(String ip, int port, Player[] player){
+//		Timer t = new Timer();
+//		t.schedule(new TimerTask(){
+//
+//			@Override
+//			public void run() {
+//				try {
+//					hostClient = new MClient(ip, port, true, diceP, player);
+//					while (hostClient.getIsServerUp()){
+//						//nothing
+//					}
+////					closeServer();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//			
+//		}, 0);
+//		
+//	}
 }

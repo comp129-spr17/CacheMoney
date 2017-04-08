@@ -71,6 +71,8 @@ public class GameScreen extends JFrame{
 	private DefaultComboBoxModel tempComboBox;
 	private JButton displayTestWindow;
 	private PlayerInfoDisplay pInfoDisplay;
+	private MainGameArea mainGameArea;
+	private WaitingArea waitingArea;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -82,10 +84,10 @@ public class GameScreen extends JFrame{
 		exitSetting(true);
 	}
 	// called if user is the client
-	public GameScreen(boolean isSingle, String ip, int port) throws UnknownHostException, IOException{
+	public GameScreen(boolean isSingle) throws UnknownHostException, IOException{
 		initEverything(false,isSingle);
 		try{
-			addClient(ip,port);
+			addClient();
 		}
 		catch (IOException e){
 			mainPanel.setVisible(false);
@@ -178,8 +180,9 @@ public class GameScreen extends JFrame{
 						e1.printStackTrace();
 					}
 	        	}
-	        	pInfo.sendMessageToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,pInfo.getMyPlayerNum()));
-
+//	        	pInfo.sendMessageToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,pInfo.getMyPlayerNum()));
+	    		
+	    		pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
 	    	}
 		}
         System.exit(1);
@@ -440,13 +443,11 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
-		mainPanel.add(pDisplay);
-		mainPanel.add(pInfoDisplay);
+		
 		repaint();
+		mainGameArea = new MainGameArea(getContentPane());
+//		waitingArea = new WaitingArea(getContentPane());
 		
-		
-		pDisplay.setVisible(false);
-		pInfoDisplay.setVisible(false);
 		btnExit = new JButton("X");
 		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
 		mainPanel.add(btnExit);
@@ -491,6 +492,15 @@ public class GameScreen extends JFrame{
 		mainPanel.add(boardPanel);
 		mainPanel.add(giveJailFreeCard);
 		mainPanel.add(displayTestWindow);
+		mainPanel.add(pDisplay);
+		mainPanel.add(pInfoDisplay);
+		pDisplay.setVisible(false);
+		pInfoDisplay.setVisible(false);
+		if(pInfo.isSingle())
+			switchToGame();
+		else{
+			switchToMainGameArea();
+		}
 		addMuteMusic();
 		addMuteSounds();
 		initButtonListeners();
@@ -503,6 +513,26 @@ public class GameScreen extends JFrame{
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
 		
+		
+	}
+	public void switchToGame(){
+		getContentPane().removeAll();
+		getContentPane().add(mainPanel);
+		getContentPane().repaint();
+		getContentPane().revalidate();
+		
+	}
+	private void switchToMainGameArea(){
+		getContentPane().removeAll();
+		mainGameArea.setComponents();
+		getContentPane().repaint();
+		getContentPane().revalidate();
+		
+	}
+	public void switchToWaitingArea(){
+		mainPanel.removeAll();
+		mainPanel.invalidate();
+		mainPanel.repaint();
 		
 	}
 	private void addMuteMusic() {
@@ -744,8 +774,8 @@ public class GameScreen extends JFrame{
 		}, 0);
 
 	}
-	private void addClient(String ip, int port) throws UnknownHostException, IOException{
-			client = new MClient(ip,port,false,dicePanel,players);
+	private void addClient() throws UnknownHostException, IOException{
+			client = new MClient(false,this,dicePanel,players);
 	}
 	public int getLoadingProgress() {
 		return loadingProgress;

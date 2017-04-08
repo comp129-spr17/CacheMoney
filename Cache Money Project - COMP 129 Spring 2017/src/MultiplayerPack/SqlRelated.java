@@ -221,6 +221,16 @@ public final class SqlRelated {
 		}
 		return false;
 	}
+	public static void loginAndOutAction(String user_id, boolean isLogIn){
+		try {
+			statement = connection.createStatement();
+			statement.executeUpdate("UPDATE user_info "
+					+ "SET isOn=" + isLogIn +" " 
+							+ "WHERE user_id='"+ user_id +"';");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	public static boolean checkingLogin(String user_id, String user_pw){
 		try {
 			statement = connection.createStatement();
@@ -230,6 +240,19 @@ public final class SqlRelated {
 			rSet.next();
 			if(rSet.getInt(1) > 0)
 				return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public static boolean isLoggedInAlready(String user_id){
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT isOn "
+						+ "FROM user_info "
+						+ "WHERE user_id='"+user_id+"';");
+			rSet.next();
+			return rSet.getBoolean(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

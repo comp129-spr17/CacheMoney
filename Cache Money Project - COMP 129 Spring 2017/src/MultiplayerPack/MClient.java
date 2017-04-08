@@ -29,19 +29,22 @@ public class MClient {
 	private UnicodeForServer unicode;
 	private Player[] pList;
 	private int byteCount;
+	private GameScreen gameScreen;
 	private int thisPlayNum;
 	private HashMap<Integer, DoAction> doActions;
 	private PlayingInfo playingInfo;
 	private ArrayList<String> variableCodeString;
 	private MoneyLabels mLabels;
-	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
-		this.diceP = d;
-		this.pList = pList;
-		init();
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		optionBox = new ClientEntranceBox();
-		manuallyEnterIPandPort(br, isHostClient);
-    }
+	private final static int PORT_NUM = 7777;
+	private final static String IP_ADDRESS = "10.70.70.80";
+//	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
+//		this.diceP = d;
+//		this.pList = pList;
+//		init();
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		optionBox = new ClientEntranceBox();
+//		manuallyEnterIPandPort(br, isHostClient);
+//    }
 	interface DoAction{
 		void doAction(ArrayList<Object> result);
 	}
@@ -85,12 +88,13 @@ public class MClient {
 	}
 	
 	
-	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException, UnknownHostException {
+	public MClient(boolean isHostClient, GameScreen gameScreen, DicePanel d, Player[] pList) throws IOException, UnknownHostException {
 		this.diceP = d;
 		this.pList = pList;
+		this.gameScreen = gameScreen;
 		init();
-		optionBox = new ClientEntranceBox(); 
-		connectToServer(ip, port, isHostClient);
+		optionBox = new ClientEntranceBox();
+		connectToServer(isHostClient);
     }
 	private void init(){
 		playingInfo = PlayingInfo.getInstance();
@@ -133,44 +137,43 @@ public class MClient {
 		doActions.put(UnicodeForServer.SEND_USER_ID, new DoAction(){public void doAction(ArrayList<Object> result){doSetUserId(result);}});
 		
 	}
-	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
-		isConnected = false;
-		String userEnteredIpAddress;
-		int userEnteredPortNum;
-		while(!isConnected){
-			if(!optionBox.haveIpAndPort())
-				break;
-			userEnteredIpAddress = optionBox.getIp();
-			userEnteredPortNum = optionBox.getPort();
-			connectToServer(userEnteredIpAddress, userEnteredPortNum, isHostClient);
-		}
-		
-	}
+//	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
+//		isConnected = false;
+//		String userEnteredIpAddress;
+//		int userEnteredPortNum;
+//		while(!isConnected){
+//			if(!optionBox.haveIpAndPort())
+//				break;
+//			userEnteredIpAddress = optionBox.getIp();
+//			userEnteredPortNum = optionBox.getPort();
+//			connectToServer(userEnteredIpAddress, userEnteredPortNum, isHostClient);
+//		}
+//		
+//	}
 
 
 
-	private void connectToServer(String ip, int port, boolean isHostClient)
+	private void connectToServer(boolean isHostClient)
 			throws UnknownHostException, IOException {
 		socket = null;
 		System.out.println("Connecting to the server...");
-		socket = new Socket(ip, port);
+//		socket = new Socket(ip, port);
+		socket = new Socket(IP_ADDRESS, PORT_NUM);
 			//Sounds.buttonConfirm.playSound();
-		System.out.println("Successfully connected to server at\nip: " + ip + " with port: " + port + "!\n");
+		System.out.println("Successfully connected to server at\nip: " + IP_ADDRESS + " with port: " + PORT_NUM + "!\n");
 		isConnected = true;
 //			if(!optionBox.haveName()){
 //				s.close();
 //				return;
 //			}
-		getMsg(socket, ip, port, isHostClient, optionBox.getName());
+		getMsg(socket, isHostClient, optionBox.getName());
 	}
-	private void getMsg(Socket s, String ip, int port, boolean isHostClient, String name) throws IOException{
+	private void getMsg(Socket s, boolean isHostClient, String name) throws IOException{
 		
         InputStream inputStream = s.getInputStream();
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
         playingInfo.setOutputStream(s.getOutputStream());
-        diceP.setIp(ip);	// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
-        diceP.setPort(port);// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
         diceP.setStartGameButtonEnabled(isHostClient);
         
         isServerUp = true;
@@ -182,16 +185,17 @@ public class MClient {
 			@Override
 			public void run() {
 				ArrayList<Object> result;
-				try {
-					byteCount = inputStream.read(msgs);
-					result = mUnpack.getResult(msgs);
-					setPlayer((Integer)result.get(1));
-					diceP.setMyPlayer(thisPlayNum);
-					Sounds.waitingRoomJoin.playSound();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				
+//				try {
+//					byteCount = inputStream.read(msgs);
+//					result = mUnpack.getResult(msgs);
+//					setPlayer((Integer)result.get(1));
+//					diceP.setMyPlayer(thisPlayNum);
+//					Sounds.waitingRoomJoin.playSound();
+//				} catch (IOException e1) {
+//					e1.printStackTrace();
+//				}
+				playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID,playingInfo.getLoggedInId(),"aa",new int[]{0}));
+				playingInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.CREATE_ROOM));
 				while(isServerUp){
 		        	try{
 		        		inputStream.read(msgs);
@@ -218,10 +222,9 @@ public class MClient {
 	private void doStartGame(ArrayList<Object> result){
 		int k;
 		
-		for(int i=1; i<result.size(); i++){
-			k = (Integer)result.get(i);
-			pList[k].setIsOn(true);
-			diceP.placePlayerToBoard(k);
+		for(int i=0; i<(Integer)result.get(1); i++){
+			pList[i].setIsOn(true);
+			diceP.placePlayerToBoard(i);
 		}
 		
 		diceP.actionForStart();

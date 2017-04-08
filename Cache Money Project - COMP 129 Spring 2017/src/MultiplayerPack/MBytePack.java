@@ -71,12 +71,10 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packTotalPlayerPlaying(int requestCode, ArrayList<Integer> playerList){
+	public byte[] packTotalPlayerPlaying(int requestCode, int playerList){
 		try{
 			dOutputStream.writeInt(requestCode);
-			dOutputStream.writeInt(playerList.size());
-			for(int i=0; i<playerList.size(); i++)
-				dOutputStream.writeInt(playerList.get(i));
+			dOutputStream.writeInt(playerList);
 			
 				
 			return packResult();
@@ -211,6 +209,19 @@ public final class MBytePack {
 			for (int i = 0; i < arr.length; i++){
 				dOutputStream.writeInt(arr[i]);
 			}
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public byte[] packString(int requestCode, String id){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeUTF(id);
 			return packResult();
 		}
 		catch (IOException e){
