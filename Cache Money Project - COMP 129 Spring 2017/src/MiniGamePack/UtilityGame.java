@@ -53,7 +53,7 @@ public class UtilityGame extends MiniGame {
 					// do nothing here
 					return;
 				}
-				if (numSelected == 0 || !allowInput || !isGuest){
+				if (numSelected == 0 || !allowInput || (!isGuest && !pInfo.isSingle())){
 					return;
 				}
 				if (pInfo.isSingle()){
