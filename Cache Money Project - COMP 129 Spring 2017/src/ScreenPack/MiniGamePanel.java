@@ -10,7 +10,7 @@ import MiniGamePack.*;
 import MultiplayerPack.PlayingInfo;
 
 public class MiniGamePanel extends JPanel{
-	private final boolean DEBUG_SAME_MINIGAME = true;
+	private final boolean DEBUG_SAME_MINIGAME = false;
 	public final static int NUM_OF_MINIGAMES_AVAILABLE = 9;
 	private final int GAME_TO_START_ON = 8; // -1 FOR DEFAULT
 	private Player owner;
@@ -88,7 +88,7 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
-		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE - 1;
+		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
 		if (DEBUG_SAME_MINIGAME){
 			gameNum = GAME_TO_START_ON;
 		}

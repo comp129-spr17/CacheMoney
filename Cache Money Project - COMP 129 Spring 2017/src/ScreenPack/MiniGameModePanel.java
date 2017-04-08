@@ -120,7 +120,7 @@ public class MiniGameModePanel extends JPanel{
 	
 	private void setButtonBounds(){
 		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE + 1; i++){
-			gameButton[i].setBounds(MiniGamePractice.WIDTH / 6, 10 + (i + 1)*30, 200, 25);
+			gameButton[i].setBounds(MiniGamePractice.WIDTH / 6, 10 + (i + 1)*28, 200, 25);
 		}
 	}
 	
