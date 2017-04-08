@@ -44,7 +44,7 @@ public class MainMenuScreen {
 	private PathRelated pathRelated;
 	private JLabel backgroundpic;
 	private JButton loginBtn;
-
+	private PlayingInfo playingInfo;
 
 	public MainMenuScreen(){
 		init();
@@ -68,7 +68,7 @@ public class MainMenuScreen {
 	}
 
 	private void init(){
-
+		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 		mainPanel.setOpaque(false);
@@ -90,6 +90,8 @@ public class MainMenuScreen {
 		initializeLoadingScreen();
 
 		loginBtn = new JButton("Login");
+		playingInfo = PlayingInfo.getInstance();
+		disableEnableBtns(playingInfo.isLoggedIn());
 
 	}
 	private void scaleBoardToScreenSize() {
@@ -279,16 +281,19 @@ public class MainMenuScreen {
 					LoginDialog loginDialog = new LoginDialog(mainmenuframe);
 					loginDialog.setVisible(true);
 					if(loginDialog.isSucceeded()){
-						loginBtn.setText("Hi " + loginDialog.getUsername() + "!");
-						loginBtn.setEnabled(false);
-						MultiPButton.setEnabled(true);
+						disableEnableBtns(true);
 					}
 				}
 			}
 		});
 	}
 
-
+	private void disableEnableBtns(boolean isLoggedIn){
+		if(isLoggedIn)
+			loginBtn.setText("Hi " + playingInfo.getLoggedInId() + "!");
+		loginBtn.setEnabled(!isLoggedIn);
+		MultiPButton.setEnabled(isLoggedIn);
+	}
 	public void createMenuWindow(){
 		setMenuBackgroundColor();
 		mainmenuframe.setSize(500,500);

@@ -17,10 +17,12 @@ import javax.swing.JPanel;
 import com.sun.glass.ui.Timer;
 import com.sun.media.jfxmedia.events.PlayerStateEvent.PlayerState;
 
+import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
 import GamePack.UtilityProperty;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
@@ -44,6 +46,7 @@ public class JailInfoPanel extends JPanel {
 	private int[] turnsInJail;
 	private int current;
 	private PlayingInfo pInfo;
+	private BackgroundImage bi;
 	
 	public JailInfoPanel(JPanel panelToSwitchFrom, Player[] player, DicePanel diceP, BoardPanel b)
 	{
@@ -73,10 +76,12 @@ public class JailInfoPanel extends JPanel {
 		jailPanel.setSize(getWidth()-75, getHeight()/4*3-30);
 		jailPanel.setLocation(getWidth()/2-jailPanel.getWidth()/2, 0);
 		jailPanel.setLayout(new BoxLayout(jailPanel, BoxLayout.Y_AXIS));
-		jailPanel.setBackground(Color.WHITE);
+		jailPanel.setOpaque(false);
 		hideButton = new JButton("Back");
 		payButton = new JButton();
 		rollButton = new JButton();
+		bi = new BackgroundImage(PathRelated.getInstance().getImagePath() + "jailBackground.jpg", this.getWidth(), this.getHeight());
+		
 		addListeners();
 	}
 	public void executeSwitch(Player currentPlayer, boolean isCurrent, int current)
@@ -92,6 +97,7 @@ public class JailInfoPanel extends JPanel {
 			disableButtons();
 		}
 		this.currentPlayer = currentPlayer;
+		this.add(bi);
 	}
 
 	private void hidePreviousPanel()
@@ -100,6 +106,7 @@ public class JailInfoPanel extends JPanel {
 		this.setVisible(true);
 	}
 	private void hideThisPanelShowDice() {
+		this.remove(bi);
 		this.setVisible(false);
 		panelToSwitchFrom.setVisible(true);
 	}
@@ -107,7 +114,7 @@ public class JailInfoPanel extends JPanel {
 	{
 		//Create JLabels that tell the player they are in jail and can't leave
 		this.setBackground(Color.white);
-		jailName = new JLabel("Player " + Integer.toString(this.current+1) + "'s Turn");
+		jailName = new JLabel("<html><font color = '" + "white" + "'>Player " + Integer.toString(this.current+1) + "'s Turn</font></html>");
 		jailPanel.add(jailName);
 		addHideButton();
 		addRollButton();
@@ -284,6 +291,7 @@ public class JailInfoPanel extends JPanel {
 	
 	public void actionForGetOutOfJail(){
 		currentPlayer.pay(50);
+		Sounds.money.playSound();
 		currentPlayer.setInJail(false);
 		endJailPanel();
 		dicePanel.displayEndTurnButton();

@@ -131,6 +131,8 @@ public class GameScreen extends JFrame{
 		createPlayers();
 		init(isHost);
 		//setGameScreenBackgroundColor();
+		
+		
 	}
 	
 
@@ -469,6 +471,10 @@ public class GameScreen extends JFrame{
 		//mortgageWindow
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
+		if (pInfo.isSingle())
+		{
+			mLabels.removeNonPlayers();
+		}
 		tWindow = TestingWindow.getInstance();
 		tWindow.initLabels(testInfo, insets, players, totalPlayers, mLabels);
 		loadingProgress = 10;
@@ -491,8 +497,8 @@ public class GameScreen extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
-		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
-		
+//		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
+//		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 		
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);

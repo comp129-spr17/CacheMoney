@@ -179,7 +179,7 @@ public class TicTacToeGame extends MiniGame{
 		@Override
 		public void run(){
 			restartCountdown();
-			for (currentTime = 10; currentTime > 0 && allowInput; currentTime--){
+			for (currentTime = 10; currentTime > 0 && !isGameEnded; currentTime--){
 				delayThread(1000);
 				if (allowInput){
 					lbls.get(1).setText(turnNum ? "Owner's Turn. Time: " + (currentTime - 1) : "Guest's Turn. Time: " + (currentTime - 1));
@@ -188,7 +188,7 @@ public class TicTacToeGame extends MiniGame{
 					return;
 				}
 			}
-			if (allowInput){
+			if (allowInput && !isGameEnded){
 				allowInput = false;
 				winner = !turnNum;
 				finishGame(false);

@@ -231,6 +231,15 @@ public final class Player {
 		}
 	}
 	
+	private int mortgageTotalMonnies()
+	{
+		int totalcost = 0;
+		for(Property l:ownedProperties)
+		{
+			totalcost += l.getMortgageValue();
+		}
+		return totalcost;
+	}
 	
 	public void earnMonies(int cost)
 	{
@@ -417,7 +426,14 @@ public final class Player {
 		}
 		else
 		{
-			System.out.print("You owe more money than you have!"); //Need to implement mortgage backup stuff
+			if (totalmonies + mortgageTotalMonnies() >= cost)
+			{
+				System.out.print("You will have enough money after you mortgage!");
+			}
+			else
+			{
+				System.out.print("Even after mortgaging all your property, you still don't have enough money! You lose!"); //Need to implement mortgage backup stuff
+			}
 		}
 	}
 	public void setUserId(String user_id){

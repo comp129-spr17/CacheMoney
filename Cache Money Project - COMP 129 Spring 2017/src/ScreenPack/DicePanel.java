@@ -24,8 +24,8 @@ import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
-	private final int DEBUG_MOVEMENT_VALUE = 15; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -112,6 +112,8 @@ public class DicePanel extends JPanel{
 		overrideDiceRoll.setVisible(false);
 		turnLabel.setVisible(false);
 		toggleDoubles.setVisible(false);
+		
+		this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "dicePanelBackground.jpg", this.getWidth(), this.getHeight()));
 		
 	}
 	private void setPlayerPieceStatus(){
@@ -598,7 +600,7 @@ public class DicePanel extends JPanel{
 			}
 		}
 	}
-	private void waitForDiceMoving(){ // TODO: THERE'S WAY TOO MANY IF-STATEMENTS IN THIS FUNCTION!!!!!
+	private void waitForDiceMoving(){
 		while(!board.isDoneAnimating() || isCelebrating){
 			delayThread(1);
 		}
@@ -616,7 +618,7 @@ public class DicePanel extends JPanel{
 		delayThread(600);
 		mLabel.reinitializeMoneyLabels();
 		if (!isSame || numOfDoublesInRow >= 3 || !movementAllowed || players[current].isInJail()){
-			endTurnButton.setVisible(pInfo.isSingle() || players[current].isInJail() ? true : pInfo.isMyPlayerNum(current));
+			endTurnButton.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
 		}
 		else{
 			isAbleToRollDice = true;

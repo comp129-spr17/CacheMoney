@@ -33,6 +33,7 @@ public class MClient {
 	private HashMap<Integer, DoAction> doActions;
 	private PlayingInfo playingInfo;
 	private ArrayList<String> variableCodeString;
+	private MoneyLabels mLabels;
 	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 		this.diceP = d;
 		this.pList = pList;
@@ -93,6 +94,7 @@ public class MClient {
     }
 	private void init(){
 		playingInfo = PlayingInfo.getInstance();
+		mLabels = MoneyLabels.getInstance();
 		variableCodeString = new ArrayList<>();
 		initVariableCodeString();
 		doActions = new HashMap<>();
@@ -225,7 +227,9 @@ public class MClient {
 		diceP.actionForStart();
 		SqlRelated.generateUserInfo(playingInfo.getLoggedInId());
 		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));
-        
+		System.out.println(result.size()-1);
+		mLabels.setNumPlayer(result.size()-1);
+		mLabels.removeNonPlayers();
 	}
 	private void doRemoveProperty(){
 		diceP.actionForRemovePropertyPanel();

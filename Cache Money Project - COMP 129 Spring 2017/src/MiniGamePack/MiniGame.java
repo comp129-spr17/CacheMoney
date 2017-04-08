@@ -20,6 +20,7 @@ import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
@@ -48,6 +49,7 @@ public class MiniGame{
 	private boolean readyToPlay;
 	private JPanel startPanel;
 	protected PlayingInfo pInfo;
+	private BackgroundImage bi;
 	
 	public MiniGame(JPanel miniPanel){
 		init(miniPanel);
@@ -72,6 +74,7 @@ public class MiniGame{
 		btnStart.setBounds(dpWidth/10, dpHeight*6/8, dpWidth*8/10, dpHeight/6);
 		btnStart.setEnabled(false);
 		startPanel.add(btnStart);
+		bi = new BackgroundImage(PathRelated.getInstance().getImagePath() + "minigameBackground.png", dpWidth, dpHeight);
 		btnStart.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {}
@@ -87,7 +90,7 @@ public class MiniGame{
 					if(pInfo.isSingle())
 						actionForStart();
 					else
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.MINI_GAME_START_CODE));
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.MINI_GAME_START_CODE));
 				}
 				
 			}
@@ -157,11 +160,14 @@ public class MiniGame{
 		miniPanel.removeAll();
 		isOwnerSetting();
 		miniPanel.add(startPanel);
-		btnStart.setEnabled(pInfo.isSingle() || isOwner);
+		btnStart.setEnabled(pInfo.isSingle() || (isOwner && GAME_NUM != 8) || (isGuest && GAME_NUM == 8));
 		if (!pInfo.isSingle()){
 			btnStart.setText(isOwner ? "Start Minigame!" : "Waiting For Owner to Start...");
 		}
 		setAppropriateMinigameTitleAndDescription(GAME_NUM);
+		startPanel.add(bi);
+		startPanel.revalidate();
+		startPanel.repaint();
 		Sounds.quickDisplay.playSound();
 	}
 
@@ -192,6 +198,9 @@ public class MiniGame{
 			break;
 		case 7:
 			setInstructions("Tic-Tac-Toe", "<html>Instructions: <br />Defeat your opponent in a tic-tac-toe match, but the game starts with 1 spot randomly filled! Tie favors the owner of the property.<br /><br />Controls:<br />Owner: Press a num key to place X on your turn. <br />Guest: Press a num key to place O on your turn.<html>");
+			break;
+		case 8:
+			setInstructions("Utility Game", "<html>Instructions: <br />You have 10 seconds to make sure all of the lights are turned off, but some of the light switches have reversed functionality!<br /><br />Controls:<br />Guest: Press a num key to flip the respective light switch.<html>");
 			break;
 		default:
 			break;
@@ -243,6 +252,7 @@ public class MiniGame{
 	}
 	private void actionForStart(){
 		miniPanel.remove(startPanel);
+		//startPanel.removeAll();
 		miniPanel.revalidate();
 		miniPanel.repaint();
 		Sounds.minigameBegin.playSound();

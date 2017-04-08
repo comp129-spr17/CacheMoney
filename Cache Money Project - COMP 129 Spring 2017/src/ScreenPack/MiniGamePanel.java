@@ -10,9 +10,9 @@ import MiniGamePack.*;
 import MultiplayerPack.PlayingInfo;
 
 public class MiniGamePanel extends JPanel{
-	private final boolean DEBUG_SAME_MINIGAME = false;
-	public final static int NUM_OF_MINIGAMES_AVAILABLE = 8;
-	private final int GAME_TO_START_ON = 7; // -1 FOR DEFAULT
+	private final boolean DEBUG_SAME_MINIGAME = true;
+	public final static int NUM_OF_MINIGAMES_AVAILABLE = 9;
+	private final int GAME_TO_START_ON = 8; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
 	private BoardPanel boardPanel;
@@ -75,6 +75,7 @@ public class MiniGamePanel extends JPanel{
 		mGames[5] = new MathGame(this);
 		mGames[6] = new MemorizationGame(this);
 		mGames[7] = new TicTacToeGame(this);
+		mGames[8] = new UtilityGame(this);
 	}
 	public void openMiniGame(Player owner, Player guest, boolean isCurrent){
 		hostPanel.setVisible(false);
@@ -87,7 +88,7 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
-		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
+		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE - 1;
 		if (DEBUG_SAME_MINIGAME){
 			gameNum = GAME_TO_START_ON;
 		}
