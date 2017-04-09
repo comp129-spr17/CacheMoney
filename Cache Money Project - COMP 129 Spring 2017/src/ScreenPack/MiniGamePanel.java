@@ -10,14 +10,14 @@ import MiniGamePack.*;
 import MultiplayerPack.PlayingInfo;
 
 public class MiniGamePanel extends JPanel{
-	public final static int SPAM_MINIGAME = 0; 
-	public final static int REACTION_MINIGAME = 1;
-	public final static int BOX_SELECT_MINIGAME = 2;
-	public final static int ROCK_SCISSORS_PAPER_MINIGAME = 3;
-	public final static int ELIMINATION_MINIGAME = 4;
-	public final static int MATH_MINIGAME = 5;
-	public final static int MEMORIZATION_MINIGAME = 6;
-	public final static int TICTACTOE_MINIGAME = 7;
+	public final static int SPAM_MINIGAME = 2; 
+	public final static int REACTION_MINIGAME = 3;
+	public final static int BOX_SELECT_MINIGAME = 0;
+	public final static int ROCK_SCISSORS_PAPER_MINIGAME = 1;
+	public final static int ELIMINATION_MINIGAME = 5;
+	public final static int MATH_MINIGAME = 6;
+	public final static int MEMORIZATION_MINIGAME = 7;
+	public final static int TICTACTOE_MINIGAME = 4;
 	public final static int UTILITY_MINIGAME = 8;
 	
 	private final boolean DEBUG_SAME_MINIGAME = false;
@@ -122,7 +122,7 @@ public class MiniGamePanel extends JPanel{
 	}
 	
 	public void openSelectedMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent, int miniGameNum){
-		gameNum = miniGameNum - 1;
+		gameNum = miniGameNum;
 		setupGame(owner, guest, isCurrent);
 		
 	}

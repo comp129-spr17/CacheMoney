@@ -56,14 +56,14 @@ public class MiniGameModePanel extends JPanel{
 	}
 
 	private void initGameButtons() {
-		gameButton[0] = new JButton("Spam Game");
-		gameButton[1] = new JButton("Reaction Game");
-		gameButton[2] = new JButton("Box Selecting Game");
-		gameButton[3] = new JButton("Rock Paper Scissors");
-		gameButton[4] = new JButton("Eliminate Apples Game");
-		gameButton[5] = new JButton("Math Game");
-		gameButton[6] = new JButton("Memorization Game");
-		gameButton[7] = new JButton("Tic-Tac-Toe Game");
+		gameButton[0] = new JButton("Box Selecting Game");
+		gameButton[1] = new JButton("Rock Scissors Paper");
+		gameButton[2] = new JButton("Spamming Game");
+		gameButton[3] = new JButton("Reaction Game");
+		gameButton[4] = new JButton("Tic-Tac-Toe Game");
+		gameButton[5] = new JButton("Elimination Game");
+		gameButton[6] = new JButton("Math Game");
+		gameButton[7] = new JButton("Memorization Game");
 		gameButton[8] = new JButton("Utility Game");
 		gameButton[9] = new JButton("Random");
 		

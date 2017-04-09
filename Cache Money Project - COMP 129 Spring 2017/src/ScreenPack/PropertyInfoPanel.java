@@ -31,6 +31,7 @@ public class PropertyInfoPanel extends JPanel{
 	private JLabel buyingPrice;
 	private JLabel mortgagePrice;
 	private JLabel buyHousePrice;
+	private JLabel minigameInfo;
 	private JButton buyButton;
 	private JButton auctionButton;
 	private JButton hideButton;
@@ -73,6 +74,12 @@ public class PropertyInfoPanel extends JPanel{
 		configureInfoPanel();
 		initializeButtons();
 		addListeners();
+		
+		buyingPrice = new JLabel();
+		mortgagePrice = new JLabel();
+		buyHousePrice = new JLabel();
+		minigameInfo = new JLabel();
+		
 		bi = new BackgroundImage(PathRelated.getInstance().getImagePath() + "propertyBackground.png", this.getWidth(), this.getHeight());
 	}
 
@@ -94,9 +101,10 @@ public class PropertyInfoPanel extends JPanel{
 	// ADD LOCATIONS/SIZE TO THEM
 	private void loadPropertyInfo(Property info, int utilitiesModifier)
 	{
-		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
-		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
-		buyHousePrice = new JLabel("Build House: " + property.getBuildHouseCost());
+		buyingPrice.setText("Price: " + Integer.toString(property.getBuyingPrice()));
+		mortgagePrice.setText("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
+		buyHousePrice.setText("Build House: " + property.getBuildHouseCost());
+		minigameInfo.setText("Minigame: " + miniGameText(info.getPropertyFamilyIdentifier()));
 		
 		rentValues = new ArrayList<JLabel>();
 		int houseNum = 0;
@@ -126,6 +134,33 @@ public class PropertyInfoPanel extends JPanel{
 		name.setAlignmentX(CENTER_ALIGNMENT);
 	}
 	
+	private String miniGameText(int propertyFamilyIdentifier) {
+		switch (propertyFamilyIdentifier){
+		case 1:
+			return "Box Selecting Game";
+		case 2:
+			return "Rock Scissors Paper";
+		case 3:
+			return "Spamming Game";
+		case 4:
+			return "Reaction Game";
+		case 5:
+			return "Tic-Tac-Toe Game";
+		case 6:
+			return "Eliminiation Game";
+		case 7:
+			return "Math Game";
+		case 8:
+			return "Memorization Game";
+		case 10:
+			return "Utility Game";
+		case 9:
+			return "Random";
+		default:
+			return "ERROR";
+		}
+	}
+
 	private String rentValueText(int houseNum){
 		switch (property.getPropertyFamilyIdentifier()){
 		case 9:
@@ -232,12 +267,12 @@ public class PropertyInfoPanel extends JPanel{
 		}
 		mortgagePrice.setHorizontalAlignment(JLabel.CENTER);
 		buyHousePrice.setHorizontalAlignment(JLabel.CENTER);
+		minigameInfo.setHorizontalAlignment(JLabel.CENTER);
 		infoPanel.add(mortgagePrice);
-		
 		if (property.getBuildHouseCost() > 0){ // checks if it's a standard property you can build a house on
 			infoPanel.add(buyHousePrice);
 		}
-		
+		infoPanel.add(minigameInfo);
 		add(infoPanel);
 		addBackground();
 	}
