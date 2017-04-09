@@ -456,6 +456,13 @@ public class GameScreen extends JFrame{
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
+		mainPanel.add(pDisplay);
+		mainPanel.add(pInfoDisplay);
+		repaint();
+		
+		
+		pDisplay.setVisible(false);
+		pInfoDisplay.setVisible(false);
 		
 		mainGameArea = new MainGameArea(getContentPane());
 		waitingArea = mainGameArea.getWaiting();
@@ -504,12 +511,6 @@ public class GameScreen extends JFrame{
 		mainPanel.add(boardPanel);
 		mainPanel.add(giveJailFreeCard);
 		mainPanel.add(displayTestWindow);
-		mainPanel.add(pDisplay);
-		mainPanel.add(pInfoDisplay);
-
-		repaint();
-		pDisplay.setVisible(false);
-		pInfoDisplay.setVisible(false);
 		
 		addMuteMusic();
 		addMuteSounds();

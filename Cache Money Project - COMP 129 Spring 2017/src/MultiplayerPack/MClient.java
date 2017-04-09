@@ -252,7 +252,6 @@ public class MClient {
 			pList[i].setIsOn(true);
 			diceP.placePlayerToBoard(i);
 		}
-		
 		diceP.actionForStart();
 		SqlRelated.generateUserInfo(playingInfo.getLoggedInId());
 		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));

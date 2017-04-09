@@ -28,12 +28,14 @@ public class MWaitingRoom extends Thread{
 	private boolean isGameStartedOrDisconnected;
 	private long roomNum;
 	private ArrayList<Object> result;
+	private MManagingMaps mManagingMaps;
 	public MWaitingRoom(HashMap<String,OutputStream> usersOutput, HashMap<String,InputStream> usersInput,  HashMap<String, String> userIds, InputStream inputStream, String userId, boolean isHost, long roomNum){
 		this.usersOutput = usersOutput;
 		this.usersInput = usersInput;
 		this.userIds = userIds;
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
+		mManagingMaps = MManagingMaps.getInstance();
 		readFromUser = inputStream;
 		this.userId = userId;
 		this.isHost = isHost;
@@ -92,7 +94,9 @@ public class MWaitingRoom extends Thread{
 							exitCode = true;
 							if(isHost){
 								System.out.println("Starting thing received");
-								
+
+								mManagingMaps.removeWaitingRoom(roomNum);
+								showMsgToAllUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, mManagingMaps.getWaitingRooms()));
 								for(int i=0; i<numPpl; i++){
 									(new MThread(outputForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
 								}

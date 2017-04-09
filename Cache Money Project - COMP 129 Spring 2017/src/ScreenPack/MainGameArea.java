@@ -170,16 +170,17 @@ public class MainGameArea extends JPanel{
 		add(rooms.get(roomNum));
 		System.out.println(rooms.size());
 	}
-	public void updateRoom(long roomNum, int numPpl, boolean isHost){
-//		if(isHost){
-//			remove(rooms.remove(roomNum));
-//			revalidate();
-//			repaint();
-//		}else{
-		System.out.print("room:"+roomNum + " num:" + numPpl);
-		rooms.get(roomNum).setEnabled(numPpl < 4);
-		setRoomText(rooms.get(roomNum), roomNum, numPpl);
-//		}
+	public void updateRoom(long roomNum, int numPpl, boolean isStarting){
+		if(isStarting){
+			remove(rooms.get(roomNum));
+			rooms.remove(roomNum);
+			revalidate();
+			repaint();
+		}else{
+			System.out.print("room:"+roomNum + " num:" + numPpl);
+			rooms.get(roomNum).setEnabled(numPpl < 4);
+			setRoomText(rooms.get(roomNum), roomNum, numPpl);
+		}
 		
 	}
 	private void setRoomText(JButton b, long roomNum, int numPpl){
