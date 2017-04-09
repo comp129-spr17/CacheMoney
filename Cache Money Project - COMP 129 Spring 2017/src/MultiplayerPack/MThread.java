@@ -27,15 +27,17 @@ public class MThread extends Thread{
 	private MBytePack mPack;
 	private UnicodeForServer ufs;
 	private Integer playerNum;
+	private int myPlayerNum;
 	private int disconnectPlayer;
 	private byte[] tempMsg;
 	private int numPlayer;
 	private int specialCode;
 	private boolean exitCode;
-	public MThread(ArrayList<OutputStream> usersOutput, int numPlayer, InputStream inputStream){
+	public MThread(ArrayList<OutputStream> usersOutput, int numPlayer, int myPlayerNum, InputStream inputStream){
 		this.playerNum = playerNum;
 		this.usersOutput = usersOutput;
 		this.numPlayer = numPlayer;
+		this.myPlayerNum = myPlayerNum;
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
 		ufs = UnicodeForServer.getInstance();
@@ -54,9 +56,8 @@ public class MThread extends Thread{
 	}
 	public void run(){
 		try{
-			sendPlayerNum(mPack.packPlayerNumber(ufs.PLAYER_NUM, usersOutput.size()-1));
-			
-			playerNum = playerNum.intValue()+1;
+
+			sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum));
 			while(!exitCode){
 				getMsg();
 				
@@ -113,7 +114,7 @@ public class MThread extends Thread{
 	}
 	private void sendPlayerNum(byte[] msg){
 		try {
-			usersOutput.get(usersOutput.size()-1).write(msg);
+			usersOutput.get(myPlayerNum).write(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

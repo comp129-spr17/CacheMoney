@@ -41,8 +41,8 @@ public class MWaitingRoom extends Thread{
 		msg=new byte[512];
 		if(isHost){
 			outputForThisRoom = new ArrayList<>();
-			outputForThisRoom.add(usersOutput.get(userId));
-			numPpl++;
+			userForThisRoom = new ArrayList<>();
+			
 		}
 			
 		/*
@@ -59,48 +59,51 @@ public class MWaitingRoom extends Thread{
 	public void run(){
 		String name=null;
 		try{
-			
+			System.out.println("in waiting");
 			while(!exitCode){
 				getMsg();
 				
-				specialCode = whichRequest(msg[3]);
-				result = mUnpack.getResult(msg);
-				
-				if(specialCode == 3){
-					if(isHost){
-						name = (String)result.get(1);
-						outputForThisRoom.add(usersOutput.get(name));
-						userForThisRoom.add(name);
-						numPpl++;
-					}
+				if(!isHost){
+					outputForThisRoom.get(0).write(msg);
 				}else{
-					synchronized (this) {
-						if(specialCode == 1){
-							isGameStartedOrDisconnected = true;
-							exitCode = userId.equals((String)result.get(1)) || isHost;
-							numPpl--;
-						}else if(specialCode == 2){
-							isGameStartedOrDisconnected = false;
-							exitCode = userId.equals((String)result.get(1));
-							numPpl--;
-						}else if(specialCode == 4){
-							isGameStartedOrDisconnected = true;
-							exitCode = true;
-							if(isHost){
-								showMsgToUsers(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPpl));
-								for(int i=0; i<numPpl; i++){
-									(new MThread(outputForThisRoom, numPpl, usersInput.get(userForThisRoom.get(i)))).start();
+					specialCode = whichRequest(msg[3]);
+					result = mUnpack.getResult(msg);
+					
+					if(specialCode == 3){
+//						if(isHost){
+//							name = (String)result.get(1);
+//							System.out.println(name + " joined");
+//							outputForThisRoom.add(usersOutput.get(name));
+//							userForThisRoom.add(name);
+//							numPpl++;
+//						}
+					}else{
+						synchronized (this) {
+							if(specialCode == 1){
+								isGameStartedOrDisconnected = true;
+								exitCode = userId.equals((String)result.get(1)) || isHost;
+								numPpl--;
+							}else if(specialCode == 2){
+								isGameStartedOrDisconnected = false;
+								exitCode = userId.equals((String)result.get(1));
+								numPpl--;
+							}else if(specialCode == 4){
+								isGameStartedOrDisconnected = true;
+								exitCode = true;
+								if(isHost){
+									System.out.println("Starting thing received");
+									for(int i=0; i<numPpl; i++){
+										(new MThread(outputForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
+									}
+									
 								}
 								
 							}
-							
+							if(exitCode)
+								notify();
 						}
-						if(exitCode)
-							notify();
 					}
 				}
-				
-				
 					
 				
 			}
@@ -108,6 +111,7 @@ public class MWaitingRoom extends Thread{
 			e.printStackTrace();
 		}finally{
 		}
+		System.out.println("Game started. Now, exit from waiting");
 	}
 	private void getMsg(){
 		try {
@@ -119,7 +123,7 @@ public class MWaitingRoom extends Thread{
 	public long getRoomNum(){
 		return roomNum;
 	}
-	private void showMsgToUsers(byte[] msg) throws SocketException{
+	private void showMsgToUsers(byte[] msg){
 		for(OutputStream output:outputForThisRoom){
 			try {
 				if(output != null)
@@ -130,8 +134,39 @@ public class MWaitingRoom extends Thread{
 			}
 		}
 	}
+	private void showMsgToAllUsers(byte[] msg){
+		for(OutputStream output:usersOutput.values()){
+			try {
+				if(output != null)
+					output.write(msg);
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+			}
+		}
+	}
+	public ArrayList<OutputStream> getList(){
+		return outputForThisRoom;
+	}
+	public void setList(ArrayList<OutputStream> list){
+		outputForThisRoom = list;
+	}
 	public void notifyUserEnter(String uId){
-		System.out.println(uId + " has joined");
+		System.out.println(uId + " joined");
+		outputForThisRoom.add(usersOutput.get(uId));
+		userForThisRoom.add(uId);
+		numPpl++;
+		showMsgToUsers(mPack.packStringArray(UnicodeForServer.JOIN_ROOM_TO_CLIENT, userForThisRoom));
+		showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,isHost));
+		
+	}
+	public void getUpdatedWaitingArea(String userId){
+		System.out.println("Sending main thingggg");
+		try {
+			usersOutput.get(userId).write(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,false));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	private int whichRequest(int code){
 			if(UnicodeForServer.DISCONNECTED == code)

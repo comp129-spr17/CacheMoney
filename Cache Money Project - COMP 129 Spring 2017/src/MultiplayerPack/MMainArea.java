@@ -58,40 +58,64 @@ public class MMainArea extends Thread{
 	}
 	public void run(){
 		long roomNum;
+		System.out.println("now start");
+		sendToMine(mPack.packSimpleRequest(UnicodeForServer.SERVER_READY));
 		while(!exitCode){
 			try{
 				MWaitingRoom mWaitingRoom=null;
 				getMsg();
+				System.out.println("recieved msg.");
 				specialCode = whichRequest(msg[3]);
-				if(specialCode == 1){
-					mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
-					exitCode = true;
-					break;
-				}else if(specialCode == 2){
-					roomNum = mMaps.getRoomNum();
-					mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
-					waitingRooms.put(roomNum, mWaitingRoom);
-				}else {
-					result = mUnpack.getResult(msg);
-					roomNum = (Long)result.get(1);
-					waitingRooms.get(roomNum).notifyUserEnter(userId);
-					mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
-				}
-				mWaitingRoom.start();
-				
-				synchronized (mWaitingRoom) {
-					mWaitingRoom.wait();
-					exitCode = mWaitingRoom.isGameStartedOrDisconnected();
-					if(exitCode){
-						
+				if(specialCode == 4){
+					System.out.println("Request for update");
+					sendToMine(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN, userIds));
+					sendToMine(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
+					for(MWaitingRoom room: waitingRooms.values()){
+						room.getUpdatedWaitingArea(userId);
 					}
 				}
+				else{
+					if(specialCode == 1){
+						System.out.println("1.");
+						mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
+						exitCode = true;
+						break;
+					}else if(specialCode == 2){
+						System.out.println("CREATING ROOM");
+						roomNum = mMaps.getRoomNum();
+						System.out.println("CREATING ROOM" + roomNum);
+						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
+						waitingRooms.put(roomNum, mWaitingRoom);
+						showMsgToUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
+						mWaitingRoom.notifyUserEnter(userId);
+					}else {
+						System.out.println("3.");
+						result = mUnpack.getResult(msg);
+						System.out.println(result.get(1));
+						roomNum = (Long)result.get(1);
+						waitingRooms.get(roomNum).notifyUserEnter(userId);
+						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
+						mWaitingRoom.setList(waitingRooms.get(roomNum).getList());
+					}
+					mWaitingRoom.start();
+					
+					synchronized (mWaitingRoom) {
+						mWaitingRoom.wait();
+						exitCode = mWaitingRoom.isGameStartedOrDisconnected();
+						if(exitCode){
+							
+						}
+					}
+				}
+					
+				
 			}catch(Exception e){
 				e.printStackTrace();
 			}finally{
 			}
+			
 		}
-		
+		System.out.println("Game started. Now, exit from mainArea");
 				
 		
 	}
@@ -121,12 +145,14 @@ public class MMainArea extends Thread{
 				return 2;
 			else if(UnicodeForServer.JOIN_ROOM == code)
 				return 3;
+			else if(UnicodeForServer.REQUESTING_STATUS_MAIN == code)
+				return 4;
 			return 0;
 	}
 	
-	private void sendPlayerNum(byte[] msg){
+	private void sendToMine(byte[] msg){
 		try {
-			usersOutput.get(usersOutput.size()-1).write(msg);
+			usersOutput.get(userId).write(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

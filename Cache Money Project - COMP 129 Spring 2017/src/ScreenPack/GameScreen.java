@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -73,6 +74,7 @@ public class GameScreen extends JFrame{
 	private PlayerInfoDisplay pInfoDisplay;
 	private MainGameArea mainGameArea;
 	private WaitingArea waitingArea;
+	private boolean isServerReady;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -94,6 +96,11 @@ public class GameScreen extends JFrame{
 			this.dispose();
 			throw new IOException();
 		}
+		if(pInfo.isSingle())
+			switchToGame();
+		while (!client.isReadyToUse() || !isServerReady);
+		pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.REQUESTING_STATUS_MAIN));
+		System.out.println("requesting");
 		setWindowVisible();
 		exitSetting(false);
 	}
@@ -101,6 +108,9 @@ public class GameScreen extends JFrame{
 		boardPanel.PlacePiecesToBaord(numPlayer);
 		//System.out.print(numPlayer);
 		totalPlayers = numPlayer;
+	}
+	public void serverReady(boolean isReady){
+		isServerReady = isReady;
 	}
 	private void setWindowVisible(){
 		try {
@@ -446,7 +456,7 @@ public class GameScreen extends JFrame{
 		
 		repaint();
 		mainGameArea = new MainGameArea(getContentPane());
-//		waitingArea = new WaitingArea(getContentPane());
+		waitingArea = mainGameArea.getWaiting();
 		
 		btnExit = new JButton("X");
 		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
@@ -496,11 +506,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(pInfoDisplay);
 		pDisplay.setVisible(false);
 		pInfoDisplay.setVisible(false);
-		if(pInfo.isSingle())
-			switchToGame();
-		else{
-			switchToMainGameArea();
-		}
+		
 		addMuteMusic();
 		addMuteSounds();
 		initButtonListeners();
@@ -522,18 +528,28 @@ public class GameScreen extends JFrame{
 		getContentPane().revalidate();
 		
 	}
-	private void switchToMainGameArea(){
+	public void switchToMainGameArea(ArrayList<Object> userList){
 		getContentPane().removeAll();
-		mainGameArea.setComponents();
+		mainGameArea.setComponents(userList);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
 	}
+	public void updateInMainAreaRooms(ArrayList<Object> roomLIst){
+		mainGameArea.updateRooms(roomLIst);
+	}
+	
 	public void switchToWaitingArea(){
 		mainPanel.removeAll();
-		mainPanel.invalidate();
+		
 		mainPanel.repaint();
 		
+	}
+	public void updateWaitingArea(ArrayList<Object> userId, boolean isQuit){
+		waitingArea.updateUserInfos(userId, isQuit);
+	}
+	public void updateRoomStatus(Long roomNum, int numPpl, boolean isHost){
+		mainGameArea.updateRoom(roomNum, numPpl, isHost);
 	}
 	private void addMuteMusic() {
 		ImageIcon imgOn, imgOff;

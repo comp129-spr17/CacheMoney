@@ -19,8 +19,8 @@ public final class UnicodeForServer {
 	public static final int JOIN_ROOM = 14;
 	public static final int HOST_LEAVE_ROOM = 15;
 	public static final int LEAVE_ROOM = 16;
-	public static final int RANDOM_NUM = 17;
-	public static final int GENERIC_SEND_INT_ARRAY = 18;
+	public static final int REQUESTING_STATUS_MAIN = 17;
+	public static final int REQUESTING_STATUS_WAITING = 18;
 	public static final int BOX_MINI_GAME_SURPRISE_BOXES = 19;
 	public static final int RSP_MINI_GAME_DECISION = 20;
 	public static final int GENERIC_SEND_INTEGER = 21;
@@ -37,6 +37,14 @@ public final class UnicodeForServer {
 	public static final int REACTION_MINI_GAME_OWNER_EARLY = 32;
 	public static final int REACTION_MINI_GAME_GUEST_END = 33;
 	public static final int REACTION_MINI_GAME_OWNER_END = 34;
+	public static final int RANDOM_NUM = 35;
+	public static final int GENERIC_SEND_INT_ARRAY = 36;
+	public static final int REQUESTING_STATUS_MAIN_ROOM = 37;
+	public static final int JOIN_ROOM_TO_CLIENT = 38;
+	public static final int JOIN_ROOM_TO_MAIN_GAME_AREA = 39;
+	public static final int SERVER_READY = 40;
+	public static final int SEND_USER_ID_SIMPLE = 41;
+	
 	private UnicodeForServer(){
 		
 	}

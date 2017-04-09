@@ -35,6 +35,7 @@ public class MClient {
 	private PlayingInfo playingInfo;
 	private ArrayList<String> variableCodeString;
 	private MoneyLabels mLabels;
+	private boolean isReadyToUse;
 	private final static int PORT_NUM = 7777;
 	private final static String IP_ADDRESS = "10.70.70.80";
 //	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
@@ -66,12 +67,14 @@ public class MClient {
 		variableCodeString.add(new String("PROPERTY_RENT_PAY"));
 		variableCodeString.add(new String("SPAM_MINI_GAME_GUEST"));
 		variableCodeString.add(new String("SPAM_MINI_GAME_OWNER"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_EARLY"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_EARLY"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_END"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_END"));
-		variableCodeString.add(new String("RANDOM_NUM"));
-		variableCodeString.add(new String("GENERIC_SEND_INT_ARRAY"));
+		
+		variableCodeString.add(new String("CREATE_ROOM"));
+		variableCodeString.add(new String("JOIN_ROOM"));
+		variableCodeString.add(new String("HOST_LEAVE_ROOM"));
+		variableCodeString.add(new String("LEAVE_ROOM"));
+		variableCodeString.add(new String("REQUESTING_STATUS_MAIN"));
+		variableCodeString.add(new String("REQUESTING_STATUS_WAITING"));
+		
 		variableCodeString.add(new String("BOX_MINI_GAME_SURPRISE_BOXES"));
 		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
 		variableCodeString.add(new String("GENERIC_SEND_INTEGER"));
@@ -84,6 +87,20 @@ public class MClient {
 		variableCodeString.add(new String("BUILD_HOUSE"));
 		variableCodeString.add(new String("GOT_OUT_OF_JAIL"));
 		variableCodeString.add(new String("SEND_USER_ID"));
+		
+		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_EARLY"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_EARLY"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_END"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_END"));
+		variableCodeString.add(new String("RANDOM_NUM"));
+		variableCodeString.add(new String("GENERIC_SEND_INT_ARRAY"));
+		
+		variableCodeString.add(new String("REQUESTING_STATUS_MAIN_ROOM"));
+		variableCodeString.add(new String("JOIN_ROOM_TO_CLIENT"));
+		variableCodeString.add(new String("JOIN_ROOM_TO_MAIN_GAME_AREA"));
+		variableCodeString.add(new String("SERVER_READY"));
+		variableCodeString.add(new String("SEND_USER_ID_SIMPLE"));
+		
 	
 	}
 	
@@ -135,6 +152,11 @@ public class MClient {
 		doActions.put(UnicodeForServer.BUILD_HOUSE, new DoAction(){public void doAction(ArrayList<Object> result){doBuildHouse(result);}});
 		doActions.put(UnicodeForServer.GOT_OUT_OF_JAIL, new DoAction(){public void doAction(ArrayList<Object> result){doGotOutOfJail(result);}});
 		doActions.put(UnicodeForServer.SEND_USER_ID, new DoAction(){public void doAction(ArrayList<Object> result){doSetUserId(result);}});
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,0);}});
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,1);}});
+		doActions.put(UnicodeForServer.JOIN_ROOM_TO_CLIENT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result,false);}});
+		doActions.put(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayerMainGame(result);}});
+		doActions.put(UnicodeForServer.SERVER_READY, new DoAction(){public void doAction(ArrayList<Object> result){doAlarmServerReady(result);}});
 		
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -194,8 +216,12 @@ public class MClient {
 //				} catch (IOException e1) {
 //					e1.printStackTrace();
 //				}
-				playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID,playingInfo.getLoggedInId(),"aa",new int[]{0}));
-				playingInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.CREATE_ROOM));
+				
+				playingInfo.sendMessageToServer(mPack.packString(UnicodeForServer.SEND_USER_ID_SIMPLE,playingInfo.getLoggedInId()));
+				System.out.println("now sending id");
+				isReadyToUse = true;
+				
+				
 				while(isServerUp){
 		        	try{
 		        		inputStream.read(msgs);
@@ -220,8 +246,8 @@ public class MClient {
 		diceP.actionForDiceEnd();
 	}
 	private void doStartGame(ArrayList<Object> result){
-		int k;
-		
+		setPlayer((Integer)result.get(2));
+		gameScreen.switchToGame();
 		for(int i=0; i<(Integer)result.get(1); i++){
 			pList[i].setIsOn(true);
 			diceP.placePlayerToBoard(i);
@@ -230,9 +256,10 @@ public class MClient {
 		diceP.actionForStart();
 		SqlRelated.generateUserInfo(playingInfo.getLoggedInId());
 		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));
-		System.out.println(result.size()-1);
-		mLabels.setNumPlayer(result.size()-1);
+		System.out.println((Integer)result.get(1));
+		mLabels.setNumPlayer((Integer)result.get(1));
 		mLabels.removeNonPlayers();
+		
 	}
 	private void doRemoveProperty(){
 		diceP.actionForRemovePropertyPanel();
@@ -315,11 +342,36 @@ public class MClient {
 		pList[pos].setNumWin((Integer)result.get(4));
 		pList[pos].setNumLose((Integer)result.get(5));
 	}
+	private void initializeMainGameLobby(ArrayList<Object> result, int type){
+		if(type == 0){
+			System.out.println("SwitchingMain going");
+			gameScreen.switchToMainGameArea(result);
+		}else{
+			System.out.println("update rooms going");
+			gameScreen.updateInMainAreaRooms(result);
+		}
+	}
+	private void doUpdateJoinedPlayer(ArrayList<Object> result, boolean isQuit){
+		gameScreen.updateWaitingArea(result, isQuit);
+		
+	}
+	private void doUpdateJoinedPlayerMainGame(ArrayList<Object> result){
+		System.out.println("this should be called");
+		gameScreen.updateRoomStatus((Long)result.get(1), (Integer)result.get(2), (Boolean)result.get(3));
+		
+	}
+	private void doAlarmServerReady(ArrayList<Object> result){
+		gameScreen.serverReady(true);
+		
+	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;
+	}
+	public boolean isReadyToUse(){
+		return isReadyToUse;
 	}
 	
 }

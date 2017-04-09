@@ -67,6 +67,8 @@ public class MServer {
         waitingRooms = new HashMap<>();
         managingMaps.setUOutputs(usersOutput);
         managingMaps.setIds(joinedPlayerIds);
+        managingMaps.setInputs(usersInput);
+        managingMaps.setWaitingRooms(waitingRooms);
         closingServerAsking();
 	}
 	private void joinedPlayer(){
@@ -80,6 +82,7 @@ public class MServer {
         		inputStream = socket.getInputStream();
         		inputStream.read(firstMsg);
         		ArrayList<Object> result = mUnpack.getResult(firstMsg);
+        		System.out.println(result.get(0));
         		id = (String)result.get(1);
         		System.out.println(id);
         		usersOutput.put(id,socket.getOutputStream());

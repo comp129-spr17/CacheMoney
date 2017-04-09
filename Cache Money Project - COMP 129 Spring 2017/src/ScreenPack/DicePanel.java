@@ -86,7 +86,8 @@ public class DicePanel extends JPanel{
 		sizeRelated = SizeRelated.getInstance();
 		this.setBounds(sizeRelated.getDicePanelX(), sizeRelated.getDicePanelY(), sizeRelated.getDicePanelWidth(), sizeRelated.getDicePanelHeight());
 		setLayout(null);
-		addStartGameButton();
+		if(pInfo.isSingle())
+			addStartGameButton();
 		rand = new Random();
 		isAbleToRollDice = true;
 		
@@ -222,13 +223,16 @@ public class DicePanel extends JPanel{
 	}
 
 	public void setStartGameButtonEnabled(boolean enabled){
-		this.startGameButton.setEnabled(enabled);
-		if (enabled){
-			startGameButton.setText(startGameButton.getText() + "<br />Click to begin game once all players have joined..." + "</html>");
+		if(pInfo.isSingle()){
+			this.startGameButton.setEnabled(enabled);
+			if (enabled){
+				startGameButton.setText(startGameButton.getText() + "<br />Click to begin game once all players have joined..." + "</html>");
+			}
+			else{
+				startGameButton.setText(startGameButton.getText() + "<br />Waiting for host to begin game..." + "</html>");
+			}
 		}
-		else{
-			startGameButton.setText(startGameButton.getText() + "<br />Waiting for host to begin game..." + "</html>");
-		}
+		
 
 	}
 
@@ -253,29 +257,32 @@ public class DicePanel extends JPanel{
 		board.placePieceToFirst(i);
 	}
 	private void addListeners(){		
-		startGameButton.addMouseListener(new MouseListener(){
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == 3){
-					setDebugVisible = false;
-				}
-				if (startGameButton.isEnabled()){
-					if(pInfo.isSingle()){
-						actionForStart();
+		if(pInfo.isSingle()){
+			startGameButton.addMouseListener(new MouseListener(){
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == 3){
+						setDebugVisible = false;
 					}
-					else
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME));
+					if (startGameButton.isEnabled()){
+						if(pInfo.isSingle()){
+							actionForStart();
+						}
+						else
+							pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME));
+					}
 				}
-			}
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {}
-		});
+				@Override
+				public void mousePressed(MouseEvent e) {}
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+				@Override
+				public void mouseEntered(MouseEvent e) {}
+				@Override
+				public void mouseExited(MouseEvent e) {}
+			});
+		}
+		
 		rollButton.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {}
@@ -339,7 +346,8 @@ public class DicePanel extends JPanel{
 		});
 	}
 	public void actionForStart(){
-		startGameButton.setVisible(false);
+		if(pInfo.isSingle())
+			startGameButton.setVisible(false);
 		setRollButtonVisible();
 		turnLabel.setVisible(true);
 		if (setDebugVisible){
@@ -711,8 +719,8 @@ public class DicePanel extends JPanel{
 	public void setPort(int port) {
 		this.port = port;
 		String startGameButtonText = "<html>" + "Welcome to Monopoly Waiting Room! <br /><br />" + "Other players may connect to this game by the following:<br /><br />" + "IP: " + this.ip + "<br />Port: " + this.port + "<br />";
-
-		this.startGameButton.setText(startGameButtonText);	
+		if(pInfo.isSingle())
+			this.startGameButton.setText(startGameButtonText);	
 	}
 
 	public int getSumOfDie()

@@ -11,7 +11,7 @@ public final class PlayingInfo {
 	private String loggedInId;
 	private static final PlayingInfo PLAYING_INFO = new PlayingInfo();
 	private PlayingInfo(){
-		
+		outputStream = null;
 	}
 	public static PlayingInfo getInstance(){
 		return PLAYING_INFO;
@@ -60,5 +60,8 @@ public final class PlayingInfo {
 	}
 	public String getLoggedInId(){
 		return loggedInId;
+	}
+	public boolean isOutputSet(){
+		return outputStream!=null;
 	}
 }
