@@ -92,7 +92,7 @@ public class PropertyInfoPanel extends JPanel{
 		returnButton = new JButton();
 	}
 	// ADD LOCATIONS/SIZE TO THEM
-	private void loadPropertyInfo(Property info)
+	private void loadPropertyInfo(Property info, int utilitiesModifier)
 	{
 		buyingPrice = new JLabel("Price: " + Integer.toString(property.getBuyingPrice()));
 		mortgagePrice = new JLabel("Mortgage Value: " + Integer.toString(property.getMortgageValue()));
@@ -100,13 +100,24 @@ public class PropertyInfoPanel extends JPanel{
 		
 		rentValues = new ArrayList<JLabel>();
 		int houseNum = 0;
+		if (utilitiesModifier > 0 && info.isOwned()){
+			info.setUtilityRentPrice(utilitiesModifier * info.getRent());
+		}
+		else if (property.getPropertyFamilyIdentifier() == 10){
+			info.setUtilityRentPrice(0);
+		}
 		for(Integer a:info.getRentRange())
 		{
-			rentValues.add(new JLabel("<html>" + rentValueText(houseNum) + a.toString() + "</html>"));
+			if (a > 0){
+				rentValues.add(new JLabel("<html>" + rentValueText(houseNum) + a.toString() + "</html>"));
+			}
 			houseNum += 1;
 		}
 		if (property.isOwned()){
 			rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
+			if (property instanceof UtilityProperty && rentValues.size() > 2){
+				rentValues.get(2).setText("<html><b>" + rentValues.get(2).getText() + "</b></html>");
+			}
 		}
 		else{
 			buyingPrice.setText("<html><b>" + buyingPrice.getText() + "</b></html>");
@@ -116,35 +127,52 @@ public class PropertyInfoPanel extends JPanel{
 	}
 	
 	private String rentValueText(int houseNum){
-		if (houseNum == 0){
-			return "Rent Cost: ";
-		}
 		switch (property.getPropertyFamilyIdentifier()){
 		case 9:
-			return "- with " + (houseNum + 1) + " railroads: ";
+			if (houseNum == 0){
+				return "Rent Cost: ";
+			}
+			return "- with " + (houseNum + 1) + " Railroads: ";
 		case 10:
-			return "- with 2 utilities: ";
+			switch (houseNum){
+			case 0:
+				return "- 1 Utility Multiplier: ";
+			case 1:
+				return "- 2 Utilities Multipler: ";
+			case 2:
+				if (property.isOwned() && currentPlayer.getPlayerNum() != property.getOwner()){
+					return "You Pay: ";
+				}
+				else{
+					return "";
+				}
+			default:
+				break;
+			}
 		default:
+			if (houseNum == 0){
+				return "Rent Cost: ";
+			}
 			if (houseNum == 5){
-				return "- with hotel: ";
+				return "- with Hotel: ";
 			}
 			else if (houseNum == 1){
-				return "- with " + houseNum + " house: ";
+				return "- with " + houseNum + " House: ";
 			}
 			else{
-				return "- with " + houseNum + " houses: ";
+				return "- with " + houseNum + " Houses: ";
 			}
 		}
 	}
 	
-	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent)
+	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent, int utilityLightsOn)
 	{
 		this.currentPlayer = currentPlayer;
 		property = propertyInfo.get(name).getPropertyInfo();
 		AP = new AuctionPanel(property, players, this);
 		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo);
 		bPanel.add(mPanel);
-		loadPropertyInfo(property);
+		loadPropertyInfo(property, utilityLightsOn);
 		infoPanel.removeAll();
 		setButtonsEnabled((pInfo.isSingle() || isCurrent)); 
 		renderPropertyInfo(currentPlayer, isCurrent);
@@ -196,11 +224,10 @@ public class PropertyInfoPanel extends JPanel{
 			buyButton.setEnabled(property.getBuyingPrice() < this.currentPlayer.getTotalMonies() && (pInfo.isSingle() || isCurrent));
 			Sounds.landedOnUnownedProperty.playSound();
 		}
-		addHideButton();
+		//addHideButton();
 		//buyingPrice.setHorizontalAlignment(JLabel.LEFT);
 		infoPanel.add(buyingPrice);
 		for(JLabel a:rentValues){
-			//a.setHorizontalAlignment(JLabel.LEFT);
 			infoPanel.add(a);
 		}
 		mortgagePrice.setHorizontalAlignment(JLabel.CENTER);
@@ -373,7 +400,7 @@ public class PropertyInfoPanel extends JPanel{
 				if(payButton.isEnabled()){
 					if(property instanceof UtilityProperty)
 					{				
-						int cost = property.getRent()*dicePanel.getSumOfDie();
+						int cost = property.getUtilityRentPrice();
 						if(currentPlayer.getTotalMonies() >= cost) {
 							payForR(cost, property.getOwner());
 							dismissPropertyPanel();
@@ -538,7 +565,6 @@ public class PropertyInfoPanel extends JPanel{
 		property.setOwned(true);
 	}
 	public void payForRent(int amount, int owner){
-
 		Sounds.money.playSound();
 		currentPlayer.pay(amount);
 		players[owner].earnMonies(amount);
@@ -550,7 +576,11 @@ public class PropertyInfoPanel extends JPanel{
 	public boolean isPropertyMortgaged(String name){
 		return propertyInfo.get(name).getPropertyInfo().isMortgaged();
 	}
-
+	
+	public Property getProperty(String name){
+		return propertyInfo.get(name).getPropertyInfo();
+	}
+	
 	public Player getOwner(String name){
 		return players[propertyInfo.get(name).getPropertyInfo().getOwner()];
 	}

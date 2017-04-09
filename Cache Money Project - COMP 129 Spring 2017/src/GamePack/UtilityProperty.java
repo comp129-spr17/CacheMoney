@@ -26,9 +26,10 @@ public class UtilityProperty extends Property {
 		}
 		else{
 			rentMultiplier = 0;
-			rentValues.add(4);
 			rentValues.add(10);
+			rentValues.add(25);
 		}
+		rentValues.add(0);
 		//This space charges the non-owners with 4*the dice amount rolled to land on this space
 		//If both Utilities are owned, it becomes 10* the dice amount rolled to land on this space
 		

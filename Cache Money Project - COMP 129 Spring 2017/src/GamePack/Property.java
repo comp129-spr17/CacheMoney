@@ -50,6 +50,11 @@ public abstract class Property {
 		init();
 	}
 	
+	public void setUtilityRentPrice(int price){
+		rentValues.remove(2);
+		rentValues.add(price);
+	}
+	
 	
 	
 	protected abstract void init();
@@ -65,6 +70,10 @@ public abstract class Property {
 	
 	public int getRent() {
 		return rentValues.get(rentMultiplier);
+	}
+	
+	public int getUtilityRentPrice(){
+		return rentValues.get(rentValues.size() - 1);
 	}
 
 	public int getBuyingPrice() {

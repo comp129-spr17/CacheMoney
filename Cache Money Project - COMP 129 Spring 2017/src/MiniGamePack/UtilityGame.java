@@ -29,7 +29,7 @@ public class UtilityGame extends MiniGame {
 	private KeyListener listener;
 	private int timeRemaining;
 	private boolean winner;
-	private int lightsOn;
+	private int numLightsOn;
 	private int numSwitchesReversed;
 	private boolean allowInput;
 	
@@ -133,7 +133,7 @@ public class UtilityGame extends MiniGame {
 		
 		isGameEnded = false;
 		timeRemaining = 10;
-		lightsOn = 0;
+		numLightsOn = 0;
 		allowInput = false;
 		
 		fillGrids();
@@ -222,7 +222,7 @@ public class UtilityGame extends MiniGame {
 		allowInput = false;
 		for (int i = 0; i < GRID_LENGTH; ++i){
 			if ((switchGrid[i] + trueGrid[i]) % 2 == 1){
-				lightsOn += 1;
+				numLightsOn += 1;
 				gridLbls[i].setIcon(lightDisplay[ON]);
 			}
 			else{
@@ -233,7 +233,7 @@ public class UtilityGame extends MiniGame {
 		}
 		//printGrid(switchGrid);
 		
-		lbls.get(1).setText("You left " + lightsOn + " lights on!");
+		lbls.get(1).setText("You left " + numLightsOn + " lights on!");
 		
 	}
 //	
@@ -267,6 +267,11 @@ public class UtilityGame extends MiniGame {
 	
 	public boolean isGameEnded(){
 		return isGameEnded;
+	}
+	
+	@Override
+	public int getNumLightsOn(){
+		return numLightsOn;
 	}
 	
 	

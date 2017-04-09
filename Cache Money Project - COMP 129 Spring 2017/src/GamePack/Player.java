@@ -211,12 +211,15 @@ public final class Player {
 		pay(p.getBuyingPrice());
 		
 		if (p.getPropertyFamilyIdentifier() == 9){ // if the property belongs to the railroad family
-			railroadPurchaseCase(p);
+			railroadPurchaseCase();
+		}
+		else if (p.getPropertyFamilyIdentifier() == 10){
+			utilityPurchaseCase();
 		}
 		//Subtract the cost of the property using the pay function right below.
 	}
 	
-	private void railroadPurchaseCase(Property p) {
+	private void railroadPurchaseCase() {
 		int numRailroadsOwned = 0;
 		int[] indexOfRailroads = {-1, -1, -1, -1};
 		for (int i = 0; i < getOwnedProperties().size(); ++i){
@@ -229,6 +232,22 @@ public final class Player {
 			if (i >= 0)
 				getOwnedProperties().get(i).setMultiplier(numRailroadsOwned - 1);
 		}
+	}
+	
+	private void utilityPurchaseCase(){
+		int numUtilitiesOwned = 0;
+		int[] indexOfUtilities = {-1, -1};
+		for (int i = 0; i < getOwnedProperties().size(); ++i){
+			if (getOwnedProperties().get(i).getPropertyFamilyIdentifier() == 10){
+				indexOfUtilities[numUtilitiesOwned] = i;
+				numUtilitiesOwned += 1;
+			}
+		}
+		for (int i : indexOfUtilities){
+			if (i >= 0)
+				getOwnedProperties().get(i).setMultiplier(numUtilitiesOwned - 1);
+		}
+		
 	}
 	
 	private int mortgageTotalMonnies()

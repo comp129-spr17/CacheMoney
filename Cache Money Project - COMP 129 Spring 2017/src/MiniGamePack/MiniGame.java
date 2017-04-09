@@ -145,11 +145,7 @@ public class MiniGame{
 	public void play(){
 		isGameEnded = false;
 		while(!readyToPlay){
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			delayThread(1);
 		}
 	}
 	protected boolean isUnavailableToPlay(){
@@ -278,6 +274,11 @@ public class MiniGame{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public int getNumLightsOn(){
+		System.out.println("This isn't the utility minigame!");
+		return -1;
 	}
 	
 	class GameEnding extends Thread{

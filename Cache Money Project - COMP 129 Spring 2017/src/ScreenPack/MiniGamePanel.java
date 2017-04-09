@@ -1,4 +1,4 @@
- package ScreenPack;
+package ScreenPack;
 
 import java.io.OutputStream;
 
@@ -10,6 +10,16 @@ import MiniGamePack.*;
 import MultiplayerPack.PlayingInfo;
 
 public class MiniGamePanel extends JPanel{
+	public final static int SPAM_MINIGAME = 0; 
+	public final static int REACTION_MINIGAME = 1;
+	public final static int BOX_SELECT_MINIGAME = 2;
+	public final static int ROCK_SCISSORS_PAPER_MINIGAME = 3;
+	public final static int ELIMINATION_MINIGAME = 4;
+	public final static int MATH_MINIGAME = 5;
+	public final static int MEMORIZATION_MINIGAME = 6;
+	public final static int TICTACTOE_MINIGAME = 7;
+	public final static int UTILITY_MINIGAME = 8;
+	
 	private final boolean DEBUG_SAME_MINIGAME = false;
 	public final static int NUM_OF_MINIGAMES_AVAILABLE = 9;
 	private final int GAME_TO_START_ON = 8; // -1 FOR DEFAULT
@@ -67,18 +77,27 @@ public class MiniGamePanel extends JPanel{
 	private void initMinigames(){
 		// ADD MINIGAMES HERE
 		mGames = new MiniGame[NUM_OF_MINIGAMES_AVAILABLE];
-		mGames[0] = new SpammingGame(this);
-		mGames[1] = new ReactionGame(this);
-		mGames[2] = new BoxSelectGame(this);
-		mGames[3] = new RockScissorPaperGame(this);
-		mGames[4] = new EliminationGame(this);
-		mGames[5] = new MathGame(this);
-		mGames[6] = new MemorizationGame(this);
-		mGames[7] = new TicTacToeGame(this);
-		mGames[8] = new UtilityGame(this);
+		mGames[SPAM_MINIGAME] = new SpammingGame(this);
+		mGames[REACTION_MINIGAME] = new ReactionGame(this);
+		mGames[BOX_SELECT_MINIGAME] = new BoxSelectGame(this);
+		mGames[ROCK_SCISSORS_PAPER_MINIGAME] = new RockScissorPaperGame(this);
+		mGames[ELIMINATION_MINIGAME] = new EliminationGame(this);
+		mGames[MATH_MINIGAME] = new MathGame(this);
+		mGames[MEMORIZATION_MINIGAME] = new MemorizationGame(this);
+		mGames[TICTACTOE_MINIGAME] = new TicTacToeGame(this);
+		mGames[UTILITY_MINIGAME] = new UtilityGame(this);
 	}
 	public void openMiniGame(Player owner, Player guest, boolean isCurrent){
 		hostPanel.setVisible(false);
+		rotateGameNum();
+		setupGame(owner, guest, isCurrent);
+	}
+	
+	
+
+	public void openMiniGame(Player owner, Player guest, boolean isCurrent, int desiredGameNum){
+		hostPanel.setVisible(false);
+		gameNum = desiredGameNum;
 		setupGame(owner, guest, isCurrent);
 	}
 
@@ -88,12 +107,18 @@ public class MiniGamePanel extends JPanel{
 		this.owner = owner;
 		this.guest = guest;
 		this.isCurrent = isCurrent;
+		mGames[gameNum].setOwnerAndGuest(owner, guest);
+		mGames[gameNum].addGame();
+	}
+	
+	private void rotateGameNum() {
 		gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
+		if (gameNum == UTILITY_MINIGAME){
+			gameNum = (gameNum + 1) % NUM_OF_MINIGAMES_AVAILABLE;
+		}
 		if (DEBUG_SAME_MINIGAME){
 			gameNum = GAME_TO_START_ON;
 		}
-		mGames[gameNum].setOwnerAndGuest(owner, guest);
-		mGames[gameNum].addGame();
 	}
 	
 	public void openSelectedMiniGame(Player owner, Player guest, int myPlayerNum, boolean isCurrent, int miniGameNum){
@@ -163,7 +188,7 @@ public class MiniGamePanel extends JPanel{
 		cleanup();
 		if (!isPracticingMode){
 			Sounds.landedOnOwnedProperty.playSound();
-			pPanel.executeSwitch(curSpaceName,guest,isCurrent);
+			pPanel.executeSwitch(curSpaceName,guest,isCurrent, mGames[gameNum].getNumLightsOn());
 		}
 		else{
 			Sounds.gainMoney.playSound();
