@@ -89,7 +89,7 @@ public final class PropertyDisplay extends JPanel{
 		case 5:
 			return "TicTacToe";
 		case 6:
-			return "Apple";
+			return "Eliminate";
 		case 7:
 			return "Math";
 		case 8:
