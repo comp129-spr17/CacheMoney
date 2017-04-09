@@ -98,9 +98,12 @@ public class GameScreen extends JFrame{
 		}
 		if(pInfo.isSingle())
 			switchToGame();
-		while (!client.isReadyToUse() || !isServerReady);
-		pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.REQUESTING_STATUS_MAIN));
-		System.out.println("requesting");
+		else{
+			while (!client.isReadyToUse() || !isServerReady);
+			pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.REQUESTING_STATUS_MAIN));
+			System.out.println("requesting");
+		}
+		
 		setWindowVisible();
 		exitSetting(false);
 	}
@@ -454,7 +457,6 @@ public class GameScreen extends JFrame{
 		mainPanel.setLayout(null);
 		getContentPane().add(mainPanel);
 		
-		repaint();
 		mainGameArea = new MainGameArea(getContentPane());
 		waitingArea = mainGameArea.getWaiting();
 		
@@ -504,6 +506,8 @@ public class GameScreen extends JFrame{
 		mainPanel.add(displayTestWindow);
 		mainPanel.add(pDisplay);
 		mainPanel.add(pInfoDisplay);
+
+		repaint();
 		pDisplay.setVisible(false);
 		pInfoDisplay.setVisible(false);
 		

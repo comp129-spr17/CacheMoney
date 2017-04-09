@@ -88,16 +88,19 @@ public class MMainArea extends Thread{
 						waitingRooms.put(roomNum, mWaitingRoom);
 						showMsgToUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
 						mWaitingRoom.notifyUserEnter(userId);
+						mWaitingRoom.start();
 					}else {
 						System.out.println("3.");
 						result = mUnpack.getResult(msg);
 						System.out.println(result.get(1));
 						roomNum = (Long)result.get(1);
 						waitingRooms.get(roomNum).notifyUserEnter(userId);
-						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
-						mWaitingRoom.setList(waitingRooms.get(roomNum).getList());
+						mWaitingRoom = waitingRooms.get(roomNum);
+//						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
+//						mWaitingRoom.setList(waitingRooms.get(roomNum).getList());
+						
 					}
-					mWaitingRoom.start();
+					
 					
 					synchronized (mWaitingRoom) {
 						mWaitingRoom.wait();

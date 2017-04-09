@@ -62,14 +62,14 @@ public class MWaitingRoom extends Thread{
 			System.out.println("in waiting");
 			while(!exitCode){
 				getMsg();
+//				
+//				if(!isHost){
+//					outputForThisRoom.get(0).write(msg);
+//				}else{
+				specialCode = whichRequest(msg[3]);
+				result = mUnpack.getResult(msg);
 				
-				if(!isHost){
-					outputForThisRoom.get(0).write(msg);
-				}else{
-					specialCode = whichRequest(msg[3]);
-					result = mUnpack.getResult(msg);
-					
-					if(specialCode == 3){
+				if(specialCode == 3){
 //						if(isHost){
 //							name = (String)result.get(1);
 //							System.out.println(name + " joined");
@@ -77,33 +77,34 @@ public class MWaitingRoom extends Thread{
 //							userForThisRoom.add(name);
 //							numPpl++;
 //						}
-					}else{
-						synchronized (this) {
-							if(specialCode == 1){
-								isGameStartedOrDisconnected = true;
-								exitCode = userId.equals((String)result.get(1)) || isHost;
-								numPpl--;
-							}else if(specialCode == 2){
-								isGameStartedOrDisconnected = false;
-								exitCode = userId.equals((String)result.get(1));
-								numPpl--;
-							}else if(specialCode == 4){
-								isGameStartedOrDisconnected = true;
-								exitCode = true;
-								if(isHost){
-									System.out.println("Starting thing received");
-									for(int i=0; i<numPpl; i++){
-										(new MThread(outputForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
-									}
-									
+				}else{
+					synchronized (this) {
+						if(specialCode == 1){
+							isGameStartedOrDisconnected = true;
+							exitCode = userId.equals((String)result.get(1)) || isHost;
+							numPpl--;
+						}else if(specialCode == 2){
+							isGameStartedOrDisconnected = false;
+							exitCode = userId.equals((String)result.get(1));
+							numPpl--;
+						}else if(specialCode == 4){
+							isGameStartedOrDisconnected = true;
+							exitCode = true;
+							if(isHost){
+								System.out.println("Starting thing received");
+								
+								for(int i=0; i<numPpl; i++){
+									(new MThread(outputForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
 								}
 								
 							}
-							if(exitCode)
-								notify();
+							
 						}
+						if(exitCode)
+							notify();
 					}
 				}
+//				}
 					
 				
 			}

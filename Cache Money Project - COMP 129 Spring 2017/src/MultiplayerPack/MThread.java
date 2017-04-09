@@ -43,6 +43,7 @@ public class MThread extends Thread{
 		ufs = UnicodeForServer.getInstance();
 		readFromUser = inputStream;
 		msg=new byte[512];
+		System.out.println("playerNum : " + numPlayer + " , myNum" + myPlayerNum + ", outputNum" + usersOutput.size());
 		/*
 		try {
 			System.out.println("Connection from : " + s.getOutputStream());

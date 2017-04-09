@@ -50,6 +50,7 @@ public class PropertySpace extends Space {
 			public void mousePressed(MouseEvent e) {
 				pDisplay.setProperty(info);
 				pDisplay.setVisible(true);
+				System.out.println(e.getXOnScreen() + " : " + e.getYOnScreen());
 				setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
 				repaint();
 			}
