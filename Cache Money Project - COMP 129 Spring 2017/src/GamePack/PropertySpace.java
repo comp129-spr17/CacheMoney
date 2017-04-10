@@ -68,18 +68,6 @@ public class PropertySpace extends Space {
 				
 			}
 		});
-//		addMouseMotionListener(new MouseMotionListener() {
-//			
-//			@Override
-//			public void mouseMoved(MouseEvent e) {
-//				
-//			}
-//			
-//			@Override
-//			public void mouseDragged(MouseEvent e) {
-//				
-//			}
-//		});
 	}
 	private void setDisplayLocation(int x, int y){
 		pDisplay.setLocation(pDisplay.getStartX(x), pDisplay.getStartY(y));

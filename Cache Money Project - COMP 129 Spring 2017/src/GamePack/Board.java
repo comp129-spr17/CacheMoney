@@ -100,14 +100,6 @@ public class Board {
 			if (players[player].getPositionNumber() % 5 == 0){ // THIS IS WHEN PLAYER LANDS ON RAILROAD
 				Sounds.landedOnRailroad.playSound();
 			}
-			//else{
-				// IF PROPERTY IS UNOWNED
-				 //Sounds.landedOnUnownedProperty.playSound();
-				 // ELSE IF PROPERTY IS OWNED
-				 // Sounds.landedOnOwnedProperty.playSound();
-				 // return "OWNED_PROPERTY";
-			//}
-			//System.out.println(boardTracker[playerPosition[player]].getName());
 			return boardTracker[players[player].getPositionNumber()].getName();
 		}
 	}
