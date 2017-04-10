@@ -24,6 +24,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import GamePack.*;
 import InterfacePack.BackgroundImage;
@@ -533,25 +534,29 @@ public class GameScreen extends JFrame{
 		getContentPane().revalidate();
 		
 	}
-	public void switchToMainGameArea(ArrayList<Object> userList){
+	public void switchToMainGameArea(){
 		getContentPane().removeAll();
-		mainGameArea.setComponents(userList);
+		mainGameArea.setComponents();
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
+	}
+	public void updateMainGameAreaIds(ArrayList<Object> userList){
+		mainGameArea.updatelist(userList);
 	}
 	public void updateInMainAreaRooms(ArrayList<Object> roomLIst){
 		mainGameArea.updateRooms(roomLIst);
 	}
 	
-	public void switchToWaitingArea(){
-		mainPanel.removeAll();
-		
-		mainPanel.repaint();
-		
+	public void hostLeftWaitingArea(){
+		JOptionPane.showMessageDialog(this, "The host of the waiting room has left.");
+		waitingArea.switchToMainGameArea();		
 	}
-	public void updateWaitingArea(ArrayList<Object> userId, boolean isQuit){
-		waitingArea.updateUserInfos(userId, isQuit);
+	public void EnableHostButton(){
+		waitingArea.actionToHost();
+	}
+	public void updateWaitingArea(ArrayList<Object> userId){
+		waitingArea.updateUserInfos(userId);
 	}
 	public void updateRoomStatus(Long roomNum, int numPpl, boolean isHost){
 		mainGameArea.updateRoom(roomNum, numPpl, isHost);

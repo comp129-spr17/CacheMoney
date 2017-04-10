@@ -68,7 +68,8 @@ public class MMainArea extends Thread{
 				specialCode = whichRequest(msg[3]);
 				if(specialCode == 4){
 					System.out.println("Request for update");
-					sendToMine(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN, userIds));
+					sendToMine(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
+					showMsgToUsers(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
 					sendToMine(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
 					// TO do : WHY THE FUCK DOESN"T MYSELF RECEIVE THE STATUS FOR THIS SHIT!!!!!!!!
 					for(MWaitingRoom room: waitingRooms.values()){
@@ -79,6 +80,7 @@ public class MMainArea extends Thread{
 					if(specialCode == 1){
 						System.out.println("1.");
 						mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
+						showMsgToUsers(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
 						exitCode = true;
 						break;
 					}else if(specialCode == 2){
@@ -87,26 +89,27 @@ public class MMainArea extends Thread{
 						System.out.println("CREATING ROOM" + roomNum);
 						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
 						waitingRooms.put(roomNum, mWaitingRoom);
+
+						sendToMine(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
 						showMsgToUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
 						mWaitingRoom.notifyUserEnter(userId);
-						mWaitingRoom.start();
+						
 					}else {
 						System.out.println("3.");
 						result = mUnpack.getResult(msg);
 						System.out.println(result.get(1));
 						roomNum = (Long)result.get(1);
 						waitingRooms.get(roomNum).notifyUserEnter(userId);
-						mWaitingRoom = waitingRooms.get(roomNum);
-//						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
-//						mWaitingRoom.setList(waitingRooms.get(roomNum).getList());
+//						mWaitingRoom = waitingRooms.get(roomNum);
+						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
+						mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
 						
 					}
-					
+					mWaitingRoom.start();
 					
 					synchronized (mWaitingRoom) {
 						mWaitingRoom.wait();
 						exitCode = mWaitingRoom.isGameStartedOrDisconnected();
-						
 					}
 				}
 					

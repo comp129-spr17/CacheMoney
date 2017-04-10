@@ -50,7 +50,7 @@ public class MClient {
 		void doAction(ArrayList<Object> result);
 	}
 	public void doAction(ArrayList<Object> result){
-		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString.get((Integer)result.get(0)));
+//		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString.get((Integer)result.get(0)));
 		doActions.get((Integer)result.get(0)).doAction(result);
 	}
 	private void initVariableCodeString(){
@@ -59,8 +59,8 @@ public class MClient {
 		variableCodeString.add(new String("PROPERTY"));
 		variableCodeString.add(new String("PLAYER_NUM"));
 		variableCodeString.add(new String("END_TURN"));
-		variableCodeString.add(new String("START_GAME"));
-		variableCodeString.add(new String("END_PROPERTY"));
+		variableCodeString.add(new String("START_GAME_REPLY"));
+		variableCodeString.add(new String("START_GAME_TO_OTHER"));
 		variableCodeString.add(new String("DISCONNECTED"));
 		variableCodeString.add(new String("HOST_DISCONNECTED"));
 		variableCodeString.add(new String("START_GAME_REPLY"));
@@ -102,7 +102,8 @@ public class MClient {
 		variableCodeString.add(new String("DICE"));
 		variableCodeString.add(new String("SERVER_READY"));
 		variableCodeString.add(new String("SEND_USER_ID_SIMPLE"));
-		
+
+		variableCodeString.add(new String("END_PROPERTY"));
 	
 	}
 	
@@ -133,8 +134,8 @@ public class MClient {
 		doActions.put(UnicodeForServer.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
 		doActions.put(UnicodeForServer.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
 		doActions.put(UnicodeForServer.START_GAME_REPLY, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame(result);}});
-		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
-		doActions.put(UnicodeForServer.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
+		doActions.put(UnicodeForServer.START_GAME_TO_OTHER, new DoAction(){public void doAction(ArrayList<Object> result){doSendBackStartSignal();}});
+		doActions.put(UnicodeForServer.DISCONNECTED_FOR_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
 		doActions.put(UnicodeForServer.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
 		doActions.put(UnicodeForServer.PROPERTY_PURCHASE, new DoAction(){public void doAction(ArrayList<Object> result){doPurchaseProperty(result);}});
 		doActions.put(UnicodeForServer.PROPERTY_RENT_PAY, new DoAction(){public void doAction(ArrayList<Object> result){doPayRent(result);}});
@@ -157,10 +158,14 @@ public class MClient {
 		doActions.put(UnicodeForServer.GOT_OUT_OF_JAIL, new DoAction(){public void doAction(ArrayList<Object> result){doGotOutOfJail(result);}});
 		doActions.put(UnicodeForServer.SEND_USER_ID, new DoAction(){public void doAction(ArrayList<Object> result){doSetUserId(result);}});
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,0);}});
-		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,1);}});
-		doActions.put(UnicodeForServer.JOIN_ROOM_TO_CLIENT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result,false);}});
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,1);}});
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,2);}});
+		doActions.put(UnicodeForServer.JOIN_ROOM_TO_CLIENT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result);}});
 		doActions.put(UnicodeForServer.SERVER_READY, new DoAction(){public void doAction(ArrayList<Object> result){doAlarmServerReady(result);}});
-		
+		doActions.put(UnicodeForServer.LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result);}});
+		doActions.put(UnicodeForServer.HOST_LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doDestroyRoom(result);}});
+		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
+		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom();}});
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
@@ -263,6 +268,9 @@ public class MClient {
 		mLabels.removeNonPlayers();
 		
 	}
+	private void doSendBackStartSignal(){
+		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME_TO_OTHER));
+	}
 	private void doRemoveProperty(){
 		diceP.actionForRemovePropertyPanel();
 	}
@@ -347,14 +355,18 @@ public class MClient {
 	private void initializeMainGameLobby(ArrayList<Object> result, int type){
 		if(type == 0){
 			System.out.println("SwitchingMain going");
-			gameScreen.switchToMainGameArea(result);
-		}else{
+			gameScreen.switchToMainGameArea();
+		}else if(type == 1){
+			System.out.println("SwitchingMain going");
+			gameScreen.updateMainGameAreaIds(result);
+		}
+		else{
 			System.out.println("update rooms going");
 			gameScreen.updateInMainAreaRooms(result);
 		}
 	}
-	private void doUpdateJoinedPlayer(ArrayList<Object> result, boolean isQuit){
-		gameScreen.updateWaitingArea(result, isQuit);
+	private void doUpdateJoinedPlayer(ArrayList<Object> result){
+		gameScreen.updateWaitingArea(result);
 		
 	}
 	private void doUpdateJoinedPlayerMainGame(ArrayList<Object> result){
@@ -365,6 +377,12 @@ public class MClient {
 	private void doAlarmServerReady(ArrayList<Object> result){
 		gameScreen.serverReady(true);
 		
+	}
+	private void doDestroyRoom(ArrayList<Object> result){
+		gameScreen.hostLeftWaitingArea();
+	}
+	private void doForCreatingRoom(){
+		gameScreen.EnableHostButton();
 	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);

@@ -30,7 +30,7 @@ public class WaitingArea extends JPanel{
 	private MainGameArea mainGameArea;
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
-
+	private Color color;
 	private boolean isDoneRender;
 	
 	public WaitingArea(final Container container, MainGameArea mainGameArea) {
@@ -41,6 +41,7 @@ public class WaitingArea extends JPanel{
 	}
 	private void init(){
 		players = new ArrayList<>();
+		color = new Color(245,245,220);
 		btnStart = new JButton("START GAME");
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
@@ -48,6 +49,7 @@ public class WaitingArea extends JPanel{
 		controlPanel = new JPanel();
 		for(int i=0; i<4; i++){
 			players.add(new JButton());
+			players.get(i).setBackground(color);
 			add(players.get(i));
 		}
 			
@@ -63,34 +65,42 @@ public class WaitingArea extends JPanel{
 		controlPanel.add(btnGoBack);
 	}
 	public void switchToMainGameArea(){
-//		container.removeAll();
-//		mainGameArea.setComponents();
-//		container.repaint();
-//		container.revalidate();
-		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
+
+		resetPlayerDisplay();
+		container.removeAll();
+		mainGameArea.setComponents();
+		container.repaint();
+		container.revalidate();
+		
 	}
-	public void updateUserInfos(ArrayList<Object> userId, boolean isQuit){
+	public void updateUserInfos(ArrayList<Object> userId){
 		while(!isDoneRender){
 			System.out.println("rendering..");
 			
 		}
-		if(isQuit){
-			players.get(players.indexOf((String)userId.get(1))).setText("");
-		}else{
-			System.out.println("update info called : " + userId);
-			for(int i=1; i<userId.size(); i++){
-				players.get(i-1).setText((String)userId.get(i));
-			}
-			repaint();
-			revalidate();
+		resetPlayerDisplay();
+		System.out.println("update info called : " + userId);
+		for(int i=1; i<userId.size(); i++){
+			players.get(i-1).setText((String)userId.get(i));
+		}
+		repaint();
+		revalidate();
+	}
+	private void resetPlayerDisplay(){
+		for(int i=0; i<4; i++){
+			players.get(i).setText("");
 		}
 	}
 	public void setComponents(){
-		
+		btnStart.setEnabled(false);
 		container.add(this,BorderLayout.NORTH);
 		container.add(new JSeparator(),BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.SOUTH);
 		isDoneRender = true;
+	}
+	public void actionToHost(){
+		btnStart.setEnabled(true);
+		controlPanel.revalidate();
 	}
 	private void addListener(){
 		btnStart.addMouseListener(new MouseListener() {
@@ -121,7 +131,8 @@ public class WaitingArea extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME));
+				if(btnStart.isEnabled())
+					playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME));
 			}
 		});
 		btnGoBack.addMouseListener(new MouseListener() {
@@ -153,6 +164,7 @@ public class WaitingArea extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				switchToMainGameArea();
+				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.LEAVE_ROOM));
 			}
 		});
 	}

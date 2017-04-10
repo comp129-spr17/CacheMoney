@@ -85,6 +85,18 @@ public final class MBytePack {
 		}
 		return null;
 	}
+	public byte[] packBoolean(int requestCode, boolean value){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeBoolean(value);
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public byte[] packStringArray(int requestCode, HashMap<String, String> onlinePlayers){
 		try{
 			dOutputStream.writeInt(requestCode);

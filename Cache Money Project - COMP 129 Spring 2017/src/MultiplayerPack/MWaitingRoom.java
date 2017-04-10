@@ -14,13 +14,12 @@ public class MWaitingRoom extends Thread{
 	private HashMap<String, OutputStream> usersOutput;
 	private HashMap<String,InputStream> usersInput;
 	private HashMap<String, String> userIds;
-	private ArrayList<OutputStream> outputForThisRoom;
-	private ArrayList<String> userForThisRoom;
+	private static ArrayList<OutputStream> outputForThisRoom;
+	private static ArrayList<String> userForThisRoom;
 	private InputStream readFromUser;
 	private byte[] msg;
 	private MByteUnpack mUnpack;
 	private MBytePack mPack;
-	private int numPpl;
 	private int specialCode;
 	private boolean exitCode;
 	private String userId;
@@ -77,30 +76,42 @@ public class MWaitingRoom extends Thread{
 					// need to find the way to get specific user to execute this action,.
 					if(specialCode == 1){
 						isGameStartedOrDisconnected = true;
-						exitCode = playingInfo.isLoggedInId((String)result.get(1));
-						if(exitCode && playingInfo.isLoggedInId(userForThisRoom.get(0)))
-							actionToRemoveRoom(false);
-						mManagingMaps.removeFromList((String)result.get(1));
-						numPpl--;
-					}else if(specialCode == 2){
-						isGameStartedOrDisconnected = false;
-						exitCode = playingInfo.isLoggedInId((String)result.get(1));
-						if(exitCode && playingInfo.isLoggedInId(userForThisRoom.get(0)))
-							actionToRemoveRoom(false);
-						numPpl--;
-					}else if(specialCode == 4){
-						isGameStartedOrDisconnected = true;
 						exitCode = true;
+						if(isHost)
+							actionToRemoveRoom(false);
+						else{
+							actionToLeaveUser();
+							notifyUserLeave(userId);
+						}
+							
+						mManagingMaps.removeFromList((String)result.get(1));
+					}else if(specialCode == 2){
+						System.out.println("user leaving called");
+						isGameStartedOrDisconnected = false;
+						exitCode = true;
+						if(isHost)
+							actionToRemoveRoom(false);
+						else{
+							actionToLeaveUser();
+							notifyUserLeave(userId);
+						}
+					}else if(specialCode == 3){
 						if(isHost){
 							System.out.println("Starting thing received");
-
+							showMsgToUsers(mPack.packSimpleRequest(UnicodeForServer.START_GAME_TO_OTHER));
+						}
+					}else if(specialCode == 4){
+						int numPpl = userForThisRoom.size();
+						isGameStartedOrDisconnected = true;
+						exitCode = true;
+						
+						if(isHost){
 							actionToRemoveRoom(true);
 							for(int i=0; i<numPpl; i++){
-								(new MThread(outputForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
+								(new MThread(outputForThisRoom,userForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
 							}
-							
 						}
-						
+							
 					}
 					if(exitCode)
 						notify();
@@ -116,15 +127,17 @@ public class MWaitingRoom extends Thread{
 		// send individual a code about close the room and go back to the main area.
 		mManagingMaps.removeWaitingRoom(roomNum);
 		if(!isGameStarted){
-			
-			showMsgToAllUsers(mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
+			showMsgToUsersWithoutHost(mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
 		}
-			
 		showMsgToAllUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, mManagingMaps.getWaitingRooms()));
 
-		
 	}
-	
+	private void actionToLeaveUser(){
+		userForThisRoom.remove(userId);
+		outputForThisRoom.remove(usersOutput.get(userId));
+		for(String user : userForThisRoom)
+			System.out.println("left IN ROOm : " + user);
+	}
 	private void getMsg(){
 		try {
 			
@@ -136,6 +149,7 @@ public class MWaitingRoom extends Thread{
 		return roomNum;
 	}
 	private void showMsgToUsers(byte[] msg){
+		System.out.println("OUTPUT SIZE : " + outputForThisRoom.size());
 		for(OutputStream output:outputForThisRoom){
 			try {
 				if(output != null)
@@ -143,6 +157,15 @@ public class MWaitingRoom extends Thread{
 			} catch (Exception e) {
 				e.printStackTrace();
 				
+			}
+		}
+	}
+	private void showMsgToUsersWithoutHost(byte[] msg){
+		for(int i=1; i<outputForThisRoom.size(); i++){
+			try {
+				outputForThisRoom.get(i).write(msg);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -157,19 +180,28 @@ public class MWaitingRoom extends Thread{
 			}
 		}
 	}
-	public ArrayList<OutputStream> getList(){
+	public ArrayList<OutputStream> getListForOutput(){
 		return outputForThisRoom;
 	}
-	public void setList(ArrayList<OutputStream> list){
-		outputForThisRoom = list;
+	public ArrayList<String> getListForUser(){
+		return userForThisRoom;
+	}
+	public void setList(ArrayList<OutputStream> oList, ArrayList<String> uList){
+		outputForThisRoom = oList;
+		userForThisRoom = uList;
 	}
 	public void notifyUserEnter(String uId){
 		System.out.println(uId + " joined");
 		outputForThisRoom.add(usersOutput.get(uId));
 		userForThisRoom.add(uId);
-		numPpl++;
 		showMsgToUsers(mPack.packStringArray(UnicodeForServer.JOIN_ROOM_TO_CLIENT, userForThisRoom));
-		showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,false));
+		showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
+		
+	}
+	public void notifyUserLeave(String uId){
+		System.out.println(uId + " left");
+		showMsgToUsers(mPack.packStringArray(UnicodeForServer.LEAVE_ROOM, userForThisRoom));
+		showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
 		
 	}
 	public void getUpdatedWaitingArea(String userId){
@@ -179,7 +211,7 @@ public class MWaitingRoom extends Thread{
 			System.out.println("user in all : " + aString);
 		}
 
-			showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,false));
+		showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
 		
 	}
 	private int whichRequest(int code){
@@ -188,7 +220,10 @@ public class MWaitingRoom extends Thread{
 			else if(UnicodeForServer.LEAVE_ROOM == code)
 				return 2;
 			else if(UnicodeForServer.START_GAME == code)
+				return 3;
+			else if(UnicodeForServer.START_GAME_TO_OTHER == code)
 				return 4;
+			
 				
 			return 0;
 	}

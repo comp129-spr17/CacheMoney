@@ -19,6 +19,7 @@ import java.util.TimerTask;
 public class MThread extends Thread{
 	private String name;
 	private ArrayList<OutputStream> usersOutput;
+	private ArrayList<String> usersId;
 	private InputStream readFromUser;
 	private int pos;
 	private byte[] msg;
@@ -34,11 +35,12 @@ public class MThread extends Thread{
 	private int specialCode;
 	private boolean exitCode;
 	private MManagingMaps mMaps;
-	public MThread(ArrayList<OutputStream> usersOutput, int numPlayer, int myPlayerNum, InputStream inputStream){
-		this.playerNum = playerNum;
+	public MThread(ArrayList<OutputStream> usersOutput,ArrayList<String> usersId, int numPlayer, int myPlayerNum, InputStream inputStream){
+		
 		this.usersOutput = usersOutput;
 		this.numPlayer = numPlayer;
 		this.myPlayerNum = myPlayerNum;
+		this.usersId = usersId;
 		mMaps = MManagingMaps.getInstance();
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
@@ -70,12 +72,15 @@ public class MThread extends Thread{
 				}
 				else if(specialCode == 1){
 					// To do : get rid of all the property this owner owns.
-					mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
-//					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
-//					usersOutput.set(disconnectPlayer,null);
+					name = (String)mUnpack.getResult(msg).get(1);
+					disconnectPlayer = usersId.indexOf(name);
+					mMaps.removeFromList(name);
+					
+					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
+					usersOutput.set(disconnectPlayer,null);
 					
 //					disconnectedUser();
-					showMsgToUsers(mPack.packPlayerNumber(ufs.DISCONNECTED, disconnectPlayer));
+					showMsgToUsers(mPack.packPlayerNumber(ufs.DISCONNECTED_FOR_GAME, disconnectPlayer));
 					exitCode = true;
 					break;
 				}else if(specialCode == 2){
@@ -96,6 +101,7 @@ public class MThread extends Thread{
 			e.printStackTrace();
 		}finally{
 		}
+		System.out.println(name+"'s thread is gone now.");
 	}
 	private void getMsg(){
 		try {

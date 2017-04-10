@@ -66,14 +66,13 @@ public class MainGameArea extends JPanel{
 		container.repaint();
 		container.revalidate();
 	}
-	public void setComponents(ArrayList<Object> userList){
-		updatelist(userList);
+	public void setComponents(){
 		container.add(this,BorderLayout.WEST);
 		container.add(new JSeparator(),BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.EAST);
 	}
 	
-	private void updatelist(ArrayList<Object> userList){
+	public void updatelist(ArrayList<Object> userList){
 		listOfOnlineUsers.removeAllItems();
 		System.out.println("This update is called. size:" + userList.get(0));
 		for(int i=1; i<userList.size(); i++){

@@ -5,10 +5,10 @@ public final class UnicodeForServer {
 
 	public static final int JOIN_ROOM_TO_MAIN_GAME_AREA = 0;
 	public static final int PROPERTY = 1;
-	public static final int PLAYER_NUM = 2;
+	public static final int DISCONNECTED_FOR_GAME = 2;
 	public static final int END_TURN = 3;
 	public static final int START_GAME = 4;
-	public static final int END_PROPERTY = 5;
+	public static final int START_GAME_TO_OTHER = 5;	
 	public static final int DISCONNECTED = 6;
 	public static final int HOST_DISCONNECTED = 7;
 	public static final int START_GAME_REPLY = 8;
@@ -45,7 +45,8 @@ public final class UnicodeForServer {
 	public static final int DICE = 39;
 	public static final int SERVER_READY = 40;
 	public static final int SEND_USER_ID_SIMPLE = 41;
-	
+	public static final int END_PROPERTY = 42;
+	public static final int REQUESTING_STATUS_MAIN_IDS = 43;
 	private UnicodeForServer(){
 		
 	}
