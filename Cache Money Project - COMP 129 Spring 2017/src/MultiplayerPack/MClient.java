@@ -29,33 +29,38 @@ public class MClient {
 	private UnicodeForServer unicode;
 	private Player[] pList;
 	private int byteCount;
+	private GameScreen gameScreen;
 	private int thisPlayNum;
 	private HashMap<Integer, DoAction> doActions;
 	private PlayingInfo playingInfo;
 	private ArrayList<String> variableCodeString;
 	private MoneyLabels mLabels;
-	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
-		this.diceP = d;
-		this.pList = pList;
-		init();
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		optionBox = new ClientEntranceBox();
-		manuallyEnterIPandPort(br, isHostClient);
-    }
+	private boolean isReadyToUse;
+	private final static int PORT_NUM = 7777;
+	private final static String IP_ADDRESS = "10.70.70.80";
+//	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
+//		this.diceP = d;
+//		this.pList = pList;
+//		init();
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		optionBox = new ClientEntranceBox();
+//		manuallyEnterIPandPort(br, isHostClient);
+//    }
 	interface DoAction{
 		void doAction(ArrayList<Object> result);
 	}
 	public void doAction(ArrayList<Object> result){
-		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString.get((Integer)result.get(0)));
+//		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString.get((Integer)result.get(0)));
 		doActions.get((Integer)result.get(0)).doAction(result);
 	}
 	private void initVariableCodeString(){
-		variableCodeString.add(new String("DICE"));
+
+		variableCodeString.add(new String("JOIN_ROOM_TO_MAIN_GAME_AREA"));
 		variableCodeString.add(new String("PROPERTY"));
 		variableCodeString.add(new String("PLAYER_NUM"));
 		variableCodeString.add(new String("END_TURN"));
-		variableCodeString.add(new String("START_GAME"));
-		variableCodeString.add(new String("END_PROPERTY"));
+		variableCodeString.add(new String("START_GAME_REPLY"));
+		variableCodeString.add(new String("START_GAME_TO_OTHER"));
 		variableCodeString.add(new String("DISCONNECTED"));
 		variableCodeString.add(new String("HOST_DISCONNECTED"));
 		variableCodeString.add(new String("START_GAME_REPLY"));
@@ -63,12 +68,14 @@ public class MClient {
 		variableCodeString.add(new String("PROPERTY_RENT_PAY"));
 		variableCodeString.add(new String("SPAM_MINI_GAME_GUEST"));
 		variableCodeString.add(new String("SPAM_MINI_GAME_OWNER"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_EARLY"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_EARLY"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_END"));
-		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_END"));
-		variableCodeString.add(new String("RANDOM_NUM"));
-		variableCodeString.add(new String("GENERIC_SEND_INT_ARRAY"));
+		
+		variableCodeString.add(new String("CREATE_ROOM"));
+		variableCodeString.add(new String("JOIN_ROOM"));
+		variableCodeString.add(new String("HOST_LEAVE_ROOM"));
+		variableCodeString.add(new String("LEAVE_ROOM"));
+		variableCodeString.add(new String("REQUESTING_STATUS_MAIN"));
+		variableCodeString.add(new String("REQUESTING_STATUS_WAITING"));
+		
 		variableCodeString.add(new String("BOX_MINI_GAME_SURPRISE_BOXES"));
 		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
 		variableCodeString.add(new String("GENERIC_SEND_INTEGER"));
@@ -81,16 +88,33 @@ public class MClient {
 		variableCodeString.add(new String("BUILD_HOUSE"));
 		variableCodeString.add(new String("GOT_OUT_OF_JAIL"));
 		variableCodeString.add(new String("SEND_USER_ID"));
+		
+		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_EARLY"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_EARLY"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_GUEST_END"));
+		variableCodeString.add(new String("REACTION_MINI_GAME_OWNER_END"));
+		variableCodeString.add(new String("RANDOM_NUM"));
+		variableCodeString.add(new String("GENERIC_SEND_INT_ARRAY"));
+		
+		variableCodeString.add(new String("REQUESTING_STATUS_MAIN_ROOM"));
+		variableCodeString.add(new String("JOIN_ROOM_TO_CLIENT"));
+
+		variableCodeString.add(new String("DICE"));
+		variableCodeString.add(new String("SERVER_READY"));
+		variableCodeString.add(new String("SEND_USER_ID_SIMPLE"));
+
+		variableCodeString.add(new String("END_PROPERTY"));
 	
 	}
 	
 	
-	public MClient(String ip, int port, boolean isHostClient, DicePanel d, Player[] pList) throws IOException, UnknownHostException {
+	public MClient(boolean isHostClient, GameScreen gameScreen, DicePanel d, Player[] pList) throws IOException, UnknownHostException {
 		this.diceP = d;
 		this.pList = pList;
+		this.gameScreen = gameScreen;
 		init();
-		optionBox = new ClientEntranceBox(); 
-		connectToServer(ip, port, isHostClient);
+		optionBox = new ClientEntranceBox();
+		connectToServer(isHostClient);
     }
 	private void init(){
 		playingInfo = PlayingInfo.getInstance();
@@ -105,11 +129,13 @@ public class MClient {
 		initDoActions();
 	}
 	private void initDoActions(){ // ADD ACTIONS HERE 
+		doActions.put(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayerMainGame(result);}});
+		
 		doActions.put(UnicodeForServer.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
 		doActions.put(UnicodeForServer.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
 		doActions.put(UnicodeForServer.START_GAME_REPLY, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame(result);}});
-		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
-		doActions.put(UnicodeForServer.DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
+		doActions.put(UnicodeForServer.START_GAME_TO_OTHER, new DoAction(){public void doAction(ArrayList<Object> result){doSendBackStartSignal();}});
+		doActions.put(UnicodeForServer.DISCONNECTED_FOR_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doDisconnect(result);}});
 		doActions.put(UnicodeForServer.HOST_DISCONNECTED, new DoAction(){public void doAction(ArrayList<Object> result){doHostDisconnect();}});
 		doActions.put(UnicodeForServer.PROPERTY_PURCHASE, new DoAction(){public void doAction(ArrayList<Object> result){doPurchaseProperty(result);}});
 		doActions.put(UnicodeForServer.PROPERTY_RENT_PAY, new DoAction(){public void doAction(ArrayList<Object> result){doPayRent(result);}});
@@ -131,46 +157,53 @@ public class MClient {
 		doActions.put(UnicodeForServer.BUILD_HOUSE, new DoAction(){public void doAction(ArrayList<Object> result){doBuildHouse(result);}});
 		doActions.put(UnicodeForServer.GOT_OUT_OF_JAIL, new DoAction(){public void doAction(ArrayList<Object> result){doGotOutOfJail(result);}});
 		doActions.put(UnicodeForServer.SEND_USER_ID, new DoAction(){public void doAction(ArrayList<Object> result){doSetUserId(result);}});
-		
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,0);}});
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,1);}});
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,2);}});
+		doActions.put(UnicodeForServer.JOIN_ROOM_TO_CLIENT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result);}});
+		doActions.put(UnicodeForServer.SERVER_READY, new DoAction(){public void doAction(ArrayList<Object> result){doAlarmServerReady(result);}});
+		doActions.put(UnicodeForServer.LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result);}});
+		doActions.put(UnicodeForServer.HOST_LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doDestroyRoom(result);}});
+		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
+		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom();}});
 	}
-	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
-		isConnected = false;
-		String userEnteredIpAddress;
-		int userEnteredPortNum;
-		while(!isConnected){
-			if(!optionBox.haveIpAndPort())
-				break;
-			userEnteredIpAddress = optionBox.getIp();
-			userEnteredPortNum = optionBox.getPort();
-			connectToServer(userEnteredIpAddress, userEnteredPortNum, isHostClient);
-		}
-		
-	}
+//	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
+//		isConnected = false;
+//		String userEnteredIpAddress;
+//		int userEnteredPortNum;
+//		while(!isConnected){
+//			if(!optionBox.haveIpAndPort())
+//				break;
+//			userEnteredIpAddress = optionBox.getIp();
+//			userEnteredPortNum = optionBox.getPort();
+//			connectToServer(userEnteredIpAddress, userEnteredPortNum, isHostClient);
+//		}
+//		
+//	}
 
 
 
-	private void connectToServer(String ip, int port, boolean isHostClient)
+	private void connectToServer(boolean isHostClient)
 			throws UnknownHostException, IOException {
 		socket = null;
 		System.out.println("Connecting to the server...");
-		socket = new Socket(ip, port);
+//		socket = new Socket(ip, port);
+		socket = new Socket(IP_ADDRESS, PORT_NUM);
 			//Sounds.buttonConfirm.playSound();
-		System.out.println("Successfully connected to server at\nip: " + ip + " with port: " + port + "!\n");
+		System.out.println("Successfully connected to server at\nip: " + IP_ADDRESS + " with port: " + PORT_NUM + "!\n");
 		isConnected = true;
 //			if(!optionBox.haveName()){
 //				s.close();
 //				return;
 //			}
-		getMsg(socket, ip, port, isHostClient, optionBox.getName());
+		getMsg(socket, isHostClient, optionBox.getName());
 	}
-	private void getMsg(Socket s, String ip, int port, boolean isHostClient, String name) throws IOException{
+	private void getMsg(Socket s, boolean isHostClient, String name) throws IOException{
 		
         InputStream inputStream = s.getInputStream();
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
         playingInfo.setOutputStream(s.getOutputStream());
-        diceP.setIp(ip);	// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
-        diceP.setPort(port);// THIS IS JUST FOR REFERENCE FOR START GAME BUTTON
         diceP.setStartGameButtonEnabled(isHostClient);
         
         isServerUp = true;
@@ -182,15 +215,20 @@ public class MClient {
 			@Override
 			public void run() {
 				ArrayList<Object> result;
-				try {
-					byteCount = inputStream.read(msgs);
-					result = mUnpack.getResult(msgs);
-					setPlayer((Integer)result.get(1));
-					diceP.setMyPlayer(thisPlayNum);
-					Sounds.waitingRoomJoin.playSound();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+//				try {
+//					byteCount = inputStream.read(msgs);
+//					result = mUnpack.getResult(msgs);
+//					setPlayer((Integer)result.get(1));
+//					diceP.setMyPlayer(thisPlayNum);
+//					Sounds.waitingRoomJoin.playSound();
+//				} catch (IOException e1) {
+//					e1.printStackTrace();
+//				}
+				
+				playingInfo.sendMessageToServer(mPack.packString(UnicodeForServer.SEND_USER_ID_SIMPLE,playingInfo.getLoggedInId()));
+				System.out.println("now sending id");
+				isReadyToUse = true;
+				
 				
 				while(isServerUp){
 		        	try{
@@ -216,20 +254,22 @@ public class MClient {
 		diceP.actionForDiceEnd();
 	}
 	private void doStartGame(ArrayList<Object> result){
-		int k;
-		
-		for(int i=1; i<result.size(); i++){
-			k = (Integer)result.get(i);
-			pList[k].setIsOn(true);
-			diceP.placePlayerToBoard(k);
+		setPlayer((Integer)result.get(2));
+		gameScreen.switchToGame();
+		for(int i=0; i<(Integer)result.get(1); i++){
+			pList[i].setIsOn(true);
+			diceP.placePlayerToBoard(i);
 		}
-		
 		diceP.actionForStart();
 		SqlRelated.generateUserInfo(playingInfo.getLoggedInId());
 		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));
-		System.out.println(result.size()-1);
-		mLabels.setNumPlayer(result.size()-1);
+		System.out.println((Integer)result.get(1));
+		mLabels.setNumPlayer((Integer)result.get(1));
 		mLabels.removeNonPlayers();
+		
+	}
+	private void doSendBackStartSignal(){
+		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME_TO_OTHER));
 	}
 	private void doRemoveProperty(){
 		diceP.actionForRemovePropertyPanel();
@@ -312,11 +352,46 @@ public class MClient {
 		pList[pos].setNumWin((Integer)result.get(4));
 		pList[pos].setNumLose((Integer)result.get(5));
 	}
+	private void initializeMainGameLobby(ArrayList<Object> result, int type){
+		if(type == 0){
+			System.out.println("SwitchingMain going");
+			gameScreen.switchToMainGameArea();
+		}else if(type == 1){
+			System.out.println("SwitchingMain going");
+			gameScreen.updateMainGameAreaIds(result);
+		}
+		else{
+			System.out.println("update rooms going");
+			gameScreen.updateInMainAreaRooms(result);
+		}
+	}
+	private void doUpdateJoinedPlayer(ArrayList<Object> result){
+		gameScreen.updateWaitingArea(result);
+		
+	}
+	private void doUpdateJoinedPlayerMainGame(ArrayList<Object> result){
+		System.out.println("this should be called");
+		gameScreen.updateRoomStatus((Long)result.get(1), (Integer)result.get(2), (Boolean)result.get(3));
+		
+	}
+	private void doAlarmServerReady(ArrayList<Object> result){
+		gameScreen.serverReady(true);
+		
+	}
+	private void doDestroyRoom(ArrayList<Object> result){
+		gameScreen.hostLeftWaitingArea();
+	}
+	private void doForCreatingRoom(){
+		gameScreen.EnableHostButton();
+	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;
+	}
+	public boolean isReadyToUse(){
+		return isReadyToUse;
 	}
 	
 }

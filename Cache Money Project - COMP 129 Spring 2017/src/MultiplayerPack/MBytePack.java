@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public final class MBytePack {
@@ -71,13 +72,80 @@ public final class MBytePack {
 		}
 		return null;
 	}
-	public byte[] packTotalPlayerPlaying(int requestCode, ArrayList<Integer> playerList){
+	public byte[] packTotalPlayerPlaying(int requestCode, int playerList, int playerNum){
 		try{
 			dOutputStream.writeInt(requestCode);
-			dOutputStream.writeInt(playerList.size());
-			for(int i=0; i<playerList.size(); i++)
-				dOutputStream.writeInt(playerList.get(i));
+			dOutputStream.writeInt(playerList);
+			dOutputStream.writeInt(playerNum);
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public byte[] packBoolean(int requestCode, boolean value){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeBoolean(value);
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public byte[] packStringArray(int requestCode, HashMap<String, String> onlinePlayers){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(onlinePlayers.size());
+			for(String id : onlinePlayers.values())
+				dOutputStream.writeUTF(id);
 			
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public byte[] packStringArray(int requestCode, ArrayList<String> onList){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(onList.size());
+			for(String id : onList)
+				dOutputStream.writeUTF(id);
+			
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public byte[] packLongArray(int requestCode, HashMap<Long, MWaitingRoom> waitingRooms){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(waitingRooms.size());
+			for(Long roomNum : waitingRooms.keySet())
+				dOutputStream.writeLong(roomNum);
+			
+				
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public byte[] packLong(int requestCode, Long pos){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeLong(pos);
 				
 			return packResult();
 		}
@@ -220,6 +288,33 @@ public final class MBytePack {
 		return null;
 	}
 	
+	public byte[] packString(int requestCode, String id){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeUTF(id);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	public byte[] packLongIntBoolean(int requestCode, long roomNum, int numPpl, boolean isHost){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeLong(roomNum);
+			dOutputStream.writeInt(numPpl);
+			dOutputStream.writeBoolean(isHost);
+			
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 	
 	public byte[] packSimpleRequest(int requestCode){
 		try{

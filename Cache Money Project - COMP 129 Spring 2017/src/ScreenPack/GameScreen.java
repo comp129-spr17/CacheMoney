@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +24,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import GamePack.*;
 import InterfacePack.BackgroundImage;
@@ -71,6 +73,9 @@ public class GameScreen extends JFrame{
 	private DefaultComboBoxModel tempComboBox;
 	private JButton displayTestWindow;
 	private PlayerInfoDisplay pInfoDisplay;
+	private MainGameArea mainGameArea;
+	private WaitingArea waitingArea;
+	private boolean isServerReady;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -82,16 +87,24 @@ public class GameScreen extends JFrame{
 		exitSetting(true);
 	}
 	// called if user is the client
-	public GameScreen(boolean isSingle, String ip, int port) throws UnknownHostException, IOException{
+	public GameScreen(boolean isSingle) throws UnknownHostException, IOException{
 		initEverything(false,isSingle);
 		try{
-			addClient(ip,port);
+			addClient();
 		}
 		catch (IOException e){
 			mainPanel.setVisible(false);
 			this.dispose();
 			throw new IOException();
 		}
+		if(pInfo.isSingle())
+			switchToGame();
+		else{
+			while (!client.isReadyToUse() || !isServerReady);
+			pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.REQUESTING_STATUS_MAIN));
+			System.out.println("requesting");
+		}
+		
 		setWindowVisible();
 		exitSetting(false);
 	}
@@ -99,6 +112,9 @@ public class GameScreen extends JFrame{
 		boardPanel.PlacePiecesToBaord(numPlayer);
 		//System.out.print(numPlayer);
 		totalPlayers = numPlayer;
+	}
+	public void serverReady(boolean isReady){
+		isServerReady = isReady;
 	}
 	private void setWindowVisible(){
 		try {
@@ -178,8 +194,9 @@ public class GameScreen extends JFrame{
 						e1.printStackTrace();
 					}
 	        	}
-	        	pInfo.sendMessageToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,pInfo.getMyPlayerNum()));
-
+//	        	pInfo.sendMessageToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,pInfo.getMyPlayerNum()));
+	    		
+	    		pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
 	    	}
 		}
         System.exit(1);
@@ -447,6 +464,10 @@ public class GameScreen extends JFrame{
 		
 		pDisplay.setVisible(false);
 		pInfoDisplay.setVisible(false);
+		
+		mainGameArea = new MainGameArea(getContentPane());
+		waitingArea = mainGameArea.getWaiting();
+		
 		btnExit = new JButton("X");
 		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
 		mainPanel.add(btnExit);
@@ -491,6 +512,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(boardPanel);
 		mainPanel.add(giveJailFreeCard);
 		mainPanel.add(displayTestWindow);
+		
 		addMuteMusic();
 		addMuteSounds();
 		initButtonListeners();
@@ -504,6 +526,40 @@ public class GameScreen extends JFrame{
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
 		
 		
+	}
+	public void switchToGame(){
+		getContentPane().removeAll();
+		getContentPane().add(mainPanel);
+		getContentPane().repaint();
+		getContentPane().revalidate();
+		
+	}
+	public void switchToMainGameArea(){
+		getContentPane().removeAll();
+		mainGameArea.setComponents();
+		getContentPane().repaint();
+		getContentPane().revalidate();
+		
+	}
+	public void updateMainGameAreaIds(ArrayList<Object> userList){
+		mainGameArea.updatelist(userList);
+	}
+	public void updateInMainAreaRooms(ArrayList<Object> roomLIst){
+		mainGameArea.updateRooms(roomLIst);
+	}
+	
+	public void hostLeftWaitingArea(){
+		JOptionPane.showMessageDialog(this, "The host of the waiting room has left.");
+		waitingArea.switchToMainGameArea();		
+	}
+	public void EnableHostButton(){
+		waitingArea.actionToHost();
+	}
+	public void updateWaitingArea(ArrayList<Object> userId){
+		waitingArea.updateUserInfos(userId);
+	}
+	public void updateRoomStatus(Long roomNum, int numPpl, boolean isHost){
+		mainGameArea.updateRoom(roomNum, numPpl, isHost);
 	}
 	private void addMuteMusic() {
 		ImageIcon imgOn, imgOff;
@@ -744,8 +800,8 @@ public class GameScreen extends JFrame{
 		}, 0);
 
 	}
-	private void addClient(String ip, int port) throws UnknownHostException, IOException{
-			client = new MClient(ip,port,false,dicePanel,players);
+	private void addClient() throws UnknownHostException, IOException{
+			client = new MClient(false,this,dicePanel,players);
 	}
 	public int getLoadingProgress() {
 		return loadingProgress;

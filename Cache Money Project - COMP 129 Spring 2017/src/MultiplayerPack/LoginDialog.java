@@ -68,14 +68,27 @@ public class LoginDialog extends JDialog {
  
             public void actionPerformed(ActionEvent e) {
                 if (CredentialManager.authenticate(getUsername(), getPassword())) {
-                    JOptionPane.showMessageDialog(LoginDialog.this,
-                            "Hi " + getUsername() + "! You have successfully logged in.",
-                            "Login",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    succeeded = true;
-                    playingInfo.setLoggedInId(getUsername());
-                    playingInfo.setLoggedIn();
-                    dispose();
+                	if(CredentialManager.checkIfUserIsLoggedIn(getUsername())){
+                		JOptionPane.showMessageDialog(LoginDialog.this,
+                                "That user has logged in already.",
+                                "Login Failed",
+                                JOptionPane.ERROR_MESSAGE);
+                        // reset username and password
+                        uNameIn.setText("");
+                        passIn.setText("");
+                        succeeded = false;
+                	}else{
+                		JOptionPane.showMessageDialog(LoginDialog.this,
+                                "Hi " + getUsername() + "! You have successfully logged in.",
+                                "Login",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        succeeded = true;
+                        SqlRelated.loginAndOutAction(getUsername(), true);
+                        playingInfo.setLoggedInId(getUsername());
+                        playingInfo.setLoggedIn();
+                        dispose();
+                	}
+                    
                 } else {
                     JOptionPane.showMessageDialog(LoginDialog.this,
                             "Invalid username or password",

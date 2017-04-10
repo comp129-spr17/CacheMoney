@@ -11,6 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -47,6 +48,7 @@ public class MainMenuScreen {
 	private PlayingInfo playingInfo;
 
 	public MainMenuScreen(){
+		
 		init();
 		createMenuWindow();
 		Sounds.register.playSound();
@@ -92,6 +94,11 @@ public class MainMenuScreen {
 		loginBtn = new JButton("Login");
 		playingInfo = PlayingInfo.getInstance();
 		disableEnableBtns(playingInfo.isLoggedIn());
+		Runtime.getRuntime().addShutdownHook(new Thread(){
+			public void run(){
+				exitAction();
+			}
+		});
 
 	}
 	private void scaleBoardToScreenSize() {
@@ -171,8 +178,9 @@ public class MainMenuScreen {
 			class beginMultiplayer extends Thread{
 				@Override
 				public void run(){
-					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
-					displayHostOrClientDialogBox(mwr);
+//					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+//					displayHostOrClientDialogBox(mwr);
+					setupClient();
 				}
 			}
 
@@ -304,7 +312,7 @@ public class MainMenuScreen {
 		//		mainPanel.add(backgroundpic);
 
 		mainmenuframe.setResizable(false);
-		mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addActionListenerForExit();
 		mainmenuframe.setVisible(true);
 
 
@@ -383,7 +391,7 @@ public class MainMenuScreen {
 			hideAndDisposeLoadingScreen();
 			break;
 		case 1:
-			setupClient(mwr);
+			setupClient();
 			break;
 		case 2:
 			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
@@ -393,24 +401,32 @@ public class MainMenuScreen {
 			break;
 		}
 	}
+	private void addActionListenerForExit(){
+		mainmenuframe.addWindowListener( new WindowAdapter() {
+			@Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+            	super.windowClosing(e);
+            	mainmenuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            }
+        } );
+	}
+	private void exitAction(){
+		if(playingInfo.isLoggedIn())
+			SqlRelated.loginAndOutAction(playingInfo.getLoggedInId(), false);
+	}
 
-
-	private void setupClient(AskUserMultiplayerDialogBox mwr) {
+	private void setupClient(){
 		gameScreen = null;
 		mainmenuframe.setVisible(true);
-		if (!mwr.askUserForIPAndPort()){
-			return;
-		}
 		try {
 			mainmenuframe.setVisible(false);
 			loadingScreen.setVisible(true);
-			gameScreen = new GameScreen(false,mwr.getIPAddress(),mwr.getPortNumber());
+			gameScreen = new GameScreen(false);
 			loadingScreen.setVisible(false);
 			hideAndDisposeMainMenuScreen();
 			hideAndDisposeLoadingScreen();
 		} catch (IOException e) {
 			loadingScreen.setVisible(false);
-			setupClient(mwr);
 		}
 	}
 	
