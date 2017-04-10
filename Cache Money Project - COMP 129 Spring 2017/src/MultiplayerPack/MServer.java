@@ -32,7 +32,6 @@ public class MServer {
 	private HashMap<String,String> joinedPlayerIds;
 	private HashMap<Long, MWaitingRoom> waitingRooms; 
 	private final static int PORT_NUM = 7777;
-	private final static String IP_ADDRESS = "10.70.70.80";
 	private static ServerSocket listener;
 	private byte[] firstMsg;
 	private MBytePack mPack;

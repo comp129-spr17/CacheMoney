@@ -36,8 +36,7 @@ public class MClient {
 	private ArrayList<String> variableCodeString;
 	private MoneyLabels mLabels;
 	private boolean isReadyToUse;
-	private final static int PORT_NUM = 7777;
-	private final static String IP_ADDRESS = "10.70.70.80";
+
 //	public MClient(boolean isHostClient, DicePanel d, Player[] pList) throws IOException {
 //		this.diceP = d;
 //		this.pList = pList;
@@ -188,9 +187,9 @@ public class MClient {
 		socket = null;
 		System.out.println("Connecting to the server...");
 //		socket = new Socket(ip, port);
-		socket = new Socket(IP_ADDRESS, PORT_NUM);
+		socket = new Socket(playingInfo.IP_ADDRESS, playingInfo.PORT_NUM);
 			//Sounds.buttonConfirm.playSound();
-		System.out.println("Successfully connected to server at\nip: " + IP_ADDRESS + " with port: " + PORT_NUM + "!\n");
+		System.out.println("Successfully connected to server at\nip: " + playingInfo.IP_ADDRESS + " with port: " + playingInfo.PORT_NUM + "!\n");
 		isConnected = true;
 //			if(!optionBox.haveName()){
 //				s.close();

@@ -9,6 +9,8 @@ public final class PlayingInfo {
 	private int myPlayerNum;
 	private boolean isLoggedIn;
 	private String loggedInId;
+	public final static int PORT_NUM = 7777;
+	public final static String IP_ADDRESS = "10.70.70.80";
 	private static final PlayingInfo PLAYING_INFO = new PlayingInfo();
 	private PlayingInfo(){
 		outputStream = null;
