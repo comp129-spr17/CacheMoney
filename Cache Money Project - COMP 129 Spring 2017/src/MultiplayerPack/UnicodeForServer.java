@@ -2,7 +2,8 @@ package MultiplayerPack;
 
 public final class UnicodeForServer {
 	private static final UnicodeForServer UNICODE = new UnicodeForServer();
-	public static final int DICE = 0;
+
+	public static final int JOIN_ROOM_TO_MAIN_GAME_AREA = 0;
 	public static final int PROPERTY = 1;
 	public static final int PLAYER_NUM = 2;
 	public static final int END_TURN = 3;
@@ -41,7 +42,7 @@ public final class UnicodeForServer {
 	public static final int GENERIC_SEND_INT_ARRAY = 36;
 	public static final int REQUESTING_STATUS_MAIN_ROOM = 37;
 	public static final int JOIN_ROOM_TO_CLIENT = 38;
-	public static final int JOIN_ROOM_TO_MAIN_GAME_AREA = 39;
+	public static final int DICE = 39;
 	public static final int SERVER_READY = 40;
 	public static final int SEND_USER_ID_SIMPLE = 41;
 	

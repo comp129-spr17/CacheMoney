@@ -29,6 +29,7 @@ public class MWaitingRoom extends Thread{
 	private long roomNum;
 	private ArrayList<Object> result;
 	private MManagingMaps mManagingMaps;
+	private PlayingInfo playingInfo;
 	public MWaitingRoom(HashMap<String,OutputStream> usersOutput, HashMap<String,InputStream> usersInput,  HashMap<String, String> userIds, InputStream inputStream, String userId, boolean isHost, long roomNum){
 		this.usersOutput = usersOutput;
 		this.usersInput = usersInput;
@@ -36,6 +37,7 @@ public class MWaitingRoom extends Thread{
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
 		mManagingMaps = MManagingMaps.getInstance();
+		playingInfo = PlayingInfo.getInstance();
 		readFromUser = inputStream;
 		this.userId = userId;
 		this.isHost = isHost;
@@ -71,46 +73,38 @@ public class MWaitingRoom extends Thread{
 				specialCode = whichRequest(msg[3]);
 				result = mUnpack.getResult(msg);
 				
-				if(specialCode == 3){
-//						if(isHost){
-//							name = (String)result.get(1);
-//							System.out.println(name + " joined");
-//							outputForThisRoom.add(usersOutput.get(name));
-//							userForThisRoom.add(name);
-//							numPpl++;
-//						}
-				}else{
-					synchronized (this) {
-						if(specialCode == 1){
-							isGameStartedOrDisconnected = true;
-							exitCode = userId.equals((String)result.get(1)) || isHost;
-							numPpl--;
-						}else if(specialCode == 2){
-							isGameStartedOrDisconnected = false;
-							exitCode = userId.equals((String)result.get(1));
-							numPpl--;
-						}else if(specialCode == 4){
-							isGameStartedOrDisconnected = true;
-							exitCode = true;
-							if(isHost){
-								System.out.println("Starting thing received");
+				synchronized (this) {
+					// need to find the way to get specific user to execute this action,.
+					if(specialCode == 1){
+						isGameStartedOrDisconnected = true;
+						exitCode = playingInfo.isLoggedInId((String)result.get(1));
+						if(exitCode && playingInfo.isLoggedInId(userForThisRoom.get(0)))
+							actionToRemoveRoom(false);
+						mManagingMaps.removeFromList((String)result.get(1));
+						numPpl--;
+					}else if(specialCode == 2){
+						isGameStartedOrDisconnected = false;
+						exitCode = playingInfo.isLoggedInId((String)result.get(1));
+						if(exitCode && playingInfo.isLoggedInId(userForThisRoom.get(0)))
+							actionToRemoveRoom(false);
+						numPpl--;
+					}else if(specialCode == 4){
+						isGameStartedOrDisconnected = true;
+						exitCode = true;
+						if(isHost){
+							System.out.println("Starting thing received");
 
-								mManagingMaps.removeWaitingRoom(roomNum);
-								showMsgToAllUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, mManagingMaps.getWaitingRooms()));
-								for(int i=0; i<numPpl; i++){
-									(new MThread(outputForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
-								}
-								
+							actionToRemoveRoom(true);
+							for(int i=0; i<numPpl; i++){
+								(new MThread(outputForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
 							}
 							
 						}
-						if(exitCode)
-							notify();
+						
 					}
+					if(exitCode)
+						notify();
 				}
-//				}
-					
-				
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -118,6 +112,19 @@ public class MWaitingRoom extends Thread{
 		}
 		System.out.println("Game started. Now, exit from waiting");
 	}
+	private void actionToRemoveRoom(boolean isGameStarted){
+		// send individual a code about close the room and go back to the main area.
+		mManagingMaps.removeWaitingRoom(roomNum);
+		if(!isGameStarted){
+			
+			showMsgToAllUsers(mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
+		}
+			
+		showMsgToAllUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, mManagingMaps.getWaitingRooms()));
+
+		
+	}
+	
 	private void getMsg(){
 		try {
 			
@@ -162,24 +169,24 @@ public class MWaitingRoom extends Thread{
 		userForThisRoom.add(uId);
 		numPpl++;
 		showMsgToUsers(mPack.packStringArray(UnicodeForServer.JOIN_ROOM_TO_CLIENT, userForThisRoom));
-		showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,isHost));
+		showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,false));
 		
 	}
 	public void getUpdatedWaitingArea(String userId){
-		System.out.println("Sending main thingggg");
-		try {
-			usersOutput.get(userId).write(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,false));
-		} catch (IOException e) {
-			e.printStackTrace();
+		System.out.println("Sending main thingggg" + userId);
+		
+		for(String aString : usersOutput.keySet()){
+			System.out.println("user in all : " + aString);
 		}
+
+			showMsgToAllUsers(mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,numPpl,false));
+		
 	}
 	private int whichRequest(int code){
 			if(UnicodeForServer.DISCONNECTED == code)
 				return 1;
 			else if(UnicodeForServer.LEAVE_ROOM == code)
 				return 2;
-			else if(UnicodeForServer.JOIN_ROOM == code)
-				return 3;
 			else if(UnicodeForServer.START_GAME == code)
 				return 4;
 				

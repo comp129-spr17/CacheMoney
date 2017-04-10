@@ -164,13 +164,14 @@ public class MainGameArea extends JPanel{
 		revalidate();
 	}
 	public void makeNewRoom(long roomNum){
-		System.out.println("RoomNum:"+roomNum);
+		System.out.println("MAKE ROOM");
 		rooms.put(roomNum,new JButton("Room : " + roomNum + "  1/4"));
 		addListenerToRoom(rooms.get(roomNum),roomNum);
 		add(rooms.get(roomNum));
 		System.out.println(rooms.size());
 	}
 	public void updateRoom(long roomNum, int numPpl, boolean isStarting){
+		System.out.println("UPDATE ROOM");
 		if(isStarting){
 			remove(rooms.get(roomNum));
 			rooms.remove(roomNum);

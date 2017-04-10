@@ -64,4 +64,7 @@ public final class PlayingInfo {
 	public boolean isOutputSet(){
 		return outputStream!=null;
 	}
+	public boolean isLoggedInId(String id){
+		return loggedInId.equals(id);
+	}
 }

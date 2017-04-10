@@ -33,11 +33,13 @@ public class MThread extends Thread{
 	private int numPlayer;
 	private int specialCode;
 	private boolean exitCode;
+	private MManagingMaps mMaps;
 	public MThread(ArrayList<OutputStream> usersOutput, int numPlayer, int myPlayerNum, InputStream inputStream){
 		this.playerNum = playerNum;
 		this.usersOutput = usersOutput;
 		this.numPlayer = numPlayer;
 		this.myPlayerNum = myPlayerNum;
+		mMaps = MManagingMaps.getInstance();
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
 		ufs = UnicodeForServer.getInstance();
@@ -68,9 +70,10 @@ public class MThread extends Thread{
 				}
 				else if(specialCode == 1){
 					// To do : get rid of all the property this owner owns.
-					disconnectPlayer = (Integer)mUnpack.getResult(msg).get(1);
-					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
-					usersOutput.set(disconnectPlayer,null);
+					mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
+//					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
+//					usersOutput.set(disconnectPlayer,null);
+					
 //					disconnectedUser();
 					showMsgToUsers(mPack.packPlayerNumber(ufs.DISCONNECTED, disconnectPlayer));
 					exitCode = true;

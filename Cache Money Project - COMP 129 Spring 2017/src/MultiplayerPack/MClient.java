@@ -54,7 +54,8 @@ public class MClient {
 		doActions.get((Integer)result.get(0)).doAction(result);
 	}
 	private void initVariableCodeString(){
-		variableCodeString.add(new String("DICE"));
+
+		variableCodeString.add(new String("JOIN_ROOM_TO_MAIN_GAME_AREA"));
 		variableCodeString.add(new String("PROPERTY"));
 		variableCodeString.add(new String("PLAYER_NUM"));
 		variableCodeString.add(new String("END_TURN"));
@@ -97,7 +98,8 @@ public class MClient {
 		
 		variableCodeString.add(new String("REQUESTING_STATUS_MAIN_ROOM"));
 		variableCodeString.add(new String("JOIN_ROOM_TO_CLIENT"));
-		variableCodeString.add(new String("JOIN_ROOM_TO_MAIN_GAME_AREA"));
+
+		variableCodeString.add(new String("DICE"));
 		variableCodeString.add(new String("SERVER_READY"));
 		variableCodeString.add(new String("SEND_USER_ID_SIMPLE"));
 		
@@ -126,6 +128,8 @@ public class MClient {
 		initDoActions();
 	}
 	private void initDoActions(){ // ADD ACTIONS HERE 
+		doActions.put(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayerMainGame(result);}});
+		
 		doActions.put(UnicodeForServer.DICE, new DoAction(){public void doAction(ArrayList<Object> result){doRollingDice(result);}});
 		doActions.put(UnicodeForServer.END_TURN, new DoAction(){public void doAction(ArrayList<Object> result){doEndTurn();}});
 		doActions.put(UnicodeForServer.START_GAME_REPLY, new DoAction(){public void doAction(ArrayList<Object> result){doStartGame(result);}});
@@ -155,7 +159,6 @@ public class MClient {
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,0);}});
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,1);}});
 		doActions.put(UnicodeForServer.JOIN_ROOM_TO_CLIENT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result,false);}});
-		doActions.put(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayerMainGame(result);}});
 		doActions.put(UnicodeForServer.SERVER_READY, new DoAction(){public void doAction(ArrayList<Object> result){doAlarmServerReady(result);}});
 		
 	}

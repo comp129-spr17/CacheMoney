@@ -70,6 +70,7 @@ public class MMainArea extends Thread{
 					System.out.println("Request for update");
 					sendToMine(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN, userIds));
 					sendToMine(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
+					// TO do : WHY THE FUCK DOESN"T MYSELF RECEIVE THE STATUS FOR THIS SHIT!!!!!!!!
 					for(MWaitingRoom room: waitingRooms.values()){
 						room.getUpdatedWaitingArea(userId);
 					}
@@ -105,9 +106,7 @@ public class MMainArea extends Thread{
 					synchronized (mWaitingRoom) {
 						mWaitingRoom.wait();
 						exitCode = mWaitingRoom.isGameStartedOrDisconnected();
-						if(exitCode){
-							
-						}
+						
 					}
 				}
 					
