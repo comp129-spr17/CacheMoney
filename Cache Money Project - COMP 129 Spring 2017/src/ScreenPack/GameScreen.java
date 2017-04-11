@@ -361,34 +361,37 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				if (selectMortgage.getSelectedItem() != "")
 				{
-					for (int h = 0; h < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); h++) 
-					{
 						if (pInfo.isSingle() == true)
 						{
-							if(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+							for (int h = 0; h < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); h++) 
 							{
-								System.out.print(selectMortgage.getSelectedItem());
-								players[dicePanel.getCurrentPlayerNumber()].earnMonies(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getMortgageValue());
-								players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).setMortgagedTo(true);
-								players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().remove(h);
-								selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-								selectMortgage.repaint();
-								mLabels.reinitializeMoneyLabels();
+								if(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+								{
+									System.out.print(selectMortgage.getSelectedItem());
+									players[dicePanel.getCurrentPlayerNumber()].earnMonies(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getMortgageValue());
+									players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).setMortgagedTo(true);
+									players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().remove(h);
+									selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
+									selectMortgage.repaint();
+									mLabels.reinitializeMoneyLabels();
+								}
 							}
 						}
 						else{
-							if(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+							for (int h = 0; h < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); h++) 
 							{
-								players[pInfo.getMyPlayerNum()].earnMonies(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getMortgageValue());
-								players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).setMortgagedTo(true);
-								players[pInfo.getMyPlayerNum()].getOwnedProperties().remove(h);
-								selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-								selectMortgage.repaint();
-								mLabels.reinitializeMoneyLabels();
+								if(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+								{
+									players[pInfo.getMyPlayerNum()].earnMonies(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getMortgageValue());
+									players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).setMortgagedTo(true);
+									players[pInfo.getMyPlayerNum()].getOwnedProperties().remove(h);
+									selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
+									selectMortgage.repaint();
+									mLabels.reinitializeMoneyLabels();
+								}
 							}
 						}
 					}
-				}
 				updateMortgage();
 				mortgageWindow.setVisible(false);
 			}
