@@ -227,7 +227,8 @@ public class PropertyInfoPanel extends JPanel{
 		AP.actionToAuction(bid, playerNum);
 	}
 	public void actionToSwitchToAuction(){
-		Sounds.landedOnOwnedProperty.playSound();		
+		Sounds.landedOnOwnedProperty.playSound();
+		buyButton.setEnabled(true);
 		AP.switchtoAP();
 		
 		bPanel.add(AP);
@@ -252,11 +253,14 @@ public class PropertyInfoPanel extends JPanel{
 			}
 			else{
 				addPayButton();
+				checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent);
+				(new waitForPayEnabled()).start();
 			}
 		}else{
 			addBuyButton();
 			addAuctionButton();
 			buyButton.setEnabled(property.getBuyingPrice() < this.currentPlayer.getTotalMonies() && (pInfo.isSingle() || isCurrent));
+			(new waitForBuyEnabled()).start();
 			Sounds.landedOnUnownedProperty.playSound();
 		}
 		//addHideButton();
@@ -275,6 +279,56 @@ public class PropertyInfoPanel extends JPanel{
 		infoPanel.add(minigameInfo);
 		add(infoPanel);
 		addBackground();
+	}
+	
+	class waitForPayEnabled extends Thread{
+		@Override
+		public void run(){
+			if (pInfo.isSingle() || currentPlayer.getPlayerNum() == pInfo.getMyPlayerNum()){
+				while (
+						(property instanceof UtilityProperty) && property.getUtilityRentPrice() > currentPlayer.getTotalMonies() ||
+						!(property instanceof UtilityProperty) && property.getRent() > currentPlayer.getTotalMonies()
+						){
+					try {
+						sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				payButton.setEnabled(true);
+			}
+		}
+	}
+	
+	class waitForBuyEnabled extends Thread{
+		@Override
+		public void run(){
+			if (pInfo.isSingle() || currentPlayer.getPlayerNum() == pInfo.getMyPlayerNum()){
+				while (
+						property.getBuyingPrice() > currentPlayer.getTotalMonies() &&
+						!buyButton.isEnabled()
+						){
+					try {
+						sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				buyButton.setEnabled(true);
+			}
+		}
+	}
+	
+
+	private void checkIfPlayerHasEnoughMoneyForRent(Player currentPlayer, boolean isCurrent) {
+		int cost;
+		if(property instanceof UtilityProperty)
+		{				
+			cost = property.getUtilityRentPrice();
+		}else{
+			cost = property.getRent();
+		}
+		payButton.setEnabled(currentPlayer.getTotalMonies() >= cost && (pInfo.isSingle() || isCurrent));
 	}
 
 	private boolean checkIfUserCanBuyHouses() {
@@ -401,6 +455,7 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				if(auctionButton.isEnabled()){
 					if(pInfo.isSingle())
 						actionToSwitchToAuction();
@@ -439,15 +494,11 @@ public class PropertyInfoPanel extends JPanel{
 						if(currentPlayer.getTotalMonies() >= cost) {
 							payForR(cost, property.getOwner());
 							dismissPropertyPanel();
-						}else{
-							mPanel.executeSwitch(currentPlayer,cost);
 						}
 					}else{
 						if(currentPlayer.getTotalMonies() >= property.getRent()) {
 							payForR(property.getRent(), property.getOwner());
 							dismissPropertyPanel();
-						}else{
-							mPanel.executeSwitch(currentPlayer,property.getRent());
 						}
 					}
 				}
