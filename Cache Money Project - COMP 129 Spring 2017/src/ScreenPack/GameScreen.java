@@ -106,7 +106,10 @@ public class GameScreen extends JFrame{
 		if(pInfo.isSingle())
 			switchToGame();
 		else{
-			while (!client.isReadyToUse() || !isServerReady);
+			while (!client.isReadyToUse() || !isServerReady){
+				System.out.println("spinning......");
+			}
+			System.out.println("hmmmmm");
 			pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.REQUESTING_STATUS_MAIN));
 			System.out.println("requesting");
 		}

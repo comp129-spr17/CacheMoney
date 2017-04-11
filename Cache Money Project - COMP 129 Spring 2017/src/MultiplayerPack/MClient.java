@@ -262,7 +262,7 @@ public class MClient {
 		}
 		diceP.actionForStart();
 		SqlRelated.generateUserInfo(playingInfo.getLoggedInId());
-		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));
+//		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));
 		System.out.println((Integer)result.get(1));
 		mLabels.setNumPlayer((Integer)result.get(1));
 		mLabels.removeNonPlayers();
@@ -375,6 +375,7 @@ public class MClient {
 		
 	}
 	private void doAlarmServerReady(ArrayList<Object> result){
+		System.out.println("Server ready");
 		gameScreen.serverReady(true);
 		
 	}
