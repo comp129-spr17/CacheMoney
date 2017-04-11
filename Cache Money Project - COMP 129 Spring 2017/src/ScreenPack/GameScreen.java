@@ -578,6 +578,7 @@ public class GameScreen extends JFrame{
 		waitingArea.switchToMainGameArea();		
 	}
 	public void EnableHostButton(){
+		mainGameArea.switchToWaiting();
 		waitingArea.actionToHost();
 	}
 	public void updateWaitingArea(ArrayList<Object> userId){

@@ -165,7 +165,8 @@ public class MClient {
 		doActions.put(UnicodeForServer.HOST_LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doDestroyRoom(result);}});
 		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
 		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom();}});
-	}
+		doActions.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUserEntersMainArea(result);}});
+		}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
 //		String userEnteredIpAddress;
@@ -356,7 +357,7 @@ public class MClient {
 			System.out.println("SwitchingMain going");
 			gameScreen.switchToMainGameArea();
 		}else if(type == 1){
-			System.out.println("SwitchingMain going");
+			System.out.println("Update Ids going");
 			gameScreen.updateMainGameAreaIds(result);
 		}
 		else{
@@ -378,10 +379,16 @@ public class MClient {
 		
 	}
 	private void doDestroyRoom(ArrayList<Object> result){
+		playingInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.HOST_LEAVE_ROOM));
 		gameScreen.hostLeftWaitingArea();
 	}
 	private void doForCreatingRoom(){
 		gameScreen.EnableHostButton();
+		playingInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.CREATE_ROOM_REST));
+	}
+	private void doUserEntersMainArea(ArrayList<Object> result){
+		initializeMainGameLobby(result,0);
+		initializeMainGameLobby(result,2);
 	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);

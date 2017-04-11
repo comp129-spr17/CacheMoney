@@ -86,6 +86,7 @@ public class MWaitingRoom extends Thread{
 							
 						mManagingMaps.removeFromList((String)result.get(1));
 					}else if(specialCode == 2){
+						/// To do ::: when host leaves the room, it messes up the thread I think. 
 						System.out.println("user leaving called");
 						isGameStartedOrDisconnected = false;
 						exitCode = true;
@@ -96,6 +97,7 @@ public class MWaitingRoom extends Thread{
 							notifyUserLeave(userId);
 						}
 					}else if(specialCode == 3){
+						
 						if(isHost){
 							System.out.println("Starting thing received");
 							showMsgToUsers(mPack.packSimpleRequest(UnicodeForServer.START_GAME_TO_OTHER));
@@ -112,6 +114,9 @@ public class MWaitingRoom extends Thread{
 							}
 						}
 							
+					}else if(specialCode == 5){
+						isGameStartedOrDisconnected = false;
+						exitCode = true;	
 					}
 					if(exitCode)
 						notify();
@@ -223,7 +228,8 @@ public class MWaitingRoom extends Thread{
 				return 3;
 			else if(UnicodeForServer.START_GAME_TO_OTHER == code)
 				return 4;
-			
+			else if(UnicodeForServer.HOST_LEAVE_ROOM == code)
+				return 5;
 				
 			return 0;
 	}

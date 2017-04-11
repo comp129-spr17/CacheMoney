@@ -74,7 +74,7 @@ public class MainGameArea extends JPanel{
 	
 	public void updatelist(ArrayList<Object> userList){
 		listOfOnlineUsers.removeAllItems();
-		System.out.println("This update is called. size:" + userList.get(0));
+		System.out.println("Update user lists : . size:" + userList.get(0));
 		for(int i=1; i<userList.size(); i++){
 			System.out.println((String)userList.get(i));
 			listOfOnlineUsers.addItem((String)userList.get(i));
@@ -109,7 +109,7 @@ public class MainGameArea extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				switchToWaiting();
+//				switchToWaiting();
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
 				
 			}

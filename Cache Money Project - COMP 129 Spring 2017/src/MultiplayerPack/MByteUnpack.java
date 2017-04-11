@@ -112,6 +112,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.START_GAME_TO_OTHER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongArray(result);
+			return cleanUpAndReturn();}});
 	}
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);

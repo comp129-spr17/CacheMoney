@@ -12,7 +12,7 @@ public final class UnicodeForServer {
 	public static final int DISCONNECTED = 6;
 	public static final int HOST_DISCONNECTED = 7;
 	public static final int START_GAME_REPLY = 8;
-	public static final int PROPERTY_PURCHASE = 9;
+	public static final int CREATE_ROOM_REST = 9;
 	public static final int PROPERTY_RENT_PAY = 10;
 	public static final int SPAM_MINI_GAME_GUEST = 11;
 	public static final int SPAM_MINI_GAME_OWNER = 12;
@@ -47,6 +47,8 @@ public final class UnicodeForServer {
 	public static final int SEND_USER_ID_SIMPLE = 41;
 	public static final int END_PROPERTY = 42;
 	public static final int REQUESTING_STATUS_MAIN_IDS = 43;
+	public static final int WHEN_USER_ENTERS_GAME_AREA = 44;
+	public static final int PROPERTY_PURCHASE = 45;
 	private UnicodeForServer(){
 		
 	}

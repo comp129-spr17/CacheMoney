@@ -66,7 +66,7 @@ public class WaitingArea extends JPanel{
 	}
 	public void switchToMainGameArea(){
 
-		resetPlayerDisplay();
+//		resetPlayerDisplay();
 		container.removeAll();
 		mainGameArea.setComponents();
 		container.repaint();
@@ -74,14 +74,11 @@ public class WaitingArea extends JPanel{
 		
 	}
 	public void updateUserInfos(ArrayList<Object> userId){
-		while(!isDoneRender){
-			System.out.println("rendering..");
-			
-		}
 		resetPlayerDisplay();
 		System.out.println("update info called : " + userId);
 		for(int i=1; i<userId.size(); i++){
 			players.get(i-1).setText((String)userId.get(i));
+			System.out.println("Entered : " + (String)userId.get(i));
 		}
 		repaint();
 		revalidate();
@@ -96,9 +93,9 @@ public class WaitingArea extends JPanel{
 		container.add(this,BorderLayout.NORTH);
 		container.add(new JSeparator(),BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.SOUTH);
-		isDoneRender = true;
 	}
 	public void actionToHost(){
+		resetPlayerDisplay();
 		btnStart.setEnabled(true);
 		controlPanel.revalidate();
 	}

@@ -60,21 +60,25 @@ public class MMainArea extends Thread{
 		long roomNum;
 		System.out.println("now start");
 		sendToMine(mPack.packSimpleRequest(UnicodeForServer.SERVER_READY));
+		MWaitingRoom mWaitingRoom=null;
 		while(!exitCode){
 			try{
-				MWaitingRoom mWaitingRoom=null;
+				
 				getMsg();
 				System.out.println("recieved msg.");
 				specialCode = whichRequest(msg[3]);
 				if(specialCode == 4){
 					System.out.println("Request for update");
-					sendToMine(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
+					sendToMine(mPack.packLongArray(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, waitingRooms));
 					showMsgToUsers(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
-					sendToMine(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
-					// TO do : WHY THE FUCK DOESN"T MYSELF RECEIVE THE STATUS FOR THIS SHIT!!!!!!!!
-					for(MWaitingRoom room: waitingRooms.values()){
-						room.getUpdatedWaitingArea(userId);
+					for(Long room : waitingRooms.keySet()){
+						System.out.println("Room : " + room);
 					}
+					
+					// TO do : WHY THE FUCK DOESN"T MYSELF RECEIVE THE STATUS FOR THIS SHIT!!!!!!!!
+//					for(MWaitingRoom room: waitingRooms.values()){
+//						room.getUpdatedWaitingArea(userId);
+//					}
 				}
 				else{
 					if(specialCode == 1){
@@ -89,12 +93,10 @@ public class MMainArea extends Thread{
 						System.out.println("CREATING ROOM" + roomNum);
 						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
 						waitingRooms.put(roomNum, mWaitingRoom);
-
-						sendToMine(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
 						showMsgToUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
-						mWaitingRoom.notifyUserEnter(userId);
-						
-					}else {
+						sendToMine(mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
+						continue;
+					}else if(specialCode == 3){
 						System.out.println("3.");
 						result = mUnpack.getResult(msg);
 						System.out.println(result.get(1));
@@ -103,8 +105,10 @@ public class MMainArea extends Thread{
 //						mWaitingRoom = waitingRooms.get(roomNum);
 						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
 						mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
-						
+					}else if(specialCode == 5){
+						mWaitingRoom.notifyUserEnter(userId);
 					}
+						
 					mWaitingRoom.start();
 					
 					synchronized (mWaitingRoom) {
@@ -152,6 +156,8 @@ public class MMainArea extends Thread{
 				return 3;
 			else if(UnicodeForServer.REQUESTING_STATUS_MAIN == code)
 				return 4;
+			else if(UnicodeForServer.CREATE_ROOM_REST == code)
+				return 5;
 			return 0;
 	}
 	
