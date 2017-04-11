@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -26,6 +28,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import GamePack.*;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
@@ -76,6 +80,8 @@ public class GameScreen extends JFrame{
 	private MainGameArea mainGameArea;
 	private WaitingArea waitingArea;
 	private boolean isServerReady;
+	private JTextField mortgagePrice;
+	private JLabel priceDisplay;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -320,6 +326,10 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				updateMortgage();
+				if (selectMortgage.getItemCount() == 0)
+				{
+					mortgagePrice.setText("");
+				}
 				mortgageWindow.setVisible(true);
 			}
 			@Override
@@ -475,20 +485,35 @@ public class GameScreen extends JFrame{
 		initUserInfoWindow();
 		tempComboBox = new DefaultComboBoxModel();
 		selectMortgage = new JComboBox(tempComboBox);
+		selectMortgage.addActionListener (new ActionListener ()
+		{
+		    public void actionPerformed(ActionEvent e) 
+		    {
+		        updateTextField();
+		    }
+		});
+		priceDisplay = new JLabel("Price:");
+		priceDisplay.setFont(new Font("Serif",Font.BOLD,16));
+		mortgagePrice = new JTextField();
+		mortgagePrice.setEditable(false);
+		priceDisplay.setBounds(170, 75, 100,50);
+		mortgagePrice.setBounds(165, 125, 50, 50);
 		sellConfirm = new JButton("Mortgage");
 		sellCancel = new JButton("Cancel");
 		pleaseSelectMortgage =  new JLabel("Please select a property to mortgage:");
 		pleaseSelectMortgage.setBounds(75,20,250,20);	//SUBJECT TO CHANGE/////////////////////////////////////	
 		pleaseSelectMortgage.setFont(new Font("Serif",Font.BOLD,16));
 		selectMortgage.setBounds(90, 50, 200, 20);  //SUBJECT TO CHANGE/////////////////////////////////////
-		sellConfirm.setBounds(30,100,120,30); 	//SUBJECT TO CHANGE/////////////////////////////////////
-		sellCancel.setBounds(230, 100, 120, 30); //SUBJECT TO CHANGE/////////////////////////////////////
+		sellConfirm.setBounds(30,200,120,30); 	//SUBJECT TO CHANGE/////////////////////////////////////
+		sellCancel.setBounds(230, 200, 120, 30); //SUBJECT TO CHANGE/////////////////////////////////////
 		sellConfirm.setFont(new Font("Serif",Font.BOLD,16));
 		sellCancel.setFont(new Font("Serif",Font.BOLD,16));
 		mortgageWindow.add(sellConfirm);
 		mortgageWindow.add(pleaseSelectMortgage);
 		mortgageWindow.add(selectMortgage);
 		mortgageWindow.add(sellCancel);
+		mortgageWindow.add(priceDisplay);
+		mortgageWindow.add(mortgagePrice);
 		//mortgageWindow
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
@@ -678,7 +703,7 @@ public class GameScreen extends JFrame{
         
         mortgageWindow = new JDialog();
         mortgageWindow.setLayout(null);
-        mortgageWindow.setSize(400,200);
+        mortgageWindow.setSize(400,300);
         mortgageWindow.setTitle("Mortgage Property!");
         
         testInfo = new JDialog();
@@ -704,6 +729,39 @@ public class GameScreen extends JFrame{
 			}
 		}
 	}
+	
+	public void updateTextField()
+	{
+		if (tempComboBox.getSelectedItem() != "")
+		{
+			if (pInfo.isSingle())
+			{
+				for (int j = 0; j < players[0].getOwnedProperties().size(); j++)
+				{
+					if (tempComboBox.getSelectedItem().equals(players[0].getOwnedProperties().get(j).getName()))
+					{
+						mortgagePrice.setText(Integer.toString(players[0].getOwnedProperties().get(j).getMortgageValue()));
+					}
+				}
+			}
+			else
+			{
+				for (int j = 0; j < players[0].getOwnedProperties().size(); j++)
+				{
+					if (tempComboBox.getSelectedItem().equals(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getName()))
+					{
+						mortgagePrice.setText(Integer.toString(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getMortgageValue()));
+					}
+				}
+			}
+		}
+		else
+		{
+			mortgagePrice.setText("");
+		}
+		mortgagePrice.repaint();
+	}
+	
 	public void updateMortgage()
 	{
 		if (pInfo.isSingle())

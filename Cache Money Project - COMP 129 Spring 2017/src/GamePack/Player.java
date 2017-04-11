@@ -250,16 +250,6 @@ public final class Player {
 		
 	}
 	
-	private int mortgageTotalMonnies()
-	{
-		int totalcost = 0;
-		for(Property l:ownedProperties)
-		{
-			totalcost += l.getMortgageValue();
-		}
-		return totalcost;
-	}
-	
 	public void earnMonies(int cost)
 	{
 		int modMoney = 0; //Yes, this stupid thing is back again :^)
@@ -445,7 +435,7 @@ public final class Player {
 		}
 		else
 		{
-			if (totalmonies + mortgageTotalMonnies() >= cost)
+			if (enoughMonies(cost))
 			{
 				System.out.print("You will have enough money after you mortgage!");
 			}
@@ -455,6 +445,29 @@ public final class Player {
 			}
 		}
 	}
+	
+	private int mortgageTotalMonnies()
+	{
+		int totalcost = 0;
+		for(Property l:ownedProperties)
+		{
+			totalcost += l.getMortgageValue();
+		}
+		return totalcost;
+	}
+	
+	private boolean enoughMonies(int cost)
+	{
+		if (totalmonies + mortgageTotalMonnies() >= cost)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public void setUserId(String user_id){
 		this.user_id = user_id;
 		playerpiece.setUserId(user_id);
