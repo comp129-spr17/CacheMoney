@@ -128,8 +128,11 @@ public class WaitingArea extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(btnStart.isEnabled())
+				if(btnStart.isEnabled()){
+					btnStart.setEnabled(false);
 					playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME));
+				}
+					
 			}
 		});
 		btnGoBack.addMouseListener(new MouseListener() {
