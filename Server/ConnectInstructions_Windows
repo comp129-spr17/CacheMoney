@@ -29,9 +29,11 @@ On a Windows machine:
           
   4: At the end of the file, add this line: 10.15.17.88     www.cachemoney.com
   5: Your host file should look like below
+  
           # localhost name resolution is handled within DNS itself.
           #	127.0.0.1       localhost
           #	::1             localhost
           10.15.17.88       www.cachemoney.com
+          
   6: Save the hosts file and move it back to the etc directory. Start a browser and try navigating to www.cachemoney.com to ensure that 
      it works
