@@ -106,9 +106,11 @@ public class MWaitingRoom extends Thread{
 						int numPpl = userForThisRoom.size();
 						isGameStartedOrDisconnected = true;
 						exitCode = true;
-						
+						// try to add the timer or sth? It could happen becuz host is too fast to creae room
+						// compare to others? Others has to get out of this thread first. 
 						if(isHost){
 							actionToRemoveRoom(true);
+							sleep(3000);
 							for(int i=0; i<numPpl; i++){
 								(new MThread(outputForThisRoom,userForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
 							}

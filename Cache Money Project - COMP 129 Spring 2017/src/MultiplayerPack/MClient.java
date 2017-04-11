@@ -254,6 +254,7 @@ public class MClient {
 		diceP.actionForDiceEnd();
 	}
 	private void doStartGame(ArrayList<Object> result){
+		System.out.println("received start game");
 		setPlayer((Integer)result.get(2));
 		gameScreen.switchToGame();
 		for(int i=0; i<(Integer)result.get(1); i++){
