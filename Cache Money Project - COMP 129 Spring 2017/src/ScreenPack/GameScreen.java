@@ -26,7 +26,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -45,7 +44,6 @@ import MultiplayerPack.UnicodeForServer;
 public class GameScreen extends JFrame{
 	private final int NUMBER_OF_MUSIC = 5;
 	private JPanel mainPanel;
-	private JLayeredPane layeredPane;
 	private int myComp_height;
 	private DicePanel dicePanel;
 	private Player[] players;
@@ -477,10 +475,8 @@ public class GameScreen extends JFrame{
 		sizeRelated = SizeRelated.getInstance();
 		pDisplay = PropertyDisplay.getInstance();
 		pInfoDisplay = PlayerInfoDisplay.getInstance();
-		layeredPane = new JLayeredPane();
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
-		layeredPane.add(mainPanel);
 		getContentPane().add(mainPanel);
 		mainPanel.add(pDisplay);
 		mainPanel.add(pInfoDisplay);
