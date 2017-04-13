@@ -26,7 +26,7 @@ import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 5; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
@@ -441,13 +441,7 @@ public class DicePanel extends JPanel{
 		board.removePlayer(i);
 	}
 	public void actionForReceiveArray(int[] arr, int keyNum){
-		if (keyNum == 999){
-			beginRailroadMinigame(arr);
-		}
-		else{
-			mGamePanel.actionForGame(arr, keyNum);
-		}
-		
+		mGamePanel.actionForGame(arr, keyNum);
 	}
 	public void actionForReceiveIntBoolean(int decision, boolean isOwner){
 		mGamePanel.actionForGame(decision, isOwner);
@@ -658,16 +652,13 @@ public class DicePanel extends JPanel{
 			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current), -1);
 		}
 		else if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
-			if (propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier() == 9){
-				actionForRailroadMinigame(curSpaceName);
-			}
-			else{
-				mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), determineMinigameToPlay(curSpaceName));
-				mGamePanel.startMiniGame(curSpaceName);
-			}
+			mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), isRailRoad(curSpaceName) ? 9 : determineMinigameToPlay(curSpaceName));
+			mGamePanel.startMiniGame(curSpaceName);
 		}
 	}
-	
+	private boolean isRailRoad(String curSpaceName){
+		return propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier() == 9;
+	}
 	private int determineMinigameToPlay(String curSpaceName){
 		int propertyFamilyIdentifier = propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier(); 
 		switch (propertyFamilyIdentifier){
@@ -677,57 +668,6 @@ public class DicePanel extends JPanel{
 			return propertyFamilyIdentifier - 1;
 		}
 	}
-	
-	private void actionForRailroadMinigame(String curSpaceName){
-		int randNum = (rand.nextInt(MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE - 1));
-		int[] arr = new int[2];
-		arr[0] = randNum;
-		arr[1] = encodeCurSpaceName(curSpaceName);
-		if (pInfo.isSingle()){
-			beginRailroadMinigame(arr);
-		}
-		else if (players[0].getPlayerNum() == pInfo.getMyPlayerNum()){
-			pInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.GENERIC_SEND_INT_ARRAY, arr, 999));
-		}
-	}
-	
-	private int encodeCurSpaceName(String curSpaceName){
-		switch (curSpaceName){
-		case "Reading Railroad":
-			return 0;
-		case "Pennsylvania Railroad":
-			return 1;
-		case "B. & O. Railroad":
-			return 2;
-		case "Short Line":
-			return 3;
-		default:
-			return -1;
-		}
-	}
-	
-	
-	private String decodeCurSpaceName(int num){
-		switch (num){
-		case 0:
-			return "Reading Railroad";
-		case 1:
-			return "Pennsylvania Railroad";
-		case 2:
-			return "B. & O. Railroad";
-		case 3:
-			return "Short Line";
-		default:
-			return "UH OH";
-		}
-	}
-	
-	
-	private void beginRailroadMinigame(int[] num){
-		mGamePanel.openMiniGame(propertyPanel.getOwner(decodeCurSpaceName(num[1])), players[current], pInfo.isMyPlayerNum(current), num[0]);
-		mGamePanel.startMiniGame(decodeCurSpaceName(num[1]));
-	}
-	
 	
 	private void threeDoublesPunishment() {
 		numOfDoublesInRow = 0;

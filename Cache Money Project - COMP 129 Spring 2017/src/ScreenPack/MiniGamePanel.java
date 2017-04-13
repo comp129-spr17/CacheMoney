@@ -22,6 +22,7 @@ public class MiniGamePanel extends JPanel{
 	
 	private final boolean DEBUG_SAME_MINIGAME = false;
 	public final static int NUM_OF_MINIGAMES_AVAILABLE = 9;
+	private int curGameForRail;
 	private final int GAME_TO_START_ON = 8; // -1 FOR DEFAULT
 	private Player owner;
 	private Player guest;
@@ -97,10 +98,16 @@ public class MiniGamePanel extends JPanel{
 
 	public void openMiniGame(Player owner, Player guest, boolean isCurrent, int desiredGameNum){
 		hostPanel.setVisible(false);
-		gameNum = desiredGameNum;
+		if(desiredGameNum == 9){
+			gameNum = curGameForRail;
+			setGameForRail();
+		}else
+			gameNum = desiredGameNum;
 		setupGame(owner, guest, isCurrent);
 	}
-
+	private void setGameForRail(){
+		curGameForRail = (curGameForRail + 1) % 8;
+	}
 	private void setupGame(Player owner, Player guest, boolean isCurrent) {
 		isPlayingMinigame = true;
 		setVisible(true);
@@ -130,7 +137,7 @@ public class MiniGamePanel extends JPanel{
 	
 	public void startMiniGame(String curSpaceName){
 		this.curSpaceName = curSpaceName;
-		
+		System.out.println("First this. curSpaceName : " + curSpaceName + " gameNum : " + gameNum);
 		mGames[gameNum].play();
 		(new GameEndCheck()).start();
 	}

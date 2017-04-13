@@ -49,21 +49,21 @@ public class MClient {
 		void doAction(ArrayList<Object> result);
 	}
 	public void doAction(ArrayList<Object> result){
-//		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString.get((Integer)result.get(0)));
+		System.out.println("Receiving code : " + ((Integer)result.get(0)) + " - " + variableCodeString.get((Integer)result.get(0)));
 		doActions.get((Integer)result.get(0)).doAction(result);
 	}
 	private void initVariableCodeString(){
 
 		variableCodeString.add(new String("JOIN_ROOM_TO_MAIN_GAME_AREA"));
 		variableCodeString.add(new String("PROPERTY"));
-		variableCodeString.add(new String("PLAYER_NUM"));
+		variableCodeString.add(new String("DISCONNECTED_FOR_GAME"));
 		variableCodeString.add(new String("END_TURN"));
-		variableCodeString.add(new String("START_GAME_REPLY"));
+		variableCodeString.add(new String("START_GAME"));
 		variableCodeString.add(new String("START_GAME_TO_OTHER"));
 		variableCodeString.add(new String("DISCONNECTED"));
 		variableCodeString.add(new String("HOST_DISCONNECTED"));
 		variableCodeString.add(new String("START_GAME_REPLY"));
-		variableCodeString.add(new String("PROPERTY_PURCHASE"));
+		variableCodeString.add(new String("CREATE_ROOM_REST"));
 		variableCodeString.add(new String("PROPERTY_RENT_PAY"));
 		variableCodeString.add(new String("SPAM_MINI_GAME_GUEST"));
 		variableCodeString.add(new String("SPAM_MINI_GAME_OWNER"));
@@ -103,7 +103,10 @@ public class MClient {
 		variableCodeString.add(new String("SEND_USER_ID_SIMPLE"));
 
 		variableCodeString.add(new String("END_PROPERTY"));
-	
+		variableCodeString.add(new String("REQUESTING_STATUS_MAIN_IDS"));
+		variableCodeString.add(new String("WHEN_USER_ENTERS_GAME_AREA"));
+		variableCodeString.add(new String("PROPERTY_PURCHASE"));
+		
 	}
 	
 	
@@ -232,9 +235,11 @@ public class MClient {
 				
 				while(isServerUp){
 		        	try{
+		        		System.out.println("now this");
 		        		inputStream.read(msgs);
 		    			result = mUnpack.getResult(msgs);
 		        		doAction(result);
+		        		System.out.println("after this");
 		        	}
 		        	catch(SocketException e){
 		        		isServerUp = false;
@@ -326,6 +331,7 @@ public class MClient {
 			arr[i - 2] = (Integer)result.get(i);
 		}
 		diceP.actionForReceiveArray(arr);
+		System.out.println("now what?");
 	}
 	private void doReceiveAnsForMath(ArrayList<Object> result){
 		diceP.actionForReceiveAnswer((Integer)result.get(1), (Integer)result.get(2), (Boolean)result.get(3), (Integer)result.get(4));
