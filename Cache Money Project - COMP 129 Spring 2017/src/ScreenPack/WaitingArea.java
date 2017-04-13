@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 import GamePack.SizeRelated;
 import MultiplayerPack.MBytePack;
@@ -31,6 +33,7 @@ public class WaitingArea extends JPanel{
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
 	private Color color;
+	private JLabel lblCount;
 	private boolean isDoneRender;
 	
 	public WaitingArea(final Container container, MainGameArea mainGameArea) {
@@ -43,6 +46,10 @@ public class WaitingArea extends JPanel{
 		players = new ArrayList<>();
 		color = new Color(245,245,220);
 		btnStart = new JButton("START GAME");
+		lblCount = new JLabel("Starting Game now......");
+		lblCount.setFont(new Font("TimesRoman", Font.BOLD, 18));
+		lblCount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCount.setForeground(Color.blue);
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
 		gLayout = new GridLayout(4, 4);
@@ -61,6 +68,7 @@ public class WaitingArea extends JPanel{
 		controlPanel.setLayout(new GridLayout(3, 1));
 		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/3));
 		setBackground(Color.black);
+		controlPanel.add(lblCount);
 		controlPanel.add(btnStart);
 		controlPanel.add(btnGoBack);
 	}
@@ -89,15 +97,23 @@ public class WaitingArea extends JPanel{
 		}
 	}
 	public void setComponents(){
-		btnStart.setEnabled(false);
+		initButtonStat();
 		container.add(this,BorderLayout.NORTH);
 		container.add(new JSeparator(),BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.SOUTH);
 	}
+	private void initButtonStat(){
+		lblCount.setVisible(false);
+		btnStart.setEnabled(false);
+		btnGoBack.setEnabled(true);
+	}
+	public void actionForStarting(){
+		btnGoBack.setEnabled(false);
+		lblCount.setVisible(true);
+	}
 	public void actionToHost(){
 		resetPlayerDisplay();
 		btnStart.setEnabled(true);
-		controlPanel.revalidate();
 	}
 	private void addListener(){
 		btnStart.addMouseListener(new MouseListener() {

@@ -110,10 +110,12 @@ public class MWaitingRoom extends Thread{
 						// compare to others? Others has to get out of this thread first. 
 						if(isHost){
 							actionToRemoveRoom(true);
-							sleep(3000);
-							for(int i=0; i<numPpl; i++){
+							
+							for(int i=numPpl-1; i>0; i--){
 								(new MThread(outputForThisRoom,userForThisRoom, numPpl, i, usersInput.get(userForThisRoom.get(i)))).start();
 							}
+							sleep(3000);
+							(new MThread(outputForThisRoom,userForThisRoom, numPpl, 0, usersInput.get(userForThisRoom.get(0)))).start();
 						}
 							
 					}else if(specialCode == 5){

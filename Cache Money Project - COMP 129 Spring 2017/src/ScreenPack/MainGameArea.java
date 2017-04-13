@@ -109,7 +109,7 @@ public class MainGameArea extends JPanel{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				switchToWaiting();
+				switchToWaiting();
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
 				
 			}

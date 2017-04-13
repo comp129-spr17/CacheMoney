@@ -275,6 +275,7 @@ public class MClient {
 		
 	}
 	private void doSendBackStartSignal(){
+		gameScreen.updateWhenStartingGame();
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME_TO_OTHER));
 	}
 	private void doRemoveProperty(){

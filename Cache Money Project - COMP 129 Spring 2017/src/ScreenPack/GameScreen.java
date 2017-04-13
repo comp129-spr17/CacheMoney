@@ -584,11 +584,14 @@ public class GameScreen extends JFrame{
 		waitingArea.switchToMainGameArea();		
 	}
 	public void EnableHostButton(){
-		mainGameArea.switchToWaiting();
+//		mainGameArea.switchToWaiting();
 		waitingArea.actionToHost();
 	}
 	public void updateWaitingArea(ArrayList<Object> userId){
 		waitingArea.updateUserInfos(userId);
+	}
+	public void updateWhenStartingGame(){
+		waitingArea.actionForStarting();
 	}
 	public void updateRoomStatus(Long roomNum, int numPpl, boolean isHost){
 		mainGameArea.updateRoom(roomNum, numPpl, isHost);
