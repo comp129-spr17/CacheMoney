@@ -26,6 +26,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -44,6 +45,7 @@ import MultiplayerPack.UnicodeForServer;
 public class GameScreen extends JFrame{
 	private final int NUMBER_OF_MUSIC = 5;
 	private JPanel mainPanel;
+	private JLayeredPane layeredPane;
 	private int myComp_height;
 	private DicePanel dicePanel;
 	private Player[] players;
@@ -53,10 +55,12 @@ public class GameScreen extends JFrame{
 	private MBytePack mPack;
 	private UnicodeForServer unicode;
 	private BoardPanel boardPanel;
+	private EndGamePanel endGameScreen;
 	private JDialog playerInfo;
 	private JDialog testInfo;
 	private JButton showMortgage;
 	private JButton showInfo;
+	private JButton showEndGameScreen;
 	private Insets insets;
 	private JCheckBox muteMusic;
 	private JCheckBox muteSounds;
@@ -250,6 +254,47 @@ public class GameScreen extends JFrame{
 	}
 	private void initButtonListeners()
 	{
+		showEndGameScreen.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println("Show End Game Screen");
+				if(endGameScreen == null) {
+					endGameScreen = new EndGamePanel();
+				}
+				if(!endGameScreen.isVisible()) {
+
+					endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
+					endGameScreen.setVisible(true);
+					endGameScreen.setBackground(new Color(70, 220, 75));
+					mainPanel.add(endGameScreen);
+					boardPanel.setVisible(false);
+				} else {
+					endGameScreen.setVisible(false);
+					mainPanel.remove(endGameScreen);
+					boardPanel.setVisible(true);
+				}
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {	
+				
+			}
+		});
 		showInfo.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -432,8 +477,10 @@ public class GameScreen extends JFrame{
 		sizeRelated = SizeRelated.getInstance();
 		pDisplay = PropertyDisplay.getInstance();
 		pInfoDisplay = PlayerInfoDisplay.getInstance();
+		layeredPane = new JLayeredPane();
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
+		layeredPane.add(mainPanel);
 		getContentPane().add(mainPanel);
 		mainPanel.add(pDisplay);
 		mainPanel.add(pInfoDisplay);
@@ -499,12 +546,14 @@ public class GameScreen extends JFrame{
 		addShowMoneyButton();
 		addMortgageButton();
 		addTestingButton();
+		addEndGameScreenButton();
 		setupMortgage();
 		mainPanel.add(showInfo);
 		mainPanel.add(showMortgage);
 		mainPanel.add(boardPanel);
 		mainPanel.add(giveJailFreeCard);
 		mainPanel.add(displayTestWindow);
+		mainPanel.add(showEndGameScreen);
 		
 		addMuteMusic();
 		addMuteSounds();
@@ -755,6 +804,12 @@ public class GameScreen extends JFrame{
 				}
 			}
 		}
+	}
+	public void addEndGameScreenButton()
+	{
+		showEndGameScreen = new JButton("Show End Game Stats");
+		showEndGameScreen.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 -175, 200, 50);
+		showEndGameScreen.setVisible(true);
 	}
 	public void addShowMoneyButton()
 	{
