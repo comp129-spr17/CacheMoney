@@ -893,6 +893,9 @@ public class GameScreen extends JFrame{
 	}
 	public void actionForMortgageProperty(String propertyName, int playerNum){
 		int num = playerNum;
+		if (propertyName == ""){
+			return;
+		}
 		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
