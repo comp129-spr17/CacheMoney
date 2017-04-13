@@ -328,6 +328,20 @@ public final class MBytePack {
 	}
 	
 	
+	public byte[] packMortgageRequest(int requestCode, String propertyName, int playerNum){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeUTF(propertyName);
+			dOutputStream.writeInt(playerNum);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 //	public static void main(String[] args){
 //
 //		UnicodeForServer UNICODE = UnicodeForServer.getInstance();

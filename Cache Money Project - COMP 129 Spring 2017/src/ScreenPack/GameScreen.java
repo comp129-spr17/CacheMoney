@@ -350,10 +350,10 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (pInfo.isSingle()){
-					actionForMortgageProperty();
+					actionForMortgageProperty((String) selectMortgage.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
 				}
 				else{
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.MORTGAGE_PROPERTY));
+					pInfo.sendMessageToServer(mPack.packMortgageRequest((UnicodeForServer.MORTGAGE_PROPERTY), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
 				}
 				
 			}
@@ -836,21 +836,22 @@ public class GameScreen extends JFrame{
 	public int getLoadingProgress() {
 		return loadingProgress;
 	}
-	public void actionForMortgageProperty(){
-		if (selectMortgage.getSelectedItem() != ""){
-			int num = dicePanel.getCurrentPlayerNumber();
-			for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
+	public void actionForMortgageProperty(String propertyName, int playerNum){
+		selectMortgage.setSelectedItem(propertyName);
+		int num = playerNum;
+		System.out.println("propertyName: " + propertyName);
+		System.out.println("playerNum: " + playerNum);
+		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
+		{
+			if(players[num].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
 			{
-				if(players[num].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
-				{
-					players[num].earnMonies(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getMortgageValue());
-					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
-					players[num].getOwnedProperties().remove(h);
-					selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-					selectMortgage.repaint();
-					mLabels.reinitializeMoneyLabels();
-					break;
-				}
+				players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
+				players[num].getOwnedProperties().get(h).setMortgagedTo(true);
+				players[num].getOwnedProperties().remove(h);
+				selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
+				selectMortgage.repaint();
+				mLabels.reinitializeMoneyLabels();
+				break;
 			}
 		}
 		updateMortgage();

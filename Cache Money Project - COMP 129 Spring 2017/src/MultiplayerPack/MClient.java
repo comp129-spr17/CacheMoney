@@ -106,7 +106,7 @@ public class MClient {
 		variableCodeString.add(new String("REQUESTING_STATUS_MAIN_IDS"));
 		variableCodeString.add(new String("WHEN_USER_ENTERS_GAME_AREA"));
 		variableCodeString.add(new String("PROPERTY_PURCHASE"));
-		
+		variableCodeString.add(new String("MORTGAGE_PROPERTY"));
 	}
 	
 	
@@ -401,7 +401,7 @@ public class MClient {
 		initializeMainGameLobby(result,2);
 	}
 	private void doMortgageProperty(ArrayList<Object> result){
-		gameScreen.actionForMortgageProperty();
+		gameScreen.actionForMortgageProperty((String)result.get(1), (Integer)result.get(2));
 	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);
