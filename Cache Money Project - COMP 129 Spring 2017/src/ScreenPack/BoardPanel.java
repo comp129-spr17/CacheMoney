@@ -127,6 +127,18 @@ public class BoardPanel extends JPanel{
 		
 		
 	}
+	public int getBoardPanelX() {
+		return sizeRelated.getBoardStartX();
+	}
+	public int getBoardPanelY() {
+		return sizeRelated.getBoardStartY();
+	}
+	public int getBoardPanelWidth() {
+		return START_X + COL_SPACE_WIDTH + ROW_SPACE_WIDTH * 9 + COL_SPACE_WIDTH;
+	}
+	public int getBoardPanelHeight() {
+		return START_Y + ROW_SPACE_HEIGHT + COL_SPACE_HEIGHT * 9 + ROW_SPACE_HEIGHT;
+	}
 	private void importImgs(){
 		spaceImgs = new ImageIcon[40];
 		spaces = new Space[40];
