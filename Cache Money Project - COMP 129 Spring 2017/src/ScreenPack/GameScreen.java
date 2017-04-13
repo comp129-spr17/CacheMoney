@@ -162,10 +162,11 @@ public class GameScreen extends JFrame{
 	
 
 	private void exitSetting(boolean isHost){
-		if(pInfo.isSingle())
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		else
-			addActionListenerForExit(isHost);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		if(pInfo.isSingle())
+//			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		else
+//			addActionListenerForExit(isHost);
 	}
 	private void setGameScreenBackgroundColor() {
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
@@ -177,38 +178,27 @@ public class GameScreen extends JFrame{
 			@Override
             public void windowClosing(java.awt.event.WindowEvent e) {
             	super.windowClosing(e);
-            	exitForServer(false,isHost);
+//            	exitForServer();
             	
             }
         } );
 	}
-	private void exitForServer(boolean isSingle, boolean isHost){
-		if(!isSingle){
-			if(isHost){
-	    		// need to figure out the problem
-//	    		while(host == null || host.getOutputStream() == null){
-//	        		try {
-//						Thread.sleep(1);
-//					} catch (InterruptedException e1) {
-//						e1.printStackTrace();
-//					}
-//	        	}
-//	        	host.writeToServer(mPack.packSimpleRequest(unicode.HOST_DISCONNECTED), mPack.getByteSize());
-	    		
-	    	}else{
-	    		while(pInfo.getOutputStream() == null){
-	        		try {
-						Thread.sleep(1);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-	        	}
-//	        	pInfo.sendMessageToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,pInfo.getMyPlayerNum()));
-	    		
-	    		pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
-	    	}
+	public void exitForServer(){
+		System.out.println("is this being called?");
+		if(!pInfo.isSingle()){
+//			while(pInfo.getOutputStream() == null){
+//	    		try {
+//					Thread.sleep(1);
+//				} catch (InterruptedException e1) {
+//					e1.printStackTrace();
+//				}
+//	    	}
+			System.out.println("Yes it is.");
+			pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
 		}
-        System.exit(1);
+		System.out.println("Now");
+//        System.exit(1);
+        System.out.println("What?");
 	}
 	private void addExitListener(boolean isHost){
 		btnExit.addMouseListener(new MouseListener() {
@@ -239,7 +229,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				exitForServer(pInfo.isSingle(), isHost);
+				exitForServer();
 			}
 		});
 	}
@@ -361,34 +351,37 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				if (selectMortgage.getSelectedItem() != "")
 				{
-					for (int h = 0; h < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); h++) 
-					{
 						if (pInfo.isSingle() == true)
 						{
-							if(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+							for (int h = 0; h < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); h++) 
 							{
-								System.out.print(selectMortgage.getSelectedItem());
-								players[dicePanel.getCurrentPlayerNumber()].earnMonies(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getMortgageValue());
-								players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).setMortgagedTo(true);
-								players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().remove(h);
-								selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-								selectMortgage.repaint();
-								mLabels.reinitializeMoneyLabels();
+								if(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+								{
+									System.out.print(selectMortgage.getSelectedItem());
+									players[dicePanel.getCurrentPlayerNumber()].earnMonies(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getMortgageValue());
+									players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).setMortgagedTo(true);
+									players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().remove(h);
+									selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
+									selectMortgage.repaint();
+									mLabels.reinitializeMoneyLabels();
+								}
 							}
 						}
 						else{
-							if(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+							for (int h = 0; h < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); h++) 
 							{
-								players[pInfo.getMyPlayerNum()].earnMonies(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getMortgageValue());
-								players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).setMortgagedTo(true);
-								players[pInfo.getMyPlayerNum()].getOwnedProperties().remove(h);
-								selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-								selectMortgage.repaint();
-								mLabels.reinitializeMoneyLabels();
+								if(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+								{
+									players[pInfo.getMyPlayerNum()].earnMonies(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getMortgageValue());
+									players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).setMortgagedTo(true);
+									players[pInfo.getMyPlayerNum()].getOwnedProperties().remove(h);
+									selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
+									selectMortgage.repaint();
+									mLabels.reinitializeMoneyLabels();
+								}
 							}
 						}
 					}
-				}
 				updateMortgage();
 				mortgageWindow.setVisible(false);
 			}
@@ -581,11 +574,14 @@ public class GameScreen extends JFrame{
 		waitingArea.switchToMainGameArea();		
 	}
 	public void EnableHostButton(){
-		mainGameArea.switchToWaiting();
+//		mainGameArea.switchToWaiting();
 		waitingArea.actionToHost();
 	}
 	public void updateWaitingArea(ArrayList<Object> userId){
 		waitingArea.updateUserInfos(userId);
+	}
+	public void updateWhenStartingGame(){
+		waitingArea.actionForStarting();
 	}
 	public void updateRoomStatus(Long roomNum, int numPpl, boolean isHost){
 		mainGameArea.updateRoom(roomNum, numPpl, isHost);

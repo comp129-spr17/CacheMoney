@@ -87,10 +87,16 @@ public class MiniGame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(btnStart.isEnabled()){
-					if(pInfo.isSingle())
+					
+					if(pInfo.isSingle()){
+						System.out.println("Single");
 						actionForStart();
-					else
+					}
+					else{
 						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.MINI_GAME_START_CODE));
+						System.out.println("Multi");
+					}
+						
 				}
 				
 			}
@@ -143,6 +149,7 @@ public class MiniGame{
 		isGuest = pInfo.isMyPlayerNum(guest.getPlayerNum());
 	}
 	public void play(){
+		System.out.println("is this being called?");
 		isGameEnded = false;
 		while(!readyToPlay){
 			delayThread(1);

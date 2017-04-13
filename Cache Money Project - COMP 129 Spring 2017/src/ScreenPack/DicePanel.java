@@ -27,7 +27,7 @@ import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
 	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
-	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
+	private final int DEBUG_MOVEMENT_VALUE = 5; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -234,8 +234,6 @@ public class DicePanel extends JPanel{
 				startGameButton.setText(startGameButton.getText() + "<br />Waiting for host to begin game..." + "</html>");
 			}
 		}
-		
-
 	}
 
 
@@ -641,6 +639,7 @@ public class DicePanel extends JPanel{
 
 	}
 	private void handlePropertySpaceAction(String curSpaceName) {
+		System.out.println(curSpaceName);
 		if (propertyPanel.isPropertyOwned(curSpaceName)){
 			checkForPlayerPropertyAction(curSpaceName);
 		}
@@ -653,23 +652,22 @@ public class DicePanel extends JPanel{
 			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current), -1);
 		}
 		else if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
-			mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), determineMinigameToPlay(curSpaceName));
+			mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), isRailRoad(curSpaceName) ? 9 : determineMinigameToPlay(curSpaceName));
 			mGamePanel.startMiniGame(curSpaceName);
 		}
 	}
-	
+	private boolean isRailRoad(String curSpaceName){
+		return propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier() == 9;
+	}
 	private int determineMinigameToPlay(String curSpaceName){
 		int propertyFamilyIdentifier = propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier(); 
 		switch (propertyFamilyIdentifier){
-		case 9:
-			return (rand.nextInt(MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE - 1));
 		case 10:
 			return MiniGamePanel.UTILITY_MINIGAME;
 		default:
 			return propertyFamilyIdentifier - 1;
 		}
 	}
-	
 	
 	private void threeDoublesPunishment() {
 		numOfDoublesInRow = 0;
