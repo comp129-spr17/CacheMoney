@@ -162,10 +162,11 @@ public class GameScreen extends JFrame{
 	
 
 	private void exitSetting(boolean isHost){
-		if(pInfo.isSingle())
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		else
-			addActionListenerForExit(isHost);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		if(pInfo.isSingle())
+//			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		else
+//			addActionListenerForExit(isHost);
 	}
 	private void setGameScreenBackgroundColor() {
 		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
@@ -177,11 +178,13 @@ public class GameScreen extends JFrame{
 			@Override
             public void windowClosing(java.awt.event.WindowEvent e) {
             	super.windowClosing(e);
-            	exitForServer();
+//            	exitForServer();
+            	
             }
         } );
 	}
 	public void exitForServer(){
+		System.out.println("is this being called?");
 		if(!pInfo.isSingle()){
 //			while(pInfo.getOutputStream() == null){
 //	    		try {
@@ -190,9 +193,12 @@ public class GameScreen extends JFrame{
 //					e1.printStackTrace();
 //				}
 //	    	}
+			System.out.println("Yes it is.");
 			pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
 		}
-        System.exit(1);
+		System.out.println("Now");
+//        System.exit(1);
+        System.out.println("What?");
 	}
 	private void addExitListener(boolean isHost){
 		btnExit.addMouseListener(new MouseListener() {
