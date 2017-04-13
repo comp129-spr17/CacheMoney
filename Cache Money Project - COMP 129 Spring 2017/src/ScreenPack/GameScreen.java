@@ -177,36 +177,20 @@ public class GameScreen extends JFrame{
 			@Override
             public void windowClosing(java.awt.event.WindowEvent e) {
             	super.windowClosing(e);
-            	exitForServer(false,isHost);
-            	
+            	exitForServer();
             }
         } );
 	}
-	private void exitForServer(boolean isSingle, boolean isHost){
-		if(!isSingle){
-			if(isHost){
-	    		// need to figure out the problem
-//	    		while(host == null || host.getOutputStream() == null){
-//	        		try {
-//						Thread.sleep(1);
-//					} catch (InterruptedException e1) {
-//						e1.printStackTrace();
-//					}
-//	        	}
-//	        	host.writeToServer(mPack.packSimpleRequest(unicode.HOST_DISCONNECTED), mPack.getByteSize());
-	    		
-	    	}else{
-	    		while(pInfo.getOutputStream() == null){
-	        		try {
-						Thread.sleep(1);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-	        	}
-//	        	pInfo.sendMessageToServer(mPack.packPlayerNumber(unicode.DISCONNECTED,pInfo.getMyPlayerNum()));
-	    		
-	    		pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
-	    	}
+	public void exitForServer(){
+		if(!pInfo.isSingle()){
+//			while(pInfo.getOutputStream() == null){
+//	    		try {
+//					Thread.sleep(1);
+//				} catch (InterruptedException e1) {
+//					e1.printStackTrace();
+//				}
+//	    	}
+			pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
 		}
         System.exit(1);
 	}
@@ -239,7 +223,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				exitForServer(pInfo.isSingle(), isHost);
+				exitForServer();
 			}
 		});
 	}

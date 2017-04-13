@@ -96,6 +96,7 @@ public class MainMenuScreen {
 		disableEnableBtns(playingInfo.isLoggedIn());
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			public void run(){
+				System.out.println("I AM EXITING!");
 				exitAction();
 			}
 		});
@@ -413,6 +414,7 @@ public class MainMenuScreen {
 	private void exitAction(){
 		if(playingInfo.isLoggedIn())
 			SqlRelated.loginAndOutAction(playingInfo.getLoggedInId(), false);
+		gameScreen.exitForServer();
 	}
 
 	private void setupClient(){
