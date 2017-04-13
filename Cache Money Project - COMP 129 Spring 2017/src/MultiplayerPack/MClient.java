@@ -106,7 +106,7 @@ public class MClient {
 		variableCodeString.add(new String("REQUESTING_STATUS_MAIN_IDS"));
 		variableCodeString.add(new String("WHEN_USER_ENTERS_GAME_AREA"));
 		variableCodeString.add(new String("PROPERTY_PURCHASE"));
-		
+		variableCodeString.add(new String("MORTGAGE_PROPERTY"));
 	}
 	
 	
@@ -169,7 +169,8 @@ public class MClient {
 		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
 		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom();}});
 		doActions.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUserEntersMainArea(result);}});
-		}
+		doActions.put(UnicodeForServer.MORTGAGE_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doMortgageProperty(result);;}});
+	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
 //		String userEnteredIpAddress;
@@ -191,9 +192,9 @@ public class MClient {
 		socket = null;
 		System.out.println("Connecting to the server...");
 //		socket = new Socket(ip, port);
-		socket = new Socket(playingInfo.IP_ADDRESS, playingInfo.PORT_NUM);
+		socket = new Socket(PlayingInfo.IP_ADDRESS, PlayingInfo.PORT_NUM);
 			//Sounds.buttonConfirm.playSound();
-		System.out.println("Successfully connected to server at\nip: " + playingInfo.IP_ADDRESS + " with port: " + playingInfo.PORT_NUM + "!\n");
+		System.out.println("Successfully connected to server at\nip: " + PlayingInfo.IP_ADDRESS + " with port: " + PlayingInfo.PORT_NUM + "!\n");
 		isConnected = true;
 //			if(!optionBox.haveName()){
 //				s.close();
@@ -388,16 +389,19 @@ public class MClient {
 		
 	}
 	private void doDestroyRoom(ArrayList<Object> result){
-		playingInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.HOST_LEAVE_ROOM));
+		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
 		gameScreen.hostLeftWaitingArea();
 	}
 	private void doForCreatingRoom(){
 		gameScreen.EnableHostButton();
-		playingInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.CREATE_ROOM_REST));
+		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM_REST));
 	}
 	private void doUserEntersMainArea(ArrayList<Object> result){
 		initializeMainGameLobby(result,0);
 		initializeMainGameLobby(result,2);
+	}
+	private void doMortgageProperty(ArrayList<Object> result){
+		gameScreen.actionForMortgageProperty((String)result.get(1), (Integer)result.get(2));
 	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);

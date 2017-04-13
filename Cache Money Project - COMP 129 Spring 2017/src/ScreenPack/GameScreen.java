@@ -394,41 +394,13 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (selectMortgage.getSelectedItem() != "")
-				{
-						if (pInfo.isSingle() == true)
-						{
-							for (int h = 0; h < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); h++) 
-							{
-								if(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
-								{
-									System.out.print(selectMortgage.getSelectedItem());
-									players[dicePanel.getCurrentPlayerNumber()].earnMonies(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).getMortgageValue());
-									players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(h).setMortgagedTo(true);
-									players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().remove(h);
-									selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-									selectMortgage.repaint();
-									mLabels.reinitializeMoneyLabels();
-								}
-							}
-						}
-						else{
-							for (int h = 0; h < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); h++) 
-							{
-								if(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
-								{
-									players[pInfo.getMyPlayerNum()].earnMonies(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).getMortgageValue());
-									players[pInfo.getMyPlayerNum()].getOwnedProperties().get(h).setMortgagedTo(true);
-									players[pInfo.getMyPlayerNum()].getOwnedProperties().remove(h);
-									selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-									selectMortgage.repaint();
-									mLabels.reinitializeMoneyLabels();
-								}
-							}
-						}
-					}
-				updateMortgage();
-				mortgageWindow.setVisible(false);
+				if (pInfo.isSingle()){
+					actionForMortgageProperty((String) selectMortgage.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
+				}
+				else{
+					pInfo.sendMessageToServer(mPack.packMortgageRequest((UnicodeForServer.MORTGAGE_PROPERTY), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
+				}
+				
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -918,5 +890,26 @@ public class GameScreen extends JFrame{
 	}
 	public int getLoadingProgress() {
 		return loadingProgress;
+	}
+	public void actionForMortgageProperty(String propertyName, int playerNum){
+		selectMortgage.setSelectedItem(propertyName);
+		int num = playerNum;
+		System.out.println("propertyName: " + propertyName);
+		System.out.println("playerNum: " + playerNum);
+		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
+		{
+			if(players[num].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+			{
+				players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
+				players[num].getOwnedProperties().get(h).setMortgagedTo(true);
+				players[num].getOwnedProperties().remove(h);
+				selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
+				selectMortgage.repaint();
+				mLabels.reinitializeMoneyLabels();
+				break;
+			}
+		}
+		updateMortgage();
+		mortgageWindow.setVisible(false);
 	}
 }

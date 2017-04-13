@@ -114,7 +114,10 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongArray(result);
 			return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.MORTGAGE_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackMortgageRequest(result);
+		return cleanUpAndReturn();}});
 	}
+	
 	private ArrayList<Object> cleanUpAndReturn(){
 		ArrayList<Object> tempResult = new ArrayList<Object>(resultList);
 		resultList.clear();
@@ -309,6 +312,17 @@ public final class MByteUnpack {
 			e.printStackTrace();
 		}
 	}
+	
+	public void unpackMortgageRequest(byte[] result) {
+		try {
+			resultList.add(dInputStream.readUTF());
+			resultList.add(dInputStream.readInt());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public ArrayList<Object> getResult(byte[] result){
 	
 		resetAndReceive(result);
@@ -321,6 +335,8 @@ public final class MByteUnpack {
 		}
 		return null;
 	}
+	
+	
 	/**
 	 * 0 - Not disconnected
 	 * 1 - client disconnected
