@@ -1,0 +1,56 @@
+<form method="get">
+
+<html>
+	<head>
+		<title>CacheMoney Game</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="subpage">
+
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="index.html" class="logo">CacheMoney</a>
+					<nav id="nav">
+						<a href="index.html">Home</a>
+						<a href="generic.html">Members</a>
+						<a href="elements.html">Game</a>
+					</nav>
+					<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+				</div>
+			</header>
+  		<!-- Main -->
+			<section id="main" class="wrapper">
+				<div class="content">
+					<header class="align-center">
+						<h2 class="content__heading">From Us to You</h2>
+						<p  class="content__teaser">We hope you enjoy the game</p>
+						<a href="#" class="content__cta">Download</a>
+					</header>
+				</div>
+				<!-- /video -->
+				<video id="my-video" class="video" muted loop>
+					<source src="media/money_video.mp4" type="video/mp4">
+					<source src="media/money_video.ogv" type="video/ogg">
+					<source src="media/money_video.webm" type="video/webm">
+				</video>
+				<script>
+					(function() {
+					/**
+					* Video element
+					* @type {HTMLElement}
+					*/
+					var video = document.getElementById("my-video");
+					/**
+					* Check if video can play, and play it
+					*/
+					video.addEventListener( "canplay", function() {
+					video.play();
+					});
+					})();
+				</script>
+			</section>
+	</body>
+</html>	
