@@ -763,7 +763,7 @@ public class GameScreen extends JFrame{
 			}
 			else
 			{
-				for (int j = 0; j < players[0].getOwnedProperties().size(); j++)
+				for (int j = 0; j < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); j++)
 				{
 					if (tempComboBox.getSelectedItem().equals(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getName()))
 					{
@@ -888,13 +888,13 @@ public class GameScreen extends JFrame{
 		return loadingProgress;
 	}
 	public void actionForMortgageProperty(String propertyName, int playerNum){
-		selectMortgage.setSelectedItem(propertyName);
 		int num = playerNum;
-		System.out.println("propertyName: " + propertyName);
-		System.out.println("playerNum: " + playerNum);
+		if (propertyName == ""){
+			return;
+		}
 		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
 		{
-			if(players[num].getOwnedProperties().get(h).getName() == selectMortgage.getSelectedItem())
+			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
 			{
 				players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
 				players[num].getOwnedProperties().get(h).setMortgagedTo(true);
