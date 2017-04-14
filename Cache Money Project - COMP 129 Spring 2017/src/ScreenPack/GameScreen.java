@@ -234,6 +234,8 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				exitForServer();
+
+		        System.exit(0);
 			}
 		});
 	}
