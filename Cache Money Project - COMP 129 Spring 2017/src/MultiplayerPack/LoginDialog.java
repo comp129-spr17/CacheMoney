@@ -17,6 +17,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import InterfacePack.Sounds;
+
 public class LoginDialog extends JDialog {
 
 	private JTextField uNameIn;
@@ -69,19 +71,23 @@ public class LoginDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 if (CredentialManager.authenticate(getUsername(), getPassword())) {
                 	if(CredentialManager.checkIfUserIsLoggedIn(getUsername())){
+                		Sounds.buttonCancel.playSound();
                 		JOptionPane.showMessageDialog(LoginDialog.this,
                                 "That user has logged in already.",
                                 "Login Failed",
                                 JOptionPane.ERROR_MESSAGE);
                         // reset username and password
+                		Sounds.buttonCancel.playSound();
                         uNameIn.setText("");
                         passIn.setText("");
                         succeeded = false;
                 	}else{
+                		Sounds.buttonConfirm.playSound();
                 		JOptionPane.showMessageDialog(LoginDialog.this,
                                 "Hi " + getUsername() + "! You have successfully logged in.",
                                 "Login",
                                 JOptionPane.INFORMATION_MESSAGE);
+                		Sounds.buttonCancel.playSound();
                         succeeded = true;
                         SqlRelated.loginAndOutAction(getUsername(), true);
                         playingInfo.setLoggedInId(getUsername());
@@ -90,6 +96,7 @@ public class LoginDialog extends JDialog {
                 	}
                     
                 } else {
+                	Sounds.buttonCancel.playSound();
                     JOptionPane.showMessageDialog(LoginDialog.this,
                             "Invalid username or password",
                             "Login",
@@ -106,6 +113,7 @@ public class LoginDialog extends JDialog {
         cancel.addActionListener(new ActionListener() {
  
             public void actionPerformed(ActionEvent e) {
+            	Sounds.buttonCancel.playSound();
                 dispose();
             }
         });
@@ -113,6 +121,7 @@ public class LoginDialog extends JDialog {
         createAccount.addActionListener(new ActionListener() {
  
             public void actionPerformed(ActionEvent e) {
+            	Sounds.buttonPress.playSound();
                 SignUpDialog SUD = new SignUpDialog();
                 dispose();
                 SUD.setVisible(true);

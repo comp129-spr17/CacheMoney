@@ -18,6 +18,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import InterfacePack.Sounds;
+
 public class SignUpDialog extends JDialog {
 
 	private JTextField fName;
@@ -171,12 +173,14 @@ public class SignUpDialog extends JDialog {
 
 			public void actionPerformed(ActionEvent e) {
 				if (goodUsername() && goodPassword() && CredentialManager.createUser(getFirstName(),getLastName(),getUsername(), getPassword())) {
+					Sounds.buttonConfirm.playSound();
 					JOptionPane.showMessageDialog(SignUpDialog.this,
 							"Hi " + getUsername() + "! Your account has ben created!.",
 							"Login",
 							JOptionPane.INFORMATION_MESSAGE);
 					dispose();
 				} else {
+					Sounds.buttonCancel.playSound();
 					JOptionPane.showMessageDialog(SignUpDialog.this,
 							"Error creating account!",
 							"Login",
@@ -195,6 +199,7 @@ public class SignUpDialog extends JDialog {
 		cancel.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				Sounds.buttonCancel.playSound();
 				dispose();
 			}
 		});

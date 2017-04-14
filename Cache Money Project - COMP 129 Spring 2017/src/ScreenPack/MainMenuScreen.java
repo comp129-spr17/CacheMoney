@@ -287,6 +287,7 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(loginBtn.isEnabled()){
+					Sounds.buttonConfirm.playSound();
 					LoginDialog loginDialog = new LoginDialog(mainmenuframe);
 					loginDialog.setVisible(true);
 					if(loginDialog.isSucceeded()){

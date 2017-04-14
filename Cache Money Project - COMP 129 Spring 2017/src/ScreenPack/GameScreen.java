@@ -896,6 +896,9 @@ public class GameScreen extends JFrame{
 		if (propertyName == ""){
 			return;
 		}
+	
+		
+		
 		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
