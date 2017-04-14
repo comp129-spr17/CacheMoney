@@ -785,7 +785,7 @@ public class GameScreen extends JFrame{
 		mortgagePrice.repaint();
 	}
 	
-	public void updateMortgage()
+	public void updateMortgage() // TODO: WE NEED TO FIX THIS FUNCTION
 	{
 		if (pInfo.isSingle())
 		{
@@ -898,9 +898,6 @@ public class GameScreen extends JFrame{
 		if (propertyName == ""){
 			return;
 		}
-	
-		
-		
 		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
