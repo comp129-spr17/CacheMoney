@@ -60,9 +60,13 @@ public class MThread extends Thread{
 		serverDisconnected = true;
 	}
 	public void run(){
+		
+		
 		try{
-
+			System.out.println("Jeremy you are so annoying. FROM player : " +  myPlayerNum);
+			usersOutput.get(myPlayerNum).flush();
 			sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum));
+			System.out.println("After sending msg : " +  myPlayerNum);
 			while(!exitCode){
 				getMsg();
 				
@@ -124,7 +128,9 @@ public class MThread extends Thread{
 	}
 	private void sendPlayerNum(byte[] msg){
 		try {
+			System.out.println(Arrays.toString(msg));
 			usersOutput.get(myPlayerNum).write(msg);
+			usersOutput.get(myPlayerNum).flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
