@@ -259,9 +259,7 @@ public class GameScreen extends JFrame{
 		showEndGameScreen.addMouseListener(new MouseListener()
 		{
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-			}
+			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Show End Game Screen");
@@ -280,22 +278,13 @@ public class GameScreen extends JFrame{
 					mainPanel.remove(endGameScreen);
 					boardPanel.setVisible(true);
 				}
-				
 			}
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 			@Override
-			public void mouseExited(MouseEvent e) {	
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 		});
 		showInfo.addMouseListener(new MouseListener()
 		{
@@ -306,24 +295,13 @@ public class GameScreen extends JFrame{
 					//playerInfo.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 			}
 			@Override
-			public void mousePressed(MouseEvent e) {
-				
-				
-			}
+			public void mousePressed(MouseEvent e) {}
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 			@Override
-			public void mouseExited(MouseEvent e) {	
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 		});
 		giveJailFreeCard.addMouseListener(new MouseListener()
 		{
@@ -365,7 +343,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				updateMortgage();
+				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
 				if (selectMortgage.getItemCount() == 0)
 				{
 					mortgagePrice.setText("");
@@ -428,7 +406,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				updateMortgage();
+				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
 				mortgageWindow.setVisible(false);
 			}
 			@Override
@@ -568,8 +546,6 @@ public class GameScreen extends JFrame{
 		
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
-		
-		
 	}
 	public void switchToGame(){
 		getContentPane().removeAll();
@@ -715,7 +691,6 @@ public class GameScreen extends JFrame{
 		});
 	}
 	
-	
 	public void initUserInfoWindow()
 	{
 		playerInfo = new JDialog();
@@ -737,44 +712,23 @@ public class GameScreen extends JFrame{
 	
 	public void setupMortgage()
 	{
-		if (pInfo.isSingle())
+		int playerNum = pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum();
+		for (int g = 0; g < players[playerNum].getOwnedProperties().size(); g++)
 		{
-			for (int g = 0; g < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); g++)
-			{
-				selectMortgage.addItem(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(g).getName());
-			}
-		}
-		else
-		{
-			for (int g = 0; g < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); g++)	
-			{
-				selectMortgage.addItem(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(g).getName());	
-			}
+			selectMortgage.addItem(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(g).getName());
 		}
 	}
 	
 	public void updateTextField()
 	{
+		int playerNum = pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum();
 		if (tempComboBox.getSelectedItem() != "")
 		{
-			if (pInfo.isSingle())
+			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
-				for (int j = 0; j < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); j++)
+				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
 				{
-					if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
-					{
-						mortgagePrice.setText(Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
-					}
-				}
-			}
-			else
-			{
-				for (int j = 0; j < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); j++)
-				{
-					if (tempComboBox.getSelectedItem().equals(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getName()))
-					{
-						mortgagePrice.setText(Integer.toString(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getMortgageValue()));
-					}
+					mortgagePrice.setText(Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
 				}
 			}
 		}
@@ -785,25 +739,14 @@ public class GameScreen extends JFrame{
 		mortgagePrice.repaint();
 	}
 	
-	public void updateMortgage() // TODO: WE NEED TO FIX THIS FUNCTION
+	@SuppressWarnings("unchecked")
+	public void updateMortgage(int playerNum)
 	{
-		if (pInfo.isSingle())
+		for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 		{
-			for (int j = 0; j < players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().size(); j++)
+			if (tempComboBox.getIndexOf(players[playerNum].getOwnedProperties().get(j).getName()) == -1)
 			{
-				if (tempComboBox.getIndexOf(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()) == -1)
-				{
-					tempComboBox.addElement(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName());
-				}
-			}
-		}
-		else{
-			for (int j = 0; j < players[pInfo.getMyPlayerNum()].getOwnedProperties().size(); j++)
-			{
-				if (tempComboBox.getIndexOf(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getName()) == -1)
-				{
-					tempComboBox.addElement(players[pInfo.getMyPlayerNum()].getOwnedProperties().get(j).getName());
-				}
+				tempComboBox.addElement(players[playerNum].getOwnedProperties().get(j).getName());
 			}
 		}
 	}
@@ -840,10 +783,6 @@ public class GameScreen extends JFrame{
 		displayTestWindow.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 + 125, 150, 50);
 		displayTestWindow.setVisible(true);
 	}
-	
-//	public static void main(String[] args) {
-//		GameScreen game = new GameScreen();
-//	}
 
 	
 	private void playScheduledMusic(){
@@ -870,34 +809,27 @@ public class GameScreen extends JFrame{
 		
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
-
 			@Override
 			public void run() {
 				try {
-
 					new MHost(dicePanel,players);
-					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 			}
-
 		}, 0);
-
 	}
 	private void addClient() throws UnknownHostException, IOException{
-			client = new MClient(false,this,dicePanel,players);
+		client = new MClient(false,this,dicePanel,players);
 	}
 	public int getLoadingProgress() {
 		return loadingProgress;
 	}
 	public void actionForMortgageProperty(String propertyName, int playerNum){
-		int num = playerNum;
 		if (propertyName == ""){
 			return;
 		}
+		int num = playerNum;
 		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
@@ -905,13 +837,15 @@ public class GameScreen extends JFrame{
 				players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
 				players[num].getOwnedProperties().get(h).setMortgagedTo(true);
 				players[num].getOwnedProperties().remove(h);
-				selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
-				selectMortgage.repaint();
+				if (pInfo.isSingle() || (!pInfo.isSingle() && pInfo.getMyPlayerNum() == playerNum)){
+					selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
+					selectMortgage.repaint();
+				}
 				mLabels.reinitializeMoneyLabels();
 				break;
 			}
 		}
-		updateMortgage();
+		updateMortgage(playerNum);
 		mortgageWindow.setVisible(false);
 	}
 }
