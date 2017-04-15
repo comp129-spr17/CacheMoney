@@ -34,6 +34,7 @@ public class MainMenuScreen {
 	private JFrame mainmenuframe;
 	private JButton SinglePButton;
 	private JButton MultiPButton;
+	private JButton CreditsButton;
 	private JLabel HelloThere;
 	private JButton ExitButton;
 	private JButton MiniGamesButton;
@@ -83,6 +84,7 @@ public class MainMenuScreen {
 		SinglePButton = new JButton("Single Player");
 		HelloThere = new JLabel("Cache Money", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
+		CreditsButton = new JButton("Credits");
 		MiniGamesButton = new JButton("Play Minigames");
 		cmbNumP = new JComboBox(numPlayer);
 		cmbNumP.setSelectedIndex(0);
@@ -296,6 +298,27 @@ public class MainMenuScreen {
 				}
 			}
 		});
+		CreditsButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Sounds.quickDisplay.playSound();
+				new CreditsScreen();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+		});
 	}
 
 	private void disableEnableBtns(boolean isLoggedIn){
@@ -306,7 +329,7 @@ public class MainMenuScreen {
 	}
 	public void createMenuWindow(){
 		setMenuBackgroundColor();
-		mainmenuframe.setSize(500,500);
+		mainmenuframe.setSize(500,600);
 		pathRelated = PathRelated.getInstance();
 		//		backgroundpic = new JLabel(new ImageIcon(pathRelated.getImagePath() + "background.jpg"));
 		//		System.out.println(mainmenuframe.getWidth() + " : " + mainmenuframe.getHeight());
@@ -335,8 +358,12 @@ public class MainMenuScreen {
 		loginBtn.setBounds(175,305,150,50);
 		loginBtn.setFont(mainfont);
 		mainPanel.add(loginBtn);
-		ExitButton.setBounds(175,365,150,50);
+		ExitButton.setBounds(175,425,150,50);
 		mainPanel.add(ExitButton);
+		CreditsButton.setBounds(175, 365, 150, 50);
+		CreditsButton.setFont(mainfont);
+		mainPanel.add(CreditsButton);
+		
 		mainmenuframe.add(mainPanel);
 		mainPanel.add(new BackgroundImage(pathRelated.getImagePath() + "background.jpg", mainmenuframe.getWidth(), mainmenuframe.getHeight()));
 		//		mainPanel.setComponentZOrder(backgroundpic, 0);
@@ -381,27 +408,6 @@ public class MainMenuScreen {
 	private void hideAndDisposeMainMenuScreen() {
 		mainmenuframe.setVisible(false);
 		mainmenuframe.dispose();
-	}
-
-
-	private void displayHostOrClientDialogBox(AskUserMultiplayerDialogBox mwr) {
-		switch (mwr.askUserHostOrClient()){
-		case 0:
-			hideAndDisposeMainMenuScreen();
-			loadingScreen.setVisible(true);
-			gameScreen = new GameScreen(false, 4);
-			hideAndDisposeLoadingScreen();
-			break;
-		case 1:
-			setupClient();
-			break;
-		case 2:
-			// USER CLOSED THE DIALOG WINDOW. DO NOTHING HERE.
-			break;
-		default:
-			System.out.println("***** THERE'S SOMETHING WRONG INSIDE OF GAMEBUTTON MOUSE CLICKED ASKING USER HOST/CLIENT");
-			break;
-		}
 	}
 	private void addActionListenerForExit(){
 		mainmenuframe.addWindowListener( new WindowAdapter() {

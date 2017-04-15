@@ -74,11 +74,11 @@ public class GameScreen extends JFrame{
 	private PlayingInfo pInfo;
 	private JDialog mortgageWindow;
 	private SqlRelated sqlRelated;
-	private JComboBox selectMortgage;
+	private JComboBox<String> selectMortgage;
 	private JButton sellConfirm;
 	private JButton sellCancel;
 	private JLabel pleaseSelectMortgage;
-	private DefaultComboBoxModel tempComboBox;
+	private DefaultComboBoxModel<String> tempComboBox;
 	private JButton displayTestWindow;
 	private PlayerInfoDisplay pInfoDisplay;
 	private MainGameArea mainGameArea;
@@ -114,7 +114,7 @@ public class GameScreen extends JFrame{
 				System.out.println("spinning......");
 			}
 			System.out.println("hmmmmm");
-			pInfo.sendMessageToServer(mPack.packSimpleRequest(unicode.REQUESTING_STATUS_MAIN));
+			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
 			System.out.println("requesting");
 		}
 		
@@ -188,7 +188,7 @@ public class GameScreen extends JFrame{
         } );
 	}
 	public void exitForServer(){
-		System.out.println("is this being called?");
+		System.out.println("Received request to disconnect.");
 		if(!pInfo.isSingle()){
 //			while(pInfo.getOutputStream() == null){
 //	    		try {
@@ -197,19 +197,16 @@ public class GameScreen extends JFrame{
 //					e1.printStackTrace();
 //				}
 //	    	}
-			System.out.println("Yes it is.");
-			pInfo.sendMessageToServer(mPack.packString(unicode.DISCONNECTED,pInfo.getLoggedInId()));
+			System.out.println("Disconnecting...");
+			pInfo.sendMessageToServer(mPack.packString(UnicodeForServer.DISCONNECTED,pInfo.getLoggedInId()));
 		}
-		System.out.println("Now");
-//        System.exit(1);
-        System.out.println("What?");
+		System.out.println("You have disconnected from the server.");
 	}
 	private void addExitListener(boolean isHost){
 		btnExit.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -478,8 +475,8 @@ public class GameScreen extends JFrame{
 		mainPanel.add(btnExit);
 		addExitListener(isHost);
 		initUserInfoWindow();
-		tempComboBox = new DefaultComboBoxModel();
-		selectMortgage = new JComboBox(tempComboBox);
+		tempComboBox = new DefaultComboBoxModel<String>();
+		selectMortgage = new JComboBox<String>(tempComboBox);
 		selectMortgage.addActionListener (new ActionListener ()
 		{
 		    public void actionPerformed(ActionEvent e) 
@@ -739,7 +736,6 @@ public class GameScreen extends JFrame{
 		mortgagePrice.repaint();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void updateMortgage(int playerNum)
 	{
 		for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
