@@ -32,6 +32,7 @@ public class MainGameArea extends JPanel{
 	private WaitingArea waitingArea;
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
+	private OnlineUsers onlineUsers;
 	public MainGameArea(final Container container) {
 		this.container = container;
 		init();
@@ -39,6 +40,7 @@ public class MainGameArea extends JPanel{
 	}
 	private void init(){
 		listOfOnlineUsers = new JComboBox<>();
+		onlineUsers = new OnlineUsers();
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
 		rooms = new HashMap<>();
@@ -55,7 +57,7 @@ public class MainGameArea extends JPanel{
 		setBackground(Color.black);
 		controlPanel.add(createNewRoom);
 		controlPanel.add(jLabel);
-		controlPanel.add(listOfOnlineUsers);
+		controlPanel.add(onlineUsers.getPanel());
 	}
 	public WaitingArea getWaiting(){
 		return waitingArea;
@@ -73,12 +75,19 @@ public class MainGameArea extends JPanel{
 	}
 	
 	public void updatelist(ArrayList<Object> userList){
-		listOfOnlineUsers.removeAllItems();
+//		listOfOnlineUsers.removeAllItems();
+//		System.out.println("Update user lists : . size:" + userList.get(0));
+//		for(int i=1; i<userList.size(); i++){
+//			System.out.println((String)userList.get(i));
+//			listOfOnlineUsers.addItem((String)userList.get(i));
+//		}
+		onlineUsers.clearList();
 		System.out.println("Update user lists : . size:" + userList.get(0));
 		for(int i=1; i<userList.size(); i++){
 			System.out.println((String)userList.get(i));
-			listOfOnlineUsers.addItem((String)userList.get(i));
+			onlineUsers.addOnlineUser((String)userList.get(i));
 		}
+		onlineUsers.refresh();
 	}
 	private void addListener(){
 		createNewRoom.addMouseListener(new MouseListener() {

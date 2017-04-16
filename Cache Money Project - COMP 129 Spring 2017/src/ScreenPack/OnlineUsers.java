@@ -27,7 +27,7 @@ public class OnlineUsers{
 		GUI_onlineUsers = new ArrayList<JButton>();
 		
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	}
 	
 	public ArrayList<String> getOnlineUsers(){
@@ -64,7 +64,10 @@ public class OnlineUsers{
 		GUI_onlineUsers.add(temp);
 		panel.add(temp);
 	}
-
+	public void refresh(){
+		panel.revalidate();
+		panel.repaint();
+	}
 	
 	public static void main(String[] args){
 		JFrame f = new JFrame("TEST");
