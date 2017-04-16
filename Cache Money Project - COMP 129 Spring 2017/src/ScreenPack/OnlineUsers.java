@@ -38,7 +38,7 @@ public class OnlineUsers{
 	public void clearList(){
 		onlineUsers.clear();;
 		GUI_onlineUsers.clear();
-		
+		panel.removeAll();
 		System.gc();
 	}
 	
