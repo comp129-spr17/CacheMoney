@@ -86,6 +86,8 @@ public class MMainArea extends Thread{
 					synchronized (mWaitingRoom) {
 						mWaitingRoom.wait();
 						exitCode = mWaitingRoom.isGameStartedOrDisconnected();
+						if(!exitCode)
+							MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongIntArrays(UnicodeForServer.UPDATE_ROOM_STAT, waitingRooms));
 					}
 				}
 				
@@ -101,7 +103,15 @@ public class MMainArea extends Thread{
 		System.out.println("Request for update");
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongArray(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, waitingRooms));
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongIntArrays(UnicodeForServer.UPDATE_ROOM_STAT, waitingRooms));
-		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
+			}
+		}, 2000);
+		
 
 	}
 	private void forDisconnected(){
