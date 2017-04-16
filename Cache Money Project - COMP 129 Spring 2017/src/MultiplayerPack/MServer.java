@@ -29,8 +29,8 @@ public class MServer {
 	private static HashMap<String,OutputStream> usersOutput;
 	private static HashMap<String,InputStream> usersInput;
 	private static ArrayList<MMainArea> runningClients;
-	private HashMap<String,String> joinedPlayerIds;
-	private HashMap<Long, MWaitingRoom> waitingRooms; 
+	private static HashMap<String,String> joinedPlayerIds;
+	private static HashMap<Long, MWaitingRoom> waitingRooms; 
 	private final static int PORT_NUM = 7777;
 	private static ServerSocket listener;
 	private byte[] firstMsg;
