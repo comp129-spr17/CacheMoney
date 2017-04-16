@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import com.sun.javafx.collections.MappingChange.Map;
 
 
 public final class MBytePack {
@@ -308,6 +311,22 @@ public final class MBytePack {
 			dOutputStream.writeInt(numPpl);
 			dOutputStream.writeBoolean(isHost);
 			
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	public byte[] packLongIntArrays(int requestCode, HashMap<Long, MWaitingRoom> waitingRooms){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeInt(waitingRooms.size());
+			for(Entry<Long, MWaitingRoom> entry : waitingRooms.entrySet()){
+				dOutputStream.writeLong(entry.getKey());
+				dOutputStream.writeInt(entry.getValue().getNumPpl());
+			}
 			return packResult();
 		}
 		catch (IOException e){

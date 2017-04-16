@@ -107,6 +107,7 @@ public class MClient {
 		variableCodeString.add(new String("WHEN_USER_ENTERS_GAME_AREA"));
 		variableCodeString.add(new String("PROPERTY_PURCHASE"));
 		variableCodeString.add(new String("MORTGAGE_PROPERTY"));
+		variableCodeString.add(new String("UPDATE_ROOM_STAT"));
 	}
 	
 	
@@ -169,6 +170,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom();}});
 		doActions.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUserEntersMainArea(result);}});
 		doActions.put(UnicodeForServer.MORTGAGE_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doMortgageProperty(result);;}});
+		doActions.put(UnicodeForServer.UPDATE_ROOM_STAT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateRoomStat(result);;}});
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
@@ -385,8 +387,7 @@ public class MClient {
 		}
 	}
 	private void doIdUpdate(ArrayList<Object> result){
-//		(new ForIdUpdating(result)).start();
-		initializeMainGameLobby(result,1);
+		(new ForIdUpdating(result)).start();
 	}
 	class ForIdUpdating extends Thread{
 		private ArrayList<Object> result;
@@ -402,8 +403,7 @@ public class MClient {
 		
 	}
 	private void doUpdateJoinedPlayerMainGame(ArrayList<Object> result){
-//		(new ForUpdatingRooms(result)).start();
-		gameScreen.updateRoomStatus((Long)result.get(1), (Integer)result.get(2), (Boolean)result.get(3));
+		(new ForUpdatingRooms(result)).start();
 	}
 	class ForUpdatingRooms extends Thread{
 		private ArrayList<Object> result;
@@ -428,9 +428,7 @@ public class MClient {
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM_REST));
 	}
 	private void doUserEntersMainArea(ArrayList<Object> result){
-//		(new ForEnteringLobby(result)).start();
-		initializeMainGameLobby(result,0);
-		initializeMainGameLobby(result,2);
+		(new ForEnteringLobby(result)).start();
 	}
 	class ForEnteringLobby extends Thread{
 		private ArrayList<Object> result;
@@ -444,6 +442,20 @@ public class MClient {
 	}
 	private void doMortgageProperty(ArrayList<Object> result){
 		gameScreen.actionForMortgageProperty((String)result.get(1), (Integer)result.get(2));
+	}
+	private void doUpdateRoomStat(ArrayList<Object> result){
+		(new ForUpdatingAllRooms(result)).start();
+	}
+	class ForUpdatingAllRooms extends Thread{
+		private ArrayList<Object> result;
+		public ForUpdatingAllRooms(ArrayList<Object> result){
+			this.result = result;
+		}
+		public void run(){
+			for(int i=0; i<(Integer)result.get(1);i++){
+				gameScreen.updateRoomStatus((Long)result.get(2*(i+1)), (Integer)result.get(2*(i+1)+1), false);
+			}
+		}
 	}
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);

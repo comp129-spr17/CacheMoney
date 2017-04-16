@@ -113,8 +113,10 @@ public final class MByteUnpack {
 		GetResults.put(UnicodeForServer.START_GAME_TO_OTHER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongArray(result);
-			return cleanUpAndReturn();}});
+		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.MORTGAGE_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackMortgageRequest(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.UPDATE_ROOM_STAT, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongIntArray(result);
 		return cleanUpAndReturn();}});
 	}
 	
@@ -319,6 +321,18 @@ public final class MByteUnpack {
 		try {
 			resultList.add(dInputStream.readUTF());
 			resultList.add(dInputStream.readInt());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void unpackLongIntArray(byte[] result) {
+		try {
+			resultList.add(dInputStream.readInt());
+			for(int i=0; i<resultList.size(); i++){
+				resultList.add(dInputStream.readLong());
+				resultList.add(dInputStream.readInt());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

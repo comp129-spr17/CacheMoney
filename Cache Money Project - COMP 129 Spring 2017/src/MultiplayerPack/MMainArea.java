@@ -88,6 +88,7 @@ public class MMainArea extends Thread{
 						exitCode = mWaitingRoom.isGameStartedOrDisconnected();
 					}
 				}
+				MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongIntArrays(UnicodeForServer.UPDATE_ROOM_STAT, waitingRooms));
 			}catch(Exception e){
 				e.printStackTrace();
 			}finally{

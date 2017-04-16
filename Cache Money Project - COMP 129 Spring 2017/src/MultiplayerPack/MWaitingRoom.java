@@ -187,6 +187,8 @@ public class MWaitingRoom extends Thread{
 		
 	}
 	public void notifyUserLeave(String uId){
+		// To do : Update rest of the rooms other than the one just quited.
+		// suggest : make a function that gathers all the number of people from the room and pack tham all 
 		System.out.println(uId + " left");
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.LEAVE_ROOM, userForThisRoom));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
@@ -196,6 +198,9 @@ public class MWaitingRoom extends Thread{
 
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
 		
+	}
+	public int getNumPpl(){
+		return userId.length();
 	}
 	private int whichRequest(int code){
 			if(UnicodeForServer.DISCONNECTED == code)

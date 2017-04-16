@@ -12,7 +12,6 @@ public final class MManagingMaps {
 	private static long roomNum;
 	private static MManagingMaps mMaps = new MManagingMaps();
 	private MManagingMaps(){
-		
 	}
 	public static MManagingMaps getInstance(){ 
 		return mMaps;
