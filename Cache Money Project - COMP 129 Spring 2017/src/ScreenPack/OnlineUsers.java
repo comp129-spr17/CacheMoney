@@ -2,6 +2,7 @@ package ScreenPack;
 
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ public class OnlineUsers{
 	public OnlineUsers(){
 		panel = new JPanel();
 		panel.setVisible(true);
-		panel.setLayout(null);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		scrollPane = new JScrollPane();
 		scrollPane.add(panel);
 		scrollPane.setViewportView(panel);
@@ -62,6 +63,7 @@ public class OnlineUsers{
 		}
 		
 		temp.setEnabled(false);
+		temp.setBorderPainted(false);
 		GUI_onlineUsers.add(temp);
 		panel.add(temp);
 	}
@@ -86,7 +88,18 @@ public class OnlineUsers{
 		o.addOnlineUser("Pikachu");
 		o.addOnlineUser("Raichu");
 		o.addOnlineUser("Magikarp");
-		
+		o.addOnlineUser("Pikachu");
+		o.addOnlineUser("Raichu");
+		o.addOnlineUser("Magikarp");
+		o.addOnlineUser("Pikachu");
+		o.addOnlineUser("Raichu");
+		o.addOnlineUser("Magikarp");
+		o.addOnlineUser("Pikachu");
+		o.addOnlineUser("Raichu");
+		o.addOnlineUser("Magikarp");
+		o.addOnlineUser("Pikachu");
+		o.addOnlineUser("Raichu");
+		o.addOnlineUser("Magikarp");
 
 	}
 
