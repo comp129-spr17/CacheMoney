@@ -38,11 +38,11 @@ public final class MManagingMaps {
 		waitingRooms.remove(pos);
 	}
 	public static long findNextAvailableWaiting(){
-		for(long i=0; i<=roomNum; i++){
-			if(!waitingRooms.containsKey(i)){
-				return i;
-			}
-		}
+//		for(long i=0; i<=roomNum; i++){
+//			if(!waitingRooms.containsKey(i)){
+//				return i;
+//			}
+//		}
 		return ++roomNum;
 	}
 	public static HashMap<String,OutputStream> getOutputForAll(){
