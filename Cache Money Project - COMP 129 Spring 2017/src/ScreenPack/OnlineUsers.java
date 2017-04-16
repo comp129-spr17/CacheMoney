@@ -9,8 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SpringLayout;
 
 public class OnlineUsers{
-	private static final int BUTTON_HEIGHT = 30;
-	private static final int BUTTON_WIDTH = 50;
+	private static final int BUTTON_HEIGHT = 50;
+	private static final int BUTTON_WIDTH = 100;
 
 	private ArrayList<String> onlineUsers;
 	private ArrayList<JButton> GUI_onlineUsers;
@@ -20,6 +20,7 @@ public class OnlineUsers{
 	public OnlineUsers(){
 		panel = new JPanel();
 		panel.setVisible(true);
+		panel.setLayout(null);
 		scrollPane = new JScrollPane();
 		scrollPane.add(panel);
 		scrollPane.setViewportView(panel);
@@ -71,7 +72,7 @@ public class OnlineUsers{
 	
 	public static void main(String[] args){
 		JFrame f = new JFrame("TEST");
-		f.setSize(100,100);
+		f.setSize(BUTTON_WIDTH,BUTTON_HEIGHT);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
