@@ -168,6 +168,10 @@ public class MWaitingRoom extends Thread{
 	public void setList(ArrayList<OutputStream> oList, ArrayList<String> uList){
 		outputForThisRoom = oList;
 		userForThisRoom = uList;
+		System.out.println("User in this room");
+		for(String name : userForThisRoom){
+			System.out.println(" :: " + name);
+		}
 	}
 	public void notifyUserEnter(String uId){
 		System.out.println(uId + " joined");
