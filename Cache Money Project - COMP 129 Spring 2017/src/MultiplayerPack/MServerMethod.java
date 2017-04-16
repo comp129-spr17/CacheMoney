@@ -16,8 +16,11 @@ public final class MServerMethod {
 	public static void showMsgToUsersInRoom(ArrayList<OutputStream> outputForThisRoom, byte[] msg){
 		for(OutputStream output:outputForThisRoom){
 			try {
-				if(output != null)
+				if(output != null){
 					output.write(msg);
+					output.flush();
+				}
+					
 			} catch (Exception e) {
 				e.printStackTrace();
 				
@@ -28,6 +31,7 @@ public final class MServerMethod {
 		for(int i=1; i<outputForThisRoom.size(); i++){
 			try {
 				outputForThisRoom.get(i).write(msg);
+				outputForThisRoom.get(i).flush();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -36,8 +40,11 @@ public final class MServerMethod {
 	public static void showMsgToAllUsers(HashMap<String, OutputStream> usersOutput, byte[] msg){
 		for(OutputStream output:usersOutput.values()){
 			try {
-				if(output != null)
+				if(output != null){
 					output.write(msg);
+					output.flush();
+				}
+					
 			} catch (Exception e) {
 				e.printStackTrace();
 				
@@ -47,6 +54,7 @@ public final class MServerMethod {
 	public static void sendMsgToMyself(HashMap<String, OutputStream> usersOutput, String userId, byte[] msg){
 		try {
 			usersOutput.get(userId).write(msg);
+			usersOutput.get(userId).flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

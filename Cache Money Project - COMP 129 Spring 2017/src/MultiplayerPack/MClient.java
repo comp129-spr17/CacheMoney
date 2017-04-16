@@ -234,12 +234,13 @@ public class MClient {
 				
 				
 				while(isServerUp){
+					
 		        	try{
-		        		System.out.println("now this");
+		        		System.out.println("Reading");
 		        		inputStream.read(msgs);
 		    			result = mUnpack.getResult(msgs);
 		        		doAction(result);
-		        		System.out.println("after this");
+		        		System.out.println("after Reading");
 		        	}
 		        	catch(SocketException e){
 		        		isServerUp = false;
@@ -384,7 +385,8 @@ public class MClient {
 		}
 	}
 	private void doIdUpdate(ArrayList<Object> result){
-		(new ForIdUpdating(result)).start();
+//		(new ForIdUpdating(result)).start();
+		initializeMainGameLobby(result,1);
 	}
 	class ForIdUpdating extends Thread{
 		private ArrayList<Object> result;
@@ -400,7 +402,8 @@ public class MClient {
 		
 	}
 	private void doUpdateJoinedPlayerMainGame(ArrayList<Object> result){
-		(new ForUpdatingRooms(result)).start();
+//		(new ForUpdatingRooms(result)).start();
+		gameScreen.updateRoomStatus((Long)result.get(1), (Integer)result.get(2), (Boolean)result.get(3));
 	}
 	class ForUpdatingRooms extends Thread{
 		private ArrayList<Object> result;
@@ -425,7 +428,9 @@ public class MClient {
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM_REST));
 	}
 	private void doUserEntersMainArea(ArrayList<Object> result){
-		(new ForEnteringLobby(result)).start();
+//		(new ForEnteringLobby(result)).start();
+		initializeMainGameLobby(result,0);
+		initializeMainGameLobby(result,2);
 	}
 	class ForEnteringLobby extends Thread{
 		private ArrayList<Object> result;

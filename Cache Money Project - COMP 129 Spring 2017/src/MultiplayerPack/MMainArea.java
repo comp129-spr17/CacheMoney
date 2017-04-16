@@ -36,6 +36,7 @@ public class MMainArea extends Thread{
 	private MManagingMaps mMaps;
 	private ArrayList<Object> result;
 	private MWaitingRoom mWaitingRoom;
+	private long roomNum;
 	public MMainArea(HashMap<String,OutputStream> usersOutput, HashMap<String,InputStream> usersInput, HashMap<String, String> userIds, InputStream inputStream, String userId, HashMap<Long, MWaitingRoom> waitingRooms){
 		this.usersOutput = usersOutput;
 		this.userIds = userIds;
@@ -55,7 +56,7 @@ public class MMainArea extends Thread{
 		msg=new byte[512];
 	}
 	public void run(){
-		long roomNum=0;
+		
 		System.out.println("now start");
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packSimpleRequest(UnicodeForServer.SERVER_READY));
 		mWaitingRoom=null;
@@ -72,10 +73,10 @@ public class MMainArea extends Thread{
 						forDisconnected();
 						break;
 					}else if(specialCode == 2){
-						forCreatingRoom(roomNum);
+						forCreatingRoom();
 						continue;
 					}else if(specialCode == 3){
-						forJoiningRoom(roomNum);
+						forJoiningRoom();
 					}else if(specialCode == 5){
 						mWaitingRoom.notifyUserEnter(userId);
 					}
@@ -110,7 +111,7 @@ public class MMainArea extends Thread{
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
 		exitCode = true;
 	}
-	private void forCreatingRoom(long roomNum){
+	private void forCreatingRoom(){
 		roomNum = mMaps.getRoomNum();
 		System.out.println("CREATING ROOM" + roomNum);
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
@@ -118,7 +119,7 @@ public class MMainArea extends Thread{
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
 	}
-	private void forJoiningRoom(long roomNum){
+	private void forJoiningRoom(){
 		result = mUnpack.getResult(msg);
 		System.out.println(result.get(1));
 		roomNum = (Long)result.get(1);
