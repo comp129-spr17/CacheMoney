@@ -14,8 +14,8 @@ public class MWaitingRoom extends Thread{
 	private HashMap<String, OutputStream> usersOutput;
 	private HashMap<String,InputStream> usersInput;
 	private HashMap<String, String> userIds;
-	private static ArrayList<OutputStream> outputForThisRoom;
-	private static ArrayList<String> userForThisRoom;
+	private ArrayList<OutputStream> outputForThisRoom;
+	private ArrayList<String> userForThisRoom;
 	private InputStream readFromUser;
 	private byte[] msg;
 	private MByteUnpack mUnpack;
@@ -160,6 +160,11 @@ public class MWaitingRoom extends Thread{
 		return roomNum;
 	}
 	public ArrayList<OutputStream> getListForOutput(){
+		System.out.println("Giving room num :"  + roomNum);
+		System.out.println("Giving users : ");
+		for(String name : userForThisRoom){
+			System.out.println(" GIVING :: " + name);
+		}
 		return outputForThisRoom;
 	}
 	public ArrayList<String> getListForUser(){
@@ -170,7 +175,7 @@ public class MWaitingRoom extends Thread{
 		userForThisRoom = uList;
 		System.out.println("User in this room");
 		for(String name : userForThisRoom){
-			System.out.println(" :: " + name);
+			System.out.println(" RECEIVING :: " + name);
 		}
 	}
 	public void notifyUserEnter(String uId){
