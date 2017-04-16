@@ -562,7 +562,8 @@ public class GameScreen extends JFrame{
 		mainGameArea.updatelist(userList);
 	}
 	public void updateInMainAreaRooms(ArrayList<Object> roomLIst){
-		mainGameArea.updateRooms(roomLIst);
+		if(roomLIst.size() > 1)
+			mainGameArea.updateRooms(roomLIst);
 	}
 	
 	public void hostLeftWaitingArea(){
