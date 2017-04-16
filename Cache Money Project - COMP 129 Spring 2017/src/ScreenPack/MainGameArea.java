@@ -154,10 +154,9 @@ public class MainGameArea extends JPanel{
 		});
 	}
 	public void updateRooms(ArrayList<Object> list){
-		removeAll();
+//		removeAll();
 		System.out.println("size"+list.size());
-		for(int i=1; i<list.size(); i++)
-			makeNewRoom((Long)list.get(i));
+		makeNewRoom((Long)list.get(1));
 
 		repaint();
 		revalidate();

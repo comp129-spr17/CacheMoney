@@ -94,7 +94,7 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringArray(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongArray(result);
+		GetResults.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLong(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.JOIN_ROOM, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLong(result);
 		return cleanUpAndReturn();}});

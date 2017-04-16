@@ -125,7 +125,7 @@ public class MMainArea extends Thread{
 		System.out.println("CREATING ROOM" + roomNum);
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
 		waitingRooms.put(roomNum, mWaitingRoom);
-		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
 	}
 	private void forJoiningRoom(){

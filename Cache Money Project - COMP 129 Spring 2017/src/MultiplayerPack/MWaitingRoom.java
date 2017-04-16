@@ -141,14 +141,13 @@ public class MWaitingRoom extends Thread{
 		if(!isGameStarted){
 			MServerMethod.showMsgToUsersWithoutHost(outputForThisRoom, mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
 		}
-		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, mManagingMaps.getWaitingRooms()));
-
+//		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, mManagingMaps.getWaitingRooms()));
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,0,true));
+		
 	}
 	private void actionToLeaveUser(){
 		userForThisRoom.remove(userId);
 		outputForThisRoom.remove(usersOutput.get(userId));
-		for(String user : userForThisRoom)
-			System.out.println("left IN ROOm : " + user);
 	}
 	private void getMsg(){
 		try {
@@ -160,11 +159,6 @@ public class MWaitingRoom extends Thread{
 		return roomNum;
 	}
 	public ArrayList<OutputStream> getListForOutput(){
-		System.out.println("Giving room num :"  + roomNum);
-		System.out.println("Giving users : ");
-		for(String name : userForThisRoom){
-			System.out.println(" GIVING :: " + name);
-		}
 		return outputForThisRoom;
 	}
 	public ArrayList<String> getListForUser(){
@@ -173,10 +167,6 @@ public class MWaitingRoom extends Thread{
 	public void setList(ArrayList<OutputStream> oList, ArrayList<String> uList){
 		outputForThisRoom = oList;
 		userForThisRoom = uList;
-		System.out.println("User in this room");
-		for(String name : userForThisRoom){
-			System.out.println(" RECEIVING :: " + name);
-		}
 	}
 	public void notifyUserEnter(String uId){
 		System.out.println(uId + " joined");
