@@ -158,7 +158,6 @@ public class MClient {
 		doActions.put(UnicodeForServer.STACK_CARD_DRAWN, new DoAction(){public void doAction(ArrayList<Object> result){doDrawChanceStack(result);}});
 		doActions.put(UnicodeForServer.BUILD_HOUSE, new DoAction(){public void doAction(ArrayList<Object> result){doBuildHouse(result);}});
 		doActions.put(UnicodeForServer.GOT_OUT_OF_JAIL, new DoAction(){public void doAction(ArrayList<Object> result){doGotOutOfJail(result);}});
-		doActions.put(UnicodeForServer.SEND_USER_ID, new DoAction(){public void doAction(ArrayList<Object> result){doSetUserId(result);}});
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,0);}});
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,1);}});
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,2);}});
@@ -268,11 +267,10 @@ public class MClient {
 			diceP.placePlayerToBoard(i);
 		}
 		diceP.actionForStart();
-		SqlRelated.generateUserInfo(playingInfo.getLoggedInId());
-//		playingInfo.sendMessageToServer(mPack.packStringIntArray(UnicodeForServer.SEND_USER_ID, playingInfo.getLoggedInId(),SqlRelated.getUserName(), new int[]{playingInfo.getMyPlayerNum(), SqlRelated.getWin(), SqlRelated.getLose()}));
 		System.out.println((Integer)result.get(1));
 		mLabels.setNumPlayer((Integer)result.get(1));
 		mLabels.removeNonPlayers();
+		(new SetId(result)).start();
 		
 	}
 	private void doSendBackStartSignal(){
@@ -354,12 +352,23 @@ public class MClient {
 		diceP.actionForBuildHouse();
 	}
 	
-	private void doSetUserId(ArrayList<Object> result){
-		int pos = (Integer)result.get(3);
-		pList[pos].setUserId((String)result.get(1));
-		pList[pos].setUserName((String)result.get(2));
-		pList[pos].setNumWin((Integer)result.get(4));
-		pList[pos].setNumLose((Integer)result.get(5));
+	class SetId extends Thread{
+		private String id = "";
+		private ArrayList<Object> result;
+		public SetId(ArrayList<Object> result){
+			this.result = result;
+		}
+		public void run(){
+			for(int i=0; i<(Integer)result.get(1); i++){
+				id = (String)result.get(i+3);
+				System.out.println(id);
+				SqlRelated.generateUserInfo(id);
+				pList[i].setUserId(id);
+				pList[i].setUserName(SqlRelated.getUserName());
+				pList[i].setNumWin(SqlRelated.getWin());
+				pList[i].setNumLose(SqlRelated.getLose());
+			}
+		}
 	}
 	private void initializeMainGameLobby(ArrayList<Object> result, int type){
 		if(type == 0){

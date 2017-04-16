@@ -162,6 +162,8 @@ public final class MByteUnpack {
 		try{
 			resultList.add(dInputStream.readInt());
 			resultList.add(dInputStream.readInt());
+			for(int i=0; i<(Integer)resultList.get(1); i++)
+				resultList.add(dInputStream.readUTF());
 		}catch(IOException e){
 			e.printStackTrace();
 		}

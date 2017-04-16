@@ -65,7 +65,7 @@ public class MThread extends Thread{
 		try{
 			System.out.println("Jeremy you are so annoying. FROM player : " +  myPlayerNum);
 			usersOutput.get(myPlayerNum).flush();
-			sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum));
+			sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum, usersId));
 			System.out.println("After sending msg : " +  myPlayerNum);
 			while(!exitCode){
 				getMsg();
