@@ -329,7 +329,7 @@ public final class MByteUnpack {
 	public void unpackLongIntArray(byte[] result) {
 		try {
 			resultList.add(dInputStream.readInt());
-			for(int i=0; i<resultList.size(); i++){
+			for(int i=0; i<(Integer)resultList.get(1); i++){
 				resultList.add(dInputStream.readLong());
 				resultList.add(dInputStream.readInt());
 			}
