@@ -200,7 +200,7 @@ public class MWaitingRoom extends Thread{
 		
 	}
 	public int getNumPpl(){
-		return userIds.size();
+		return userForThisRoom.size();
 	}
 	private int whichRequest(int code){
 			if(UnicodeForServer.DISCONNECTED == code)
