@@ -453,6 +453,7 @@ public class MClient {
 		}
 		public void run(){
 			for(int i=0; i<(Integer)result.get(1);i++){
+				System.out.println("Long : "+ (Long)result.get(2*(i+1)) + " NUM : " +(Integer)result.get(2*(i+1)+1));
 				gameScreen.updateRoomStatus((Long)result.get(2*(i+1)), (Integer)result.get(2*(i+1)+1), false);
 			}
 		}

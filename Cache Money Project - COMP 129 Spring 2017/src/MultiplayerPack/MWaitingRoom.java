@@ -191,8 +191,8 @@ public class MWaitingRoom extends Thread{
 		// suggest : make a function that gathers all the number of people from the room and pack tham all 
 		System.out.println(uId + " left");
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.LEAVE_ROOM, userForThisRoom));
-		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
-		
+//		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntArrays(UnicodeForServer.UPDATE_ROOM_STAT, mManagingMaps.getWaitingRooms()));
 	}
 	public void getUpdatedWaitingArea(String userId){
 
