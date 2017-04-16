@@ -41,70 +41,41 @@ public class MMainArea extends Thread{
 		this.userIds = userIds;
 		this.waitingRooms = waitingRooms;
 		this.usersInput = usersInput;
+		this.inputStream = inputStream;
+		this.userId = userId;
+		init();
+		
+	}
+	private void init(){
+
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
 		ufs = UnicodeForServer.getInstance();
-		this.inputStream = inputStream;
-		this.userId = userId;
 		mMaps = MManagingMaps.getInstance();
 		msg=new byte[512];
-		/*
-		try {
-			System.out.println("Connection from : " + s.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
 	}
 	public void run(){
-		long roomNum;
+		long roomNum=0;
 		System.out.println("now start");
-		sendToMine(mPack.packSimpleRequest(UnicodeForServer.SERVER_READY));
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packSimpleRequest(UnicodeForServer.SERVER_READY));
 		MWaitingRoom mWaitingRoom=null;
 		while(!exitCode){
 			try{
-				
 				getMsg();
 				System.out.println("recieved msg.");
 				specialCode = whichRequest(msg[3]);
 				if(specialCode == 4){
-					System.out.println("Request for update");
-					sendToMine(mPack.packLongArray(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, waitingRooms));
-					showMsgToUsers(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
-					for(Long room : waitingRooms.keySet()){
-						System.out.println("Room : " + room);
-					}
-					
-					// TO do : WHY THE FUCK DOESN"T MYSELF RECEIVE THE STATUS FOR THIS SHIT!!!!!!!!
-//					for(MWaitingRoom room: waitingRooms.values()){
-//						room.getUpdatedWaitingArea(userId);
-//					}
+					forEntering();
 				}
 				else{
 					if(specialCode == 1){
-						System.out.println("1.");
-						mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
-						showMsgToUsers(mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
-						exitCode = true;
+						forDisconnected();
 						break;
 					}else if(specialCode == 2){
-						System.out.println("CREATING ROOM");
-						roomNum = mMaps.getRoomNum();
-						System.out.println("CREATING ROOM" + roomNum);
-						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
-						waitingRooms.put(roomNum, mWaitingRoom);
-						showMsgToUsers(mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
-						sendToMine(mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
+						forCreatingRoom(roomNum, mWaitingRoom);
 						continue;
 					}else if(specialCode == 3){
-						System.out.println("3.");
-						result = mUnpack.getResult(msg);
-						System.out.println(result.get(1));
-						roomNum = (Long)result.get(1);
-						waitingRooms.get(roomNum).notifyUserEnter(userId);
-//						mWaitingRoom = waitingRooms.get(roomNum);
-						mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
-						mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
+						forJoiningRoom(roomNum, mWaitingRoom);
 					}else if(specialCode == 5){
 						mWaitingRoom.notifyUserEnter(userId);
 					}
@@ -116,35 +87,51 @@ public class MMainArea extends Thread{
 						exitCode = mWaitingRoom.isGameStartedOrDisconnected();
 					}
 				}
-					
-				
 			}catch(Exception e){
 				e.printStackTrace();
 			}finally{
 			}
 			
 		}
-		System.out.println("Game started. Now, exit from mainArea");
-				
-		
+		System.out.println("Now, exit from mainArea");
 	}
+	private void forEntering(){
+		System.out.println("Request for update");
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongArray(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, waitingRooms));
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
+
+		for(MWaitingRoom room: waitingRooms.values()){
+			room.getUpdatedWaitingArea(userId);
+		}
+	}
+	private void forDisconnected(){
+		System.out.println("1.");
+		mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
+		exitCode = true;
+	}
+	private void forCreatingRoom(long roomNum, MWaitingRoom mWaitingRoom){
+		roomNum = mMaps.getRoomNum();
+		System.out.println("CREATING ROOM" + roomNum);
+		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
+		waitingRooms.put(roomNum, mWaitingRoom);
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, waitingRooms));
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
+	}
+	private void forJoiningRoom(long roomNum, MWaitingRoom mWaitingRoom){
+		result = mUnpack.getResult(msg);
+		System.out.println(result.get(1));
+		roomNum = (Long)result.get(1);
+		waitingRooms.get(roomNum).notifyUserEnter(userId);
+		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
+		mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
+	}
+	
 	private void getMsg(){
 		try {
 			
 			inputStream.read(msg);
-//			sendingQ.enqueue(msg);
 		} catch (IOException e) {
-		}
-	}
-	private void showMsgToUsers(byte[] msg) throws SocketException{
-		for(OutputStream output:usersOutput.values()){
-			try {
-				if(output != null)
-					output.write(msg);
-			} catch (Exception e) {
-				e.printStackTrace();
-				
-			}
 		}
 	}
 	private int whichRequest(int code){
@@ -159,14 +146,6 @@ public class MMainArea extends Thread{
 			else if(UnicodeForServer.CREATE_ROOM_REST == code)
 				return 5;
 			return 0;
-	}
-	
-	private void sendToMine(byte[] msg){
-		try {
-			usersOutput.get(userId).write(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 }

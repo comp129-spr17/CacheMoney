@@ -48,57 +48,26 @@ public class MThread extends Thread{
 		readFromUser = inputStream;
 		msg=new byte[512];
 		System.out.println("playerNum : " + numPlayer + " , myNum" + myPlayerNum + ", outputNum" + usersOutput.size());
-		/*
-		try {
-			System.out.println("Connection from : " + s.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
+
 	}
 	public void disconnectServer(){
 		serverDisconnected = true;
 	}
 	public void run(){
-		
-		
 		try{
-			System.out.println("Jeremy you are so annoying. FROM player : " +  myPlayerNum);
 			usersOutput.get(myPlayerNum).flush();
 			sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum, usersId));
-			System.out.println("After sending msg : " +  myPlayerNum);
 			while(!exitCode){
 				getMsg();
 				
 				specialCode = mUnpack.isSpecalCode(msg[3]);
 				if(specialCode == 0){
-					showMsgToUsers(msg);
+					MServerMethod.showMsgToUsersInRoom(usersOutput, msg);
 				}
 				else if(specialCode == 1){
-					// To do : get rid of all the property this owner owns.
-					name = (String)mUnpack.getResult(msg).get(1);
-					disconnectPlayer = usersId.indexOf(name);
-					mMaps.removeFromList(name);
-					
-					System.out.println("Player " + (disconnectPlayer+1) + " is disconnected");
-					usersOutput.set(disconnectPlayer,null);
-					
-//					disconnectedUser();
-					showMsgToUsers(mPack.packPlayerNumber(ufs.DISCONNECTED_FOR_GAME, disconnectPlayer));
-					exitCode = true;
+					forDisconnected();
 					break;
-				}else if(specialCode == 2){
-//					System.out.println("Server is disconnected");
-//					usersOutput.set(myNum,null);
-//					startPlayers.set(myNum, null);
-//					showMsgToUsers(mPack.packSimpleRequest(ufs.HOST_DISCONNECTED));
-					exitCode = true;
-					break;
-				}else {
-//					System.out.println("Called");
 				}
-				
-					
 				
 			}
 		}catch(Exception e){
@@ -115,20 +84,18 @@ public class MThread extends Thread{
 		} catch (IOException e) {
 		}
 	}
-	private void showMsgToUsers(byte[] msg) throws SocketException{
-		for(OutputStream output:usersOutput){
-			try {
-				if(output != null)
-					output.write(msg);
-			} catch (Exception e) {
-				e.printStackTrace();
-				
-			}
-		}
+	private void forDisconnected(){
+		name = (String)mUnpack.getResult(msg).get(1);
+		disconnectPlayer = usersId.indexOf(name);
+		mMaps.removeFromList(name);
+		System.out.println("Player " + name + " is disconnected");
+		usersOutput.set(disconnectPlayer,null);
+		MServerMethod.showMsgToUsersInRoom(usersOutput, mPack.packPlayerNumber(ufs.DISCONNECTED_FOR_GAME, disconnectPlayer));
+		exitCode = true;
+		MServerMethod.showMsgToAllUsers(MManagingMaps.getOutputForAll(), mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, MManagingMaps.getIds()));
 	}
 	private void sendPlayerNum(byte[] msg){
 		try {
-			System.out.println(Arrays.toString(msg));
 			usersOutput.get(myPlayerNum).write(msg);
 			usersOutput.get(myPlayerNum).flush();
 		} catch (IOException e) {

@@ -45,6 +45,12 @@ public final class MManagingMaps {
 		}
 		return ++roomNum;
 	}
+	public static HashMap<String,OutputStream> getOutputForAll(){
+		return usersOutput;
+	}
+	public static HashMap<String,String> getIds(){
+		return joinedPlayerIds;
+	}
 	public HashMap<Long, MWaitingRoom> getWaitingRooms(){
 		return waitingRooms;
 	}

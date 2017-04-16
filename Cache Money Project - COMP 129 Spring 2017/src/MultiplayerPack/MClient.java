@@ -159,7 +159,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.BUILD_HOUSE, new DoAction(){public void doAction(ArrayList<Object> result){doBuildHouse(result);}});
 		doActions.put(UnicodeForServer.GOT_OUT_OF_JAIL, new DoAction(){public void doAction(ArrayList<Object> result){doGotOutOfJail(result);}});
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,0);}});
-		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,1);}});
+		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, new DoAction(){public void doAction(ArrayList<Object> result){doIdUpdate(result);}});
 		doActions.put(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){initializeMainGameLobby(result,2);}});
 		doActions.put(UnicodeForServer.JOIN_ROOM_TO_CLIENT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result);}});
 		doActions.put(UnicodeForServer.SERVER_READY, new DoAction(){public void doAction(ArrayList<Object> result){doAlarmServerReady(result);}});
@@ -383,14 +383,33 @@ public class MClient {
 			gameScreen.updateInMainAreaRooms(result);
 		}
 	}
+	private void doIdUpdate(ArrayList<Object> result){
+		(new ForIdUpdating(result)).start();
+	}
+	class ForIdUpdating extends Thread{
+		private ArrayList<Object> result;
+		public ForIdUpdating(ArrayList<Object> result){
+			this.result = result;
+		}
+		public void run(){
+			initializeMainGameLobby(result,1);
+		}
+	}
 	private void doUpdateJoinedPlayer(ArrayList<Object> result){
 		gameScreen.updateWaitingArea(result);
 		
 	}
 	private void doUpdateJoinedPlayerMainGame(ArrayList<Object> result){
-		System.out.println("this should be called");
-		gameScreen.updateRoomStatus((Long)result.get(1), (Integer)result.get(2), (Boolean)result.get(3));
-		
+		(new ForUpdatingRooms(result)).start();
+	}
+	class ForUpdatingRooms extends Thread{
+		private ArrayList<Object> result;
+		public ForUpdatingRooms(ArrayList<Object> result){
+			this.result = result;
+		}
+		public void run(){
+			gameScreen.updateRoomStatus((Long)result.get(1), (Integer)result.get(2), (Boolean)result.get(3));
+		}
 	}
 	private void doAlarmServerReady(ArrayList<Object> result){
 		System.out.println("Server ready");
@@ -406,8 +425,17 @@ public class MClient {
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM_REST));
 	}
 	private void doUserEntersMainArea(ArrayList<Object> result){
-		initializeMainGameLobby(result,0);
-		initializeMainGameLobby(result,2);
+		(new ForEnteringLobby(result)).start();
+	}
+	class ForEnteringLobby extends Thread{
+		private ArrayList<Object> result;
+		public ForEnteringLobby(ArrayList<Object> result){
+			this.result = result;
+		}
+		public void run(){
+			initializeMainGameLobby(result,0);
+			initializeMainGameLobby(result,2);
+		}
 	}
 	private void doMortgageProperty(ArrayList<Object> result){
 		gameScreen.actionForMortgageProperty((String)result.get(1), (Integer)result.get(2));
