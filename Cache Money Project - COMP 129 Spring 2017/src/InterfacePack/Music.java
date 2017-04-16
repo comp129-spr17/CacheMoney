@@ -5,7 +5,8 @@ public enum Music {
 	music2,
 	music3,
 	music4,
-	music5;
+	music5, 
+	music6;
 	
 	public void playMusic(){
 		switch (this){
@@ -24,6 +25,8 @@ public enum Music {
 		case music5:
 			SoundAndMusicPlayer.getInstance().loopMusic("music", "music5", 6900);
 			return;
+		case music6:
+			SoundAndMusicPlayer.getInstance().loopMusic("music", "music6", 4500);
 		}
 	}
 	
