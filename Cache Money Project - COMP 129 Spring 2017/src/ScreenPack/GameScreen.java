@@ -70,7 +70,7 @@ public class GameScreen extends JFrame{
 	private JButton btnExit;
 	private SizeRelated sizeRelated;
 	private PropertyDisplay pDisplay;
-	private JButton giveJailFreeCard;
+	private JButton tradeButton;
 	private PlayingInfo pInfo;
 	private JDialog mortgageWindow;
 	private SqlRelated sqlRelated;
@@ -86,6 +86,7 @@ public class GameScreen extends JFrame{
 	private boolean isServerReady;
 	private JTextField mortgagePrice;
 	private JLabel priceDisplay;
+	private TradingPanel tradeP;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -146,7 +147,11 @@ public class GameScreen extends JFrame{
 	}
 	
 	private void initEverything(boolean isHost, boolean isSingle){
-		loadingProgress = 0;
+		
+		
+		
+		
+		
 		if (Property.isSQLEnabled){
 			sqlRelated = SqlRelated.getInstance();
 
@@ -161,6 +166,9 @@ public class GameScreen extends JFrame{
 		init(isHost);
 		//setGameScreenBackgroundColor();
 		
+		tradeP = new TradingPanel();
+		
+		
 		
 	}
 	
@@ -172,21 +180,21 @@ public class GameScreen extends JFrame{
 //		else
 //			addActionListenerForExit(isHost);
 	}
-	private void setGameScreenBackgroundColor() {
-		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
-		this.setBackground(boardBackgroundColor);
-	}
-	// TODO: need to find the way to send exit meesage to server when closing windows.
-	private void addActionListenerForExit(boolean isHost){
-		addWindowListener( new WindowAdapter() {
-			@Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-            	super.windowClosing(e);
-//            	exitForServer();
-            	
-            }
-        } );
-	}
+//	private void setGameScreenBackgroundColor() {
+//		Color boardBackgroundColor = new Color(0, 180, 20); // DARK GREEN
+//		this.setBackground(boardBackgroundColor);
+//	}
+//	// TODO: need to find the way to send exit meesage to server when closing windows.
+//	private void addActionListenerForExit(boolean isHost){
+//		addWindowListener( new WindowAdapter() {
+//			@Override
+//            public void windowClosing(java.awt.event.WindowEvent e) {
+//            	super.windowClosing(e);
+////            	exitForServer();
+//            	
+//            }
+//        } );
+//	}
 	public void exitForServer(){
 		System.out.println("Received request to disconnect.");
 		if(!pInfo.isSingle()){
@@ -300,21 +308,24 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseExited(MouseEvent e) {}
 		});
-		giveJailFreeCard.addMouseListener(new MouseListener()
+		tradeButton.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (pInfo.isSingle() == true)
-				{
-					players[pInfo.getMyPlayerNum()].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
-					mLabels.reinitializeMoneyLabels();
-					playerInfo.repaint();
-				}
-				else{
-					players[0].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
-					mLabels.reinitializeMoneyLabels();
-					playerInfo.repaint();
-				}
+				tradeP.openTradingWindow(players, pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
+				
+				// NO LONGER GET-OUT-OF-JAIL FREE BUTTON
+//				if (pInfo.isSingle() == true)
+//				{
+//					players[pInfo.getMyPlayerNum()].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
+//					mLabels.reinitializeMoneyLabels();
+//					playerInfo.repaint();
+//				}
+//				else{
+//					players[0].setJailFreeCard(1);			//NEED TO GET PLAYER VALUE
+//					mLabels.reinitializeMoneyLabels();
+//					playerInfo.repaint();
+//				}
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -340,6 +351,8 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
+				
 				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
 				if (selectMortgage.getItemCount() == 0)
 				{
@@ -528,7 +541,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(showInfo);
 		mainPanel.add(showMortgage);
 		mainPanel.add(boardPanel);
-		mainPanel.add(giveJailFreeCard);
+		mainPanel.add(tradeButton);
 		mainPanel.add(displayTestWindow);
 		mainPanel.add(showEndGameScreen);
 		
@@ -763,8 +776,8 @@ public class GameScreen extends JFrame{
 		showInfo.add(BorderLayout.NORTH, buttonLabel1);
 		showInfo.add(BorderLayout.SOUTH, buttonLabel2);
 		showInfo.setVisible(true);
-		giveJailFreeCard = new JButton("GIVE JAIL-FREE CARD");
-		giveJailFreeCard.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 25, 200, 50);
+		tradeButton = new JButton("Trade");
+		tradeButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 25, 200, 50);
 	}
 	public void addMortgageButton()
 	{
