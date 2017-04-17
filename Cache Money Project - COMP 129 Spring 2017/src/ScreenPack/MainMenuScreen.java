@@ -292,10 +292,8 @@ public class MainMenuScreen {
 					Sounds.buttonConfirm.playSound();
 					LoginDialog loginDialog = new LoginDialog(mainmenuframe);
 					loginDialog.setVisible(true);
-					if(playingInfo.isLoggedIn()){
-						disableEnableBtns(true);
-					}
-				}
+					disableEnableBtns(playingInfo.isLoggedIn());
+				}				
 			}
 		});
 		CreditsButton.addMouseListener(new MouseListener(){

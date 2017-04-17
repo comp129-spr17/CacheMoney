@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import InterfacePack.Sounds;
+import ScreenPack.MainMenuScreen;
 
 public class SignUpDialog extends JDialog {
 
@@ -174,16 +175,16 @@ public class SignUpDialog extends JDialog {
 		createUser.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (goodUsername() && goodPassword() && CredentialManager.createUser(getFirstName(),getLastName(),getUsername(), getPassword())) {
+				if (!badUsername() && goodPassword() && CredentialManager.createUser(getFirstName(),getLastName(),getUsername(), getPassword())) {
 					Sounds.buttonConfirm.playSound();
 					JOptionPane.showMessageDialog(SignUpDialog.this,
 							"Hi " + getUsername() + "! Your account has ben created!.",
 							"Account Creation",
 							JOptionPane.INFORMATION_MESSAGE);
-					CredentialManager.authenticate(getUsername(), getPassword());
+					/*CredentialManager.authenticate(getUsername(), getPassword());
 					SqlRelated.loginAndOutAction(getUsername(), true);
                     playingInfo.setLoggedInId(getUsername());
-                    playingInfo.setLoggedIn();
+                    playingInfo.setLoggedIn();*/
 					dispose();
 				} else {
 					Sounds.buttonCancel.playSound();
@@ -236,9 +237,8 @@ public class SignUpDialog extends JDialog {
 		return new String(pass.getPassword());
 	}
 
-	private boolean goodUsername(){
-		//TODO SQL to check that username already exists or not
-		return true;
+	private boolean badUsername(){
+		return SqlRelated.isIdExisting(getUsername());
 	}
 
 	private boolean goodPassword(){
