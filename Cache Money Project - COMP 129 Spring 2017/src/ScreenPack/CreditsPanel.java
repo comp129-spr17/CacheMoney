@@ -68,7 +68,7 @@ public class CreditsPanel extends JPanel {
 		String gtNamesColor = "white";
 		
 		creditsLabels[2].setText("<html>"
-				+ "<h" + gameTestersTitleStyle + "><span style='font-size:" + gameTestersFontSize + "px'><font color = '" + gameTestersTitleColor + "'>Game Testers:</color></span></h" + gameTestersTitleStyle + "><br />"
+				+ "<h" + gameTestersTitleStyle + "><span style='font-size:" + gameTestersFontSize + "px'><font color = '" + gameTestersTitleColor + "'>Contributions:</color></span></h" + gameTestersTitleStyle + "><br />"
 				+ "<span style='font-size:" + gtNamesFontSize + "px'><font color = '" + gtNamesColor + "'>"
 				+ "Chris Chao<br />"
 				+ "John Kim<br />"
@@ -76,6 +76,7 @@ public class CreditsPanel extends JPanel {
 				+ "Jamie Culilap<br />"
 				+ "Courtney Banh<br />"
 				+ "Lauren Wong<br />"
+				+ "Add names in CreditsPanel.java line 79. Follow format pls.<br />"
 				+ "</font></span></html>");
 		
 		
@@ -91,6 +92,7 @@ public class CreditsPanel extends JPanel {
 				+ "<span style='font-size:" + mNamesFontSize + "px'><font color = '" + mNamesColor + "'>"
 				+ "Yoshi's Island Athletic Theme<br />"
 				+ "Paper Mario Color Splash: Juggler<br />"
+				+ "Paper Mario Color Splash: Title Theme<br />"
 				+ "The Legend of Zelda - BotW: Kass's Theme<br />"
 				+ "Tetris: Theme A<br />"
 				+ "</font></span></html>");
@@ -112,6 +114,7 @@ public class CreditsPanel extends JPanel {
 				+ "Travis<br />"
 				+ "Gradle<br />"
 				+ "PHPMyAdmin<br />"
+				+ "Logic Pro X<br />"
 				+ "</font></span></html>");
 		
 		
