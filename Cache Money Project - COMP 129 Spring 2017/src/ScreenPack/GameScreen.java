@@ -726,7 +726,7 @@ public class GameScreen extends JFrame{
 		int playerNum = pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum();
 		for (int g = 0; g < players[playerNum].getOwnedProperties().size(); g++)
 		{
-			selectMortgage.addItem(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(g).getName());
+			selectMortgage.addItem(players[playerNum].getOwnedProperties().get(g).getName());
 		}
 	}
 	
