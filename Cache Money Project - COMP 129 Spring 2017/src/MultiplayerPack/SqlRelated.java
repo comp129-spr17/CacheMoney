@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public final class SqlRelated {
 	private static SqlRelated sqlRelated = new SqlRelated();
-	private static final String IP_ADDRESS = "www.cachemoney.com";
+	private static final String IP_ADDRESS = "10.15.17.88";
 	private static final String PORT_NUM = "3306";
 	private static final String DATABASE = "cachemoneydb";
 	private static final String USER_ID = "devinlim";
