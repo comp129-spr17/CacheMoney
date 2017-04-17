@@ -37,12 +37,14 @@ public class SignUpDialog extends JDialog {
 	private boolean uNameExists;
 	private JButton createUser;
 	private JButton cancel;
+	private PlayingInfo playingInfo;
 
 	public SignUpDialog()
 	{
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		inputUName = "";
+		playingInfo = PlayingInfo.getInstance();
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 
@@ -176,8 +178,12 @@ public class SignUpDialog extends JDialog {
 					Sounds.buttonConfirm.playSound();
 					JOptionPane.showMessageDialog(SignUpDialog.this,
 							"Hi " + getUsername() + "! Your account has ben created!.",
-							"Login",
+							"Account Creation",
 							JOptionPane.INFORMATION_MESSAGE);
+					CredentialManager.authenticate(getUsername(), getPassword());
+					SqlRelated.loginAndOutAction(getUsername(), true);
+                    playingInfo.setLoggedInId(getUsername());
+                    playingInfo.setLoggedIn();
 					dispose();
 				} else {
 					Sounds.buttonCancel.playSound();
