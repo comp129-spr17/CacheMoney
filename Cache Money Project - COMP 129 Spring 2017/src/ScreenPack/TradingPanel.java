@@ -124,15 +124,15 @@ public class TradingPanel extends JDialog{
 	}
 	
 	private void assignPlayerButtonIcons(int playerNum, Player[] players) {
-		listenerIterator = 0;
+		int h = 0;
 		setPlayerButtonsVisible(false);
-		for (int i = 0; i < 4; i++){
-			if (i != playerNum && !players[i].getAlreadyDead() && players[i].isOn()){
-				selectPlayerButton[listenerIterator].setIcon(playerIcons[i]);
-				selectPlayerButton[listenerIterator].setBorder(null);
-				selectPlayerButton[listenerIterator].setVisible(true);
-				selectPlayerButton[listenerIterator].addMouseListener(new MouseListener(){
-					private int playerToTradeWithNum = listenerIterator;
+		for (listenerIterator = 0; listenerIterator < 4; listenerIterator++){
+			if (listenerIterator != playerNum && !players[listenerIterator].getAlreadyDead() && players[listenerIterator].isOn()){
+				selectPlayerButton[h].setIcon(playerIcons[listenerIterator]);
+				selectPlayerButton[h].setBorder(null);
+				selectPlayerButton[h].setVisible(true);
+				selectPlayerButton[h].addMouseListener(new MouseListener(){
+					private final int playerToTradeWithNum = listenerIterator;
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						displayTradeOptions(playerToTradeWithNum);
@@ -147,7 +147,7 @@ public class TradingPanel extends JDialog{
 					public void mouseExited(MouseEvent e) {}
 				});
 				System.out.println("listenerIterator: " + listenerIterator);
-				listenerIterator += 1;
+				h += 1;
 			}
 		}
 	}
