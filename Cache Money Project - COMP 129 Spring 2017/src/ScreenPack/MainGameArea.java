@@ -32,6 +32,7 @@ public class MainGameArea extends JPanel{
 	private WaitingArea waitingArea;
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
+	private OnlineUsers onlineUsers;
 	public MainGameArea(final Container container) {
 		this.container = container;
 		init();
@@ -39,6 +40,7 @@ public class MainGameArea extends JPanel{
 	}
 	private void init(){
 		listOfOnlineUsers = new JComboBox<>();
+		onlineUsers = new OnlineUsers();
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
 		rooms = new HashMap<>();
@@ -49,13 +51,14 @@ public class MainGameArea extends JPanel{
 		waitingArea = new WaitingArea(container, this);
 		setLayout(gLayout);
 		setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));
-		
-		controlPanel.setLayout(new GridLayout(12, 2));
-		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));
+
+		controlPanel.setLayout(new GridLayout(9, 1));
+
+		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()));	
 		setBackground(Color.black);
 		controlPanel.add(createNewRoom);
 		controlPanel.add(jLabel);
-		controlPanel.add(listOfOnlineUsers);
+		controlPanel.add(onlineUsers.getPanel());
 	}
 	public WaitingArea getWaiting(){
 		return waitingArea;
@@ -71,93 +74,100 @@ public class MainGameArea extends JPanel{
 		container.add(new JSeparator(),BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.EAST);
 	}
-	
+
 	public void updatelist(ArrayList<Object> userList){
-		listOfOnlineUsers.removeAllItems();
+		//		listOfOnlineUsers.removeAllItems();
+		//		System.out.println("Update user lists : . size:" + userList.get(0));
+		//		for(int i=1; i<userList.size(); i++){
+		//			System.out.println((String)userList.get(i));
+		//			listOfOnlineUsers.addItem((String)userList.get(i));
+		//		}
+		onlineUsers.clearList();
 		System.out.println("Update user lists : . size:" + userList.get(0));
 		for(int i=1; i<userList.size(); i++){
 			System.out.println((String)userList.get(i));
-			listOfOnlineUsers.addItem((String)userList.get(i));
+			onlineUsers.addOnlineUser((String)userList.get(i));
 		}
+		onlineUsers.refresh();
 	}
 	private void addListener(){
 		createNewRoom.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				switchToWaiting();
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
-				
+
 			}
 		});
 	}
 	private void addListenerToRoom(JButton room, long roomNum){
 		room.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(room.isEnabled()){
 					switchToWaiting();
 					playingInfo.sendMessageToServer(mPack.packLong(UnicodeForServer.JOIN_ROOM, roomNum));
 				}
-				
-				
+
+
 			}
 		});
 	}
 	public void updateRooms(ArrayList<Object> list){
-		removeAll();
+		//		removeAll();
 		System.out.println("size"+list.size());
-		for(int i=1; i<list.size(); i++)
-			makeNewRoom((Long)list.get(i));
+
+		makeNewRoom((Long)list.get(1));
 
 		repaint();
 		revalidate();
@@ -181,7 +191,7 @@ public class MainGameArea extends JPanel{
 			rooms.get(roomNum).setEnabled(numPpl < 4);
 			setRoomText(rooms.get(roomNum), roomNum, numPpl);
 		}
-		
+
 	}
 	private void setRoomText(JButton b, long roomNum, int numPpl){
 		b.setText("Room : " + roomNum + "  " + numPpl+ "/4");

@@ -50,6 +50,7 @@ public final class UnicodeForServer {
 	public static final int WHEN_USER_ENTERS_GAME_AREA = 44;
 	public static final int PROPERTY_PURCHASE = 45;
 	public static final int MORTGAGE_PROPERTY = 46;
+	public static final int UPDATE_ROOM_STAT = 47;
 	private UnicodeForServer(){
 		
 	}
