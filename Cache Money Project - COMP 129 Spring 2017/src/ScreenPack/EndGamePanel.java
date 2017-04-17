@@ -6,14 +6,20 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.Player;
+
 
 public class EndGamePanel extends JPanel {
 	private boolean playerWon;
+	private Player[] players;
+	private int currentPlayerNum;
 	
 	private JLabel[] playerNames;
 	private JLabel PlayerWinStatus;
-	public EndGamePanel(boolean winStatus) {
+	public EndGamePanel(boolean winStatus, Player[] players, int currentPlayerNum) {
 		playerWon = winStatus;
+		this.players = players;
+		this.currentPlayerNum = currentPlayerNum;
 		createLabels();
 		displayLabels();
 		displayData();
