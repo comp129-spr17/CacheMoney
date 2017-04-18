@@ -116,11 +116,11 @@ public class SignUpDialog extends JDialog {
 				System.out.println(inputUName + " " + uNameExists + " " + inputUName.isEmpty());
 				
 				if(uNameExists || inputUName.isEmpty()){
-					uNameOK.setText(":(");
+					//uNameOK.setText(":(");
 					createUser.setEnabled(false);
 				}
 				else{
-					uNameOK.setText(":)");
+					//uNameOK.setText(":)");
 					createUser.setEnabled(true);
 				}
 			}
