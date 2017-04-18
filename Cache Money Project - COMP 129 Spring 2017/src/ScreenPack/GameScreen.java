@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 import GamePack.*;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
+import InterfacePack.SoundAndMusicPlayer;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.MClient;
@@ -137,6 +138,7 @@ public class GameScreen extends JFrame{
 		this.setVisible(true);
 		if (pInfo.isSingle()){
 			Sounds.waitingRoomJoin.playSound();
+			Music.music6.playMusic();
 		}
 		mainPanel.add(muteSounds);
 		mainPanel.add(muteMusic);
