@@ -17,11 +17,12 @@ public class CreditsScreen extends JFrame {
 	
 	public CreditsScreen()
 	{
+		this.setTitle("Credits");
 		SizeRelated sizeRelated = SizeRelated.getInstance();
 		this.setBounds(sizeRelated.getScreenW() / 2 - WIDTH / 2, sizeRelated.getScreenH() / 2 - HEIGHT / 2, WIDTH, HEIGHT);
 		setResizable(false);
 		init();
-		setVisible(true);
+		setVisible(false);
 	}
 	
 	private void init(){
@@ -31,6 +32,7 @@ public class CreditsScreen extends JFrame {
 		//mainPanel.add(backB);
 		iPanel = new CreditsPanel();
 		mainPanel.add(iPanel);
+		
 	}
 	
 	

@@ -47,6 +47,8 @@ public class MainMenuScreen {
 	private JLabel backgroundpic;
 	private JButton loginBtn;
 	private PlayingInfo playingInfo;
+	private CreditsScreen creditsScreen;
+	
 
 	public MainMenuScreen(){
 		
@@ -88,6 +90,7 @@ public class MainMenuScreen {
 		MiniGamesButton = new JButton("Play Minigames");
 		cmbNumP = new JComboBox(numPlayer);
 		cmbNumP.setSelectedIndex(0);
+		creditsScreen = new CreditsScreen();
 		messages = new Object[2];
 		messages[0] = "How many players would you like to play with:";
 		messages[1] = cmbNumP;
@@ -301,7 +304,7 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.quickDisplay.playSound();
-				new CreditsScreen();
+				creditsScreen.setVisible(true);
 			}
 
 			@Override

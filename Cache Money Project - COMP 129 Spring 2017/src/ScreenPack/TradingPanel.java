@@ -27,12 +27,14 @@ public class TradingPanel extends JDialog{
 	
 	private final int WIDTH = 700;
 	private final int HEIGHT = 500;
+	private final int NUM_LBLS_FOR_THIS = 2;
 	
 	private JLabel description;
 	private JButton[] selectPlayerButton;
 	private Icon[] playerIcons;
 	private JComboBox[] propertyComboBox;
 	private DefaultComboBoxModel<String> contentsPropertyComboBox;
+	private JLabel[] lblsForThis;
 	
 	private int listenerIterator;
 	private int currentPlayerNum;
@@ -54,6 +56,8 @@ public class TradingPanel extends JDialog{
 		selectPlayerButton = new JButton[3];
 		playerIcons = new Icon[4];
 		propertyComboBox = new JComboBox[2];
+		lblsForThis = new JLabel[NUM_LBLS_FOR_THIS];
+		initLblsForThis();
 		initPropertyComboBox();
 		initSelectPlayerButtonBounds();
 		initPlayerIcons();
@@ -80,6 +84,23 @@ public class TradingPanel extends JDialog{
 		}));
 	}
 
+	private void initLblsForThis() {
+		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++)
+		{
+			lblsForThis[i] = new JLabel();
+		}
+		lblsForThis[0].setText("Your Properties:");
+		lblsForThis[1].setText("Their Properties:");
+		lblsForThis[0].setBounds(70, 100, 80, 30);
+		lblsForThis[1].setBounds(420, 100, 80, 30);
+		
+		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++){
+			lblsForThis[i].setVisible(false);
+			add(lblsForThis[i]);
+		}
+		
+	}
+
 	private void initPropertyComboBox() {
 		propertyComboBox[0] = new JComboBox<String>(new DefaultComboBoxModel<String>());
 		propertyComboBox[1] = new JComboBox<String>(new DefaultComboBoxModel<String>());
@@ -90,8 +111,8 @@ public class TradingPanel extends JDialog{
 				System.out.println("DO SOMETHING HERE");
 			}
 		});
-		propertyComboBox[0].setBounds(150, 50, 200, 20);
-		propertyComboBox[1].setBounds(400, 50, 200, 20);
+		propertyComboBox[0].setBounds(50, 120, 200, 20);
+		propertyComboBox[1].setBounds(400, 120, 200, 20);
 		this.add(propertyComboBox[0]);
 		this.add(propertyComboBox[1]);
 		propertyComboBox[0].setVisible(false);
