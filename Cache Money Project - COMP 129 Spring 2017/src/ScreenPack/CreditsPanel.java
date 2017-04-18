@@ -68,7 +68,7 @@ public class CreditsPanel extends JPanel {
 		String gtNamesColor = "white";
 		
 		creditsLabels[2].setText("<html>"
-				+ "<h" + gameTestersTitleStyle + "><span style='font-size:" + gameTestersFontSize + "px'><font color = '" + gameTestersTitleColor + "'>Contributions:</color></span></h" + gameTestersTitleStyle + "><br />"
+				+ "<h" + gameTestersTitleStyle + "><span style='font-size:" + gameTestersFontSize + "px'><font color = '" + gameTestersTitleColor + "'>Helpers:</color></span></h" + gameTestersTitleStyle + "><br />"
 				+ "<span style='font-size:" + gtNamesFontSize + "px'><font color = '" + gtNamesColor + "'>"
 				+ "Chris Chao<br />"
 				+ "John Kim<br />"
@@ -76,7 +76,7 @@ public class CreditsPanel extends JPanel {
 				+ "Jamie Culilap<br />"
 				+ "Courtney Banh<br />"
 				+ "Lauren Wong<br />"
-				+ "Add names in CreditsPanel.java line 79. Follow format pls.<br />"
+				//+ "Add names in CreditsPanel.java line 79. Follow format pls.<br />"
 				+ "</font></span></html>");
 		
 		

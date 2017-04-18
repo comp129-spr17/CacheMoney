@@ -149,7 +149,7 @@ public class TradingPanel extends JDialog{
 	private void initConfirmButton() {
 		for (int i = 0; i < 2; i++){
 			confirmTradeButton[i] = new JButton();
-			confirmTradeButton[i].setBounds(150 + (300*i), 450, 200, 30);
+			confirmTradeButton[i].setBounds(150 + (300*i), 400, 200, 50);
 			confirmTradeButton[i].setVisible(false);
 			add(confirmTradeButton[i]);
 		}
@@ -287,7 +287,7 @@ public class TradingPanel extends JDialog{
 		if (!(moneyTradeField[TRADE_HOST].getText().equals("0") && moneyTradeField[TRADE_TARGET].getText().equals("0"))){
 			try{
 				boolean b = Integer.parseInt(moneyTradeField[TRADE_HOST].getText()) <= players[currentPlayerNum].getTotalMonies() && Integer.parseInt(moneyTradeField[TRADE_TARGET].getText()) <= players[tradePlayerNum].getTotalMonies();
-				b = b && Integer.parseInt(moneyTradeField[TRADE_HOST].getText()) > 0 && Integer.parseInt(moneyTradeField[TRADE_TARGET].getText()) > 0;
+				b = b && Integer.parseInt(moneyTradeField[TRADE_HOST].getText()) >= 0 && Integer.parseInt(moneyTradeField[TRADE_TARGET].getText()) >= 0;
 				return b;
 			}
 			catch (Exception e1){
