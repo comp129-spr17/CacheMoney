@@ -55,7 +55,7 @@ public class MainMenuScreen {
 		init();
 		createMenuWindow();
 		Sounds.register.playSound();
-		addMouseListen();
+		addMouseListen(this);
 
 
 	}
@@ -113,7 +113,7 @@ public class MainMenuScreen {
 		sizeRelated.setScreen_Width_Height((int)screenSize.getDisplayMode().getWidth(), (int)screenSize.getDisplayMode().getHeight());
 	}
 
-	private void addMouseListen(){
+	private void addMouseListen(final MainMenuScreen mainMenu){
 		SinglePButton.addMouseListener(new MouseListener() {
 
 			@Override
@@ -293,9 +293,10 @@ public class MainMenuScreen {
 			public void mouseClicked(MouseEvent e) {
 				if(loginBtn.isEnabled()){
 					Sounds.buttonConfirm.playSound();
-					LoginDialog loginDialog = new LoginDialog(mainmenuframe);
+					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
 					loginDialog.setVisible(true);
 					disableEnableBtns(playingInfo.isLoggedIn());
+					System.out.println("Hello kadri");
 				}				
 			}
 		});
@@ -322,7 +323,7 @@ public class MainMenuScreen {
 		});
 	}
 
-	private void disableEnableBtns(boolean isLoggedIn){
+	public void disableEnableBtns(boolean isLoggedIn){
 		if(isLoggedIn)
 			loginBtn.setText("Hi " + playingInfo.getLoggedInId() + "!");
 		loginBtn.setEnabled(!isLoggedIn);

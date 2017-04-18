@@ -39,9 +39,10 @@ public class SignUpDialog extends JDialog {
 	private JButton createUser;
 	private JButton cancel;
 	private PlayingInfo playingInfo;
-
-	public SignUpDialog()
+	private MainMenuScreen mainMenu;
+	public SignUpDialog(MainMenuScreen mainMenu)
 	{
+		this.mainMenu = mainMenu;
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		inputUName = "";
@@ -181,10 +182,11 @@ public class SignUpDialog extends JDialog {
 							"Hi " + getUsername() + "! Your account has ben created!.",
 							"Account Creation",
 							JOptionPane.INFORMATION_MESSAGE);
-					/*CredentialManager.authenticate(getUsername(), getPassword());
+//					CredentialManager.authenticate(getUsername(), getPassword());
 					SqlRelated.loginAndOutAction(getUsername(), true);
                     playingInfo.setLoggedInId(getUsername());
-                    playingInfo.setLoggedIn();*/
+                    playingInfo.setLoggedIn();
+                    mainMenu.disableEnableBtns(true);
 					dispose();
 				} else {
 					Sounds.buttonCancel.playSound();

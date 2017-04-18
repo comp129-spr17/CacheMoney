@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import InterfacePack.Sounds;
+import ScreenPack.MainMenuScreen;
 
 public class LoginDialog extends JDialog {
 
@@ -30,10 +31,11 @@ public class LoginDialog extends JDialog {
 	private JButton createAccount;
 	private boolean succeeded;
 	private PlayingInfo playingInfo;
+	private MainMenuScreen mainMenu;
 
-
-	public LoginDialog(Frame parent){
+	public LoginDialog(Frame parent, MainMenuScreen mainMenu){
 		super(parent,"Login",true);
+		this.mainMenu = mainMenu;
 		JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         playingInfo = PlayingInfo.getInstance();
@@ -122,7 +124,7 @@ public class LoginDialog extends JDialog {
  
             public void actionPerformed(ActionEvent e) {
             	Sounds.buttonPress.playSound();
-                SignUpDialog SUD = new SignUpDialog();
+                SignUpDialog SUD = new SignUpDialog(mainMenu);
                 dispose();
                 SUD.setVisible(true);
             }
