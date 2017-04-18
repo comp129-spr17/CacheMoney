@@ -26,7 +26,7 @@ public enum Music {
 			SoundAndMusicPlayer.getInstance().loopMusic("music", "music5", 6900);
 			return;
 		case music6:
-			SoundAndMusicPlayer.getInstance().loopMusic("music", "music6", 4500);
+			SoundAndMusicPlayer.getInstance().loopMusic("music", "music6", 0);
 		}
 	}
 	
