@@ -28,6 +28,7 @@ public final class Player {
 	private boolean isOn;
 	private int win;
 	private int lose;
+	private String tradeRequest;
 	private static final Player GlobalPlayer0 = new Player(0);
 	private static final Player GlobalPlayer1 = new Player(1);
 	private static final Player GlobalPlayer2 = new Player(2);
@@ -218,6 +219,27 @@ public final class Player {
 		}
 		//Subtract the cost of the property using the pay function right below.
 	}
+	
+	public void removeProperty(Property p){
+		ownedProperties.remove(p);
+		if (p.getPropertyFamilyIdentifier() == 9){ // if the property belongs to the railroad family
+			railroadPurchaseCase();
+		}
+		else if (p.getPropertyFamilyIdentifier() == 10){
+			utilityPurchaseCase();
+		}
+	}
+	
+	public void addProperty(Property p){
+		ownedProperties.add(p);
+		if (p.getPropertyFamilyIdentifier() == 9){ // if the property belongs to the railroad family
+			railroadPurchaseCase();
+		}
+		else if (p.getPropertyFamilyIdentifier() == 10){
+			utilityPurchaseCase();
+		}
+	}
+	
 	
 	private void railroadPurchaseCase() {
 		int numRailroadsOwned = 0;
@@ -499,5 +521,11 @@ public final class Player {
 	
 	public int getNumPropertiesOwned(){
 		return ownedProperties.size();
+	}
+	public String getTradeRequest() {
+		return tradeRequest;
+	}
+	public void setTradeRequest(String tradeRequest) {
+		this.tradeRequest = tradeRequest;
 	}
 }

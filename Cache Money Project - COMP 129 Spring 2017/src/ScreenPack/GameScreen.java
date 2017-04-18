@@ -164,7 +164,7 @@ public class GameScreen extends JFrame{
 		init(isHost);
 		//setGameScreenBackgroundColor();
 		
-		tradeP = new TradingPanel();
+		
 		
 		
 		
@@ -473,7 +473,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(pInfoDisplay);
 		repaint();
 		
-		
+		tradeP = new TradingPanel();
 		pDisplay.setVisible(false);
 		pInfoDisplay.setVisible(false);
 		
@@ -526,7 +526,7 @@ public class GameScreen extends JFrame{
 		tWindow = TestingWindow.getInstance();
 		tWindow.initLabels(testInfo, insets, players, totalPlayers, mLabels);
 		loadingProgress = 10;
-		dicePanel = new DicePanel(players, mLabels);
+		dicePanel = new DicePanel(players, mLabels, tradeP);
 		loadingProgress = 20;
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);

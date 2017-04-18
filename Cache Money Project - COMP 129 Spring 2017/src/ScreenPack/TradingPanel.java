@@ -1,8 +1,12 @@
 package ScreenPack;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -15,31 +19,47 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.Property;
+import GamePack.PropertySpace;
 
 @SuppressWarnings("serial")
 public class TradingPanel extends JDialog{
 	
-	
+	private final int TRADE_HOST = 0;
+	private final int TRADE_TARGET = 1;
+	private final int YES = 1;
+	private final int NO = 0;
 	private final int WIDTH = 700;
 	private final int HEIGHT = 500;
-	private final int NUM_LBLS_FOR_THIS = 2;
+	private final int NUM_LBLS_FOR_THIS = 4;
 	
 	private JLabel description;
 	private JButton[] selectPlayerButton;
 	private Icon[] playerIcons;
-	private JComboBox[] propertyComboBox;
-	private DefaultComboBoxModel<String> contentsPropertyComboBox;
+	private JComboBox<String>[] propertyComboBox;
+	private JComboBox<String>[] propertyRemoveComboBox;
+	private ArrayList<String>[] propertiesToTrade;
+	
 	private JLabel[] lblsForThis;
+	private JLabel[] tradeConfirmDisplay;
+	private JTextField[] moneyTradeField;
+	private JButton okButton;
+	private JButton[] confirmTradeButton;
+	private JButton startOverButton;
+	private int requestedMoney;
+	private int offeredMoney;
+	private boolean isReceiver;
 	
 	private int listenerIterator;
 	private int currentPlayerNum;
 	private int tradePlayerNum;
 	private Player[] players;
+	HashMap<String, PropertySpace> propertyInfo;
 	
 	
 	public TradingPanel(){
@@ -52,13 +72,27 @@ public class TradingPanel extends JDialog{
 	
 	private void init(){
 		description = new JLabel();
-		description.setBounds(25, HEIGHT / 8, 300, 30);
+		description.setBounds(200, 10, 400, 30);
 		selectPlayerButton = new JButton[3];
 		playerIcons = new Icon[4];
 		propertyComboBox = new JComboBox[2];
+		propertyRemoveComboBox = new JComboBox[2];
 		lblsForThis = new JLabel[NUM_LBLS_FOR_THIS];
+		moneyTradeField = new JTextField[2];
+		okButton = new JButton();
+		propertiesToTrade = new ArrayList[2];
+		tradeConfirmDisplay = new JLabel[2];
+		confirmTradeButton = new JButton[2];
+		startOverButton = new JButton();
+		initStartOverButton();
+		initConfirmButton();
+		initTradeConfirmDisplay();
+		initPropertiesToTrade();
+		initOKButton();
+		initMoneyTradeField();
 		initLblsForThis();
 		initPropertyComboBox();
+		initPropertyRemoveComboBox();
 		initSelectPlayerButtonBounds();
 		initPlayerIcons();
 		addPlayerButtons();
@@ -84,15 +118,194 @@ public class TradingPanel extends JDialog{
 		}));
 	}
 
+	private void initStartOverButton() {
+		startOverButton.setText("Start Over");
+		startOverButton.setBounds(1, 1, 130, 30);
+		startOverButton.setVisible(false);
+		add(startOverButton);
+		startOverButton.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				setPlayerButtonsVisible(false);
+				setTradeInterfaceVisible(false);
+				setConfirmButtonsVisible(false);
+				setTradeConfirmDisplayVisible(false);
+				propertiesToTrade[TRADE_HOST].clear();
+				propertiesToTrade[TRADE_TARGET].clear();
+				startOverButton.setVisible(false);
+				openTradingWindow(players, currentPlayerNum);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+	}
+
+	private void initConfirmButton() {
+		for (int i = 0; i < 2; i++){
+			confirmTradeButton[i] = new JButton();
+			confirmTradeButton[i].setBounds(150 + (300*i), 450, 200, 30);
+			confirmTradeButton[i].setVisible(false);
+			add(confirmTradeButton[i]);
+		}
+		confirmTradeButton[YES].setText("Confirm");
+		confirmTradeButton[YES].addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (isReceiver){
+					commenceTrade();
+				}
+				else{
+					players[tradePlayerNum].setTradeRequest(packTradeRequest());
+				}
+				closeTradingWindow();
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		confirmTradeButton[NO].setText("Back");
+		confirmTradeButton[NO].addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				setTradeConfirmDisplayVisible(false);
+				setTradeInterfaceVisible(true);
+				setConfirmButtonsVisible(false);
+				description.setText("Configure trading options here.");
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+	}
+
+	
+
+	private void initTradeConfirmDisplay() {
+		for (int i = 0; i < 2; i++){
+			tradeConfirmDisplay[i] = new JLabel("");
+			tradeConfirmDisplay[i].setBounds(50 + (350*i), 80, 300, 300);
+			tradeConfirmDisplay[i].setHorizontalAlignment(JLabel.CENTER);
+			tradeConfirmDisplay[i].setVerticalAlignment(JLabel.TOP);
+			tradeConfirmDisplay[i].setVisible(false);
+			add(tradeConfirmDisplay[i]);
+		}
+		
+	}
+
+	private void initPropertiesToTrade() {
+		propertiesToTrade[TRADE_HOST] = new ArrayList<String>();
+		propertiesToTrade[TRADE_TARGET] = new ArrayList<String>();
+	}
+
+	private void initOKButton() {
+		okButton.setText("Send Trade Request");
+		okButton.setBounds(WIDTH / 2 - 200, (int) (HEIGHT / 1.5), 200, 50);
+		okButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (checkConditions()){
+					
+					setTradeInterfaceVisible(false);
+					description.setText("Are you sure you would like to send this trade request?");
+					offeredMoney = Integer.parseInt(moneyTradeField[TRADE_HOST].getText());
+					requestedMoney = Integer.parseInt(moneyTradeField[TRADE_TARGET].getText());
+					
+					displayTradeRequest();
+				}
+				else{
+					System.out.println("Invalid request.");
+				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+		});
+		okButton.setVisible(false);
+		add(okButton);
+	}
+
+	private void setTradeConfirmDisplayVisible(boolean visible) {
+		tradeConfirmDisplay[TRADE_HOST].setVisible(visible);
+		tradeConfirmDisplay[TRADE_TARGET].setVisible(visible);
+	}
+	
+	private void setConfirmButtonsVisible(boolean visible) {
+		confirmTradeButton[YES].setVisible(visible);
+		confirmTradeButton[NO].setVisible(visible);
+	}
+	
+	private void initMoneyTradeField() {
+		for (int i = 0; i < 2; i++){
+			JTextField j = new JTextField();
+			j.setVisible(false);
+			j.setBounds(50 + (i*350), 220, 200, 20);
+			moneyTradeField[i] = j;
+			add(moneyTradeField[i]);
+		}
+	}
+	
+	private boolean checkConditions(){
+		if (moneyTradeField[TRADE_HOST].getText().isEmpty()){
+			moneyTradeField[TRADE_HOST].setText("0");
+		}
+		if (moneyTradeField[TRADE_TARGET].getText().isEmpty()){
+			moneyTradeField[TRADE_TARGET].setText("0");
+		}
+		if (!(moneyTradeField[TRADE_HOST].getText().equals("0") && moneyTradeField[TRADE_TARGET].getText().equals("0"))){
+			try{
+				boolean b = Integer.parseInt(moneyTradeField[TRADE_HOST].getText()) <= players[currentPlayerNum].getTotalMonies() && Integer.parseInt(moneyTradeField[TRADE_TARGET].getText()) <= players[tradePlayerNum].getTotalMonies();
+				return b;
+			}
+			catch (Exception e1){
+				return false;
+			}
+		}
+		else{
+			return !(propertiesToTrade[TRADE_HOST].isEmpty() && propertiesToTrade[TRADE_TARGET].isEmpty());
+		}
+	}
+	
+
 	private void initLblsForThis() {
 		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++)
 		{
 			lblsForThis[i] = new JLabel();
 		}
-		lblsForThis[0].setText("Your Properties:");
-		lblsForThis[1].setText("Their Properties:");
-		lblsForThis[0].setBounds(70, 100, 80, 30);
-		lblsForThis[1].setBounds(420, 100, 80, 30);
+		lblsForThis[0].setText("Trade Your Properties:");
+		lblsForThis[1].setText("Trade Their Properties:");
+		lblsForThis[2].setText("Trade Your Money:");
+		lblsForThis[3].setText("Trade Their Money:");
+		lblsForThis[0].setBounds(70, 90, 200, 30);
+		lblsForThis[1].setBounds(420, 90, 200, 30);
+		lblsForThis[2].setBounds(70, 190, 200, 30);
+		lblsForThis[3].setBounds(420, 190, 200, 30);
 		
 		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++){
 			lblsForThis[i].setVisible(false);
@@ -102,28 +315,97 @@ public class TradingPanel extends JDialog{
 	}
 
 	private void initPropertyComboBox() {
-		propertyComboBox[0] = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		propertyComboBox[1] = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		
-		propertyComboBox[0].addActionListener(new ActionListener(){
+		propertyComboBox[TRADE_HOST] = new JComboBox<String>(new DefaultComboBoxModel<String>());
+		propertyComboBox[TRADE_TARGET] = new JComboBox<String>(new DefaultComboBoxModel<String>());
+		propertyComboBox[TRADE_HOST].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("DO SOMETHING HERE");
+				if (propertyComboBox[TRADE_HOST].getItemCount() > 1){
+					String selected = (String) propertyComboBox[TRADE_HOST].getSelectedItem();
+					if (!selected.equals("Add...") && !propertiesToTrade[TRADE_HOST].contains(selected)){
+						System.out.println("Added to propertiesToTrade[TRADE_HOST]: " + selected);
+						propertiesToTrade[TRADE_HOST].add(selected);
+						propertyRemoveComboBox[TRADE_HOST].addItem(selected);
+						propertyComboBox[TRADE_HOST].removeItem(selected);
+					}
+					
+				}
+				
 			}
 		});
-		propertyComboBox[0].setBounds(50, 120, 200, 20);
-		propertyComboBox[1].setBounds(400, 120, 200, 20);
-		this.add(propertyComboBox[0]);
-		this.add(propertyComboBox[1]);
-		propertyComboBox[0].setVisible(false);
-		propertyComboBox[1].setVisible(false);
+		propertyComboBox[TRADE_TARGET].addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (propertyComboBox[TRADE_TARGET].getItemCount() > 1){
+					String selected = (String) propertyComboBox[TRADE_TARGET].getSelectedItem();
+					if (!selected.equals("Add...") && !propertiesToTrade[TRADE_TARGET].contains(selected)){
+						System.out.println("Added to propertiesToTrade[TRADE_TARGET]: " + selected);
+						propertiesToTrade[TRADE_TARGET].add(selected);
+						propertyRemoveComboBox[TRADE_TARGET].addItem(selected);
+						propertyComboBox[TRADE_TARGET].removeItem(selected);
+					}
+					
+				}
+			}
+			
+		});
+		propertyComboBox[TRADE_HOST].setBounds(50, 120, 200, 20);
+		propertyComboBox[TRADE_TARGET].setBounds(400, 120, 200, 20);
+		this.add(propertyComboBox[TRADE_HOST]);
+		this.add(propertyComboBox[TRADE_TARGET]);
+		propertyComboBox[TRADE_HOST].setVisible(false);
+		propertyComboBox[TRADE_TARGET].setVisible(false);
 	}
 
-	@SuppressWarnings("unchecked")
+	private void initPropertyRemoveComboBox() {
+		propertyRemoveComboBox[TRADE_HOST] = new JComboBox<String>(new DefaultComboBoxModel<String>());
+		propertyRemoveComboBox[TRADE_TARGET] = new JComboBox<String>(new DefaultComboBoxModel<String>());
+		propertyRemoveComboBox[TRADE_HOST].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (propertyRemoveComboBox[TRADE_HOST].getItemCount() > 1){
+					String selected = (String) propertyRemoveComboBox[TRADE_HOST].getSelectedItem();
+					if (!selected.equals("Remove...") && propertiesToTrade[TRADE_HOST].contains(selected)){
+						System.out.println("Removed from propertiesToTrade[TRADE_HOST]: " + selected);
+						propertiesToTrade[TRADE_HOST].remove(selected);
+						propertyComboBox[TRADE_HOST].addItem(selected);
+						propertyRemoveComboBox[TRADE_HOST].removeItem(selected);
+					}
+				}
+				
+			}
+		});
+		propertyRemoveComboBox[TRADE_TARGET].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (propertyRemoveComboBox[TRADE_TARGET].getItemCount() > 1){
+					String selected = (String) propertyRemoveComboBox[TRADE_TARGET].getSelectedItem();
+					if (!selected.equals("Remove...") && propertiesToTrade[TRADE_TARGET].contains(selected)){
+						System.out.println("Removed from propertiesToTrade[TRADE_TARGET]: " + selected);
+						propertiesToTrade[TRADE_TARGET].remove(selected);
+						propertyComboBox[TRADE_TARGET].addItem(selected);
+						propertyRemoveComboBox[TRADE_TARGET].removeItem(selected);
+					}
+				}
+			}
+			
+		});
+		propertyRemoveComboBox[TRADE_HOST].setBounds(50, 150, 200, 20);
+		propertyRemoveComboBox[TRADE_TARGET].setBounds(400, 150, 200, 20);
+		this.add(propertyRemoveComboBox[TRADE_HOST]);
+		this.add(propertyRemoveComboBox[TRADE_TARGET]);
+		propertyRemoveComboBox[TRADE_HOST].setVisible(false);
+		propertyRemoveComboBox[TRADE_TARGET].setVisible(false);
+	}
+	
+	
 	private void setupPlayerPropertyComboBox(int playerIndex, Player[] players, int playerNum){
 		List<Property> properties = players[playerIndex].getOwnedProperties();
+		propertyRemoveComboBox[playerNum].removeAllItems();
+		propertyRemoveComboBox[playerNum].addItem("Remove...");
 		propertyComboBox[playerNum].removeAllItems();
-		propertyComboBox[playerNum].addItem("None");
+		propertyComboBox[playerNum].addItem("Add...");
 		for (int i = 0; i < properties.size(); i++){
 			propertyComboBox[playerNum].addItem(properties.get(i).getName());
 		}
@@ -140,7 +422,7 @@ public class TradingPanel extends JDialog{
 	private void initSelectPlayerButtonBounds() {
 		for (int i = 0; i < 3; i++){
 			selectPlayerButton[i] = new JButton();
-			selectPlayerButton[i].setBounds(50 + (i*100), 150, 50, 50);
+			selectPlayerButton[i].setBounds(50 + (i*120), 150, 50, 50);
 		}
 	}
 	
@@ -167,7 +449,7 @@ public class TradingPanel extends JDialog{
 					@Override
 					public void mouseExited(MouseEvent e) {}
 				});
-				System.out.println("listenerIterator: " + listenerIterator);
+//				System.out.println("listenerIterator: " + listenerIterator);
 				h += 1;
 			}
 		}
@@ -180,15 +462,31 @@ public class TradingPanel extends JDialog{
 	}
 	
 	public void openTradingWindow(Player[] players, int playerNum){
+		setPlayerButtonsVisible(false);
+		startOverButton.setVisible(false);
+		setTradeInterfaceVisible(false);
+		setConfirmButtonsVisible(false);
+		setTradeConfirmDisplayVisible(false);
 		this.players = players;
 		this.currentPlayerNum = playerNum;
-		
-		
-		description.setText("Select a player you would like to trade with.");
-		assignPlayerButtonIcons(playerNum, players);
+		isReceiver = false;
+			description.setText("Select a player you would like to trade with.");
+			assignPlayerButtonIcons(playerNum, players);
 		this.setVisible(true);
 	}
 	
+	public void openTradingWindow(Player[] players, String tradeRequest, HashMap<String, PropertySpace> propertyInfo){
+		isReceiver = true;
+		this.propertyInfo = propertyInfo;
+		unpackTradeRequest(tradeRequest);
+		displayTradeRequest();
+		this.setVisible(true);
+		description.setText("Would you like to accept this trade offer from player " + (currentPlayerNum + 1) + "?");
+		players[tradePlayerNum].setTradeRequest(null);
+	}
+	
+	
+
 	private void setPlayerButtonsVisible(boolean visible){
 		for (JButton button : selectPlayerButton){
 			button.setVisible(visible);
@@ -197,26 +495,143 @@ public class TradingPanel extends JDialog{
 	
 	private void displayTradeOptions(int playerToTradeWith){
 		this.tradePlayerNum = playerToTradeWith;
-		System.out.println("currentPlayerNum: " + currentPlayerNum);
-		System.out.println("tradePlayerNum: " + tradePlayerNum);
+//		System.out.println("currentPlayerNum: " + currentPlayerNum);
+//		System.out.println("tradePlayerNum: " + tradePlayerNum);
+		propertiesToTrade[TRADE_HOST].clear();
+		propertiesToTrade[TRADE_TARGET].clear();
 		setPlayerButtonsVisible(false);
 		description.setText("Configure trading options here.");
 		setupPlayerPropertyComboBox(currentPlayerNum, players, 0);
 		setupPlayerPropertyComboBox(tradePlayerNum, players, 1);
-		propertyComboBox[0].setVisible(true);
-		propertyComboBox[1].setVisible(true);
+		moneyTradeField[TRADE_HOST].setText("0");
+		moneyTradeField[TRADE_TARGET].setText("0");
+		startOverButton.setVisible(true);
+		setTradeInterfaceVisible(true);
 		
-		
-		
+	}
+
+	private void setPropertyComboBoxVisible(boolean visible) {
+		propertyComboBox[TRADE_HOST].setVisible(visible);
+		propertyComboBox[TRADE_TARGET].setVisible(visible);
+		propertyRemoveComboBox[TRADE_HOST].setVisible(visible);
+		propertyRemoveComboBox[TRADE_TARGET].setVisible(visible);
+	}
+	
+	private void setMoneyTradeFieldVisible(boolean visible) {
+		moneyTradeField[TRADE_HOST].setVisible(visible);
+		moneyTradeField[TRADE_TARGET].setVisible(visible);
+	}
+
+	private void setLblsForThisVisible(boolean visible){
+		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++){
+			lblsForThis[i].setVisible(visible);
+		}
+	}
+	
+	
+	private void setTradeInterfaceVisible(boolean visible){
+		setLblsForThisVisible(visible);
+		okButton.setVisible(visible);
+		setMoneyTradeFieldVisible(visible);
+		setPropertyComboBoxVisible(visible);
+	}
+	
+	public void closeTradingWindow(){
+		setPlayerButtonsVisible(false);
+		startOverButton.setVisible(false);
+		setTradeInterfaceVisible(false);
+		setConfirmButtonsVisible(false);
+		setTradeConfirmDisplayVisible(false);
+		propertiesToTrade[TRADE_HOST].clear();
+		propertiesToTrade[TRADE_TARGET].clear();
+		setVisible(false);
+	}
+	
+	private String packTradeRequest(){
+		String offeredProperties = "";
+		String requestedProperties = "";
+		for (int i = 0; i < propertiesToTrade[TRADE_HOST].size(); i++){
+			offeredProperties += propertiesToTrade[TRADE_HOST].get(i) + "\n";
+		}
+		for (int i = 0; i < propertiesToTrade[TRADE_TARGET].size(); i++){
+			requestedProperties += propertiesToTrade[TRADE_TARGET].get(i) + "\n";
+		}
+		return  + currentPlayerNum + "\n" 	// trade host
+				+ offeredMoney + "\n" // money offered
+				+ offeredProperties	// offered properties
+				+ tradePlayerNum + "\n"	// trade target
+				+ requestedMoney + "\n" // money requesting
+				+ requestedProperties// requested properties
+				;
+	}
+	
+	private void unpackTradeRequest(String tradeRequest) {
+		String[] chunk = tradeRequest.split("\n");
+		int i = 0;
+		currentPlayerNum = Integer.parseInt(chunk[i]); i += 1;
+		offeredMoney = Integer.parseInt(chunk[i]); i += 1;
+		while (true){
+			try{
+				tradePlayerNum = Integer.parseInt(chunk[i]);
+				i += 1;
+				break;
+			}
+			catch (Exception e2){
+				propertiesToTrade[TRADE_HOST].add(chunk[i]); i += 1;
+			}
+		}
+		requestedMoney = Integer.parseInt(chunk[i]); i += 1;
+		while (i < chunk.length){
+			propertiesToTrade[TRADE_TARGET].add(chunk[i]); i += 1;
+		}
 	}
 	
 	
 	
+	private void displayTradeRequest() {
+		String propertiesToDisplay = "";
+		for (int i = 0; i < propertiesToTrade[TRADE_HOST].size(); i++){
+			propertiesToDisplay += propertiesToTrade[TRADE_HOST].get(i) + "<br />";
+		}
+		tradeConfirmDisplay[TRADE_HOST].setText("<html>"
+				+ "Offering:<br />"
+				+ (offeredMoney == 0 ? "" : "$" + offeredMoney + "<br />")
+				+ propertiesToDisplay
+				+ "</html>");
+		
+		propertiesToDisplay = "";
+		for (int i = 0; i < propertiesToTrade[TRADE_TARGET].size(); i++){
+			propertiesToDisplay += propertiesToTrade[TRADE_TARGET].get(i) + "<br />";
+		}
+		tradeConfirmDisplay[TRADE_TARGET].setText("<html>"
+				+ "Requesting:<br />"
+				+ (requestedMoney == 0 ? "" : "$" + requestedMoney + "<br />")
+				+ propertiesToDisplay
+				+ "</html>");
+		setTradeConfirmDisplayVisible(true);
+		setConfirmButtonsVisible(true);
+	}
 	
-	private void closeTradingWindow(){
-		setPlayerButtonsVisible(false);
-		propertyComboBox[0].setVisible(false);
-		propertyComboBox[1].setVisible(false);
+	protected void commenceTrade() {
+		System.out.println("COMMENCING TRADE!!");
+		players[currentPlayerNum].pay(offeredMoney);
+		players[currentPlayerNum].earnMonies(requestedMoney);
+		players[tradePlayerNum].pay(requestedMoney);
+		players[tradePlayerNum].earnMonies(offeredMoney);
+		
+		for (String s : propertiesToTrade[TRADE_TARGET]){
+			Property tradedProperty = propertyInfo.get(s).getPropertyInfo();
+			tradedProperty.setOwner(currentPlayerNum);
+			players[currentPlayerNum].addProperty(tradedProperty);
+			players[tradePlayerNum].removeProperty(tradedProperty);
+		}
+		for (String s : propertiesToTrade[TRADE_HOST]){
+			Property tradedProperty = propertyInfo.get(s).getPropertyInfo();
+			tradedProperty.setOwner(tradePlayerNum);
+			players[tradePlayerNum].addProperty(tradedProperty);
+			players[currentPlayerNum].removeProperty(tradedProperty);
+		}
+		closeTradingWindow();
 		
 	}
 	

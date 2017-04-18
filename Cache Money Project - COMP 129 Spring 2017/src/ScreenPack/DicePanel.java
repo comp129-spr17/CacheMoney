@@ -70,13 +70,15 @@ public class DicePanel extends JPanel{
 	private PlayingInfo pInfo;
 	private Icon spinningDiceIcon;
 	private Icon stationaryDiceIcon;
+	private TradingPanel tradeP;
 	
-	public DicePanel(Player[] player, MoneyLabels MLabels){
+	public DicePanel(Player[] player, MoneyLabels MLabels, TradingPanel tradeP){
 		players = player;
 		mLabel = MLabels;
 		numOfDoublesInRow = 0;
 		movementAllowed = true;
 		pInfo = PlayingInfo.getInstance();
+		this.tradeP = tradeP;
 		init();
 	}
 	private void init(){
@@ -405,6 +407,11 @@ public class DicePanel extends JPanel{
 				}
 			}
 		}
+		
+		if (players[current].getTradeRequest() != null){
+			tradeP.openTradingWindow(players, players[current].getTradeRequest(), bPanel.getMappings());
+		}
+		
 	}
 	private void setRollButtonVisible() {
 		rollButton.setIcon(spinningDiceIcon);
