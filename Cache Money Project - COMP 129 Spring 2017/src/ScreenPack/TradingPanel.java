@@ -178,10 +178,15 @@ public class TradingPanel extends JDialog{
 		confirmTradeButton[NO].addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				setTradeConfirmDisplayVisible(false);
-				setTradeInterfaceVisible(true);
-				setConfirmButtonsVisible(false);
-				description.setText("Configure trading options here.");
+				if (isReceiver){
+					closeTradingWindow();
+				}
+				else{
+					setTradeConfirmDisplayVisible(false);
+					setTradeInterfaceVisible(true);
+					setConfirmButtonsVisible(false);
+					description.setText("Configure trading options here.");
+				}
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {}
@@ -231,6 +236,7 @@ public class TradingPanel extends JDialog{
 				}
 				else{
 					System.out.println("Invalid request.");
+					description.setText("Invalid Request! Please ensure that all required fields are filled.");
 				}
 			}
 			
@@ -281,6 +287,7 @@ public class TradingPanel extends JDialog{
 		if (!(moneyTradeField[TRADE_HOST].getText().equals("0") && moneyTradeField[TRADE_TARGET].getText().equals("0"))){
 			try{
 				boolean b = Integer.parseInt(moneyTradeField[TRADE_HOST].getText()) <= players[currentPlayerNum].getTotalMonies() && Integer.parseInt(moneyTradeField[TRADE_TARGET].getText()) <= players[tradePlayerNum].getTotalMonies();
+				b = b && Integer.parseInt(moneyTradeField[TRADE_HOST].getText()) > 0 && Integer.parseInt(moneyTradeField[TRADE_TARGET].getText()) > 0;
 				return b;
 			}
 			catch (Exception e1){
@@ -366,7 +373,7 @@ public class TradingPanel extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if (propertyRemoveComboBox[TRADE_HOST].getItemCount() > 1){
 					String selected = (String) propertyRemoveComboBox[TRADE_HOST].getSelectedItem();
-					if (!selected.equals("Remove...") && propertiesToTrade[TRADE_HOST].contains(selected)){
+					if (!selected.equals("View Properties/Remove...") && propertiesToTrade[TRADE_HOST].contains(selected)){
 						System.out.println("Removed from propertiesToTrade[TRADE_HOST]: " + selected);
 						propertiesToTrade[TRADE_HOST].remove(selected);
 						propertyComboBox[TRADE_HOST].addItem(selected);
@@ -381,7 +388,7 @@ public class TradingPanel extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				if (propertyRemoveComboBox[TRADE_TARGET].getItemCount() > 1){
 					String selected = (String) propertyRemoveComboBox[TRADE_TARGET].getSelectedItem();
-					if (!selected.equals("Remove...") && propertiesToTrade[TRADE_TARGET].contains(selected)){
+					if (!selected.equals("View Properties/Remove...") && propertiesToTrade[TRADE_TARGET].contains(selected)){
 						System.out.println("Removed from propertiesToTrade[TRADE_TARGET]: " + selected);
 						propertiesToTrade[TRADE_TARGET].remove(selected);
 						propertyComboBox[TRADE_TARGET].addItem(selected);
@@ -391,8 +398,8 @@ public class TradingPanel extends JDialog{
 			}
 			
 		});
-		propertyRemoveComboBox[TRADE_HOST].setBounds(50, 150, 200, 20);
-		propertyRemoveComboBox[TRADE_TARGET].setBounds(400, 150, 200, 20);
+		propertyRemoveComboBox[TRADE_HOST].setBounds(50, 150, 210, 20);
+		propertyRemoveComboBox[TRADE_TARGET].setBounds(400, 150, 210, 20);
 		this.add(propertyRemoveComboBox[TRADE_HOST]);
 		this.add(propertyRemoveComboBox[TRADE_TARGET]);
 		propertyRemoveComboBox[TRADE_HOST].setVisible(false);
@@ -403,7 +410,7 @@ public class TradingPanel extends JDialog{
 	private void setupPlayerPropertyComboBox(int playerIndex, Player[] players, int playerNum){
 		List<Property> properties = players[playerIndex].getOwnedProperties();
 		propertyRemoveComboBox[playerNum].removeAllItems();
-		propertyRemoveComboBox[playerNum].addItem("Remove...");
+		propertyRemoveComboBox[playerNum].addItem("View Selected/Remove...");
 		propertyComboBox[playerNum].removeAllItems();
 		propertyComboBox[playerNum].addItem("Add...");
 		for (int i = 0; i < properties.size(); i++){

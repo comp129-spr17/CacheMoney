@@ -26,8 +26,8 @@ import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
-	private final int DEBUG_MOVEMENT_VALUE = 0; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final int DEBUG_MOVEMENT_VALUE = 6; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -335,7 +335,7 @@ public class DicePanel extends JPanel{
 					actionForDiceEnd();
 				else
 					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_TURN));
-				mLabel.reinitializeMoneyLabels();
+				
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {}
@@ -347,6 +347,17 @@ public class DicePanel extends JPanel{
 			public void mouseExited(MouseEvent e) {}
 		});
 	}
+	
+	class alwaysUpdateMoneyLabels extends Thread{
+		@Override
+		public void run(){
+			while (true){
+				mLabel.reinitializeMoneyLabels();
+				delayThread(100);
+			}
+		}
+	}
+	
 	public void actionForStart(){
 		if(pInfo.isSingle())
 			startGameButton.setVisible(false);
@@ -363,7 +374,7 @@ public class DicePanel extends JPanel{
 //		showPlayer[3].setVisible(true);
 		if(!pInfo.isSingle())
 			actionForPlayers();
-
+		(new alwaysUpdateMoneyLabels()).start();
 
 	}
 	// In board, run thread to determine which function to perform.
