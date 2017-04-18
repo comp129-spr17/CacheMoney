@@ -38,6 +38,7 @@ public class TradingPanel extends JDialog{
 	private final int HEIGHT = 500;
 	private final int NUM_LBLS_FOR_THIS = 4;
 	
+	
 	private JLabel description;
 	private JButton[] selectPlayerButton;
 	private Icon[] playerIcons;

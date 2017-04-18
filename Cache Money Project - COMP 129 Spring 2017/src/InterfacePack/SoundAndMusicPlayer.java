@@ -35,8 +35,8 @@ public class SoundAndMusicPlayer {
 	private boolean isSoundMuted;
 	private MediaPlayer musicOpeningPlayer;
 	private int musicCount;
-	
-	
+
+
 	private SoundAndMusicPlayer() {
 		JFXPanel fxPanel = new JFXPanel();
 		players = new ArrayList<MediaPlayer>();
@@ -46,14 +46,14 @@ public class SoundAndMusicPlayer {
 		musicCount = 0;
 		musicOpeningPlayer = findSound("music", "music1" + "_opening.wav");
 	}
-	
+
 	public static SoundAndMusicPlayer getInstance() {
 		if(somePlayer == null) {
 			somePlayer = new SoundAndMusicPlayer();
 		}
 		return somePlayer;
 	}
-	
+
 	public void playSound(String folder, String filename) {
 		if (isSoundMuted){
 			return;
@@ -67,14 +67,14 @@ public class SoundAndMusicPlayer {
 		}
 		mPlayer.play();
 	}
-	
+
 	private MediaPlayer createMediaPlayer(String folder, String filename) {
 		Media sound = new Media(buildResourcePath(folder, filename));
 		MediaPlayer mPlayer = new MediaPlayer(sound);
 		players.add(mPlayer);
 		return mPlayer;
 	}
-	
+
 	private String buildResourcePath(String folder, String filename) {
 		if(folder != null && folder.length() > 0) {
 			folder += "/";
@@ -91,7 +91,7 @@ public class SoundAndMusicPlayer {
 		}
 		return resource.toString();
 	}
-	
+
 	private MediaPlayer findSound(String folder, String filename) {
 		String path = buildResourcePath(folder, filename);
 		for(MediaPlayer mP : players) {
@@ -101,33 +101,35 @@ public class SoundAndMusicPlayer {
 		}
 		return null;
 	}
-	
+
 	public void stopSound(String folder, String filename) {
 		MediaPlayer mp = findSound(folder, filename);
 		if(mp != null) {
 			mp.stop();
 		}
 	}
-	
-	
+
+
 	public void loopMusic(String folder, String filename, int delayUntilLoopBegins){
-		
-		
-		musicOpeningPlayer = null;
-		musicOpeningPlayer = findSound(folder, filename + "_opening.wav");
-		if (isMusicMuted){
-			return;
-		}
+
 		Timer t = new Timer();
-		if(musicOpeningPlayer == null) {
-			musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.wav");
-		}
-		if(musicOpeningPlayer.getCycleDuration().lessThanOrEqualTo(musicOpeningPlayer.getCurrentTime())) {
-			musicOpeningPlayer.seek(Duration.ZERO);
-		}
-		musicOpeningPlayer.play();
-		isMusicPlaying = true;
 		
+		if(delayUntilLoopBegins > 0){
+			musicOpeningPlayer = null;
+			musicOpeningPlayer = findSound(folder, filename + "_opening.wav");
+			if (isMusicMuted){
+				return;
+			}
+			
+			if(musicOpeningPlayer == null) {
+				musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.wav");
+			}
+			if(musicOpeningPlayer.getCycleDuration().lessThanOrEqualTo(musicOpeningPlayer.getCurrentTime())) {
+				musicOpeningPlayer.seek(Duration.ZERO);
+			}
+			musicOpeningPlayer.play();
+			isMusicPlaying = true;
+		}
 		t.schedule(new TimerTask(){
 
 			@Override
@@ -138,7 +140,7 @@ public class SoundAndMusicPlayer {
 					playLoop(folder, filename);
 				}
 			}
-			
+
 			private void waitForOpeningToFinish(int delayUntilLoopBegins) {
 				try {
 					Thread.sleep(delayUntilLoopBegins);
@@ -153,15 +155,15 @@ public class SoundAndMusicPlayer {
 				Clip clip = null;
 				clip = initializeClip(inputStream);
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
-			    //musicOpeningPlayer.stop();
-			    stopWhenMusicStopsPlaying(clip);
-			    clip.drain();
-			    try {
+				//musicOpeningPlayer.stop();
+				stopWhenMusicStopsPlaying(clip);
+				clip.drain();
+				try {
 					inputStream.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			    t.cancel();
+				t.cancel();
 			}
 
 			private Clip initializeClip(AudioInputStream inputStream){
@@ -201,35 +203,35 @@ public class SoundAndMusicPlayer {
 				}
 				return inputStream;
 			}
-			
+
 		}, 0);
-		
+
 	}
-	
+
 	public void stopMusic(){
 		isMusicPlaying = false;
 		musicCount += 1;
 		musicOpeningPlayer.stop();
-		
+
 	}
-	
+
 	public void muteMusic(){
 		isMusicMuted = !isMusicMuted;
 		if (isMusicMuted){
 			stopMusic();
 		}
-		
+
 	}
-	
+
 	public void muteSounds(){
 		isSoundMuted = !isSoundMuted;
 	}
-	
+
 	public boolean isMusicMuted() {
 		return isMusicMuted;
 	}
-	
-	
+
+
 	public boolean isSoundMuted() {
 		return isSoundMuted;
 	}
