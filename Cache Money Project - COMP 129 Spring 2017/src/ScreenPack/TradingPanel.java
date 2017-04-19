@@ -145,10 +145,10 @@ public class TradingPanel extends JDialog{
 		trades.get(TRADE_HOST).setTheOtherScrollingPane(ownedProperties.get(TRADE_HOST));
 		trades.get(TRADE_TARGET).setTheOtherScrollingPane(ownedProperties.get(TRADE_TARGET));
 		
-		ownedProperties.get(TRADE_HOST).setScrollPaneBounds(0, 100, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		ownedProperties.get(TRADE_HOST).setScrollPaneBounds(0, 0, SCROLLING_WIDTH, SCROLLING_HEIGHT);
 		ownedProperties.get(TRADE_TARGET).setScrollPaneBounds(SCROLLING_WIDTH + 50, 0, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		trades.get(TRADE_HOST).setScrollPaneBounds(0, SCROLLING_HEIGHT + 150, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		trades.get(TRADE_TARGET).setScrollPaneBounds(SCROLLING_WIDTH + 50, SCROLLING_HEIGHT + 150, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_HOST).setScrollPaneBounds(0, SCROLLING_HEIGHT + 50, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_TARGET).setScrollPaneBounds(SCROLLING_WIDTH + 50, SCROLLING_HEIGHT + 50, SCROLLING_WIDTH, SCROLLING_HEIGHT);
 	}
 	
 	private void initStartOverButton() {
@@ -540,6 +540,10 @@ public class TradingPanel extends JDialog{
 	
 	private void displayTradeOptions(int playerToTradeWith){
 		this.tradePlayerNum = playerToTradeWith;
+		ownedProperties.get(TRADE_HOST).setScrollingPaneVisible(true);
+		ownedProperties.get(TRADE_TARGET).setScrollingPaneVisible(true);
+		trades.get(TRADE_HOST).setScrollingPaneVisible(true);
+		trades.get(TRADE_TARGET).setScrollingPaneVisible(true);
 //		System.out.println("currentPlayerNum: " + currentPlayerNum);
 //		System.out.println("tradePlayerNum: " + tradePlayerNum);
 		propertiesToTrade[TRADE_HOST].clear();

@@ -20,6 +20,7 @@ public abstract class ScrollingPane {
 		scrollPane = new JScrollPane();
 		scrollPane.add(panel);
 		scrollPane.setViewportView(panel);
+		scrollPane.setVisible(false);
 		
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -41,6 +42,10 @@ public abstract class ScrollingPane {
 	public void refresh(){
 		panel.revalidate();
 		panel.repaint();
+	}
+	
+	public void setScrollingPaneVisible(boolean visible){
+		scrollPane.setVisible(visible);
 	}
 	
 	protected abstract void clearList();

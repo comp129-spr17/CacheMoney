@@ -1,9 +1,9 @@
 package MultiplayerPack;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,7 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
 import InterfacePack.Sounds;
 import ScreenPack.MainMenuScreen;
@@ -48,44 +47,72 @@ public class SignUpDialog extends JDialog {
 		inputUName = "";
 		playingInfo = PlayingInfo.getInstance();
 
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-
+		constraints.gridwidth = 1;
+		constraints.anchor = constraints.EAST;
+		constraints.insets = new Insets(1,1,1,1);
+		
 		firstName = new JLabel("First Name: ");
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.gridwidth = 1;
 		panel.add(firstName, constraints);
-
-		fName = new JTextField(20);
-		constraints.gridx = 1;
-		constraints.gridy = 0;
-		constraints.gridwidth = 2;
-		panel.add(fName, constraints);
 
 		lastName = new JLabel("Last Name: ");
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		constraints.gridwidth = 1;
 		panel.add(lastName, constraints);
-
-		lName = new JTextField(20);
-		constraints.gridx = 1;
-		constraints.gridy = 1;
-		constraints.gridwidth = 2;
-		panel.add(lName, constraints);
 
 		uNameLabel = new JLabel("Username: ");
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		constraints.gridwidth = 1;
 		panel.add(uNameLabel, constraints);
+		
+		uNameOK = new JLabel("");
+		constraints.gridx = 3;
+		constraints.gridy = 2;
+		panel.add(uNameOK, constraints);
+
+		passLabel = new JLabel("Password: ");
+		constraints.gridx = 0;
+		constraints.gridy = 3;
+		panel.add(passLabel, constraints);
+
+		confirmPassLabel = new JLabel("Confirm Pass: ");
+		constraints.gridx = 0;
+		constraints.gridy = 4;
+		constraints.gridwidth = 1;
+		panel.add(confirmPassLabel, constraints);
+		
+		constraints.gridwidth = 2;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		
+		fName = new JTextField(20);
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		panel.add(fName, constraints);
+		
+		lName = new JTextField(20);
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		panel.add(lName, constraints);
 
 		uName = new JTextField(20);
 		constraints.gridx = 1;
 		constraints.gridy = 2;
-		constraints.gridwidth = 2;
 		panel.add(uName, constraints);
 
+		pass = new JPasswordField(20);
+		constraints.gridx = 1;
+		constraints.gridy = 3;
+		panel.add(pass, constraints);
+//		panel.setBorder(new LineBorder(Color.GRAY));
+
+		confirmPass = new JPasswordField(20);
+		constraints.gridx = 1;
+		constraints.gridy = 4;
+		panel.add(confirmPass, constraints);
+//		panel.setBorder(new LineBorder(Color.GRAY));
+		
+		
 		uName.addKeyListener(new KeyListener(){
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -116,11 +143,11 @@ public class SignUpDialog extends JDialog {
 				System.out.println(inputUName + " " + uNameExists + " " + inputUName.isEmpty());
 				
 				if(uNameExists || inputUName.isEmpty()){
-					//uNameOK.setText(":(");
+					uNameOK.setText(":(");
 					createUser.setEnabled(false);
 				}
 				else{
-					//uNameOK.setText(":)");
+					uNameOK.setText(":)");
 					createUser.setEnabled(true);
 				}
 			}
@@ -139,37 +166,9 @@ public class SignUpDialog extends JDialog {
 
 		});
 
-		uNameOK = new JLabel("");
-		constraints.gridx = 3;
-		constraints.gridy = 2;
-		constraints.gridwidth = 1;
-		panel.add(uNameOK, constraints);
-
-		passLabel = new JLabel("Password: ");
-		constraints.gridx = 0;
-		constraints.gridy = 3;
-		constraints.gridwidth = 1;
-		panel.add(passLabel, constraints);
-
-		pass = new JPasswordField(20);
-		constraints.gridx = 1;
-		constraints.gridy = 3;
-		constraints.gridwidth = 2;
-		panel.add(pass, constraints);
-		panel.setBorder(new LineBorder(Color.GRAY));
-
-		confirmPassLabel = new JLabel("Confirm Password: ");
-		constraints.gridx = 0;
-		constraints.gridy = 4;
-		constraints.gridwidth = 1;
-		panel.add(confirmPassLabel, constraints);
-
-		confirmPass = new JPasswordField(20);
-		constraints.gridx = 1;
-		constraints.gridy = 4;
-		constraints.gridwidth = 2;
-		panel.add(confirmPass, constraints);
-		panel.setBorder(new LineBorder(Color.GRAY));
+		
+		
+		
 
 		createUser = new JButton("Cache In!");
 		createUser.setEnabled(false);
