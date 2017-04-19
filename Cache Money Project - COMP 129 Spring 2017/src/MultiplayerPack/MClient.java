@@ -473,17 +473,12 @@ public class MClient {
 	class ForReceivingChatMsg extends Thread{
 		private ArrayList<Object> result;
 		private int area;
-		private String msg;
-		private String id;
 		public ForReceivingChatMsg(ArrayList<Object> result, int area){
 			this.result = result;
 			this.area = area;
 		}
 		public void run(){
-			id = (String)result.get(1);
-			msg = (String)result.get(2);
-			if(area == 0)
-				gameScreen.receiveMainChatMsg(id,msg);
+			gameScreen.receiveMainChatMsg((Integer)result.get(0), (String)result.get(1),(String)result.get(2));
 		}
 	}
 	private void setPlayer(int i){

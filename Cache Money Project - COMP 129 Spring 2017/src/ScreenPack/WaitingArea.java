@@ -52,7 +52,7 @@ public class WaitingArea extends JPanel{
 		lblCount.setForeground(Color.blue);
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
-		gLayout = new GridLayout(4, 1);
+		gLayout = new GridLayout(5, 1);
 		controlPanel = new JPanel();
 		for(int i=0; i<4; i++){
 			players.add(new JButton());
