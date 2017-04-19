@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -62,8 +63,8 @@ public class MainMenuScreen {
 
 	private void initializeLoadingScreen(){
 		if (loadingScreen == null){
-			GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
+			Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+			loadingScreen = new LoadingScreen((int)screenSize.getWidth() / 2, (int)screenSize.getHeight() / 2);
 		}
 	}
 
