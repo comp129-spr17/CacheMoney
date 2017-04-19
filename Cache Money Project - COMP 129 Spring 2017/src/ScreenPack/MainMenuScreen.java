@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -48,7 +49,7 @@ public class MainMenuScreen {
 	private JButton loginBtn;
 	private PlayingInfo playingInfo;
 	private CreditsScreen creditsScreen;
-	
+	private SizeRelated sizeRelated ;
 
 	public MainMenuScreen(){
 		
@@ -62,8 +63,8 @@ public class MainMenuScreen {
 
 	private void initializeLoadingScreen(){
 		if (loadingScreen == null){
-			GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			loadingScreen = new LoadingScreen(screenSize.getDisplayMode().getWidth() / 2, screenSize.getDisplayMode().getHeight() / 2);
+			loadingScreen = new LoadingScreen(sizeRelated.getScreenW() / 2, sizeRelated.getScreenH() / 2);
+			
 		}
 	}
 
@@ -108,9 +109,9 @@ public class MainMenuScreen {
 
 	}
 	private void scaleBoardToScreenSize() {
-		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		SizeRelated sizeRelated = SizeRelated.getInstance();
-		sizeRelated.setScreen_Width_Height((int)screenSize.getDisplayMode().getWidth(), (int)screenSize.getDisplayMode().getHeight());
+		Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		sizeRelated = SizeRelated.getInstance();
+		sizeRelated.setScreen_Width_Height((int)screenSize.getWidth(), (int)screenSize.getHeight());
 	}
 
 	private void addMouseListen(final MainMenuScreen mainMenu){
