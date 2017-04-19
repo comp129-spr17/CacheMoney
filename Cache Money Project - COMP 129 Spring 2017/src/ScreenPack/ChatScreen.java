@@ -18,48 +18,61 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import GamePack.SizeRelated;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 	public class ChatScreen extends JPanel{
-		private final static int SCREEN_WIDTH = 500;
-		private final static int SCREEN_HEIGHT = 600;
-		private final static int MSGTYPEAREA_HEIGHT = 150;
+		private final static int SCREEN_WIDTH = 350;
+		private final static int SCREEN_HEIGHT = 350;
+		private final static int MSGTYPEAREA_HEIGHT = 100;
+		private final static int BTN_WIDTH = 80;
+		private final static int TITLE_HEIGHT = 40;
+		
+		private boolean isHide;
 		private JTextArea msgDisplayArea, msgTypeArea;
 		private JButton btnSend;
 		private PrintWriter writer;
 		private PlayingInfo playingInfo;
 		private MBytePack mPack;
 		private int MSG_TYPE;
+		private SizeRelated sizeRelated;
+		private JScrollPane displayPane;
+		private JScrollPane typePane;
+		private JButton titleBar;
 		public ChatScreen(int msgType){
 			setting();
 			MSG_TYPE = msgType;
 			showWelcomeMsg();
 		}
 		private void setting(){
-			setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 			init();
 //			playingInfo.sendMessageToServer(msg);
 		}
 		private void init(){
+			setLayout(null);
+			sizeRelated = SizeRelated.getInstance();
 			playingInfo = PlayingInfo.getInstance();
 			mPack = MBytePack.getInstance();
-			setBounds(0,0,SCREEN_WIDTH, SCREEN_HEIGHT);
+			titleBar = new JButton("Chatting");
+			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT,SCREEN_WIDTH, SCREEN_HEIGHT);
 			btnSend = new JButton("Send");
-			msgDisplayArea = new JTextArea(30,55);
+			msgDisplayArea = new JTextArea(10,20);
 			msgDisplayArea.setEditable(false);
-			msgTypeArea = new JTextArea(5,45);
-			msgDisplayArea.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT);
-			msgTypeArea.setBounds(0,SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT, SCREEN_WIDTH, MSGTYPEAREA_HEIGHT);
+			msgTypeArea = new JTextArea(2,20);
+			titleBar.setBounds(0,0,SCREEN_WIDTH,TITLE_HEIGHT);
 			msgDisplayArea.setFont(new Font("Serif",Font.BOLD,15));
 			msgTypeArea.setFont(new Font("Serif",Font.BOLD,15));
-			btnSend.setBounds(SCREEN_WIDTH-200,SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT, 200,150);
-			btnSend.setPreferredSize(new Dimension(100, 100));
-			add(new JScrollPane(msgDisplayArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-			add(new JScrollPane(msgTypeArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+			displayPane = new JScrollPane(msgDisplayArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			displayPane.setBounds(0, TITLE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT);
+			typePane = new JScrollPane(msgTypeArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			typePane.setBounds(0,SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, SCREEN_WIDTH-BTN_WIDTH, MSGTYPEAREA_HEIGHT);
+			btnSend.setBounds(SCREEN_WIDTH-BTN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, BTN_WIDTH,MSGTYPEAREA_HEIGHT);
+			add(displayPane);
+			add(typePane);
 			add(btnSend);
-
+			add(titleBar);
 			addListeners();
 			msgDisplayArea.setLineWrap(true);
 			msgTypeArea.setLineWrap(true);
@@ -69,6 +82,28 @@ import MultiplayerPack.UnicodeForServer;
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					sendMsg();
+				}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					
+				}
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					
+				}
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					
+				}
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+				}
+			});
+			titleBar.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					minimizeAndMaximize();
 				}
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
@@ -106,7 +141,14 @@ import MultiplayerPack.UnicodeForServer;
 			});
 		}
 		private void showWelcomeMsg(){
-			msgDisplayArea.setText("Welcome to Cache Chat!\n\n-------------------------------------------------------------\n\n");
+			msgDisplayArea.setText("Welcome to Cache Chat!\n\n------------------------------------------------\n\n");
+		}
+		private void minimizeAndMaximize(){
+			titleBar.setLocation(0,isHide?0 : SCREEN_HEIGHT-TITLE_HEIGHT);
+			displayPane.setVisible(isHide);
+			typePane.setVisible(isHide);
+			btnSend.setVisible(isHide);
+			isHide = !isHide;
 		}
 		private void sendMsg(){
 			if(!msgTypeArea.getText().equals("")){
@@ -115,7 +157,7 @@ import MultiplayerPack.UnicodeForServer;
 			}
 		}
 		public void receiveMsg(String id, String msg){
-			msgDisplayArea.append(id+":\n\t" + msg+"\n");
+			msgDisplayArea.append(id+":\n    " + msg+"\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
 		}
 		public void clearArea(){

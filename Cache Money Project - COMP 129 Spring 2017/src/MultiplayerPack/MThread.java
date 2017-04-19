@@ -61,14 +61,12 @@ public class MThread extends Thread{
 				getMsg();
 				
 				specialCode = mUnpack.isSpecalCode(msg[3]);
-				if(specialCode == 0){
-					MServerMethod.showMsgToUsersInRoom(usersOutput, msg);
-				}
-				else if(specialCode == 1){
+					
+				if(specialCode == 1){
 					forDisconnected();
 					break;
 				}
-				
+				MServerMethod.showMsgToUsersInRoom(usersOutput, msg);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
