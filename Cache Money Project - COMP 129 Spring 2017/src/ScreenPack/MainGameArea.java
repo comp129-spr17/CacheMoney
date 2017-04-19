@@ -42,6 +42,7 @@ public class MainGameArea extends JPanel{
 	private void init(){
 		listOfOnlineUsers = new JComboBox<>();
 		onlineUsers = new infoThatScrolls(false);
+		onlineUsers.setScrollingPaneVisible(true);
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
 		rooms = new HashMap<>();
