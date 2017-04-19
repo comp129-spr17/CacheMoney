@@ -120,11 +120,11 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.UPDATE_ROOM_STAT, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongIntArray(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_LOBBY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		GetResults.put(UnicodeForServer.CHAT_LOBBY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_WAITING, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		GetResults.put(UnicodeForServer.CHAT_WAITING, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
 		
 	}
