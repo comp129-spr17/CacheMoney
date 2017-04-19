@@ -32,7 +32,7 @@ public final class MByteUnpack {
 	private void initUnicodeToMethod(){
 		GetResults.put(UnicodeForServer.DICE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackDiceResult(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_MESSAGE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		GetResults.put(UnicodeForServer.CHAT_MESSAGE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyResult(result);
 		return cleanUpAndReturn();}});

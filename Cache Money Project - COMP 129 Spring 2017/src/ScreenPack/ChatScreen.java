@@ -108,7 +108,7 @@ import MultiplayerPack.UnicodeForServer;
 		}
 		private void sendMsg(){
 			if(!msgTypeArea.getText().equals("")){
-				playingInfo.sendMessageToServer(mPack.packString(UnicodeForServer.CHAT_MESSAGE, msgTypeArea.getText()));
+				playingInfo.sendMessageToServer(mPack.packStrStr(UnicodeForServer.CHAT_MESSAGE,playingInfo.getLoggedInId(), msgTypeArea.getText()));
 				msgTypeArea.setText("");
 			}
 		}
