@@ -49,7 +49,7 @@ public class MainMenuScreen {
 	private JButton loginBtn;
 	private PlayingInfo playingInfo;
 	private CreditsScreen creditsScreen;
-	
+	private SizeRelated sizeRelated ;
 
 	public MainMenuScreen(){
 		
@@ -63,8 +63,8 @@ public class MainMenuScreen {
 
 	private void initializeLoadingScreen(){
 		if (loadingScreen == null){
-			Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-			loadingScreen = new LoadingScreen((int)screenSize.getWidth() / 2, (int)screenSize.getHeight() / 2);
+			loadingScreen = new LoadingScreen(sizeRelated.getScreenW() / 2, sizeRelated.getScreenH() / 2);
+			
 		}
 	}
 
@@ -109,9 +109,9 @@ public class MainMenuScreen {
 
 	}
 	private void scaleBoardToScreenSize() {
-		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		SizeRelated sizeRelated = SizeRelated.getInstance();
-		sizeRelated.setScreen_Width_Height((int)screenSize.getDisplayMode().getWidth(), (int)screenSize.getDisplayMode().getHeight());
+		Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		sizeRelated = SizeRelated.getInstance();
+		sizeRelated.setScreen_Width_Height((int)screenSize.getWidth(), (int)screenSize.getHeight());
 	}
 
 	private void addMouseListen(final MainMenuScreen mainMenu){
