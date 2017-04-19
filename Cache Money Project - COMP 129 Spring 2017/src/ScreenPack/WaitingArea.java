@@ -34,8 +34,7 @@ public class WaitingArea extends JPanel{
 	private MBytePack mPack;
 	private Color color;
 	private JLabel lblCount;
-	private boolean isDoneRender;
-	
+	private ChatScreen chatScreen;
 	public WaitingArea(final Container container, MainGameArea mainGameArea) {
 		this.container = container;
 		this.mainGameArea = mainGameArea;
@@ -46,13 +45,14 @@ public class WaitingArea extends JPanel{
 		players = new ArrayList<>();
 		color = new Color(245,245,220);
 		btnStart = new JButton("START GAME");
+		chatScreen = new ChatScreen(UnicodeForServer.CHAT_WAITING);
 		lblCount = new JLabel("Starting Game now......");
 		lblCount.setFont(new Font("TimesRoman", Font.BOLD, 18));
 		lblCount.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCount.setForeground(Color.blue);
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
-		gLayout = new GridLayout(4, 4);
+		gLayout = new GridLayout(4, 1);
 		controlPanel = new JPanel();
 		for(int i=0; i<4; i++){
 			players.add(new JButton());
@@ -75,6 +75,7 @@ public class WaitingArea extends JPanel{
 	public void switchToMainGameArea(){
 
 //		resetPlayerDisplay();
+		chatScreen.clearArea();
 		container.removeAll();
 		mainGameArea.setComponents();
 		container.repaint();
@@ -98,9 +99,10 @@ public class WaitingArea extends JPanel{
 	}
 	public void setComponents(){
 		initButtonStat();
-		container.add(this,BorderLayout.NORTH);
-		container.add(new JSeparator(),BorderLayout.CENTER);
-		container.add(controlPanel, BorderLayout.SOUTH);
+		container.add(this,BorderLayout.WEST);
+		add(controlPanel, BorderLayout.SOUTH);
+		container.add(chatScreen,BorderLayout.CENTER);
+		container.add(new JPanel(),BorderLayout.EAST);
 	}
 	private void initButtonStat(){
 		lblCount.setVisible(false);
@@ -183,5 +185,8 @@ public class WaitingArea extends JPanel{
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.LEAVE_ROOM));
 			}
 		});
+	}
+	public void receiveMsg(String id, String msg){
+		chatScreen.receiveMsg(id, msg);
 	}
 }

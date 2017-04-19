@@ -23,16 +23,18 @@ import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 	public class ChatScreen extends JPanel{
-		private final static int SCREEN_WIDTH = 700;
-		private final static int SCREEN_HEIGHT = 760;
-		private final static int MSGTYPEAREA_HEIGHT = 200;
+		private final static int SCREEN_WIDTH = 500;
+		private final static int SCREEN_HEIGHT = 600;
+		private final static int MSGTYPEAREA_HEIGHT = 150;
 		private JTextArea msgDisplayArea, msgTypeArea;
 		private JButton btnSend;
 		private PrintWriter writer;
 		private PlayingInfo playingInfo;
 		private MBytePack mPack;
-		public ChatScreen(){
+		private int MSG_TYPE;
+		public ChatScreen(int msgType){
 			setting();
+			MSG_TYPE = msgType;
 			showWelcomeMsg();
 		}
 		private void setting(){
@@ -108,13 +110,17 @@ import MultiplayerPack.UnicodeForServer;
 		}
 		private void sendMsg(){
 			if(!msgTypeArea.getText().equals("")){
-				playingInfo.sendMessageToServer(mPack.packStrStr(UnicodeForServer.CHAT_MESSAGE,playingInfo.getLoggedInId(), msgTypeArea.getText()));
+				playingInfo.sendMessageToServer(mPack.packStrStr(MSG_TYPE,playingInfo.getLoggedInId(), msgTypeArea.getText()));
 				msgTypeArea.setText("");
 			}
 		}
 		public void receiveMsg(String id, String msg){
-			msgDisplayArea.append(id+":\n" + msg+"\n");
+			msgDisplayArea.append(id+":\n\t" + msg+"\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
+		}
+		public void clearArea(){
+			msgDisplayArea.setText("");
+			msgTypeArea.setText("");
 		}
 //		public void serverDisconnected() throws SocketException{
 //			Sounds.buttonCancel.playSound();

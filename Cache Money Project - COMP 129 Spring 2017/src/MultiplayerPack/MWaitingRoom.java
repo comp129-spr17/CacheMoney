@@ -65,7 +65,9 @@ public class MWaitingRoom extends Thread{
 				
 				
 				synchronized (this) {
-					if(specialCode == 1){
+					if(specialCode == 0){
+						forChatting();
+					}else if(specialCode == 1){
 						forDisconnected();
 					}else if(specialCode == 2){
 						forLeavingRoom();
@@ -85,6 +87,11 @@ public class MWaitingRoom extends Thread{
 		}finally{
 		}
 		System.out.println("Now, exit from waitingArea");
+	}
+
+	private void forChatting(){
+		System.out.println("Request for Waiting Chatting");
+		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, msg);
 	}
 	private void forDisconnected(){
 		result = mUnpack.getResult(msg);
@@ -203,8 +210,9 @@ public class MWaitingRoom extends Thread{
 				return 4;
 			else if(UnicodeForServer.HOST_LEAVE_ROOM == code)
 				return 5;
-				
-			return 0;
+			else if(UnicodeForServer.CHAT_WAITING == code)
+				return 0;
+			return 6;
 	}
 	
 	

@@ -70,7 +70,7 @@ public class MMainArea extends Thread{
 				}else if(specialCode == 0){
 					forChatting();
 				}
-				else{
+				else if(specialCode != 6){
 					if(specialCode == 1){
 						forDisconnected();
 						break;
@@ -118,9 +118,7 @@ public class MMainArea extends Thread{
 	}
 	private void forChatting(){
 		System.out.println("Request for Chatting");
-		result = mUnpack.getResult(msg);
-		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStrStr(UnicodeForServer.CHAT_LOBBY, (String)result.get(1),(String)result.get(2)));
-		
+		MServerMethod.showMsgToAllUsers(usersOutput, msg);
 	}
 	private void forDisconnected(){
 		System.out.println("1.");
@@ -163,7 +161,7 @@ public class MMainArea extends Thread{
 				return 4;
 			else if(UnicodeForServer.CREATE_ROOM_REST == code)
 				return 5;
-			else if(UnicodeForServer.CHAT_MESSAGE == code)
+			else if(UnicodeForServer.CHAT_LOBBY == code)
 				return 0;
 			return 6;
 	}

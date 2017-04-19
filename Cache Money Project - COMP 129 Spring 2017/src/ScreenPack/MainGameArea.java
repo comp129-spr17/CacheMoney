@@ -50,7 +50,7 @@ public class MainGameArea extends JPanel{
 		jLabel = new JLabel("Online users:");
 		controlPanel = new JPanel();
 		waitingArea = new WaitingArea(container, this);
-		chatScreen = new ChatScreen();
+		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
 		setLayout(gLayout);
 		setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));
 
@@ -66,6 +66,7 @@ public class MainGameArea extends JPanel{
 		return waitingArea;
 	}
 	public void switchToWaiting(){
+		chatScreen.clearArea();
 		container.removeAll();
 		waitingArea.setComponents();
 		container.repaint();
