@@ -4,7 +4,7 @@ public final class UnicodeForServer {
 	private static final UnicodeForServer UNICODE = new UnicodeForServer();
 
 	public static final int JOIN_ROOM_TO_MAIN_GAME_AREA = 0;
-	public static final int PROPERTY = 1;
+	public static final int CHAT_MESSAGE = 1;
 	public static final int DISCONNECTED_FOR_GAME = 2;
 	public static final int END_TURN = 3;
 	public static final int START_GAME = 4;
@@ -51,6 +51,10 @@ public final class UnicodeForServer {
 	public static final int PROPERTY_PURCHASE = 45;
 	public static final int MORTGAGE_PROPERTY = 46;
 	public static final int UPDATE_ROOM_STAT = 47;
+	public static final int PROPERTY = 48;
+	public static final int CHAT_LOBBY = 49;
+	public static final int CHAT_WAITING = 50;
+	public static final int CHAT_GAME = 51;
 	private UnicodeForServer(){
 		
 	}

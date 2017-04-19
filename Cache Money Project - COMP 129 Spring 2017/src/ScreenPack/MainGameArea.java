@@ -33,6 +33,7 @@ public class MainGameArea extends JPanel{
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
 	private OnlineUsers onlineUsers;
+	private ChatScreen chatScreen;
 	public MainGameArea(final Container container) {
 		this.container = container;
 		init();
@@ -49,6 +50,7 @@ public class MainGameArea extends JPanel{
 		jLabel = new JLabel("Online users:");
 		controlPanel = new JPanel();
 		waitingArea = new WaitingArea(container, this);
+		chatScreen = new ChatScreen();
 		setLayout(gLayout);
 		setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));
 
@@ -71,7 +73,7 @@ public class MainGameArea extends JPanel{
 	}
 	public void setComponents(){
 		container.add(this,BorderLayout.WEST);
-		container.add(new JSeparator(),BorderLayout.CENTER);
+		container.add(chatScreen,BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.EAST);
 	}
 
@@ -195,5 +197,8 @@ public class MainGameArea extends JPanel{
 	}
 	private void setRoomText(JButton b, long roomNum, int numPpl){
 		b.setText("Room : " + roomNum + "  " + numPpl+ "/4");
+	}
+	public void receiveMsg(String id, String msg){
+		chatScreen.receiveMsg(id, msg);
 	}
 }

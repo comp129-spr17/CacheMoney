@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.JOptionPane;
 
 import InterfacePack.Sounds;
+import ScreenPack.ChatScreen;
 
 public class Client {
 	private final static String IP_ADDRESS = "10.15.154.147"; // If you do not enter an IP address in the console, this one will be used by default.
@@ -78,21 +79,21 @@ public class Client {
         PrintWriter out = new PrintWriter(s.getOutputStream(),true);
         ChatScreen chat;
         if(isHostClient){
-        	chat = new ChatScreen(out, ip, port, name);
+//        	chat = new ChatScreen(out, ip, port, name);
         }else{
-        	chat = new ChatScreen(out, name);
+//        	chat = new ChatScreen(out, name);
         }
         isServerUp = true;
-        while(isServerUp){
-        	try{
-	        	chat.receiveMsg(input.readLine());
-        	}catch(SocketException e){
-        		isServerUp = false;
-        	}
-        	if (chat.getIsServerClosed()){
-	        	isServerUp = false;
-	        }
-        }
+//        while(isServerUp){
+//        	try{
+////	        	chat.receiveMsg(input.readLine());
+//        	}catch(SocketException e){
+//        		isServerUp = false;
+//        	}
+////        	if (chat.getIsServerClosed()){
+////	        	isServerUp = false;
+////	        }
+//        }
 	}
 	public boolean getIsServerUp(){
 		return isServerUp;

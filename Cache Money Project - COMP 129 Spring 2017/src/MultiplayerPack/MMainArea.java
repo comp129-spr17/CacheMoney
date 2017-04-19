@@ -67,6 +67,8 @@ public class MMainArea extends Thread{
 				specialCode = whichRequest(msg[3]);
 				if(specialCode == 4){
 					forEntering();
+				}else if(specialCode == 0){
+					forChatting();
 				}
 				else{
 					if(specialCode == 1){
@@ -114,6 +116,12 @@ public class MMainArea extends Thread{
 		
 
 	}
+	private void forChatting(){
+		System.out.println("Request for Chatting");
+		result = mUnpack.getResult(msg);
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStrStr(UnicodeForServer.CHAT_LOBBY, (String)result.get(1),(String)result.get(2)));
+		
+	}
 	private void forDisconnected(){
 		System.out.println("1.");
 		mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
@@ -155,7 +163,9 @@ public class MMainArea extends Thread{
 				return 4;
 			else if(UnicodeForServer.CREATE_ROOM_REST == code)
 				return 5;
-			return 0;
+			else if(UnicodeForServer.CHAT_MESSAGE == code)
+				return 0;
+			return 6;
 	}
 	
 }
