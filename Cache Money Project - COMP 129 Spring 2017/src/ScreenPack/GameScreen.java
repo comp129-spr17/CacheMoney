@@ -86,6 +86,7 @@ public class GameScreen extends JFrame{
 	private JTextField mortgagePrice;
 	private JLabel priceDisplay;
 	private TradingPanel tradeP;
+	private ChatScreen chatScreen;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers){
 		//setAlwaysOnTop(true);
@@ -150,7 +151,7 @@ public class GameScreen extends JFrame{
 		
 		
 		
-		
+		chatScreen = new ChatScreen(unicode.CHAT_GAME);
 		
 		if (Property.isSQLEnabled){
 			sqlRelated = SqlRelated.getInstance();
@@ -559,6 +560,8 @@ public class GameScreen extends JFrame{
 	public void switchToGame(){
 		getContentPane().removeAll();
 		getContentPane().add(mainPanel);
+		if(!pInfo.isSingle())
+			mainPanel.add(chatScreen);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
@@ -582,6 +585,8 @@ public class GameScreen extends JFrame{
 			mainGameArea.receiveMsg(id, msg);
 		else if(which == unicode.CHAT_WAITING)
 			waitingArea.receiveMsg(id, msg);
+		else
+			chatScreen.receiveMsg(id, msg);
 	}
 	public void hostLeftWaitingArea(){
 		JOptionPane.showMessageDialog(this, "The host of the waiting room has left.");
