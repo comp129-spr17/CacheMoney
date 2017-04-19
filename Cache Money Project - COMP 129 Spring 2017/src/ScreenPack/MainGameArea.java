@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -14,7 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 
 import GamePack.SizeRelated;
 import MultiplayerPack.MBytePack;
@@ -46,7 +48,7 @@ public class MainGameArea extends JPanel{
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
 		rooms = new HashMap<>();
-		createNewRoom = new JButton("Create");
+		createNewRoom = new JButton("Create Room");
 		gLayout = new GridLayout(12, 4);
 		jLabel = new JLabel("Online users:");
 		controlPanel = new JPanel();
@@ -55,13 +57,46 @@ public class MainGameArea extends JPanel{
 		setLayout(gLayout);
 		setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));
 
-		controlPanel.setLayout(new GridLayout(9, 1));
+		controlPanel.setLayout(new GridBagLayout());
 
-		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()));	
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(1,1,30,1);
+			
+		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/2));	
 		setBackground(Color.black);
-		controlPanel.add(createNewRoom);
-		controlPanel.add(jLabel);
-		controlPanel.add(onlineUsers.getScrollingPanel());
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 4;
+		gbc.gridheight = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weighty = 0.;
+		gbc.weightx = 1;
+		controlPanel.add(createNewRoom, gbc);
+		
+		gbc.insets = new Insets(1,1,0,1);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.gridheight = 1;
+		gbc.gridwidth = 4;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weighty = 0;
+		gbc.weightx = 1;
+		controlPanel.add(jLabel, gbc);
+		
+		gbc.insets = new Insets(10,1,200,1);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.gridheight = 2;
+		gbc.gridwidth = 4;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1;
+		gbc.weighty = 0.1;
+		controlPanel.add(onlineUsers.getScrollingPanel(), gbc);
 	}
 	public WaitingArea getWaiting(){
 		return waitingArea;
