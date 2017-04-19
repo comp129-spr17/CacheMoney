@@ -3,6 +3,7 @@ package ScreenPack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,6 +33,8 @@ public class TradingPanel extends JDialog{
 	
 	private final int TRADE_HOST = 0;
 	private final int TRADE_TARGET = 1;
+	private final int SCROLLING_WIDTH = 300;
+	private final int SCROLLING_HEIGHT= 100;
 	private final int YES = 1;
 	private final int NO = 0;
 	private final int WIDTH = 700;
@@ -42,9 +45,12 @@ public class TradingPanel extends JDialog{
 	private JLabel description;
 	private JButton[] selectPlayerButton;
 	private Icon[] playerIcons;
-	private JComboBox<String>[] propertyComboBox;
-	private JComboBox<String>[] propertyRemoveComboBox;
+//	private JComboBox<String>[] propertyComboBox;
+//	private JComboBox<String>[] propertyRemoveComboBox;
 	private ArrayList<String>[] propertiesToTrade;
+	private ArrayList<infoThatScrolls> ownedProperties;
+	private ArrayList<infoThatScrolls> trades;
+	
 	
 	private JLabel[] lblsForThis;
 	private JLabel[] tradeConfirmDisplay;
@@ -76,8 +82,8 @@ public class TradingPanel extends JDialog{
 		description.setBounds(200, 10, 400, 30);
 		selectPlayerButton = new JButton[3];
 		playerIcons = new Icon[4];
-		propertyComboBox = new JComboBox[2];
-		propertyRemoveComboBox = new JComboBox[2];
+//		propertyComboBox = new JComboBox[2];
+//		propertyRemoveComboBox = new JComboBox[2];
 		lblsForThis = new JLabel[NUM_LBLS_FOR_THIS];
 		moneyTradeField = new JTextField[2];
 		okButton = new JButton();
@@ -85,6 +91,9 @@ public class TradingPanel extends JDialog{
 		tradeConfirmDisplay = new JLabel[2];
 		confirmTradeButton = new JButton[2];
 		startOverButton = new JButton();
+		ownedProperties = new ArrayList<infoThatScrolls>();
+		trades = new ArrayList<infoThatScrolls>();
+		initScrollingPanels();
 		initStartOverButton();
 		initConfirmButton();
 		initTradeConfirmDisplay();
@@ -92,12 +101,18 @@ public class TradingPanel extends JDialog{
 		initOKButton();
 		initMoneyTradeField();
 		initLblsForThis();
-		initPropertyComboBox();
-		initPropertyRemoveComboBox();
+//		initPropertyComboBox();
+//		initPropertyRemoveComboBox();
 		initSelectPlayerButtonBounds();
 		initPlayerIcons();
 		addPlayerButtons();
-		this.add(description);
+		
+		this.add(ownedProperties.get(TRADE_HOST).getScrollingPanel());
+		this.add(ownedProperties.get(TRADE_TARGET).getScrollingPanel());
+		this.add(trades.get(TRADE_HOST).getScrollingPanel());
+		this.add(trades.get(TRADE_TARGET).getScrollingPanel());
+		
+//		this.add(description);
 		this.addWindowListener((new WindowListener() {
 			
 			@Override
@@ -119,11 +134,28 @@ public class TradingPanel extends JDialog{
 		}));
 	}
 
+	private void initScrollingPanels(){
+		ownedProperties.add(new infoThatScrolls(true));
+		ownedProperties.add(new infoThatScrolls(true));
+		trades.add(new infoThatScrolls(true));
+		trades.add(new infoThatScrolls(true));
+		
+		ownedProperties.get(TRADE_HOST).setTheOtherScrollingPane(trades.get(TRADE_HOST));
+		ownedProperties.get(TRADE_TARGET).setTheOtherScrollingPane(trades.get(TRADE_TARGET));
+		trades.get(TRADE_HOST).setTheOtherScrollingPane(ownedProperties.get(TRADE_HOST));
+		trades.get(TRADE_TARGET).setTheOtherScrollingPane(ownedProperties.get(TRADE_TARGET));
+		
+		ownedProperties.get(TRADE_HOST).setScrollPaneBounds(0, 100, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		ownedProperties.get(TRADE_TARGET).setScrollPaneBounds(SCROLLING_WIDTH + 50, 0, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_HOST).setScrollPaneBounds(0, SCROLLING_HEIGHT + 150, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_TARGET).setScrollPaneBounds(SCROLLING_WIDTH + 50, SCROLLING_HEIGHT + 150, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+	}
+	
 	private void initStartOverButton() {
 		startOverButton.setText("Start Over");
 		startOverButton.setBounds(1, 1, 130, 30);
 		startOverButton.setVisible(false);
-		add(startOverButton);
+//		add(startOverButton);
 		startOverButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -131,9 +163,13 @@ public class TradingPanel extends JDialog{
 				setTradeInterfaceVisible(false);
 				setConfirmButtonsVisible(false);
 				setTradeConfirmDisplayVisible(false);
-				propertiesToTrade[TRADE_HOST].clear();
-				propertiesToTrade[TRADE_TARGET].clear();
+				/*propertiesToTrade[TRADE_HOST].clear();
+				propertiesToTrade[TRADE_TARGET].clear();*/
 				startOverButton.setVisible(false);
+				ownedProperties.get(TRADE_HOST).clearList();
+				ownedProperties.get(TRADE_TARGET).clearList();
+				trades.get(TRADE_HOST).clearList();
+				trades.get(TRADE_TARGET).clearList();
 				openTradingWindow(players, currentPlayerNum);
 			}
 			@Override
@@ -152,7 +188,7 @@ public class TradingPanel extends JDialog{
 			confirmTradeButton[i] = new JButton();
 			confirmTradeButton[i].setBounds(150 + (300*i), 400, 200, 50);
 			confirmTradeButton[i].setVisible(false);
-			add(confirmTradeButton[i]);
+			//add(confirmTradeButton[i]);
 		}
 		confirmTradeButton[YES].setText("Confirm");
 		confirmTradeButton[YES].addMouseListener(new MouseListener(){
@@ -209,7 +245,7 @@ public class TradingPanel extends JDialog{
 			tradeConfirmDisplay[i].setHorizontalAlignment(JLabel.CENTER);
 			tradeConfirmDisplay[i].setVerticalAlignment(JLabel.TOP);
 			tradeConfirmDisplay[i].setVisible(false);
-			add(tradeConfirmDisplay[i]);
+			//add(tradeConfirmDisplay[i]);
 		}
 		
 	}
@@ -255,7 +291,7 @@ public class TradingPanel extends JDialog{
 			
 		});
 		okButton.setVisible(false);
-		add(okButton);
+//		add(okButton);
 	}
 
 	private void setTradeConfirmDisplayVisible(boolean visible) {
@@ -274,7 +310,7 @@ public class TradingPanel extends JDialog{
 			j.setVisible(false);
 			j.setBounds(50 + (i*350), 220, 200, 20);
 			moneyTradeField[i] = j;
-			add(moneyTradeField[i]);
+//			add(moneyTradeField[i]);
 		}
 	}
 	
@@ -317,12 +353,12 @@ public class TradingPanel extends JDialog{
 		
 		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++){
 			lblsForThis[i].setVisible(false);
-			add(lblsForThis[i]);
+//			add(lblsForThis[i]);
 		}
 		
 	}
 
-	private void initPropertyComboBox() {
+	/*private void initPropertyComboBox() {
 		propertyComboBox[TRADE_HOST] = new JComboBox<String>(new DefaultComboBoxModel<String>());
 		propertyComboBox[TRADE_TARGET] = new JComboBox<String>(new DefaultComboBoxModel<String>());
 		propertyComboBox[TRADE_HOST].addActionListener(new ActionListener(){
@@ -406,18 +442,19 @@ public class TradingPanel extends JDialog{
 		propertyRemoveComboBox[TRADE_HOST].setVisible(false);
 		propertyRemoveComboBox[TRADE_TARGET].setVisible(false);
 	}
-	
+	*/
 	
 	private void setupPlayerPropertyComboBox(int playerIndex, Player[] players, int playerNum){
 		List<Property> properties = players[playerIndex].getOwnedProperties();
-		propertyRemoveComboBox[playerNum].removeAllItems();
+		/*propertyRemoveComboBox[playerNum].removeAllItems();
 		propertyRemoveComboBox[playerNum].addItem("View Selected/Remove...");
 		propertyComboBox[playerNum].removeAllItems();
-		propertyComboBox[playerNum].addItem("Add...");
+		propertyComboBox[playerNum].addItem("Add...");*/
 		for (int i = 0; i < properties.size(); i++){
-			propertyComboBox[playerNum].addItem(properties.get(i).getName());
+//			propertyComboBox[playerNum].addItem(properties.get(i).getName());
+			ownedProperties.get(playerNum).addObject(properties.get(i).getName());
 		}
-		propertyComboBox[playerNum].repaint();
+//		propertyComboBox[playerNum].repaint();
 	}
 	
 	
@@ -518,12 +555,12 @@ public class TradingPanel extends JDialog{
 		
 	}
 
-	private void setPropertyComboBoxVisible(boolean visible) {
+	/*private void setPropertyComboBoxVisible(boolean visible) {
 		propertyComboBox[TRADE_HOST].setVisible(visible);
 		propertyComboBox[TRADE_TARGET].setVisible(visible);
 		propertyRemoveComboBox[TRADE_HOST].setVisible(visible);
 		propertyRemoveComboBox[TRADE_TARGET].setVisible(visible);
-	}
+	}*/
 	
 	private void setMoneyTradeFieldVisible(boolean visible) {
 		moneyTradeField[TRADE_HOST].setVisible(visible);
@@ -541,7 +578,7 @@ public class TradingPanel extends JDialog{
 		setLblsForThisVisible(visible);
 		okButton.setVisible(visible);
 		setMoneyTradeFieldVisible(visible);
-		setPropertyComboBoxVisible(visible);
+//		setPropertyComboBoxVisible(visible);
 	}
 	
 	public void closeTradingWindow(){

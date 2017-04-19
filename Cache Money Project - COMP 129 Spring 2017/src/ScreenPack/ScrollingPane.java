@@ -1,6 +1,8 @@
 package ScreenPack;
 
-import javax.swing.BoxLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -12,7 +14,9 @@ public abstract class ScrollingPane {
 	public ScrollingPane(){
 		panel = new JPanel();
 		panel.setVisible(true);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+//		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setLayout(new GridBagLayout());
+		
 		scrollPane = new JScrollPane();
 		scrollPane.add(panel);
 		scrollPane.setViewportView(panel);
@@ -23,7 +27,7 @@ public abstract class ScrollingPane {
 	
 	public void setScrollPaneBounds(int x, int y, int width, int height){
 		scrollPane.setBounds(x, y, width, height);
-		//panel.setSize(scrollPane.getSize());
+		panel.setSize(scrollPane.getSize());
 	}
 	
 	public JScrollPane getScrollingPanel(){
