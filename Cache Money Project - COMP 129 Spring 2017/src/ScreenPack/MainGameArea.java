@@ -87,7 +87,7 @@ public class MainGameArea extends JPanel{
 		gbc.weightx = 1;
 		controlPanel.add(jLabel, gbc);
 		
-		gbc.insets = new Insets(10,1,200,1);
+		gbc.insets = new Insets(10,1,500,1);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 3;
