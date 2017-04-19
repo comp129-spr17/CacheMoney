@@ -33,7 +33,8 @@ public class MainMenuScreen {
 	private Font mainfont;
 	private JPanel mainPanel;
 	private JFrame mainmenuframe;
-	private JButton SinglePButton;
+	private JButton NewGameButton;
+	private JButton LoadGameButton;
 	private JButton MultiPButton;
 	private JButton CreditsButton;
 	private JLabel HelloThere;
@@ -84,7 +85,8 @@ public class MainMenuScreen {
 		mainmenuframe = new JFrame("Main Menu");
 		MultiPButton = new JButton("Multiplayer");
 		MultiPButton.setEnabled(false);
-		SinglePButton = new JButton("Single Player");
+		NewGameButton = new JButton("Single Player");
+		LoadGameButton = new JButton("Load Game");
 		HelloThere = new JLabel("Cache Money", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
 		CreditsButton = new JButton("Credits");
@@ -115,7 +117,7 @@ public class MainMenuScreen {
 	}
 
 	private void addMouseListen(final MainMenuScreen mainMenu){
-		SinglePButton.addMouseListener(new MouseListener() {
+		NewGameButton.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -140,17 +142,59 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
-				(new startSinglePlayer()).start();
+				(new startSinglePlayer(false)).start();
 			}
-
 			class startSinglePlayer extends Thread{
+				boolean isLoadGame;
+				public startSinglePlayer(boolean load){
+					isLoadGame = load;
+				}
 				@Override
 				public void run(){
-					startSinglePlayer();
+					startSinglePlayer(isLoadGame);
 				}
 			}
-
 		});
+		
+		LoadGameButton.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e){
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
+				(new startSinglePlayer(true)).start();
+			}
+			class startSinglePlayer extends Thread{
+				boolean isLoadGame;
+				public startSinglePlayer(boolean load){
+					isLoadGame = load;
+				}
+				@Override
+				public void run(){
+					startSinglePlayer(isLoadGame);
+				}
+			}
+		});
+		
 		MultiPButton.addMouseListener(new MouseListener() {
 
 			@Override
@@ -348,22 +392,27 @@ public class MainMenuScreen {
 		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
 		HelloThere.setBounds(100,50,300,50);
 		mainPanel.add(HelloThere);
-		SinglePButton.setFont(mainfont);
-		SinglePButton.setBounds(175,125,150,50);
-		mainPanel.add(SinglePButton);
+		NewGameButton.setFont(mainfont);
+		NewGameButton.setBounds(175,125,150,50);
+		mainPanel.add(NewGameButton);
+		LoadGameButton.setFont(mainfont);
+		LoadGameButton.setBounds(175,185,150,50);
+		mainPanel.add(LoadGameButton);
+		
+		
 		MultiPButton.setFont(mainfont);
-		MultiPButton.setBounds(175,185,150,50);
+		MultiPButton.setBounds(175,245,150,50);
 		mainPanel.add(MultiPButton);
 		MiniGamesButton.setFont(mainfont);
-		MiniGamesButton.setBounds(175,245,150,50);
+		MiniGamesButton.setBounds(175,305,150,50);
 		mainPanel.add(MiniGamesButton);
 		ExitButton.setFont(mainfont);
-		loginBtn.setBounds(175,305,150,50);
+		loginBtn.setBounds(175,365,150,50);
 		loginBtn.setFont(mainfont);
 		mainPanel.add(loginBtn);
-		ExitButton.setBounds(175,425,150,50);
+		ExitButton.setBounds(175,485,150,50);
 		mainPanel.add(ExitButton);
-		CreditsButton.setBounds(175, 365, 150, 50);
+		CreditsButton.setBounds(175, 425, 150, 50);
 		CreditsButton.setFont(mainfont);
 		mainPanel.add(CreditsButton);
 		
@@ -391,7 +440,7 @@ public class MainMenuScreen {
 		//		mainPanel.setBackground(menuBackgroundColor);
 	}
 
-	private void startSinglePlayer() {
+	private void startSinglePlayer(boolean isLoadGame) {
 		int gNumP;
 		getNumPlayers();
 		Sounds.buttonConfirm.playSound();
@@ -399,10 +448,10 @@ public class MainMenuScreen {
 		hideAndDisposeMainMenuScreen();
 		loadingScreen.setResizable(false);
 		loadingScreen.setVisible(true);
-		gameScreen = new GameScreen(true, gNumP);
+		gameScreen = new GameScreen(true, gNumP, isLoadGame);
 		gameScreen.setNumPlayer(gNumP);
 		hideAndDisposeLoadingScreen();
-		Sounds.buttonCancel.playSound();
+		Sounds.waitingRoomJoin.playSound();
 	}
 	private boolean getNumPlayers(){
 		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of total players:", JOptionPane.YES_NO_OPTION);

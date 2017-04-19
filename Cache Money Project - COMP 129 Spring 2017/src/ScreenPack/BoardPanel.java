@@ -109,6 +109,10 @@ public class BoardPanel extends JPanel{
 		this.setBackground(boardBackgroundColor);
 	}
 
+	public void movePieceOnBoard(int player, int destinationSpace) {
+		board.addPieceOnBoard(player, destinationSpace);
+	}
+	
 
 	private void setSize(){
 		ROW_SPACE_WIDTH = COL_SPACE_HEIGHT = sizeRelated.getSpaceRowWidth();

@@ -115,9 +115,11 @@ public class Board {
 				for(int i=1; i<diceResult+1; i++){
 					Sounds.movePiece.playSound();
 					players[player].movePosition();
-					boardTracker[players[player].getPositionNumber()-1].removePiece(player);
+					int previousSpace = players[player].getPositionNumber()-1;
+					int destinationSpace = players[player].getPositionNumber();
+					boardTracker[previousSpace].removePiece(player);
 					checkIfLastSpace(player);
-					boardTracker[players[player].getPositionNumber()].receivePiece(players[player].getPiece(), player);
+					addPieceOnBoard(player, destinationSpace);
 					
 					if (players[player].getPositionNumber() == 0){
 						// PLAYER PASSED GO
@@ -157,7 +159,12 @@ public class Board {
 				
 				
 			}
+
+			
 		}, 1200);
+	}
+	public void addPieceOnBoard(int player, int destinationSpace) {
+		boardTracker[destinationSpace].receivePiece(players[player].getPiece(), player);
 	}
 	private void checkIfLastSpace(int player){
 		players[player].setPositionNumber(players[player].getPositionNumber() % 40);

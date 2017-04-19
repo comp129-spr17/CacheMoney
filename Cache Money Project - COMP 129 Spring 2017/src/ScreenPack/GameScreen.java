@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.UnknownHostException;
@@ -44,9 +47,9 @@ import MultiplayerPack.SqlRelated;
 import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
-	private final int NUMBER_OF_MUSIC = 5;
 	private static final String FILENAME = "recentSave.txt";
-	
+	private final int NUMBER_OF_MUSIC = 5;
+	private boolean loadGame;
 	private JPanel mainPanel;
 	private int myComp_height;
 	private DicePanel dicePanel;
@@ -91,9 +94,10 @@ public class GameScreen extends JFrame{
 	private TradingPanel tradeP;
 	private ChatScreen chatScreen;
 	// called if user is the host
-	public GameScreen(boolean isSingle, int totalplayers){
+	public GameScreen(boolean isSingle, int totalplayers, boolean isLoadGame){
 		//setAlwaysOnTop(true);
 		this.totalPlayers = totalplayers;
+		this.loadGame = isLoadGame;
 		initEverything(true,isSingle);
 		if(!isSingle)
 			addHost();
@@ -166,7 +170,7 @@ public class GameScreen extends JFrame{
 		unicode = UnicodeForServer.getInstance();
 		scaleBoardToScreenSize();
 		
-		createPlayers();
+		
 		init(isHost);
 		//setGameScreenBackgroundColor();
 		
@@ -261,6 +265,61 @@ public class GameScreen extends JFrame{
 		for(int i=0; i<4; i++)
 		{
 			players[i] = Player.getInstance(i);
+		}
+		
+		
+	}
+	private void loadGame() {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("recentSave.txt"));
+			String s = reader.readLine();
+			while (s != null){
+				switch (s){
+				case "*current":
+					s = reader.readLine(); dicePanel.setCurrentPlayerNum(Integer.parseInt(s));
+					s = reader.readLine();
+					break;
+				case "*player":
+					s = reader.readLine(); int playerNum = Integer.parseInt(s);
+					s = reader.readLine(); players[playerNum].setIsOn(Boolean.parseBoolean(s));
+					s = reader.readLine(); players[playerNum].setIsAlive(Boolean.parseBoolean(s));
+					s = reader.readLine(); players[playerNum].setInJail(Boolean.parseBoolean(s));
+					s = reader.readLine(); players[playerNum].setPositionNumber(Integer.parseInt(s));
+					s = reader.readLine(); players[playerNum].setTotalMonies(Integer.parseInt(s));
+					s = reader.readLine(); players[playerNum].setJailFreeCard(Integer.parseInt(s));
+					s = reader.readLine(); players[playerNum].setUserId(s.equals("null") ? null : s);
+					s = reader.readLine(); players[playerNum].setUserName(s.equals("null") ? null : s);
+					s = reader.readLine(); players[playerNum].setTradeRequest(s.equals("null") ? null : s);
+					s = reader.readLine();
+					while (s.equals("*property")){
+						s = reader.readLine(); Property p = boardPanel.getMappings().get(s).getPropertyInfo();
+						s = reader.readLine(); p.setMultiplier(Integer.parseInt(s));
+						s = reader.readLine(); p.setMortgagedTo(Boolean.parseBoolean(s));
+						s = reader.readLine(); p.setNumHouse(Integer.parseInt(s));
+						s = reader.readLine(); p.setNumHotel(Integer.parseInt(s));
+						p.setOwner(playerNum);
+						p.setIsOwned();
+						players[playerNum].addProperty(p);
+						s = reader.readLine();
+					}
+					if (players[playerNum].isOn()){
+						boardPanel.movePieceOnBoard(playerNum, players[playerNum].getPositionNumber());
+					}
+					break;
+				default:
+					System.out.println("!: " + s);
+					s = reader.readLine();
+					// do nothing
+				}
+				
+				
+				
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	private void initButtonListeners()
@@ -478,7 +537,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(pDisplay);
 		mainPanel.add(pInfoDisplay);
 		repaint();
-		
+		createPlayers();
 		tradeP = new TradingPanel();
 		pDisplay.setVisible(false);
 		pInfoDisplay.setVisible(false);
@@ -531,9 +590,7 @@ public class GameScreen extends JFrame{
 		}
 		tWindow = TestingWindow.getInstance();
 		tWindow.initLabels(testInfo, insets, players, totalPlayers, mLabels);
-		loadingProgress = 10;
 		dicePanel = new DicePanel(players, mLabels, tradeP);
-		loadingProgress = 20;
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
@@ -559,6 +616,11 @@ public class GameScreen extends JFrame{
 		
 		Random r = new Random();
 		scheduledMusic = r.nextInt(NUMBER_OF_MUSIC);
+		
+		if (loadGame){
+			loadGame();
+		}
+		
 	}
 	public void switchToGame(){
 		getContentPane().removeAll();
@@ -875,14 +937,10 @@ public class GameScreen extends JFrame{
 			PrintWriter writer = new PrintWriter(FILENAME, "UTF-8");
 			String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
 			String[] packedPlayerInfo = packPlayerInformation();
-			
-			
 			writer.println(currentPlayer);				// currentPlayer
 			for (int i = 0; i < 4; i++){
 				writer.println(packedPlayerInfo[i]);	// players and properties
 			}
-			
-			
 			writer.close();
 		}
 		catch (IOException ioe){
@@ -894,9 +952,9 @@ public class GameScreen extends JFrame{
 		String[] result = new String[4];
 		for (int i = 0; i < 4; i++){
 			result[i] = "*player" 						+ '\n'; // announce this is a player we're dealing with
+			result[i] += players[i].getPlayerNum()		+ "\n"; // gets player num
 			result[i] += players[i].isOn()				+ "\n"; // check if the player is online
 			result[i] += players[i].getIsAlive()		+ "\n"; // check if the player is alive
-			result[i] += players[i].getPlayerNum()		+ "\n"; // gets player num
 			result[i] += players[i].isInJail()			+ "\n"; // gets inJail status
 			result[i] += players[i].getPositionNumber() + "\n"; // gets player position
 			result[i] += players[i].getTotalMonies()	+ "\n";	// gets balance of player
@@ -906,9 +964,6 @@ public class GameScreen extends JFrame{
 			result[i] += players[i].getTradeRequest()	+ "\n";	// gets trade request
 			result[i] += packPlayerProperties(i);
 		}
-		
-		
-		
 		return result;
 	}
 	private String packPlayerProperties(int i) {

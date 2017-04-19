@@ -143,8 +143,15 @@ public abstract class Property {
 			incNumHotel();
 		}
 	}
+	public void setNumHouse(int num){
+		numHouse = num;
+	}
+	
 	public void incNumHotel(){
 		numHotel++;
+	}
+	public void setNumHotel(int num){
+		numHotel = num;
 	}
 	public void decNumHouse(){
 		numHouse--;
@@ -169,5 +176,9 @@ public abstract class Property {
 	}
 	public int getPropertyFamilyIdentifier(){
 		return propertyFamilyIdentifier;
+	}
+
+	public void setIsOwned() {
+		owned = true;
 	}
 }

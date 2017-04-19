@@ -26,8 +26,8 @@ import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
-	private final int DEBUG_MOVEMENT_VALUE = 6; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
@@ -725,6 +725,10 @@ public class DicePanel extends JPanel{
 		return current;
 	}
 
+	public void setCurrentPlayerNum(int currentPlayerNum){
+		current = currentPlayerNum;
+	}
+	
 	private void changePlayerTurn(){
 		checkPlayerAvailabilty();
 	}
