@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -39,8 +40,12 @@ public class SignUpDialog extends JDialog {
 	private JButton cancel;
 	private PlayingInfo playingInfo;
 	private MainMenuScreen mainMenu;
+	private ImageIcon errorIcon;
 	public SignUpDialog(MainMenuScreen mainMenu)
 	{
+		this.setSize(400, 300);
+		errorIcon = new ImageIcon("bin/Images/error.png");
+		System.out.println(errorIcon.getIconWidth());
 		this.mainMenu = mainMenu;
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -50,6 +55,7 @@ public class SignUpDialog extends JDialog {
 		constraints.gridwidth = 1;
 		constraints.anchor = constraints.EAST;
 		constraints.insets = new Insets(1,1,1,1);
+		
 		
 		firstName = new JLabel("First Name: ");
 		constraints.gridx = 0;
@@ -66,11 +72,6 @@ public class SignUpDialog extends JDialog {
 		constraints.gridy = 2;
 		panel.add(uNameLabel, constraints);
 		
-		uNameOK = new JLabel("");
-		constraints.gridx = 3;
-		constraints.gridy = 2;
-		panel.add(uNameOK, constraints);
-
 		passLabel = new JLabel("Password: ");
 		constraints.gridx = 0;
 		constraints.gridy = 3;
@@ -84,6 +85,7 @@ public class SignUpDialog extends JDialog {
 		
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = 2;
 		
 		fName = new JTextField(20);
 		constraints.gridx = 1;
@@ -112,6 +114,15 @@ public class SignUpDialog extends JDialog {
 		panel.add(confirmPass, constraints);
 //		panel.setBorder(new LineBorder(Color.GRAY));
 		
+		uNameOK = new JLabel(errorIcon);
+		uNameOK.setVisible(false);
+		constraints.gridx = 3;
+		constraints.gridy = 2;
+		constraints.gridwidth = 2;
+		constraints.gridheight = 2;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.weightx = 0;
+		panel.add(uNameOK, constraints);
 		
 		uName.addKeyListener(new KeyListener(){
 			@Override
@@ -143,11 +154,11 @@ public class SignUpDialog extends JDialog {
 				System.out.println(inputUName + " " + uNameExists + " " + inputUName.isEmpty());
 				
 				if(uNameExists || inputUName.isEmpty()){
-					uNameOK.setText(":(");
+					uNameOK.setVisible(true);
 					createUser.setEnabled(false);
 				}
 				else{
-					uNameOK.setText(":)");
+					uNameOK.setVisible(false);
 					createUser.setEnabled(true);
 				}
 			}
