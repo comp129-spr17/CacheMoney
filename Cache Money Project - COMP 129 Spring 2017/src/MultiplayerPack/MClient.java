@@ -109,6 +109,9 @@ public class MClient {
 		variableCodeString.add(new String("MORTGAGE_PROPERTY"));
 		variableCodeString.add(new String("UPDATE_ROOM_STAT"));
 		variableCodeString.add(new String("PROPERTY"));
+		variableCodeString.add(new String("CHAT_LOBBY"));
+		variableCodeString.add(new String("CHAT_WAITING"));
+		variableCodeString.add(new String("CHAT_GAME"));
 	}
 	
 	
@@ -471,14 +474,16 @@ public class MClient {
 		private ArrayList<Object> result;
 		private int area;
 		private String msg;
+		private String id;
 		public ForReceivingChatMsg(ArrayList<Object> result, int area){
 			this.result = result;
 			this.area = area;
 		}
 		public void run(){
-			msg = (String)result.get(1);
+			id = (String)result.get(1);
+			msg = (String)result.get(2);
 			if(area == 0)
-				gameScreen.receiveMainChatMsg(msg);
+				gameScreen.receiveMainChatMsg(id,msg);
 		}
 	}
 	private void setPlayer(int i){

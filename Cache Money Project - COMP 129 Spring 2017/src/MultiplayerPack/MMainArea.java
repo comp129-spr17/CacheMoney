@@ -119,9 +119,8 @@ public class MMainArea extends Thread{
 	private void forChatting(){
 		System.out.println("Request for Chatting");
 		result = mUnpack.getResult(msg);
-		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packString(UnicodeForServer.CHAT_LOBBY, (String)result.get(1)));
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStrStr(UnicodeForServer.CHAT_LOBBY, (String)result.get(1),(String)result.get(2)));
 		
-
 	}
 	private void forDisconnected(){
 		System.out.println("1.");

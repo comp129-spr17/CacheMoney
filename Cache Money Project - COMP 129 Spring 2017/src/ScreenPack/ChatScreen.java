@@ -57,7 +57,8 @@ import MultiplayerPack.UnicodeForServer;
 			add(new JScrollPane(msgDisplayArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 			add(new JScrollPane(msgTypeArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 			add(btnSend);
-			
+
+			addListeners();
 			msgDisplayArea.setLineWrap(true);
 			msgTypeArea.setLineWrap(true);
 		}
@@ -111,8 +112,8 @@ import MultiplayerPack.UnicodeForServer;
 				msgTypeArea.setText("");
 			}
 		}
-		public void receiveMsg(String msg){
-			msgDisplayArea.append(msg+"\n");
+		public void receiveMsg(String id, String msg){
+			msgDisplayArea.append(id+":\n" + msg+"\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
 		}
 //		public void serverDisconnected() throws SocketException{

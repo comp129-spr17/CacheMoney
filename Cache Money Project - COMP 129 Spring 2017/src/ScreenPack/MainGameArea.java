@@ -198,7 +198,7 @@ public class MainGameArea extends JPanel{
 	private void setRoomText(JButton b, long roomNum, int numPpl){
 		b.setText("Room : " + roomNum + "  " + numPpl+ "/4");
 	}
-	public void receiveMsg(String msg){
-		chatScreen.receiveMsg(msg);
+	public void receiveMsg(String id, String msg){
+		chatScreen.receiveMsg(id, msg);
 	}
 }

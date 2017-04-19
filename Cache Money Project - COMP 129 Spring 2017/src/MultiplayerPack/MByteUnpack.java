@@ -278,6 +278,15 @@ public final class MByteUnpack {
 			e.printStackTrace();
 		}
 	}
+	public void unpackStrStr(byte[] result){
+		try{
+			resultList.add(dInputStream.readUTF());
+			resultList.add(dInputStream.readUTF());
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 	public void unpackStringArray(byte[] result){
 		try{
 			sizeOfArray = dInputStream.readInt();

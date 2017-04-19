@@ -89,6 +89,18 @@ public final class MBytePack {
 		}
 		return null;
 	}
+	public byte[] packStrStr(int requestCode, String id, String msg){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeUTF(id);
+			dOutputStream.writeUTF(msg);	
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public byte[] packBoolean(int requestCode, boolean value){
 		try{
 			dOutputStream.writeInt(requestCode);
