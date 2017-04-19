@@ -1,5 +1,6 @@
 package ScreenPack;
 
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -17,11 +18,12 @@ public class infoThatScrolls extends ScrollingPane {
 	private HashMap<String,JButton> indexMaps;
 	private ArrayList<String> nameOfObject;
 	private boolean buttonEnabled;
+	private infoThatScrolls theOther;
 
-	public infoThatScrolls(boolean clickableButtons){
+	public infoThatScrolls(boolean enabled){
 		nameOfObject = new ArrayList<String>();
 		indexMaps = new HashMap<String, JButton>();
-		buttonEnabled = clickableButtons;
+		buttonEnabled = enabled;
 	}
 
 	public ArrayList<String> getListOfObjects(){
@@ -62,8 +64,16 @@ public class infoThatScrolls extends ScrollingPane {
 		}
 
 		temp.setBorderPainted(false);
+		temp.setOpaque(false);
+		temp.setContentAreaFilled(false);
+		
 		indexMaps.put(nOfObject, temp);
-		panel.add(temp);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		
+		panel.add(temp,gbc);
 		refresh();
 	}
 
@@ -72,15 +82,23 @@ public class infoThatScrolls extends ScrollingPane {
 		if(nameOfObject.size() > 0){
 			JButton temp = indexMaps.get(nOfObject);
 			panel.remove(temp);
-			
+
 			for(int i = 0; i < nameOfObject.size(); i++){
 				if(nOfObject == nameOfObject.get(i)){
 					nameOfObject.remove(i);
 				}
 			}
+
+			if(theOther != null){
+				theOther.addObject(temp.getText());
+			}
 		}
 
 		refresh();
+	}
+
+	public void setTheOtherScrollingPane(infoThatScrolls i){
+		theOther = i;
 	}
 
 	public static void main(String[] args){
