@@ -11,14 +11,14 @@ public abstract class Property {
 	protected int mortgageValue;
 	protected int buyingPrice;
 	protected int buildHousePrice;
-	protected int rentMultiplier;
-	protected boolean mortgaged;
+	protected int rentMultiplier;			// saved
+	protected boolean mortgaged;			// saved
 	protected boolean owned;
-	protected int numHouse;
-	protected int numHotel;
+	protected int numHouse;					// saved
+	protected int numHotel;					// saved
 	protected int propertyFamilyIdentifier;
 	protected int owner = -1;
-	protected String name;
+	protected String name;					// saved
 	public Property(int cost, String name, int propertyFamilyIdentifier) // NEED TO CREATE HOUSING PRICE THING HERE
 	{
 		

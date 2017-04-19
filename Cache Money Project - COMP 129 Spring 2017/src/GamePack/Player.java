@@ -7,7 +7,7 @@ import java.util.List;
 import com.sun.swing.internal.plaf.basic.resources.basic;
 
 public final class Player {
-	private int totalmonies;
+	private int totalmonies;		// saved
 	private int fivehunneds;
 	private int hunneds;
 	private int fitties;
@@ -15,20 +15,20 @@ public final class Player {
 	private int tens;
 	private int fives;
 	private int ones;
-	private int jailFreeCard;
-	private boolean isAlive;
+	private int jailFreeCard;		// saved
+	private boolean isAlive;		// saved
 	private boolean alreadyDead;
 	private Piece playerpiece;
-	private boolean inJail;
-	private int playerNum;
+	private boolean inJail;			// saved
+	private int playerNum;			// saved
 	private int pastPositionNumber;
-	private int playerPositionNumber;
-	private String user_id;
-	private String user_Name;
-	private boolean isOn;
+	private int playerPositionNumber;// saved
+	private String user_id;			// saved
+	private String user_Name;		// saved
+	private boolean isOn;			// saved
 	private int win;
 	private int lose;
-	private String tradeRequest;
+	private String tradeRequest;	// saved
 	private static final Player GlobalPlayer0 = new Player(0);
 	private static final Player GlobalPlayer1 = new Player(1);
 	private static final Player GlobalPlayer2 = new Player(2);

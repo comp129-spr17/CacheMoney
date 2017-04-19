@@ -424,8 +424,10 @@ public class MainMenuScreen {
 	private void exitAction(){
 		if(playingInfo.isLoggedIn())
 			SqlRelated.loginAndOutAction(playingInfo.getLoggedInId(), false);
-		if(gameScreen != null)
+		if(gameScreen != null){
+			gameScreen.saveGame();
 			gameScreen.exitForServer();
+		}
 	}
 
 	private void setupClient(){

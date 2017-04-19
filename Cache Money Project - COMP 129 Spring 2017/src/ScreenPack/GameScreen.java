@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -44,6 +45,8 @@ import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
 	private final int NUMBER_OF_MUSIC = 5;
+	private static final String FILENAME = "recentSave.txt";
+	
 	private JPanel mainPanel;
 	private int myComp_height;
 	private DicePanel dicePanel;
@@ -866,5 +869,58 @@ public class GameScreen extends JFrame{
 		}
 		updateMortgage(playerNum);
 		mortgageWindow.setVisible(false);
+	}
+	public void saveGame() {
+		try{
+			PrintWriter writer = new PrintWriter(FILENAME, "UTF-8");
+			String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
+			String[] packedPlayerInfo = packPlayerInformation();
+			
+			
+			writer.println(currentPlayer);				// currentPlayer
+			for (int i = 0; i < 4; i++){
+				writer.println(packedPlayerInfo[i]);	// players and properties
+			}
+			
+			
+			writer.close();
+		}
+		catch (IOException ioe){
+			System.out.println("Failed to write to file :(");
+		}
+		
+	}
+	private String[] packPlayerInformation() {
+		String[] result = new String[4];
+		for (int i = 0; i < 4; i++){
+			result[i] = "*player" 						+ '\n'; // announce this is a player we're dealing with
+			result[i] += players[i].isOn()				+ "\n"; // check if the player is online
+			result[i] += players[i].getIsAlive()		+ "\n"; // check if the player is alive
+			result[i] += players[i].getPlayerNum()		+ "\n"; // gets player num
+			result[i] += players[i].isInJail()			+ "\n"; // gets inJail status
+			result[i] += players[i].getPositionNumber() + "\n"; // gets player position
+			result[i] += players[i].getTotalMonies()	+ "\n";	// gets balance of player
+			result[i] += players[i].getJailFreeCard()	+ "\n"; // gets any Get Out of Jail Free cards
+			result[i] += players[i].getUserId()			+ "\n"; // gets user ID
+			result[i] += players[i].getUserName()		+ "\n"; // gets user name
+			result[i] += players[i].getTradeRequest()	+ "\n";	// gets trade request
+			result[i] += packPlayerProperties(i);
+		}
+		
+		
+		
+		return result;
+	}
+	private String packPlayerProperties(int i) {
+		String result = "";
+		for (Property p : players[i].getOwnedProperties()){
+			result += "*property"						+ "\n"; // announces this is a property
+			result += p.getName()						+ "\n"; // gets name of property
+			result += p.getMultiplier()					+ "\n"; // gets multiplier of property
+			result += p.isMortgaged()					+ "\n"; // checks if the property is mortgaged
+			result += p.getNumHouse()					+ "\n"; // checks how many houses are built
+			result += p.getNumHotel()					+ "\n"; // checks how many hotels owned
+		}
+		return result;
 	}
 }
