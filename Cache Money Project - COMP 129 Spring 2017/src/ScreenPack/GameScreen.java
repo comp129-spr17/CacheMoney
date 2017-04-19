@@ -577,7 +577,9 @@ public class GameScreen extends JFrame{
 		if(roomLIst.size() > 1)
 			mainGameArea.updateRooms(roomLIst);
 	}
-	
+	public void receiveMainChatMsg(String msg){
+		mainGameArea.receiveMsg(msg);
+	}
 	public void hostLeftWaitingArea(){
 		JOptionPane.showMessageDialog(this, "The host of the waiting room has left.");
 		waitingArea.switchToMainGameArea();		

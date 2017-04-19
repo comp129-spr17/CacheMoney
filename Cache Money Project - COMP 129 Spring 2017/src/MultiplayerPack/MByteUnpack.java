@@ -32,6 +32,8 @@ public final class MByteUnpack {
 	private void initUnicodeToMethod(){
 		GetResults.put(UnicodeForServer.DICE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackDiceResult(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_MESSAGE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackPropertyResult(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.END_TURN, new GetResult(){public ArrayList<Object> getResult(byte[] result){
@@ -118,6 +120,13 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.UPDATE_ROOM_STAT, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongIntArray(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_LOBBY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_WAITING, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackString(result);
+		return cleanUpAndReturn();}});
+		
 	}
 	
 	private ArrayList<Object> cleanUpAndReturn(){

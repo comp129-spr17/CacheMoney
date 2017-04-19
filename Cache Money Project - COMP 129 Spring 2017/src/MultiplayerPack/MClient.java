@@ -55,7 +55,7 @@ public class MClient {
 	private void initVariableCodeString(){
 
 		variableCodeString.add(new String("JOIN_ROOM_TO_MAIN_GAME_AREA"));
-		variableCodeString.add(new String("PROPERTY"));
+		variableCodeString.add(new String("CHAT_MESSAGE"));
 		variableCodeString.add(new String("DISCONNECTED_FOR_GAME"));
 		variableCodeString.add(new String("END_TURN"));
 		variableCodeString.add(new String("START_GAME"));
@@ -108,6 +108,7 @@ public class MClient {
 		variableCodeString.add(new String("PROPERTY_PURCHASE"));
 		variableCodeString.add(new String("MORTGAGE_PROPERTY"));
 		variableCodeString.add(new String("UPDATE_ROOM_STAT"));
+		variableCodeString.add(new String("PROPERTY"));
 	}
 	
 	
@@ -171,6 +172,9 @@ public class MClient {
 		doActions.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUserEntersMainArea(result);}});
 		doActions.put(UnicodeForServer.MORTGAGE_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doMortgageProperty(result);;}});
 		doActions.put(UnicodeForServer.UPDATE_ROOM_STAT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateRoomStat(result);;}});
+		doActions.put(UnicodeForServer.CHAT_LOBBY, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 0);}});
+		doActions.put(UnicodeForServer.CHAT_WAITING, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 1);}});
+		doActions.put(UnicodeForServer.CHAT_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 2);}});
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
@@ -456,6 +460,25 @@ public class MClient {
 				System.out.println("Long : "+ (Long)result.get(2*(i+1)) + " NUM : " +(Integer)result.get(2*(i+1)+1));
 				gameScreen.updateRoomStatus((Long)result.get(2*(i+1)), (Integer)result.get(2*(i+1)+1), false);
 			}
+		}
+	}
+
+	private void doReceiveChatMsg(ArrayList<Object> result, int area){
+		(new ForReceivingChatMsg(result,area)).start();
+		
+	}
+	class ForReceivingChatMsg extends Thread{
+		private ArrayList<Object> result;
+		private int area;
+		private String msg;
+		public ForReceivingChatMsg(ArrayList<Object> result, int area){
+			this.result = result;
+			this.area = area;
+		}
+		public void run(){
+			msg = (String)result.get(1);
+			if(area == 0)
+				gameScreen.receiveMainChatMsg(msg);
 		}
 	}
 	private void setPlayer(int i){
