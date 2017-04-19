@@ -56,7 +56,7 @@ import MultiplayerPack.UnicodeForServer;
 			playingInfo = PlayingInfo.getInstance();
 			mPack = MBytePack.getInstance();
 			titleBar = new JButton("Chatting");
-			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT - 100,SCREEN_WIDTH, SCREEN_HEIGHT+100);
+			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT - 200,SCREEN_WIDTH, SCREEN_HEIGHT+200);
 			btnSend = new JButton("Send");
 			msgDisplayArea = new JTextArea(10,20);
 			msgDisplayArea.setEditable(false);
