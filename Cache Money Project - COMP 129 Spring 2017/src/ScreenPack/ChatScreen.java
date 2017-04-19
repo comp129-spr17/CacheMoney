@@ -25,8 +25,8 @@ import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 	public class ChatScreen extends JPanel{
 		private final static int SCREEN_WIDTH = 350;
-		private final static int SCREEN_HEIGHT = 350;
-		private final static int MSGTYPEAREA_HEIGHT = 100;
+		private final static int SCREEN_HEIGHT = 400;
+		private final static int MSGTYPEAREA_HEIGHT = 80;
 		private final static int BTN_WIDTH = 80;
 		private final static int TITLE_HEIGHT = 40;
 		
@@ -56,7 +56,7 @@ import MultiplayerPack.UnicodeForServer;
 			playingInfo = PlayingInfo.getInstance();
 			mPack = MBytePack.getInstance();
 			titleBar = new JButton("Chatting");
-			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT,SCREEN_WIDTH, SCREEN_HEIGHT);
+			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT - 100,SCREEN_WIDTH, SCREEN_HEIGHT+100);
 			btnSend = new JButton("Send");
 			msgDisplayArea = new JTextArea(10,20);
 			msgDisplayArea.setEditable(false);
