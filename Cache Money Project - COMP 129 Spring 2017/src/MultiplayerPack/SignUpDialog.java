@@ -118,9 +118,8 @@ public class SignUpDialog extends JDialog {
 		uNameOK.setVisible(false);
 		constraints.gridx = 3;
 		constraints.gridy = 2;
-		constraints.gridwidth = 2;
-		constraints.gridheight = 2;
-		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
 		constraints.weightx = 0;
 		panel.add(uNameOK, constraints);
 		
