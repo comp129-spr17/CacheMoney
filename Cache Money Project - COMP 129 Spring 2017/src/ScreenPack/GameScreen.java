@@ -82,8 +82,11 @@ public class GameScreen extends JFrame{
 	private JComboBox<String> selectMortgage;
 	private JButton sellConfirm;
 	private JButton sellCancel;
+	private JLabel pleaseSelectMortgageChoice;
+	private JComboBox<String> selectMortgageOption;
 	private JLabel pleaseSelectMortgage;
 	private DefaultComboBoxModel<String> tempComboBox;
+	private DefaultComboBoxModel<String> firstTempComboBox;
 	private JButton displayTestWindow;
 	private PlayerInfoDisplay pInfoDisplay;
 	private MainGameArea mainGameArea;
@@ -551,7 +554,11 @@ public class GameScreen extends JFrame{
 		addExitListener(isHost);
 		initUserInfoWindow();
 		tempComboBox = new DefaultComboBoxModel<String>();
+		firstTempComboBox = new DefaultComboBoxModel<String>();
 		selectMortgage = new JComboBox<String>(tempComboBox);
+		selectMortgageOption = new JComboBox<String>(firstTempComboBox);
+		selectMortgageOption.addItem("Un-Mortgage");
+		selectMortgageOption.addItem("Mortgage");
 		selectMortgage.addActionListener (new ActionListener ()
 		{
 		    public void actionPerformed(ActionEvent e) 
@@ -559,22 +566,29 @@ public class GameScreen extends JFrame{
 		        updateTextField();
 		    }
 		});
-		priceDisplay = new JLabel("Price:");
+		priceDisplay = new JLabel("You earn:");
 		priceDisplay.setFont(new Font("Serif",Font.BOLD,16));
 		mortgagePrice = new JTextField();
 		mortgagePrice.setEditable(false);
-		priceDisplay.setBounds(170, 75, 100,50);
-		mortgagePrice.setBounds(165, 125, 50, 50);
-		sellConfirm = new JButton("Mortgage");
+		priceDisplay.setBounds(157, 105, 100,50);
+		mortgagePrice.setBounds(165, 150, 50, 50);
+		mortgagePrice.setFont(new Font("Serif",Font.BOLD,20));
+		sellConfirm = new JButton("Confirm");
 		sellCancel = new JButton("Cancel");
 		pleaseSelectMortgage =  new JLabel("Please select a property to mortgage:");
-		pleaseSelectMortgage.setBounds(75,20,250,20);	//SUBJECT TO CHANGE/////////////////////////////////////	
+		pleaseSelectMortgageChoice = new JLabel("Please select what you would like to do:");
+		pleaseSelectMortgage.setBounds(75,70,250,20);	//SUBJECT TO CHANGE/////////////////////////////////////	
 		pleaseSelectMortgage.setFont(new Font("Serif",Font.BOLD,16));
-		selectMortgage.setBounds(90, 50, 200, 20);  //SUBJECT TO CHANGE/////////////////////////////////////
+		pleaseSelectMortgageChoice.setBounds(60,20,300,20);	//SUBJECT TO CHANGE/////////////////////////////////////
+		pleaseSelectMortgageChoice.setFont(new Font("Serif",Font.BOLD,16));
+		selectMortgage.setBounds(90, 93, 200, 20);  //SUBJECT TO CHANGE/////////////////////////////////////
+		selectMortgageOption.setBounds(90,43,200,20);
 		sellConfirm.setBounds(30,200,120,30); 	//SUBJECT TO CHANGE/////////////////////////////////////
 		sellCancel.setBounds(230, 200, 120, 30); //SUBJECT TO CHANGE/////////////////////////////////////
 		sellConfirm.setFont(new Font("Serif",Font.BOLD,16));
 		sellCancel.setFont(new Font("Serif",Font.BOLD,16));
+		mortgageWindow.add(pleaseSelectMortgageChoice);
+		mortgageWindow.add(selectMortgageOption);
 		mortgageWindow.add(sellConfirm);
 		mortgageWindow.add(pleaseSelectMortgage);
 		mortgageWindow.add(selectMortgage);
@@ -791,7 +805,7 @@ public class GameScreen extends JFrame{
         
         testInfo = new JDialog();
         testInfo.setLayout(null);
-        testInfo.setSize(400,300);
+        testInfo.setSize(400,250);
         testInfo.setTitle("Testing!");
 	}
 	
@@ -813,7 +827,7 @@ public class GameScreen extends JFrame{
 			{
 				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
 				{
-					mortgagePrice.setText(Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
+					mortgagePrice.setText(" $" + Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
 				}
 			}
 		}
