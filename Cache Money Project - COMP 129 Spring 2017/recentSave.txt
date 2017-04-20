@@ -1,19 +1,19 @@
 *current
-0
+1
 
 *player
 0
 true
 true
 false
-18
-1470
-1
+11
+1360
+0
 null
 null
 null
 *property
-Tennessee Avenue
+St. Charles Place
 0
 false
 0
@@ -24,18 +24,12 @@ false
 true
 true
 false
-39
-1400
-1
+0
+1500
+0
 null
 null
 null
-*property
-New York Avenue
-0
-false
-0
-0
 
 *player
 2
@@ -44,7 +38,7 @@ true
 false
 0
 1500
-1
+0
 null
 null
 null
@@ -56,7 +50,7 @@ true
 false
 0
 1500
-1
+0
 null
 null
 null
