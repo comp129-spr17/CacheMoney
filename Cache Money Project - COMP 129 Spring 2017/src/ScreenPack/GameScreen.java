@@ -133,7 +133,20 @@ public class GameScreen extends JFrame{
 		exitSetting(false);
 	}
 	public void setNumPlayer(int numPlayer){
-		boardPanel.PlacePiecesToBaord(numPlayer);
+		if (loadGame){
+			// TODO: PLACE PIECES FROM LOAD HERE
+			for (int i = 0; i < 4; i++){
+				if (players[i].isOn() && players[i].getIsAlive()){
+					boardPanel.placePieceToBoard(i, players[i].getPositionNumber());
+				}
+			}
+			
+		}
+		else{
+			boardPanel.PlacePiecesToBaord(numPlayer);
+		}
+		
+		
 		//System.out.print(numPlayer);
 		totalPlayers = numPlayer;
 	}
@@ -305,12 +318,11 @@ public class GameScreen extends JFrame{
 						players[playerNum].addProperty(p);
 						s = reader.readLine();
 					}
-					if (players[playerNum].isOn()){
-						boardPanel.movePieceOnBoard(playerNum, players[playerNum].getPositionNumber());
-					}
+//					if (players[playerNum].isOn()){
+//						boardPanel.movePieceOnBoard(playerNum, players[playerNum].getPositionNumber(), 0);
+//					}
 					break;
 				default:
-					System.out.println("!: " + s);
 					s = reader.readLine();
 					// do nothing
 				}

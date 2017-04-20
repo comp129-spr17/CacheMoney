@@ -52,8 +52,8 @@ public class Board {
 					propertyCheck[CHANCE_TOP] = propertyCheck[CHANCE_RIGHT] = propertyCheck[COMCHEST_LEFT] = 
 					propertyCheck[COMCHEST_RIGHT] = propertyCheck[COMCHEST_BOT] = false;
 	}
-	public void placePieceToFirst(int i){
-		boardTracker[0].receivePiece(players[i].getPiece(), i);
+	public void placePieceToFirst(int i, int location){
+		boardTracker[location].receivePiece(players[i].getPiece(), i);
 		
 		
 	}
@@ -61,7 +61,7 @@ public class Board {
 		this.numPlayers = numPlayer;
 		for(int i=0; i<numPlayers; i++){
 			players[i].setIsOn(true);
-			placePieceToFirst(i);
+			placePieceToFirst(i, 0);
 		}
 	}
 	public void movePiece(int player, int diceResult) {
@@ -162,7 +162,7 @@ public class Board {
 			
 		}, 1200);
 	}
-	public void addPieceOnBoard(int player, int destinationSpace) {
+	public void addPieceOnBoard(int player, int destinationSpace, int previousSpace) {
 		boardTracker[destinationSpace].receivePiece(players[player].getPiece(), player);
 	}
 	private void checkIfLastSpace(int player){

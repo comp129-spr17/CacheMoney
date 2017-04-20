@@ -1,103 +1,37 @@
 *current
-1
-
-*player
-0
-true
-true
-false
-39
-230
-1
-null
-null
-null
-*property
-Reading Railroad
-1
-false
-0
-0
-*property
-States Avenue
-0
-false
-0
-0
-*property
-Indiana Avenue
-0
-false
-0
-0
-*property
-Oriental Avenue
-0
-false
-0
-0
-*property
-Pennsylvania Railroad
-1
-false
-0
-0
-*property
-New York Avenue
-0
-false
-0
-0
-*property
-Atlantic Avenue
-0
-false
-0
-0
-*property
-North Carolina Avenue
-0
-false
-0
 0
 
 *player
-1
+0
 true
 true
 false
+18
+1470
 1
-490
-1
 null
 null
 null
-*property
-St. Charles Place
-0
-false
-0
-0
 *property
 Tennessee Avenue
 0
 false
 0
 0
-*property
-Illinois Avenue
-0
+
+*player
+1
+true
+true
 false
-0
-0
+39
+1400
+1
+null
+null
+null
 *property
-Pacific Avenue
-0
-false
-0
-0
-*property
-Boardwalk
+New York Avenue
 0
 false
 0

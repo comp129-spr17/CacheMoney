@@ -109,8 +109,8 @@ public class BoardPanel extends JPanel{
 		this.setBackground(boardBackgroundColor);
 	}
 
-	public void movePieceOnBoard(int player, int destinationSpace) {
-		board.addPieceOnBoard(player, destinationSpace);
+	public void movePieceOnBoard(int player, int destinationSpace, int previousSpace) {
+		board.addPieceOnBoard(player, destinationSpace, previousSpace);
 	}
 	
 
@@ -342,8 +342,8 @@ public class BoardPanel extends JPanel{
 	{
 		return propertyInfo;
 	}
-	public void placePieceToBoard(int i){
-		board.placePieceToFirst(i);
+	public void placePieceToBoard(int i, int position){
+		board.placePieceToFirst(i, position);
 	}
 	public void PlacePiecesToBaord(int numPlayer){
 		board.placePiecesToFirst(numPlayer);

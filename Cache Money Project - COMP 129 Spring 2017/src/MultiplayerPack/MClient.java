@@ -274,7 +274,7 @@ public class MClient {
 		gameScreen.switchToGame();
 		for(int i=0; i<(Integer)result.get(1); i++){
 			pList[i].setIsOn(true);
-			diceP.placePlayerToBoard(i);
+			diceP.placePlayerToBoard(i, 0);  // TODO: MODIFY THIS LATER WHEN WE LOAD GAME FROM MULTIPLAYER
 		}
 		diceP.actionForStart();
 		System.out.println((Integer)result.get(1));
