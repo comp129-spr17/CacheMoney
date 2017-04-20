@@ -6,14 +6,56 @@
 true
 true
 false
-18
-1470
+9
+66
 1
 null
 null
 null
 *property
-Tennessee Avenue
+St. James Place
+0
+false
+0
+0
+*property
+B. &. O. Railroad
+1
+false
+0
+0
+*property
+Ventnor Avenue
+0
+false
+0
+0
+*property
+Pacific Avenue
+0
+false
+0
+0
+*property
+Pennsylvania Railroad
+1
+false
+0
+0
+*property
+Kentucky Avenue
+0
+false
+0
+0
+*property
+Water Works
+0
+false
+0
+0
+*property
+Baltic Avenue
 0
 false
 0
@@ -24,14 +66,56 @@ false
 true
 true
 false
-39
-1400
+12
+234
 1
 null
 null
 null
 *property
-New York Avenue
+Connecticut Avenue
+0
+false
+0
+0
+*property
+Vermont Avenue
+0
+false
+0
+0
+*property
+Electric Company
+0
+false
+0
+0
+*property
+Tennessee Avenue
+0
+false
+0
+0
+*property
+Illinois Avenue
+0
+false
+0
+0
+*property
+North Carolina Avenue
+0
+false
+0
+0
+*property
+Boardwalk
+0
+false
+0
+0
+*property
+Reading Railroad
 0
 false
 0

@@ -159,13 +159,10 @@ public class GameScreen extends JFrame{
 		}
 		this.setVisible(true);
 		if (pInfo.isSingle()){
-			Sounds.waitingRoomJoin.playSound();
-			Music.music6.playMusic();
+			startGameMusic();
 		}
 		mainPanel.add(muteSounds);
 		mainPanel.add(muteMusic);
-		playScheduledMusic();
-		
 	}
 	
 	private void initEverything(boolean isHost, boolean isSingle){
@@ -379,6 +376,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
 				tradeP.openTradingWindow(players, pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
 				
 				// NO LONGER GET-OUT-OF-JAIL FREE BUTTON
@@ -418,8 +416,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				
+				Sounds.buttonConfirm.playSound();
 				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
 				if (selectMortgage.getItemCount() == 0)
 				{
@@ -483,6 +480,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
 				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
 				mortgageWindow.setVisible(false);
 			}
@@ -510,6 +508,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				Sounds.landedOnJail.playSound();
 				testInfo.setVisible(true);
 				
 			}
@@ -689,7 +688,7 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/music_on.png");
 		imgOff = new ImageIcon("src/Images/music_off.png");
 		//muteMusic = new JCheckBox(imgOff); 	// DEBUG
-		muteMusic = new JCheckBox(imgOff); 	// DEBUG
+		muteMusic = new JCheckBox(imgOn); 	
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
 		mainPanel.add(muteMusic);
@@ -940,6 +939,7 @@ public class GameScreen extends JFrame{
 					selectMortgage.repaint();
 				}
 				mLabels.reinitializeMoneyLabels();
+				Sounds.money.playSound();
 				break;
 			}
 		}
@@ -1017,5 +1017,15 @@ public class GameScreen extends JFrame{
 			result += p.getNumHotel()					+ "\n"; // checks how many hotels owned
 		}
 		return result;
+	}
+	
+	public void startGameMusic(){
+		Music.music6.stopMusic();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		playScheduledMusic();
 	}
 }

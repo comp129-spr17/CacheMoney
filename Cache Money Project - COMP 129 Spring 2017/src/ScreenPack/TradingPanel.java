@@ -27,6 +27,7 @@ import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
+import InterfacePack.Sounds;
 
 @SuppressWarnings("serial")
 public class TradingPanel extends JDialog{
@@ -159,6 +160,7 @@ public class TradingPanel extends JDialog{
 		startOverButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
 				setPlayerButtonsVisible(false);
 				setTradeInterfaceVisible(false);
 				setConfirmButtonsVisible(false);
@@ -215,6 +217,7 @@ public class TradingPanel extends JDialog{
 		confirmTradeButton[NO].addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
 				if (isReceiver){
 					closeTradingWindow();
 				}
@@ -263,7 +266,7 @@ public class TradingPanel extends JDialog{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkConditions()){
-					
+					Sounds.buttonConfirm.playSound();
 					setTradeInterfaceVisible(false);
 					description.setText("Are you sure you would like to send this trade request?");
 					offeredMoney = Integer.parseInt(moneyTradeField[TRADE_HOST].getText());
@@ -272,6 +275,7 @@ public class TradingPanel extends JDialog{
 					displayTradeRequest();
 				}
 				else{
+					Sounds.buttonCancel.playSound();
 					System.out.println("Invalid request.");
 					description.setText("Invalid Request! Please ensure that all required fields are filled.");
 				}
@@ -483,6 +487,7 @@ public class TradingPanel extends JDialog{
 					private final int playerToTradeWithNum = listenerIterator;
 					@Override
 					public void mouseClicked(MouseEvent e) {
+						Sounds.buttonPress.playSound();
 						displayTradeOptions(playerToTradeWithNum);
 					}
 					@Override

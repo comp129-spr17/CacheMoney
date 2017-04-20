@@ -25,6 +25,7 @@ import java.util.TimerTask;
 import GamePack.ImageRelated;
 import GamePack.SizeRelated;
 import InterfacePack.BackgroundImage;
+import InterfacePack.Music;
 import InterfacePack.Sounds;
 import MultiplayerPack.*;
 import sun.util.resources.cldr.mr.TimeZoneNames_mr;
@@ -56,9 +57,10 @@ public class MainMenuScreen {
 		
 		init();
 		createMenuWindow();
+		
 		Sounds.register.playSound();
 		addMouseListen(this);
-
+		Music.music6.playMusic();
 
 	}
 

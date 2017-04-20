@@ -363,8 +363,12 @@ public class DicePanel extends JPanel{
 	}
 	
 	public void actionForStart(){
-		if(pInfo.isSingle())
+		if(pInfo.isSingle()){
 			startGameButton.setVisible(false);
+		}
+		else{
+			gamescreen.startGameMusic();
+		}
 		setRollButtonVisible();
 		turnLabel.setVisible(true);
 		if (setDebugVisible){

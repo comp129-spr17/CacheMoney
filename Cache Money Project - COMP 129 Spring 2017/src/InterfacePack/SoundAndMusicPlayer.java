@@ -41,8 +41,8 @@ public class SoundAndMusicPlayer {
 		JFXPanel fxPanel = new JFXPanel();
 		players = new ArrayList<MediaPlayer>();
 		isMusicPlaying = false;
-		isMusicMuted = true;  	// DEBUG
-		isSoundMuted = false;	// DEBUG
+		isMusicMuted = false;  
+		isSoundMuted = false;	
 		musicCount = 0;
 		musicOpeningPlayer = findSound("music", "music1" + "_opening.wav");
 	}
@@ -113,14 +113,13 @@ public class SoundAndMusicPlayer {
 	public void loopMusic(String folder, String filename, int delayUntilLoopBegins){
 
 		Timer t = new Timer();
-		
+		if (isMusicMuted){
+			return;
+		}
+		isMusicPlaying = true;
 		if(delayUntilLoopBegins > 0){
 			musicOpeningPlayer = null;
 			musicOpeningPlayer = findSound(folder, filename + "_opening.wav");
-			if (isMusicMuted){
-				return;
-			}
-			
 			if(musicOpeningPlayer == null) {
 				musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.wav");
 			}
@@ -128,7 +127,6 @@ public class SoundAndMusicPlayer {
 				musicOpeningPlayer.seek(Duration.ZERO);
 			}
 			musicOpeningPlayer.play();
-			isMusicPlaying = true;
 		}
 		t.schedule(new TimerTask(){
 
@@ -211,7 +209,10 @@ public class SoundAndMusicPlayer {
 	public void stopMusic(){
 		isMusicPlaying = false;
 		musicCount += 1;
-		musicOpeningPlayer.stop();
+		if (musicOpeningPlayer != null){
+			musicOpeningPlayer.stop();
+		}
+		
 
 	}
 

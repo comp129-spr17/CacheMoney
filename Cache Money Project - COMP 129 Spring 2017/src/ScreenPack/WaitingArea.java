@@ -18,6 +18,8 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import GamePack.SizeRelated;
+import InterfacePack.Music;
+import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
@@ -71,6 +73,7 @@ public class WaitingArea extends JPanel{
 		controlPanel.add(lblCount);
 		controlPanel.add(btnStart);
 		controlPanel.add(btnGoBack);
+		
 	}
 	public void switchToMainGameArea(){
 
@@ -121,32 +124,21 @@ public class WaitingArea extends JPanel{
 		btnStart.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 			
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(btnStart.isEnabled()){
+					Sounds.buttonConfirm.playSound();
 					btnStart.setEnabled(false);
 					playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.START_GAME));
 				}
@@ -156,31 +148,20 @@ public class WaitingArea extends JPanel{
 		btnGoBack.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 			
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
 				switchToMainGameArea();
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.LEAVE_ROOM));
 			}
