@@ -27,6 +27,7 @@ import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
+import InterfacePack.Sounds;
 
 @SuppressWarnings("serial")
 public class TradingPanel extends JDialog{
@@ -160,6 +161,7 @@ public class TradingPanel extends JDialog{
 		startOverButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
 				setPlayerButtonsVisible(false);
 				setTradeInterfaceVisible(false);
 				setConfirmButtonsVisible(false);
@@ -191,7 +193,10 @@ public class TradingPanel extends JDialog{
 	private void initConfirmButton() {
 		for (int i = 0; i < 2; i++){
 			confirmTradeButton[i] = new JButton();
-			confirmTradeButton[i].setBounds(150 + (300*i), 400, 200, 50);
+			if(i == 0)
+				confirmTradeButton[i].setBounds(WIDTH/2-300-20, 400, 300, 50);
+			else
+				confirmTradeButton[i].setBounds(WIDTH/2+20, 400, 300, 50);
 			confirmTradeButton[i].setVisible(false);
 			add(confirmTradeButton[i]);
 		}
@@ -220,6 +225,7 @@ public class TradingPanel extends JDialog{
 		confirmTradeButton[NO].addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonCancel.playSound();
 				if (isReceiver){
 					closeTradingWindow();
 				}
@@ -246,11 +252,15 @@ public class TradingPanel extends JDialog{
 	private void initTradeConfirmDisplay() {
 		for (int i = 0; i < 2; i++){
 			tradeConfirmDisplay[i] = new JLabel("");
-			tradeConfirmDisplay[i].setBounds(50 + (350*i), 80, 300, 300);
+			if(i == 1)
+				tradeConfirmDisplay[i].setBounds(WIDTH/2-300-20, 80, 300, 300);
+			else
+				tradeConfirmDisplay[i].setBounds(WIDTH/2+20, 80, 300, 300);
+			
 			tradeConfirmDisplay[i].setHorizontalAlignment(JLabel.CENTER);
 			tradeConfirmDisplay[i].setVerticalAlignment(JLabel.TOP);
 			tradeConfirmDisplay[i].setVisible(false);
-			//add(tradeConfirmDisplay[i]);
+			add(tradeConfirmDisplay[i]);
 		}
 		
 	}
@@ -262,13 +272,13 @@ public class TradingPanel extends JDialog{
 
 	private void initOKButton() {
 		okButton.setText("Send Trade Request");
-		okButton.setBounds(WIDTH / 2 - 200, (int) (HEIGHT / 1.5), 200, 50);
+		okButton.setBounds(WIDTH/2+10, HEIGHT-130, 150, 30);
 		okButton.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (checkConditions()){
-					
+					Sounds.buttonConfirm.playSound();
 					setTradeInterfaceVisible(false);
 					description.setText("Are you sure you would like to send this trade request?");
 					offeredMoney = Integer.parseInt(moneyTradeField[TRADE_HOST].getText());
@@ -277,6 +287,7 @@ public class TradingPanel extends JDialog{
 					displayTradeRequest();
 				}
 				else{
+					Sounds.buttonCancel.playSound();
 					System.out.println("Invalid request.");
 					description.setText("Invalid Request! Please ensure that all required fields are filled.");
 				}
@@ -296,7 +307,7 @@ public class TradingPanel extends JDialog{
 			
 		});
 		okButton.setVisible(false);
-//		add(okButton);
+		add(okButton);
 	}
 
 	private void setTradeConfirmDisplayVisible(boolean visible) {
@@ -313,9 +324,12 @@ public class TradingPanel extends JDialog{
 		for (int i = 0; i < 2; i++){
 			JTextField j = new JTextField();
 			j.setVisible(false);
-			j.setBounds(50 + (i*350), 220, 200, 20);
+			if(i == 1)
+				j.setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT+40, 200, 20);
+			else
+				j.setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT+40, 200, 20);
 			moneyTradeField[i] = j;
-//			add(moneyTradeField[i]);
+			add(moneyTradeField[i]);
 		}
 	}
 	
@@ -351,10 +365,10 @@ public class TradingPanel extends JDialog{
 		lblsForThis[1].setText("Trade Their Properties:");
 		lblsForThis[2].setText("Trade Your Money:");
 		lblsForThis[3].setText("Trade Their Money:");
-		lblsForThis[0].setBounds(10, 10, 200, 30);
-		lblsForThis[1].setBounds(WIDTH/2+20+SCROLLING_WIDTH/2-100, 10, 200, 30);
-		lblsForThis[2].setBounds(WIDTH/2-SCROLLING_WIDTH/2-20+100, 2*SCROLLING_HEIGHT + 90, 200, 30);
-		lblsForThis[3].setBounds(WIDTH/2+20+SCROLLING_WIDTH/2-100, 2*SCROLLING_HEIGHT + 90, 200, 30);
+		lblsForThis[0].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 10, 200, 30);
+		lblsForThis[1].setBounds(WIDTH/2+20, 10, 200, 30);
+		lblsForThis[2].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT + 10, 200, 30);
+		lblsForThis[3].setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT + 10, 200, 30);
 		
 		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++){
 			lblsForThis[i].setVisible(false);
@@ -488,6 +502,7 @@ public class TradingPanel extends JDialog{
 					private final int playerToTradeWithNum = listenerIterator;
 					@Override
 					public void mouseClicked(MouseEvent e) {
+						Sounds.buttonPress.playSound();
 						displayTradeOptions(playerToTradeWithNum);
 					}
 					@Override
@@ -586,6 +601,7 @@ public class TradingPanel extends JDialog{
 	
 	private void setTradeInterfaceVisible(boolean visible){
 		setLblsForThisVisible(visible);
+		startOverButton.setVisible(visible);
 		okButton.setVisible(visible);
 		setMoneyTradeFieldVisible(visible);
 		setTradingPanelsVisible(visible);

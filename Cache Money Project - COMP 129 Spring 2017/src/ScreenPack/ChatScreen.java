@@ -103,6 +103,7 @@ import MultiplayerPack.UnicodeForServer;
 			titleBar.addMouseListener(new MouseListener() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
+					Sounds.quickDisplay.playSound();
 					minimizeAndMaximize();
 				}
 				@Override
