@@ -30,6 +30,8 @@ public class DicePanel extends JPanel{
 	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
+	private GameScreen gamescreen;
+	
 	private PathRelated paths;
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
@@ -73,7 +75,8 @@ public class DicePanel extends JPanel{
 	private Icon stationaryDiceIcon;
 	private TradingPanel tradeP;
 	
-	public DicePanel(Player[] player, MoneyLabels MLabels, TradingPanel tradeP){
+	public DicePanel(Player[] player, MoneyLabels MLabels, TradingPanel tradeP, GameScreen gamescreen){
+		this.gamescreen = gamescreen;
 		players = player;
 		mLabel = MLabels;
 		numOfDoublesInRow = 0;
@@ -189,7 +192,7 @@ public class DicePanel extends JPanel{
 		hand[1].setBounds(sizeRelated.getDicePanelWidth()/2, sizeRelated.getDicePanelHeight()/2, 200, 200);
 	}
 	private void addTurnLabel() {
-		turnLabel = new JLabel("<html> Player 1's Turn! <br /> Click to roll! <br /> </html>");
+		turnLabel = new JLabel();
 		turnLabel.setBounds(sizeRelated.getDicePanelWidth()*0/16, sizeRelated.getDicePanelHeight()*4/5, 400, 50);
 		add(turnLabel);
 	}
@@ -370,9 +373,10 @@ public class DicePanel extends JPanel{
 		}
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-//		showPlayer[2].setVisible(true);
+		showPlayer[2].setVisible(true);
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
-//		showPlayer[3].setVisible(true);
+		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1)) : (players[current].getUserName())) + "'s Turn! <br />Click to roll! <br /></html>");
+		showPlayer[3].setVisible(true);
 		if(!pInfo.isSingle())
 			actionForPlayers();
 		(new alwaysUpdateMoneyLabels()).start();
@@ -387,6 +391,7 @@ public class DicePanel extends JPanel{
 		turnLabel.setVisible(true);
 		changePlayerTurn();
 		changeTurn();
+		gamescreen.saveGame();
 		dices[0].hideDice();
 		dices[1].hideDice();
 		propertyPanel.setButtonsEnabled(true);
@@ -494,7 +499,7 @@ public class DicePanel extends JPanel{
 		propertyPanel.actionForBuildHouse();
 	}
 	private void changeTurn(){
-		turnLabel.setText("<html> Player " + (current + 1) + "'s Turn! <br />Click to roll! <br /> </html>");
+		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1)) : (players[current].getUserName())) + "'s Turn! <br />Click to roll! <br />The game has been saved.</html>");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){
@@ -652,6 +657,8 @@ public class DicePanel extends JPanel{
 		else{
 			isAbleToRollDice = true;
 			setRollButtonVisible();
+			dices[0].hideDice();
+			dices[1].hideDice();
 			if (setDebugVisible){
 				overrideDiceRoll.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
 				toggleDoubles.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
@@ -729,7 +736,7 @@ public class DicePanel extends JPanel{
 	}
 	
 	public int getCurrentPlayerNumber() {
-		return current;
+		return current; 
 	}
 
 	public void setCurrentPlayerNum(int currentPlayerNum){

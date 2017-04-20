@@ -134,13 +134,11 @@ public class GameScreen extends JFrame{
 	}
 	public void setNumPlayer(int numPlayer){
 		if (loadGame){
-			// TODO: PLACE PIECES FROM LOAD HERE
 			for (int i = 0; i < 4; i++){
 				if (players[i].isOn() && players[i].getIsAlive()){
 					boardPanel.placePieceToBoard(i, players[i].getPositionNumber());
 				}
 			}
-			
 		}
 		else{
 			boardPanel.PlacePiecesToBaord(numPlayer);
@@ -238,27 +236,16 @@ public class GameScreen extends JFrame{
 		btnExit.addMouseListener(new MouseListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
+			public void mouseReleased(MouseEvent e) {}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent e) {}
 			
 			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseExited(MouseEvent e) {}
 			
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseEntered(MouseEvent e) {}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -326,15 +313,16 @@ public class GameScreen extends JFrame{
 					s = reader.readLine();
 					// do nothing
 				}
-				
-				
-				
 			}
+			reader.close();
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("THERE WAS NO FILE TO LOAD. STARTING NEW GAME");
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e){
+			System.out.println("THE FILE IS CORRUPTED; UNABLE TO LOAD DATA.");
+			System.exit(1);
 		}
 	}
 	private void initButtonListeners()
@@ -616,7 +604,7 @@ public class GameScreen extends JFrame{
 		}
 		tWindow = TestingWindow.getInstance();
 		tWindow.initLabels(testInfo, insets, players, totalPlayers, mLabels);
-		dicePanel = new DicePanel(players, mLabels, tradeP);
+		dicePanel = new DicePanel(players, mLabels, tradeP, this);
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
 		addShowMoneyButton();
