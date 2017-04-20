@@ -85,7 +85,7 @@ public class MainMenuScreen {
 		mainmenuframe = new JFrame("Main Menu");
 		MultiPButton = new JButton("Multiplayer");
 		MultiPButton.setEnabled(false);
-		NewGameButton = new JButton("Single Player");
+		NewGameButton = new JButton("New Game");
 		LoadGameButton = new JButton("Load Game");
 		HelloThere = new JLabel("Cache Money", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
@@ -442,8 +442,10 @@ public class MainMenuScreen {
 
 	private void startSinglePlayer(boolean isLoadGame) {
 		int gNumP;
-		getNumPlayers();
-		Sounds.buttonConfirm.playSound();
+		if (!isLoadGame){
+			getNumPlayers();
+			Sounds.buttonConfirm.playSound();
+		}
 		gNumP = (Integer)cmbNumP.getSelectedItem();
 		hideAndDisposeMainMenuScreen();
 		loadingScreen.setResizable(false);

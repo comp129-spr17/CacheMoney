@@ -317,7 +317,7 @@ public class GameScreen extends JFrame{
 			}
 			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("THERE WAS NO FILE TO LOAD. STARTING NEW GAME");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

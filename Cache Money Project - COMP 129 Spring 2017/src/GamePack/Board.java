@@ -116,10 +116,9 @@ public class Board {
 					Sounds.movePiece.playSound();
 					players[player].movePosition();
 					int previousSpace = players[player].getPositionNumber()-1;
-					int destinationSpace = players[player].getPositionNumber();
 					boardTracker[previousSpace].removePiece(player);
 					checkIfLastSpace(player);
-					addPieceOnBoard(player, destinationSpace);
+					boardTracker[players[player].getPositionNumber()].receivePiece(players[player].getPiece(), player);
 					
 					if (players[player].getPositionNumber() == 0){
 						// PLAYER PASSED GO

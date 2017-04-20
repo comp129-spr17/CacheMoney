@@ -1,43 +1,103 @@
 *current
-0
+1
 
 *player
 0
 true
 true
 false
-3
-1440
+39
+230
 1
 null
 null
 null
-*property
-Mediterranean Avenue
-0
-false
-0
-0
-
-*player
-1
-true
-true
-false
-5
-1240
-1
-null
-null
-null
-*property
-Baltic Avenue
-0
-false
-0
-0
 *property
 Reading Railroad
+1
+false
+0
+0
+*property
+States Avenue
+0
+false
+0
+0
+*property
+Indiana Avenue
+0
+false
+0
+0
+*property
+Oriental Avenue
+0
+false
+0
+0
+*property
+Pennsylvania Railroad
+1
+false
+0
+0
+*property
+New York Avenue
+0
+false
+0
+0
+*property
+Atlantic Avenue
+0
+false
+0
+0
+*property
+North Carolina Avenue
+0
+false
+0
+0
+
+*player
+1
+true
+true
+false
+1
+490
+1
+null
+null
+null
+*property
+St. Charles Place
+0
+false
+0
+0
+*property
+Tennessee Avenue
+0
+false
+0
+0
+*property
+Illinois Avenue
+0
+false
+0
+0
+*property
+Pacific Avenue
+0
+false
+0
+0
+*property
+Boardwalk
 0
 false
 0
