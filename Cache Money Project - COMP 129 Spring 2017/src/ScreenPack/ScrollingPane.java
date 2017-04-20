@@ -14,7 +14,6 @@ public abstract class ScrollingPane {
 	public ScrollingPane(){
 		panel = new JPanel();
 		panel.setVisible(true);
-//		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setLayout(new GridBagLayout());
 		
 		scrollPane = new JScrollPane();

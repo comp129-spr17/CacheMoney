@@ -34,8 +34,8 @@ public class TradingPanel extends JDialog{
 	
 	private final int TRADE_HOST = 0;
 	private final int TRADE_TARGET = 1;
-	private final int SCROLLING_WIDTH = 300;
-	private final int SCROLLING_HEIGHT= 100;
+	private final int SCROLLING_WIDTH = 240;
+	private final int SCROLLING_HEIGHT= 80;
 	private final int YES = 1;
 	private final int NO = 0;
 	private final int WIDTH = 700;
@@ -48,7 +48,7 @@ public class TradingPanel extends JDialog{
 	private Icon[] playerIcons;
 //	private JComboBox<String>[] propertyComboBox;
 //	private JComboBox<String>[] propertyRemoveComboBox;
-	private ArrayList<String>[] propertiesToTrade;
+//	private ArrayList<String>[] propertiesToTrade;
 	private ArrayList<infoThatScrolls> ownedProperties;
 	private ArrayList<infoThatScrolls> trades;
 	
@@ -88,7 +88,7 @@ public class TradingPanel extends JDialog{
 		lblsForThis = new JLabel[NUM_LBLS_FOR_THIS];
 		moneyTradeField = new JTextField[2];
 		okButton = new JButton();
-		propertiesToTrade = new ArrayList[2];
+//		propertiesToTrade = new ArrayList[2];
 		tradeConfirmDisplay = new JLabel[2];
 		confirmTradeButton = new JButton[2];
 		startOverButton = new JButton();
@@ -136,27 +136,28 @@ public class TradingPanel extends JDialog{
 	}
 
 	private void initScrollingPanels(){
-		ownedProperties.add(new infoThatScrolls(true));
-		ownedProperties.add(new infoThatScrolls(true));
-		trades.add(new infoThatScrolls(true));
-		trades.add(new infoThatScrolls(true));
+		boolean buttonEnabled = true;
+		ownedProperties.add(new infoThatScrolls(buttonEnabled));
+		ownedProperties.add(new infoThatScrolls(buttonEnabled));
+		trades.add(new infoThatScrolls(buttonEnabled));
+		trades.add(new infoThatScrolls(buttonEnabled));
 		
 		ownedProperties.get(TRADE_HOST).setTheOtherScrollingPane(trades.get(TRADE_HOST));
 		ownedProperties.get(TRADE_TARGET).setTheOtherScrollingPane(trades.get(TRADE_TARGET));
 		trades.get(TRADE_HOST).setTheOtherScrollingPane(ownedProperties.get(TRADE_HOST));
 		trades.get(TRADE_TARGET).setTheOtherScrollingPane(ownedProperties.get(TRADE_TARGET));
 		
-		ownedProperties.get(TRADE_HOST).setScrollPaneBounds(0, 0, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		ownedProperties.get(TRADE_TARGET).setScrollPaneBounds(SCROLLING_WIDTH + 50, 0, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		trades.get(TRADE_HOST).setScrollPaneBounds(0, SCROLLING_HEIGHT + 50, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		trades.get(TRADE_TARGET).setScrollPaneBounds(SCROLLING_WIDTH + 50, SCROLLING_HEIGHT + 50, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		ownedProperties.get(TRADE_HOST).setScrollPaneBounds(WIDTH/2-SCROLLING_WIDTH-20, 40, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		ownedProperties.get(TRADE_TARGET).setScrollPaneBounds(WIDTH/2+20, 40, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_HOST).setScrollPaneBounds(WIDTH/2-SCROLLING_WIDTH-20, SCROLLING_HEIGHT + 70, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_TARGET).setScrollPaneBounds(WIDTH/2+20, SCROLLING_HEIGHT + 70, SCROLLING_WIDTH, SCROLLING_HEIGHT);
 	}
 	
 	private void initStartOverButton() {
 		startOverButton.setText("Start Over");
-		startOverButton.setBounds(1, 1, 130, 30);
+		startOverButton.setBounds(WIDTH/2-130-20, HEIGHT-130, 130, 30);
 		startOverButton.setVisible(false);
-//		add(startOverButton);
+		add(startOverButton);
 		startOverButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -168,10 +169,7 @@ public class TradingPanel extends JDialog{
 				/*propertiesToTrade[TRADE_HOST].clear();
 				propertiesToTrade[TRADE_TARGET].clear();*/
 				startOverButton.setVisible(false);
-				ownedProperties.get(TRADE_HOST).clearList();
-				ownedProperties.get(TRADE_TARGET).clearList();
-				trades.get(TRADE_HOST).clearList();
-				trades.get(TRADE_TARGET).clearList();
+				clearScrollingPanel();
 				openTradingWindow(players, currentPlayerNum);
 			}
 			@Override
@@ -185,12 +183,22 @@ public class TradingPanel extends JDialog{
 		});
 	}
 
+	private void clearScrollingPanel(){
+		ownedProperties.get(TRADE_HOST).clearList();
+		ownedProperties.get(TRADE_TARGET).clearList();
+		trades.get(TRADE_HOST).clearList();
+		trades.get(TRADE_TARGET).clearList();
+	}
+	
 	private void initConfirmButton() {
 		for (int i = 0; i < 2; i++){
 			confirmTradeButton[i] = new JButton();
-			confirmTradeButton[i].setBounds(150 + (300*i), 400, 200, 50);
+			if(i == 0)
+				confirmTradeButton[i].setBounds(WIDTH/2-300-20, 400, 300, 50);
+			else
+				confirmTradeButton[i].setBounds(WIDTH/2+20, 400, 300, 50);
 			confirmTradeButton[i].setVisible(false);
-			//add(confirmTradeButton[i]);
+			add(confirmTradeButton[i]);
 		}
 		confirmTradeButton[YES].setText("Confirm");
 		confirmTradeButton[YES].addMouseListener(new MouseListener(){
@@ -244,23 +252,27 @@ public class TradingPanel extends JDialog{
 	private void initTradeConfirmDisplay() {
 		for (int i = 0; i < 2; i++){
 			tradeConfirmDisplay[i] = new JLabel("");
-			tradeConfirmDisplay[i].setBounds(50 + (350*i), 80, 300, 300);
+			if(i == 1)
+				tradeConfirmDisplay[i].setBounds(WIDTH/2-300-20, 80, 300, 300);
+			else
+				tradeConfirmDisplay[i].setBounds(WIDTH/2+20, 80, 300, 300);
+			
 			tradeConfirmDisplay[i].setHorizontalAlignment(JLabel.CENTER);
 			tradeConfirmDisplay[i].setVerticalAlignment(JLabel.TOP);
 			tradeConfirmDisplay[i].setVisible(false);
-			//add(tradeConfirmDisplay[i]);
+			add(tradeConfirmDisplay[i]);
 		}
 		
 	}
 
 	private void initPropertiesToTrade() {
-		propertiesToTrade[TRADE_HOST] = new ArrayList<String>();
-		propertiesToTrade[TRADE_TARGET] = new ArrayList<String>();
+//		propertiesToTrade[TRADE_HOST] = new ArrayList<String>();
+//		propertiesToTrade[TRADE_TARGET] = new ArrayList<String>();
 	}
 
 	private void initOKButton() {
 		okButton.setText("Send Trade Request");
-		okButton.setBounds(WIDTH / 2 - 200, (int) (HEIGHT / 1.5), 200, 50);
+		okButton.setBounds(WIDTH/2+10, HEIGHT-130, 150, 30);
 		okButton.addMouseListener(new MouseListener(){
 
 			@Override
@@ -295,7 +307,7 @@ public class TradingPanel extends JDialog{
 			
 		});
 		okButton.setVisible(false);
-//		add(okButton);
+		add(okButton);
 	}
 
 	private void setTradeConfirmDisplayVisible(boolean visible) {
@@ -312,9 +324,12 @@ public class TradingPanel extends JDialog{
 		for (int i = 0; i < 2; i++){
 			JTextField j = new JTextField();
 			j.setVisible(false);
-			j.setBounds(50 + (i*350), 220, 200, 20);
+			if(i == 1)
+				j.setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT+40, 200, 20);
+			else
+				j.setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT+40, 200, 20);
 			moneyTradeField[i] = j;
-//			add(moneyTradeField[i]);
+			add(moneyTradeField[i]);
 		}
 	}
 	
@@ -336,7 +351,7 @@ public class TradingPanel extends JDialog{
 			}
 		}
 		else{
-			return !(propertiesToTrade[TRADE_HOST].isEmpty() && propertiesToTrade[TRADE_TARGET].isEmpty());
+			return !(trades.get(TRADE_HOST).getListOfObjects().isEmpty() && trades.get(TRADE_TARGET).getListOfObjects().isEmpty());
 		}
 	}
 	
@@ -350,18 +365,18 @@ public class TradingPanel extends JDialog{
 		lblsForThis[1].setText("Trade Their Properties:");
 		lblsForThis[2].setText("Trade Your Money:");
 		lblsForThis[3].setText("Trade Their Money:");
-		lblsForThis[0].setBounds(70, 90, 200, 30);
-		lblsForThis[1].setBounds(420, 90, 200, 30);
-		lblsForThis[2].setBounds(70, 190, 200, 30);
-		lblsForThis[3].setBounds(420, 190, 200, 30);
+		lblsForThis[0].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 10, 200, 30);
+		lblsForThis[1].setBounds(WIDTH/2+20, 10, 200, 30);
+		lblsForThis[2].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT + 10, 200, 30);
+		lblsForThis[3].setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT + 10, 200, 30);
 		
 		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++){
 			lblsForThis[i].setVisible(false);
-//			add(lblsForThis[i]);
+			add(lblsForThis[i]);
 		}
 		
 	}
-
+	
 	/*private void initPropertyComboBox() {
 		propertyComboBox[TRADE_HOST] = new JComboBox<String>(new DefaultComboBoxModel<String>());
 		propertyComboBox[TRADE_TARGET] = new JComboBox<String>(new DefaultComboBoxModel<String>());
@@ -448,7 +463,7 @@ public class TradingPanel extends JDialog{
 	}
 	*/
 	
-	private void setupPlayerPropertyComboBox(int playerIndex, Player[] players, int playerNum){
+	private void setupPlayerPropertyPanel(int playerIndex, Player[] players, int playerNum){
 		List<Property> properties = players[playerIndex].getOwnedProperties();
 		/*propertyRemoveComboBox[playerNum].removeAllItems();
 		propertyRemoveComboBox[playerNum].addItem("View Selected/Remove...");
@@ -549,14 +564,15 @@ public class TradingPanel extends JDialog{
 		ownedProperties.get(TRADE_TARGET).setScrollingPaneVisible(true);
 		trades.get(TRADE_HOST).setScrollingPaneVisible(true);
 		trades.get(TRADE_TARGET).setScrollingPaneVisible(true);
-//		System.out.println("currentPlayerNum: " + currentPlayerNum);
-//		System.out.println("tradePlayerNum: " + tradePlayerNum);
-		propertiesToTrade[TRADE_HOST].clear();
-		propertiesToTrade[TRADE_TARGET].clear();
+		System.out.println("currentPlayerNum: " + currentPlayerNum);
+		System.out.println("tradePlayerNum: " + tradePlayerNum);
+//		propertiesToTrade[TRADE_HOST].clear();
+//		propertiesToTrade[TRADE_TARGET].clear();
+		clearScrollingPanel();
 		setPlayerButtonsVisible(false);
 		description.setText("Configure trading options here.");
-		setupPlayerPropertyComboBox(currentPlayerNum, players, 0);
-		setupPlayerPropertyComboBox(tradePlayerNum, players, 1);
+		setupPlayerPropertyPanel(currentPlayerNum, players, 0);
+		setupPlayerPropertyPanel(tradePlayerNum, players, 1);
 		moneyTradeField[TRADE_HOST].setText("0");
 		moneyTradeField[TRADE_TARGET].setText("0");
 		startOverButton.setVisible(true);
@@ -564,12 +580,12 @@ public class TradingPanel extends JDialog{
 		
 	}
 
-	/*private void setPropertyComboBoxVisible(boolean visible) {
-		propertyComboBox[TRADE_HOST].setVisible(visible);
-		propertyComboBox[TRADE_TARGET].setVisible(visible);
-		propertyRemoveComboBox[TRADE_HOST].setVisible(visible);
-		propertyRemoveComboBox[TRADE_TARGET].setVisible(visible);
-	}*/
+	private void setTradingPanelsVisible(boolean visible) {
+		ownedProperties.get(TRADE_HOST).setScrollingPaneVisible(visible);
+		ownedProperties.get(TRADE_TARGET).setScrollingPaneVisible(visible);
+		trades.get(TRADE_HOST).setScrollingPaneVisible(visible);
+		trades.get(TRADE_TARGET).setScrollingPaneVisible(visible);
+	}
 	
 	private void setMoneyTradeFieldVisible(boolean visible) {
 		moneyTradeField[TRADE_HOST].setVisible(visible);
@@ -585,9 +601,10 @@ public class TradingPanel extends JDialog{
 	
 	private void setTradeInterfaceVisible(boolean visible){
 		setLblsForThisVisible(visible);
+		startOverButton.setVisible(visible);
 		okButton.setVisible(visible);
 		setMoneyTradeFieldVisible(visible);
-//		setPropertyComboBoxVisible(visible);
+		setTradingPanelsVisible(visible);
 	}
 	
 	public void closeTradingWindow(){
@@ -596,19 +613,19 @@ public class TradingPanel extends JDialog{
 		setTradeInterfaceVisible(false);
 		setConfirmButtonsVisible(false);
 		setTradeConfirmDisplayVisible(false);
-		propertiesToTrade[TRADE_HOST].clear();
-		propertiesToTrade[TRADE_TARGET].clear();
+		
+		clearScrollingPanel();
 		setVisible(false);
 	}
 	
 	private String packTradeRequest(){
 		String offeredProperties = "";
 		String requestedProperties = "";
-		for (int i = 0; i < propertiesToTrade[TRADE_HOST].size(); i++){
-			offeredProperties += propertiesToTrade[TRADE_HOST].get(i) + "\n";
+		for (int i = 0; i < trades.get(TRADE_HOST).getListOfObjects().size(); i++){
+			offeredProperties += trades.get(TRADE_HOST).getListOfObjects().get(i) + "\n";
 		}
-		for (int i = 0; i < propertiesToTrade[TRADE_TARGET].size(); i++){
-			requestedProperties += propertiesToTrade[TRADE_TARGET].get(i) + "\n";
+		for (int i = 0; i < trades.get(TRADE_TARGET).getListOfObjects().size(); i++){
+			requestedProperties += trades.get(TRADE_TARGET).getListOfObjects().get(i) + "\n";
 		}
 		return  + currentPlayerNum + "\n" 	// trade host
 				+ offeredMoney + "\n" // money offered
@@ -631,12 +648,12 @@ public class TradingPanel extends JDialog{
 				break;
 			}
 			catch (Exception e2){
-				propertiesToTrade[TRADE_HOST].add(chunk[i]); i += 1;
+				trades.get(TRADE_HOST).getListOfObjects().add(chunk[i]); i += 1;
 			}
 		}
 		requestedMoney = Integer.parseInt(chunk[i]); i += 1;
 		while (i < chunk.length){
-			propertiesToTrade[TRADE_TARGET].add(chunk[i]); i += 1;
+			trades.get(TRADE_TARGET).getListOfObjects().add(chunk[i]); i += 1;
 		}
 	}
 	
@@ -644,8 +661,8 @@ public class TradingPanel extends JDialog{
 	
 	private void displayTradeRequest() {
 		String propertiesToDisplay = "";
-		for (int i = 0; i < propertiesToTrade[TRADE_HOST].size(); i++){
-			propertiesToDisplay += propertiesToTrade[TRADE_HOST].get(i) + "<br />";
+		for (int i = 0; i < trades.get(TRADE_HOST).getListOfObjects().size(); i++){
+			propertiesToDisplay += trades.get(TRADE_HOST).getListOfObjects().get(i) + "<br />";
 		}
 		tradeConfirmDisplay[TRADE_HOST].setText("<html>"
 				+ "Offering:<br />"
@@ -654,8 +671,8 @@ public class TradingPanel extends JDialog{
 				+ "</html>");
 		
 		propertiesToDisplay = "";
-		for (int i = 0; i < propertiesToTrade[TRADE_TARGET].size(); i++){
-			propertiesToDisplay += propertiesToTrade[TRADE_TARGET].get(i) + "<br />";
+		for (int i = 0; i < trades.get(TRADE_TARGET).getListOfObjects().size(); i++){
+			propertiesToDisplay += trades.get(TRADE_TARGET).getListOfObjects().get(i) + "<br />";
 		}
 		tradeConfirmDisplay[TRADE_TARGET].setText("<html>"
 				+ "Requesting:<br />"
@@ -673,13 +690,13 @@ public class TradingPanel extends JDialog{
 		players[tradePlayerNum].pay(requestedMoney);
 		players[tradePlayerNum].earnMonies(offeredMoney);
 		
-		for (String s : propertiesToTrade[TRADE_TARGET]){
+		for (String s : trades.get(TRADE_TARGET).getListOfObjects()){
 			Property tradedProperty = propertyInfo.get(s).getPropertyInfo();
 			tradedProperty.setOwner(currentPlayerNum);
 			players[currentPlayerNum].addProperty(tradedProperty);
 			players[tradePlayerNum].removeProperty(tradedProperty);
 		}
-		for (String s : propertiesToTrade[TRADE_HOST]){
+		for (String s : trades.get(TRADE_HOST).getListOfObjects()){
 			Property tradedProperty = propertyInfo.get(s).getPropertyInfo();
 			tradedProperty.setOwner(tradePlayerNum);
 			players[tradePlayerNum].addProperty(tradedProperty);

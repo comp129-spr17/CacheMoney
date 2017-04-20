@@ -35,6 +35,7 @@ public class infoThatScrolls extends ScrollingPane {
 		nameOfObject.clear();
 		indexMaps.clear();
 		panel.removeAll();
+		panel.repaint();
 		System.gc();
 	}
 
@@ -80,12 +81,13 @@ public class infoThatScrolls extends ScrollingPane {
 	public void removeObject(String nOfObject){
 
 		if(nameOfObject.size() > 0){
-			JButton temp = indexMaps.get(nOfObject);
+			JButton temp = indexMaps.remove(nOfObject);
 			panel.remove(temp);
 
 			for(int i = 0; i < nameOfObject.size(); i++){
 				if(nOfObject == nameOfObject.get(i)){
 					nameOfObject.remove(i);
+					break;
 				}
 			}
 
@@ -101,7 +103,7 @@ public class infoThatScrolls extends ScrollingPane {
 		theOther = i;
 	}
 
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		JFrame f = new JFrame("TEST");
 		f.setSize(BUTTON_WIDTH,BUTTON_HEIGHT);
 		f.setVisible(true);
@@ -119,5 +121,5 @@ public class infoThatScrolls extends ScrollingPane {
 		o.addObject("Gyrados");
 		System.out.println(o.getListOfObjects().toString());
 
-	}
+	}*/
 }
