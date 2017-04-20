@@ -23,10 +23,12 @@ public final class SqlRelated {
 	private static Connection connection;
 	private static ArrayList<ResultSet> resultSets;
 	private static ResultSet rSet;
+	private static String saving_statement;
 	public static SqlRelated getInstance(){
 		return new SqlRelated();
 	}
 	private SqlRelated(){
+		saving_statement = "";
 		statement = null;
 		resultSets = new ArrayList<>();
 		try {
@@ -292,5 +294,58 @@ public final class SqlRelated {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+	public int saveGameBeginning(int current_state, int current_turn){
+		try {
+			System.out.println(saving_statement);
+			statement = connection.createStatement();
+			statement.execute("INSERT INTO saved_game (current_state,current_turn) " +
+					"VALUES ("+current_state +","+current_turn+"); ");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT @Game_Num := MAX(saved_num) " +
+											"FROM saved_game; ");
+			rSet.next();
+			return rSet.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	public void saveGameUser(int gameNum, String user_id, boolean isAlive, int player_num, boolean inJail, int posNum ,int totMoney, int jailFree, String tradeRequest){
+		try {
+			System.out.println(saving_statement);
+			statement = connection.createStatement();
+			statement.execute("INSERT INTO saved_game_user " +
+					"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"'); ");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		saving_statement += "INSERT INTO saved_game_user " +
+//				"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"'); ";
+	}
+	public void saveProperty(int gameNum,String propName, int multiplier, boolean isMortgaged, int numHouse, int numHotel, int ownedBy){
+		try {
+			System.out.println(saving_statement);
+			statement = connection.createStatement();
+			statement.execute("INSERT INTO saved_game_property " +
+					"VALUES ("+gameNum+",'"+propName+"', "+multiplier+", "+isMortgaged+", "+numHouse+", "+numHotel+", "+ownedBy+"); ");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//				saving_statement += "INSERT INTO saved_game_property " +
+//				"VALUES ("+gameNum+",'"+propName+"', "+multiplier+", "+isMortgaged+", "+numHouse+", "+numHotel+", "+ownedBy+"); ";
+	}
+	public void insertSavingGame(){
+		try {
+			System.out.println(saving_statement);
+			statement = connection.createStatement();
+			statement.execute(saving_statement);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
