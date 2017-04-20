@@ -20,6 +20,7 @@ import GamePack.UtilityProperty;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
+import MultiplayerPack.Part;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
@@ -227,6 +228,7 @@ public class PropertyInfoPanel extends JPanel{
 		AP.actionToAuction(bid, playerNum);
 	}
 	public void actionToSwitchToAuction(){
+		pInfo.setGamePart(Part.PURCHASE_PROP);
 		Sounds.landedOnOwnedProperty.playSound();
 		buyButton.setEnabled(true);
 		AP.switchtoAP();

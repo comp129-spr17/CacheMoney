@@ -272,7 +272,8 @@ public class MClient {
 		System.out.println("received start game");
 		setPlayer((Integer)result.get(2));
 		gameScreen.switchToGame();
-		for(int i=0; i<(Integer)result.get(1); i++){
+		playingInfo.setNumberOfPlayer((Integer)result.get(1));
+		for(int i=0; i<playingInfo.getNumberOfPlayer(); i++){
 			pList[i].setIsOn(true);
 			diceP.placePlayerToBoard(i, 0);  // TODO: MODIFY THIS LATER WHEN WE LOAD GAME FROM MULTIPLAYER
 		}
@@ -299,7 +300,7 @@ public class MClient {
 	private void doDisconnect(ArrayList<Object> result){
 		int playerNo = (Integer)result.get(1);
 		pList[playerNo].setIsOn(false);
-		diceP.actionForRemovePlayer(playerNo);
+		gameScreen.actionForDiscconectingGame(playerNo);
 	}
 	private void doHostDisconnect(){
 		isServerUp = false;

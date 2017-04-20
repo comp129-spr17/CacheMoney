@@ -20,25 +20,11 @@ public class EndGamePanel extends JPanel {
 		playerWon = winStatus;
 		this.players = players;
 		this.currentPlayerNum = currentPlayerNum;
-		createLabels();
-		displayLabels();
-		displayData();
+		createWinStatusLabel();
 	}
 
 
-	private void displayLabels() {
-		// TODO Auto-generated method stub
-		PlayerWinStatus.setBounds(0,100,500,100);
-		add(PlayerWinStatus);
-	}
-
-
-	private void displayData() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void createLabels() {
+	private void createWinStatusLabel() {
 		// TODO Auto-generated method stub
 		if(playerWon) {
 			PlayerWinStatus = new JLabel("WINNER");
@@ -46,5 +32,7 @@ public class EndGamePanel extends JPanel {
 			PlayerWinStatus = new JLabel("LOSER");
 		}
 		PlayerWinStatus.setFont(new Font("Serif",Font.BOLD,72));
+		PlayerWinStatus.setBounds(0,100,500,100);
+		add(PlayerWinStatus);
 	}
 }

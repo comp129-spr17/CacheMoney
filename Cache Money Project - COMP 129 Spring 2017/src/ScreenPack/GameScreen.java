@@ -958,21 +958,47 @@ public class GameScreen extends JFrame{
 		updateMortgage(playerNum);
 		mortgageWindow.setVisible(false);
 	}
+	public void actionForDiscconectingGame(int playerNo){
+		pInfo.setIsDisconnectedByOther();
+		JOptionPane.showMessageDialog(this,
+                "Player "+playerNo +" has left.\n Exiting Game....",
+                "Warning.",
+                JOptionPane.WARNING_MESSAGE);
+		System.exit(0);
+	}
 	public void saveGame() {
-		try{
-			PrintWriter writer = new PrintWriter(FILENAME, "UTF-8");
-			String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
-			String[] packedPlayerInfo = packPlayerInformation();
-			writer.println(currentPlayer);				// currentPlayer
-			for (int i = 0; i < 4; i++){
-				writer.println(packedPlayerInfo[i]);	// players and properties
+		if(pInfo.isSingle()){
+			try{
+				PrintWriter writer = new PrintWriter(FILENAME, "UTF-8");
+				String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
+				String[] packedPlayerInfo = packPlayerInformation();
+				writer.println(currentPlayer);				// currentPlayer
+				for (int i = 0; i < 4; i++){
+					writer.println(packedPlayerInfo[i]);	// players and properties
+				}
+				writer.close();
 			}
-			writer.close();
-		}
-		catch (IOException ioe){
-			System.out.println("Failed to write to file :(");
+			catch (IOException ioe){
+				System.out.println("Failed to write to file :(");
+			}
+		}else{
+			int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber());
+			insertPlayerInformation(savedNum);
+//			sqlRelated.insertSavingGame();
 		}
 		
+		
+	}
+	private void insertPlayerInformation(int savedNum) {
+		for(int i=0;i<pInfo.getNumberOfPlayer(); i++){
+			sqlRelated.saveGameUser(savedNum,players[i].getUserId(), players[i].getIsAlive(), players[i].getPlayerNum(), players[i].isInJail(), players[i].getPositionNumber(), players[i].getTotalMonies(), players[i].getJailFreeCard(), players[i].getTradeRequest());
+			insertPlayerProperties(savedNum,i);
+		}
+	}
+	private void insertPlayerProperties(int savedNum, int i) {
+		for (Property p : players[i].getOwnedProperties()){
+			sqlRelated.saveProperty(savedNum,p.getName()	, p.getMultiplier(), p.isMortgaged(), p.getNumHouse(), p.getNumHotel(), i);
+		}
 	}
 	private String[] packPlayerInformation() {
 		String[] result = new String[4];

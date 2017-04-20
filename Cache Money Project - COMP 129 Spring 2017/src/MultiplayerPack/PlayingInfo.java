@@ -7,10 +7,13 @@ public final class PlayingInfo {
 	private boolean isSingle;
 	private OutputStream outputStream;
 	private int myPlayerNum;
+	private int numberOfPlayer;
 	private boolean isLoggedIn;
 	private String loggedInId;
+	private int gamePart;
 	public final static int PORT_NUM = 7777;
 	public final static String IP_ADDRESS = "10.15.17.88";
+	private boolean isDisconnectedByOther;
 //	public final static String IP_ADDRESS = "10.70.70.80";
 //	public final static String IP_ADDRESS = "10.0.0.3";
 	private static final PlayingInfo PLAYING_INFO = new PlayingInfo();
@@ -70,5 +73,23 @@ public final class PlayingInfo {
 	}
 	public boolean isLoggedInId(String id){
 		return loggedInId.equals(id);
+	}
+	public int getGamePart(){
+		return gamePart;
+	}
+	public void setGamePart(int gamePart){
+		this.gamePart = gamePart;
+	}
+	public int getNumberOfPlayer(){
+		return numberOfPlayer;
+	}
+	public void setNumberOfPlayer(int numberOfPlayer){
+		this.numberOfPlayer = numberOfPlayer;
+	}
+	public boolean getIsDisconnectedByOther(){
+		return isDisconnectedByOther;
+	}
+	public void setIsDisconnectedByOther(){
+		isDisconnectedByOther = true;
 	}
 }

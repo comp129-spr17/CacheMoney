@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -26,7 +27,7 @@ import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private PathRelated paths;
@@ -400,6 +401,7 @@ public class DicePanel extends JPanel{
 	}
 	public void actionForPlayers(){
 		if (players[current].isInJail()){
+			pInfo.setGamePart(Part.JAIL);
 			jailInfoScreen.executeSwitch(players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), current);
 		}
 		else{
@@ -425,14 +427,13 @@ public class DicePanel extends JPanel{
 		
 	}
 	private void setRollButtonVisible() {
+		pInfo.setGamePart(Part.ROLL_DICE);
 		rollButton.setIcon(spinningDiceIcon);
 		rollButton.setPressedIcon(spinningDiceIcon);
 		rollButton.setBorder(null);
 		rollButton.setBackground(null);
 		rollButton.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
 	}
-	
-	
 	public void actionForPropertyPurchase(String propertyName, int buyingPrice, int playerNum){
 		System.out.println(propertyName + " : " + buyingPrice + " : " + playerNum);
 		propertyPanel.purchaseProperty(propertyName, buyingPrice, playerNum);
@@ -456,7 +457,8 @@ public class DicePanel extends JPanel{
 		mGamePanel.actionForGame(isOwner, time);
 	}
 	public void actionForRemovePlayer(int i){
-		board.removePlayer(i);
+//		board.removePlayer(i);
+		
 	}
 	public void actionForReceiveArray(int[] arr, int keyNum){
 		mGamePanel.actionForGame(arr, keyNum);
@@ -644,6 +646,7 @@ public class DicePanel extends JPanel{
 		delayThread(600);
 		mLabel.reinitializeMoneyLabels();
 		if (!isSame || numOfDoublesInRow >= 3 || !movementAllowed || players[current].isInJail()){
+			pInfo.setGamePart(Part.END_TURN);
 			endTurnButton.setVisible(pInfo.isSingle() ? true : pInfo.isMyPlayerNum(current));
 		}
 		else{
@@ -670,9 +673,13 @@ public class DicePanel extends JPanel{
 			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current), -1);
 		}
 		else if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
-			mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), isRailRoad(curSpaceName) ? 9 : determineMinigameToPlay(curSpaceName));
-			mGamePanel.startMiniGame(curSpaceName);
+			browseMiniGame(curSpaceName);
 		}
+	}
+	private void browseMiniGame(String curSpaceName){
+		pInfo.setGamePart(Part.MINI_GAME);
+		mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), isRailRoad(curSpaceName) ? 9 : determineMinigameToPlay(curSpaceName));
+		mGamePanel.startMiniGame(curSpaceName);
 	}
 	private boolean isRailRoad(String curSpaceName){
 		return propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier() == 9;
