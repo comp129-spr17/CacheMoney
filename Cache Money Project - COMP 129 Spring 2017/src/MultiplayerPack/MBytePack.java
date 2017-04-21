@@ -360,7 +360,7 @@ public final class MBytePack {
 	}
 	
 	
-	public byte[] packMortgageRequest(int requestCode, String propertyName, int playerNum){
+	public byte[] packStringAndInt(int requestCode, String propertyName, int playerNum){
 		try{
 			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeUTF(propertyName);

@@ -116,7 +116,7 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongArray(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.MORTGAGE_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackMortgageRequest(result);
+		GetResults.put(UnicodeForServer.MORTGAGE_PROPERTY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringAndInt(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.UPDATE_ROOM_STAT, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongIntArray(result);
 		return cleanUpAndReturn();}});
@@ -126,7 +126,9 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringInt(result);
+		GetResults.put(UnicodeForServer.TRADE_REQUEST, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringAndInt(result);
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.COMMENCE_TRADE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackBoolean(result);
 		return cleanUpAndReturn();}});
 		
 	}
@@ -337,7 +339,7 @@ public final class MByteUnpack {
 		}
 	}
 	
-	public void unpackMortgageRequest(byte[] result) {
+	public void unpackStringAndInt(byte[] result) {
 		try {
 			resultList.add(dInputStream.readUTF());
 			resultList.add(dInputStream.readInt());

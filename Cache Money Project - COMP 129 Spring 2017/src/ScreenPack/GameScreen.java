@@ -449,7 +449,7 @@ public class GameScreen extends JFrame{
 					actionForMortgageProperty((String) selectMortgage.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
 				}
 				else{
-					pInfo.sendMessageToServer(mPack.packMortgageRequest((UnicodeForServer.MORTGAGE_PROPERTY), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
+					pInfo.sendMessageToServer(mPack.packStringAndInt((UnicodeForServer.MORTGAGE_PROPERTY), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
 				}
 				
 			}
@@ -971,8 +971,8 @@ public class GameScreen extends JFrame{
 				System.out.println("Failed to write to file :(");
 			}
 		}else{
-			int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber());
-			insertPlayerInformation(savedNum);
+//			int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber());
+//			insertPlayerInformation(savedNum);
 //			sqlRelated.insertSavingGame();
 		}
 		
@@ -986,7 +986,7 @@ public class GameScreen extends JFrame{
 	}
 	private void insertPlayerProperties(int savedNum, int i) {
 		for (Property p : players[i].getOwnedProperties()){
-			sqlRelated.saveProperty(savedNum,p.getName()	, p.getMultiplier(), p.isMortgaged(), p.getNumHouse(), p.getNumHotel(), i);
+			sqlRelated.saveProperty(savedNum,p.getName(), p.getMultiplier(), p.isMortgaged(), p.getNumHouse(), p.getNumHotel(), i);
 		}
 	}
 	private String[] packPlayerInformation() {
@@ -1032,5 +1032,8 @@ public class GameScreen extends JFrame{
 	public void actionForSendTradeRequest(String tradeReq, Integer playerNumTarget) {
 		tradeP.sendTradeRequestToTarget(tradeReq, playerNumTarget);
 		
+	}
+	public void actionForCommenceTrade(boolean b) {
+		tradeP.commenceTrade(b);
 	}
 }

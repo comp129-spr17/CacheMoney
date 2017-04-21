@@ -212,7 +212,7 @@ public class TradingPanel extends JDialog{
 			public void mouseClicked(MouseEvent e) {
 				if (pInfo.isSingle()){
 					if (isReceiver){
-						commenceTrade();
+						commenceTrade(true);
 					}
 					else{
 						sendTradeRequestToTarget(packTradeRequest(), tradePlayerNum);
@@ -220,10 +220,10 @@ public class TradingPanel extends JDialog{
 				}
 				else{
 					if (isReceiver){
-						pInfo.sendMessageToServer(mPack.packMortgageRequest(UnicodeForServer.TRADE_REQUEST, packTradeRequest(), tradePlayerNum));
+						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.COMMENCE_TRADE, true));
 					}
 					else{
-						
+						pInfo.sendMessageToServer(mPack.packStringAndInt(UnicodeForServer.TRADE_REQUEST, packTradeRequest(), tradePlayerNum));
 					}
 				}
 				closeTradingWindow();
@@ -243,7 +243,13 @@ public class TradingPanel extends JDialog{
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonCancel.playSound();
 				if (isReceiver){
-					closeTradingWindow();
+					if (pInfo.isSingle()){
+						closeTradingWindow();
+					}
+					else{
+						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.COMMENCE_TRADE, false));
+						closeTradingWindow();
+					}
 				}
 				else{
 					setTradeConfirmDisplayVisible(false);
@@ -263,6 +269,7 @@ public class TradingPanel extends JDialog{
 		});
 	}
 	public void sendTradeRequestToTarget(String tradeReq, int target) {
+		System.out.println("target: " + target);
 		players[target].setTradeRequest(tradeReq);
 	}
 	
@@ -616,7 +623,11 @@ public class TradingPanel extends JDialog{
 		setConfirmButtonsVisible(true);
 	}
 	
-	public void commenceTrade() {
+	public void commenceTrade(boolean b) {
+		if (!b){
+			closeTradingWindow();
+			return;
+		}
 		System.out.println("COMMENCING TRADE!!");
 		players[currentPlayerNum].pay(offeredMoney);
 		players[currentPlayerNum].earnMonies(requestedMoney);

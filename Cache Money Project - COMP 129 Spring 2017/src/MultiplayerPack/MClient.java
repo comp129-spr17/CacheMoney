@@ -112,6 +112,8 @@ public class MClient {
 		variableCodeString.add(new String("CHAT_LOBBY"));
 		variableCodeString.add(new String("CHAT_WAITING"));
 		variableCodeString.add(new String("CHAT_GAME"));
+		variableCodeString.add(new String("TRADE_REQUEST"));
+		variableCodeString.add(new String("COMMENCE TRADE"));
 	}
 	
 	
@@ -179,6 +181,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.CHAT_WAITING, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 1);}});
 		doActions.put(UnicodeForServer.CHAT_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 2);}});
 		doActions.put(UnicodeForServer.TRADE_REQUEST, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveTradeRequest(result);}});
+		doActions.put(UnicodeForServer.COMMENCE_TRADE, new DoAction(){public void doAction(ArrayList<Object> result){doCommenceTrade(result);}});
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
@@ -196,6 +199,7 @@ public class MClient {
 
 
 
+	
 	
 	private void connectToServer(boolean isHostClient)
 			throws UnknownHostException, IOException {
@@ -477,6 +481,11 @@ public class MClient {
 		(new ForReceivingChatMsg(result,area)).start();
 		
 	}
+	
+	protected void doCommenceTrade(ArrayList<Object> result) {
+		gameScreen.actionForCommenceTrade((boolean) result.get(1));
+	}
+	
 	class ForReceivingChatMsg extends Thread{
 		private ArrayList<Object> result;
 		private int area;
