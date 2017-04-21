@@ -817,7 +817,12 @@ public class GameScreen extends JFrame{
 	public void updateTextField()
 	{
 		int playerNum = pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum();
-		if (tempComboBox.getSelectedItem() != "")
+		if(tempComboBox == null){
+			System.out.println("You are dumb");
+		}
+
+		System.out.println("Yea:" + selectMortgage.getSelectedItem());
+		if (tempComboBox.getSelectedItem() != null)
 		{
 			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
@@ -930,7 +935,6 @@ public class GameScreen extends JFrame{
 			{
 				players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
 				players[num].getOwnedProperties().get(h).setMortgagedTo(true);
-				players[num].getOwnedProperties().remove(h);
 				if (pInfo.isSingle() || (!pInfo.isSingle() && pInfo.getMyPlayerNum() == playerNum)){
 					selectMortgage.removeItemAt(selectMortgage.getSelectedIndex());
 					selectMortgage.repaint();
