@@ -55,6 +55,7 @@ public final class UnicodeForServer {
 	public static final int CHAT_LOBBY = 49;
 	public static final int CHAT_WAITING = 50;
 	public static final int CHAT_GAME = 51;
+	public static final int TRADE_REQUEST = 52;
 	private UnicodeForServer(){
 		
 	}

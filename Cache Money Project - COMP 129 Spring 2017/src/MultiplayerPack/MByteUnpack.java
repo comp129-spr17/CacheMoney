@@ -126,6 +126,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringInt(result);
+		return cleanUpAndReturn();}});
 		
 	}
 	

@@ -51,7 +51,7 @@ public class MainMenuScreen {
 	private JButton loginBtn;
 	private PlayingInfo playingInfo;
 	private CreditsScreen creditsScreen;
-	private SizeRelated sizeRelated ;
+	private SizeRelated sizeRelated;
 
 	public MainMenuScreen(){
 		

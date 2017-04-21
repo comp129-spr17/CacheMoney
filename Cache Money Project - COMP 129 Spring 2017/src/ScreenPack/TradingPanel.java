@@ -28,6 +28,9 @@ import GamePack.Player;
 import GamePack.Property;
 import GamePack.PropertySpace;
 import InterfacePack.Sounds;
+import MultiplayerPack.MBytePack;
+import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.UnicodeForServer;
 
 @SuppressWarnings("serial")
 public class TradingPanel extends JDialog{
@@ -51,7 +54,8 @@ public class TradingPanel extends JDialog{
 //	private ArrayList<String>[] propertiesToTrade;
 	private ArrayList<infoThatScrolls> ownedProperties;
 	private ArrayList<infoThatScrolls> trades;
-	
+	private PlayingInfo pInfo;
+	private MBytePack mPack;
 	
 	private JLabel[] lblsForThis;
 	private JLabel[] tradeConfirmDisplay;
@@ -79,6 +83,8 @@ public class TradingPanel extends JDialog{
 	}
 	
 	private void init(){
+		mPack = MBytePack.getInstance();
+		pInfo = PlayingInfo.getInstance();
 		description = new JLabel();
 		description.setBounds(200, 10, 400, 30);
 		selectPlayerButton = new JButton[3];
@@ -204,11 +210,21 @@ public class TradingPanel extends JDialog{
 		confirmTradeButton[YES].addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (isReceiver){
-					commenceTrade();
+				if (pInfo.isSingle()){
+					if (isReceiver){
+						commenceTrade();
+					}
+					else{
+						sendTradeRequestToTarget(packTradeRequest(), tradePlayerNum);
+					}
 				}
 				else{
-					players[tradePlayerNum].setTradeRequest(packTradeRequest());
+					if (isReceiver){
+						pInfo.sendMessageToServer(mPack.packMortgageRequest(UnicodeForServer.TRADE_REQUEST, packTradeRequest(), tradePlayerNum));
+					}
+					else{
+						
+					}
 				}
 				closeTradingWindow();
 			}
@@ -246,7 +262,9 @@ public class TradingPanel extends JDialog{
 			public void mouseExited(MouseEvent e) {}
 		});
 	}
-
+	public void sendTradeRequestToTarget(String tradeReq, int target) {
+		players[target].setTradeRequest(tradeReq);
+	}
 	
 
 	private void initTradeConfirmDisplay() {
@@ -377,91 +395,6 @@ public class TradingPanel extends JDialog{
 		
 	}
 	
-	/*private void initPropertyComboBox() {
-		propertyComboBox[TRADE_HOST] = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		propertyComboBox[TRADE_TARGET] = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		propertyComboBox[TRADE_HOST].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (propertyComboBox[TRADE_HOST].getItemCount() > 1){
-					String selected = (String) propertyComboBox[TRADE_HOST].getSelectedItem();
-					if (!selected.equals("Add...") && !propertiesToTrade[TRADE_HOST].contains(selected)){
-						System.out.println("Added to propertiesToTrade[TRADE_HOST]: " + selected);
-						propertiesToTrade[TRADE_HOST].add(selected);
-						propertyRemoveComboBox[TRADE_HOST].addItem(selected);
-						propertyComboBox[TRADE_HOST].removeItem(selected);
-					}
-					
-				}
-				
-			}
-		});
-		propertyComboBox[TRADE_TARGET].addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (propertyComboBox[TRADE_TARGET].getItemCount() > 1){
-					String selected = (String) propertyComboBox[TRADE_TARGET].getSelectedItem();
-					if (!selected.equals("Add...") && !propertiesToTrade[TRADE_TARGET].contains(selected)){
-						System.out.println("Added to propertiesToTrade[TRADE_TARGET]: " + selected);
-						propertiesToTrade[TRADE_TARGET].add(selected);
-						propertyRemoveComboBox[TRADE_TARGET].addItem(selected);
-						propertyComboBox[TRADE_TARGET].removeItem(selected);
-					}
-					
-				}
-			}
-			
-		});
-		propertyComboBox[TRADE_HOST].setBounds(50, 120, 200, 20);
-		propertyComboBox[TRADE_TARGET].setBounds(400, 120, 200, 20);
-		this.add(propertyComboBox[TRADE_HOST]);
-		this.add(propertyComboBox[TRADE_TARGET]);
-		propertyComboBox[TRADE_HOST].setVisible(false);
-		propertyComboBox[TRADE_TARGET].setVisible(false);
-	}
-
-	private void initPropertyRemoveComboBox() {
-		propertyRemoveComboBox[TRADE_HOST] = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		propertyRemoveComboBox[TRADE_TARGET] = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		propertyRemoveComboBox[TRADE_HOST].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (propertyRemoveComboBox[TRADE_HOST].getItemCount() > 1){
-					String selected = (String) propertyRemoveComboBox[TRADE_HOST].getSelectedItem();
-					if (!selected.equals("View Properties/Remove...") && propertiesToTrade[TRADE_HOST].contains(selected)){
-						System.out.println("Removed from propertiesToTrade[TRADE_HOST]: " + selected);
-						propertiesToTrade[TRADE_HOST].remove(selected);
-						propertyComboBox[TRADE_HOST].addItem(selected);
-						propertyRemoveComboBox[TRADE_HOST].removeItem(selected);
-					}
-				}
-				
-			}
-		});
-		propertyRemoveComboBox[TRADE_TARGET].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (propertyRemoveComboBox[TRADE_TARGET].getItemCount() > 1){
-					String selected = (String) propertyRemoveComboBox[TRADE_TARGET].getSelectedItem();
-					if (!selected.equals("View Properties/Remove...") && propertiesToTrade[TRADE_TARGET].contains(selected)){
-						System.out.println("Removed from propertiesToTrade[TRADE_TARGET]: " + selected);
-						propertiesToTrade[TRADE_TARGET].remove(selected);
-						propertyComboBox[TRADE_TARGET].addItem(selected);
-						propertyRemoveComboBox[TRADE_TARGET].removeItem(selected);
-					}
-				}
-			}
-			
-		});
-		propertyRemoveComboBox[TRADE_HOST].setBounds(50, 150, 210, 20);
-		propertyRemoveComboBox[TRADE_TARGET].setBounds(400, 150, 210, 20);
-		this.add(propertyRemoveComboBox[TRADE_HOST]);
-		this.add(propertyRemoveComboBox[TRADE_TARGET]);
-		propertyRemoveComboBox[TRADE_HOST].setVisible(false);
-		propertyRemoveComboBox[TRADE_TARGET].setVisible(false);
-	}
-	*/
 	
 	private void setupPlayerPropertyPanel(int playerIndex, Player[] players, int playerNum){
 		List<Property> properties = players[playerIndex].getOwnedProperties();
@@ -683,7 +616,7 @@ public class TradingPanel extends JDialog{
 		setConfirmButtonsVisible(true);
 	}
 	
-	protected void commenceTrade() {
+	public void commenceTrade() {
 		System.out.println("COMMENCING TRADE!!");
 		players[currentPlayerNum].pay(offeredMoney);
 		players[currentPlayerNum].earnMonies(requestedMoney);

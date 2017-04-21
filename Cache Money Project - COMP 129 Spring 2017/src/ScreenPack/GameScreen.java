@@ -302,9 +302,6 @@ public class GameScreen extends JFrame{
 						players[playerNum].addProperty(p);
 						s = reader.readLine();
 					}
-//					if (players[playerNum].isOn()){
-//						boardPanel.movePieceOnBoard(playerNum, players[playerNum].getPositionNumber(), 0);
-//					}
 					break;
 				default:
 					s = reader.readLine();
@@ -1027,5 +1024,9 @@ public class GameScreen extends JFrame{
 			e.printStackTrace();
 		}
 		playScheduledMusic();
+	}
+	public void actionForSendTradeRequest(String tradeReq, Integer playerNumTarget) {
+		tradeP.sendTradeRequestToTarget(tradeReq, playerNumTarget);
+		
 	}
 }
