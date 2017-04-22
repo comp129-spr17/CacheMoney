@@ -211,6 +211,7 @@ public class TradingPanel extends JDialog{
 				if (!confirmTradeButton[YES].isEnabled()){
 					return;
 				}
+				Sounds.buttonConfirm.playSound();
 				if (pInfo.isSingle()){
 					if (isReceiving){
 						commenceTrade(true);
@@ -318,8 +319,7 @@ public class TradingPanel extends JDialog{
 				}
 				else{
 					Sounds.buttonCancel.playSound();
-					System.out.println("Invalid request.");
-					description.setText("Invalid Request! Please ensure that all required fields are filled.");
+					description.setText("Invalid Request!");
 				}
 			}
 			
@@ -487,18 +487,22 @@ public class TradingPanel extends JDialog{
 		isReceiving = false;
 		description.setText("Select a player you would like to trade with.");
 		assignPlayerButtonIcons(playerNum, players);
+		confirmTradeButton[YES].setText("Confirm");
+		confirmTradeButton[NO].setText("Back");
 		this.setVisible(true);
 	}
 	
 	public void openTradingWindow(Player[] players, String tradeRequest, HashMap<String, PropertySpace> propertyInfo){
 		setPlayerButtonsVisible(false);
+		this.players = players;
 		isReceiving = true;
 		this.propertyInfo = propertyInfo;
 		unpackTradeRequest(tradeRequest);
 		displayTradeRequest();
 		this.setVisible(true);
 		description.setText("Would you like to accept this trade offer from player " + (currentPlayerNum + 1) + "?");
-		players[tradePlayerNum].setTradeRequest(null);
+		confirmTradeButton[YES].setText("Yes");
+		confirmTradeButton[NO].setText("No");
 	}
 	
 	
@@ -613,20 +617,20 @@ public class TradingPanel extends JDialog{
 	private void displayTradeRequest() {
 		String propertiesToDisplay = "";
 		for (int i = 0; i < trades.get(TRADE_HOST).getListOfObjects().size(); i++){
-			propertiesToDisplay += trades.get(TRADE_HOST).getListOfObjects().get(i) + "<br />";
+			propertiesToDisplay += "- " + trades.get(TRADE_HOST).getListOfObjects().get(i) + "<br />";
 		}
 		tradeConfirmDisplay[TRADE_HOST].setText("<html>"
-				+ "Offering:<br />"
+				+ "<u>Offering:</u><br />"
 				+ (offeredMoney == 0 ? "" : "$" + offeredMoney + "<br />")
 				+ propertiesToDisplay
 				+ "</html>");
 		
 		propertiesToDisplay = "";
 		for (int i = 0; i < trades.get(TRADE_TARGET).getListOfObjects().size(); i++){
-			propertiesToDisplay += trades.get(TRADE_TARGET).getListOfObjects().get(i) + "<br />";
+			propertiesToDisplay += "- " + trades.get(TRADE_TARGET).getListOfObjects().get(i) + "<br />";
 		}
 		tradeConfirmDisplay[TRADE_TARGET].setText("<html>"
-				+ "Requesting:<br />"
+				+ "<u>Requesting:</u><br />"
 				+ (requestedMoney == 0 ? "" : "$" + requestedMoney + "<br />")
 				+ propertiesToDisplay
 				+ "</html>");
@@ -641,11 +645,12 @@ public class TradingPanel extends JDialog{
 	}
 
 	public void commenceTrade(boolean b) {
+		players[tradePlayerNum].setTradeRequest(null);
 		if (!b){
 			closeTradingWindow();
 			return;
 		}
-		System.out.println("COMMENCING TRADE!!");
+		Sounds.gainMoney.playSound();
 		players[currentPlayerNum].pay(offeredMoney);
 		players[currentPlayerNum].earnMonies(requestedMoney);
 		players[tradePlayerNum].pay(requestedMoney);

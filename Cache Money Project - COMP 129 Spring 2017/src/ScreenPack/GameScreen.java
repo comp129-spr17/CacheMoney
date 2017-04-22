@@ -271,7 +271,7 @@ public class GameScreen extends JFrame{
 	}
 	private void loadGame() {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader("recentSave.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader(FILENAME));
 			String s = reader.readLine();
 			while (s != null){
 				switch (s){
@@ -289,7 +289,21 @@ public class GameScreen extends JFrame{
 					s = reader.readLine(); players[playerNum].setJailFreeCard(Integer.parseInt(s));
 					s = reader.readLine(); players[playerNum].setUserId(s.equals("null") ? null : s);
 					s = reader.readLine(); players[playerNum].setUserName(s.equals("null") ? null : s);
-					s = reader.readLine(); players[playerNum].setTradeRequest(s.equals("null") ? null : s);
+					s = reader.readLine();
+					if (s.equals("null")){
+						players[playerNum].setTradeRequest(null);
+					}
+					else{
+						players[playerNum].setTradeRequest(s);
+						s = reader.readLine();
+						while (s.length() > 0){
+							System.out.println(s);
+							players[playerNum].setTradeRequest(players[playerNum].getTradeRequest() + "\n" + s);
+							s = reader.readLine();
+						}
+					}
+					
+					
 					s = reader.readLine();
 					while (s.equals("*property")){
 						s = reader.readLine(); Property p = boardPanel.getMappings().get(s).getPropertyInfo();

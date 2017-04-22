@@ -57,7 +57,7 @@ public class infoThatScrolls extends ScrollingPane {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Sounds.buttonConfirm.playSound();
+					Sounds.buttonPress.playSound();
 					removeObject(temp.getText());
 				}
 

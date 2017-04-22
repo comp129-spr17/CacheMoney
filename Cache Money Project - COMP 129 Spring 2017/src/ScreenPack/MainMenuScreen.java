@@ -13,6 +13,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -182,8 +185,11 @@ public class MainMenuScreen {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
-				(new startSinglePlayer(true)).start();
+				if (LoadGameButton.isEnabled()){
+					Sounds.buttonConfirm.playSound();
+					(new startSinglePlayer(true)).start();
+				}
+				
 			}
 			class startSinglePlayer extends Thread{
 				boolean isLoadGame;
@@ -417,7 +423,7 @@ public class MainMenuScreen {
 		CreditsButton.setBounds(175, 425, 150, 50);
 		CreditsButton.setFont(mainfont);
 		mainPanel.add(CreditsButton);
-		
+		setLoadGameButtonEnabled();
 		mainmenuframe.add(mainPanel);
 		mainPanel.add(new BackgroundImage(pathRelated.getImagePath() + "background.jpg", mainmenuframe.getWidth(), mainmenuframe.getHeight()));
 		//		mainPanel.setComponentZOrder(backgroundpic, 0);
@@ -435,6 +441,18 @@ public class MainMenuScreen {
 		mainPanel.revalidate();
 		mainmenuframe.repaint();
 		mainmenuframe.revalidate();
+	}
+	
+	private void setLoadGameButtonEnabled(){
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("recentSave.txt"));
+			LoadGameButton.setEnabled(true);
+			reader.close();
+		} catch (FileNotFoundException e) {
+			LoadGameButton.setEnabled(false);
+		} catch (IOException e) {
+			LoadGameButton.setEnabled(false);
+		}
 	}
 
 	private void setMenuBackgroundColor() {

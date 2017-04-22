@@ -123,7 +123,7 @@ public class DicePanel extends JPanel{
 		toggleDoubles.setVisible(false);
 		
 		this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "dicePanelBackground.jpg", this.getWidth(), this.getHeight()));
-		
+		(new alwaysUpdateMoneyLabels()).start();
 	}
 	private void setPlayerPieceStatus(){
 		showPlayer = new JLabel[4];
@@ -377,13 +377,12 @@ public class DicePanel extends JPanel{
 		}
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
-		showPlayer[2].setVisible(true);
-		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
+		//showPlayer[2].setVisible(true);
+		//showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1)) : (players[current].getUserName())) + "'s Turn! <br />Click to roll! <br /></html>");
-		showPlayer[3].setVisible(true);
-		if(!pInfo.isSingle())
-			actionForPlayers();
-		(new alwaysUpdateMoneyLabels()).start();
+		//showPlayer[3].setVisible(true);
+		actionForPlayers();
+		
 
 	}
 	// In board, run thread to determine which function to perform.
@@ -429,7 +428,7 @@ public class DicePanel extends JPanel{
 				}
 			}
 		}
-		
+		System.out.println("tradereq: " + players[current].getTradeRequest());
 		if (players[current].getTradeRequest() != null){
 			tradeP.openTradingWindow(players, players[current].getTradeRequest(), bPanel.getMappings());
 		}
