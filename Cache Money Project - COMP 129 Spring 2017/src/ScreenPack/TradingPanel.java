@@ -500,7 +500,7 @@ public class TradingPanel extends JDialog{
 		unpackTradeRequest(tradeRequest);
 		displayTradeRequest();
 		this.setVisible(true);
-		description.setText("Would you like to accept this trade offer from player " + (currentPlayerNum + 1) + "?");
+		description.setText("Would you like to accept this trade offer from " + (pInfo.isSingle() ? ("player " + (currentPlayerNum + 1)) : (players[currentPlayerNum].getUserName().split(" ")[0])) + "?");
 		confirmTradeButton[YES].setText("Yes");
 		confirmTradeButton[NO].setText("No");
 	}

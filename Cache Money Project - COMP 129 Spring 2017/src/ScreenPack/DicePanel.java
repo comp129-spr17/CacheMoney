@@ -27,7 +27,7 @@ import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private GameScreen gamescreen;
@@ -382,7 +382,7 @@ public class DicePanel extends JPanel{
 		Sounds.turnBegin.playSound();
 		//showPlayer[2].setVisible(true);
 		//showPlayer[3].setIcon(imageRelated.getPieceImg(current));
-		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1)) : (players[current].getUserName())) + "'s Turn! <br />Click to roll! <br /></html>");
+		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1) + "'s Turn!") : "Host moves first!") + "<br />Click to roll! <br /></html>");
 		//showPlayer[3].setVisible(true);
 		actionForPlayers();
 		
@@ -505,7 +505,7 @@ public class DicePanel extends JPanel{
 		propertyPanel.actionForBuildHouse();
 	}
 	private void changeTurn(){
-		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1)) : (players[current].getUserName())) + "'s Turn! <br />Click to roll! <br />The game has been saved.</html>");
+		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1)) : (players[current].getUserName().split(" ")[0])) + "'s Turn! <br />Click to roll! <br />The game has been saved.</html>");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){
