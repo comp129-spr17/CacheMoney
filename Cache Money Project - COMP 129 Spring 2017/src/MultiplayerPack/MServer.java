@@ -31,7 +31,7 @@ public class MServer {
 	private static ArrayList<MMainArea> runningClients;
 	private static HashMap<String,String> joinedPlayerIds;
 	private static HashMap<Long, MWaitingRoom> waitingRooms; 
-	private final static int PORT_NUM = 7777;
+	private final static int PORT_NUM = 7776;
 	private static ServerSocket listener;
 	private byte[] firstMsg;
 	private MBytePack mPack;

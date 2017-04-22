@@ -43,7 +43,7 @@ public class TradingPanel extends JDialog{
 	private final int NO = 0;
 	private final int WIDTH = 700;
 	private final int HEIGHT = 500;
-	private final int NUM_LBLS_FOR_THIS = 4;
+	private final int NUM_LBLS_FOR_THIS = 6;
 	
 	
 	private JLabel description;
@@ -65,7 +65,7 @@ public class TradingPanel extends JDialog{
 	private JButton startOverButton;
 	private int requestedMoney;
 	private int offeredMoney;
-	private boolean isReceiver;
+	private boolean isReceiving;
 	
 	private int listenerIterator;
 	private int currentPlayerNum;
@@ -119,7 +119,7 @@ public class TradingPanel extends JDialog{
 		this.add(trades.get(TRADE_HOST).getScrollingPanel());
 		this.add(trades.get(TRADE_TARGET).getScrollingPanel());
 		
-//		this.add(description);
+		this.add(description);
 		this.addWindowListener((new WindowListener() {
 			
 			@Override
@@ -153,10 +153,10 @@ public class TradingPanel extends JDialog{
 		trades.get(TRADE_HOST).setTheOtherScrollingPane(ownedProperties.get(TRADE_HOST));
 		trades.get(TRADE_TARGET).setTheOtherScrollingPane(ownedProperties.get(TRADE_TARGET));
 		
-		ownedProperties.get(TRADE_HOST).setScrollPaneBounds(WIDTH/2-SCROLLING_WIDTH-20, 40, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		ownedProperties.get(TRADE_TARGET).setScrollPaneBounds(WIDTH/2+20, 40, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		trades.get(TRADE_HOST).setScrollPaneBounds(WIDTH/2-SCROLLING_WIDTH-20, SCROLLING_HEIGHT + 70, SCROLLING_WIDTH, SCROLLING_HEIGHT);
-		trades.get(TRADE_TARGET).setScrollPaneBounds(WIDTH/2+20, SCROLLING_HEIGHT + 70, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		ownedProperties.get(TRADE_HOST).setScrollPaneBounds(WIDTH/2-SCROLLING_WIDTH-20, 80, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		ownedProperties.get(TRADE_TARGET).setScrollPaneBounds(WIDTH/2+20, 80, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_HOST).setScrollPaneBounds(WIDTH/2-SCROLLING_WIDTH-20, SCROLLING_HEIGHT + 110, SCROLLING_WIDTH, SCROLLING_HEIGHT);
+		trades.get(TRADE_TARGET).setScrollPaneBounds(WIDTH/2+20, SCROLLING_HEIGHT + 110, SCROLLING_WIDTH, SCROLLING_HEIGHT);
 	}
 	
 	private void initStartOverButton() {
@@ -172,8 +172,6 @@ public class TradingPanel extends JDialog{
 				setTradeInterfaceVisible(false);
 				setConfirmButtonsVisible(false);
 				setTradeConfirmDisplayVisible(false);
-				/*propertiesToTrade[TRADE_HOST].clear();
-				propertiesToTrade[TRADE_TARGET].clear();*/
 				startOverButton.setVisible(false);
 				clearScrollingPanel();
 				openTradingWindow(players, currentPlayerNum);
@@ -210,16 +208,19 @@ public class TradingPanel extends JDialog{
 		confirmTradeButton[YES].addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (!confirmTradeButton[YES].isEnabled()){
+					return;
+				}
 				if (pInfo.isSingle()){
-					if (isReceiver){
+					if (isReceiving){
 						commenceTrade(true);
 					}
 					else{
-						sendTradeRequestToTarget(packTradeRequest(), tradePlayerNum);
+						sendTradeRequestToTarget(packTradeRequest(), tradePlayerNum, players);
 					}
 				}
 				else{
-					if (isReceiver){
+					if (isReceiving){
 						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.COMMENCE_TRADE, true));
 					}
 					else{
@@ -241,8 +242,11 @@ public class TradingPanel extends JDialog{
 		confirmTradeButton[NO].addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (!confirmTradeButton[NO].isEnabled()){
+					return;
+				}
 				Sounds.buttonCancel.playSound();
-				if (isReceiver){
+				if (isReceiving){
 					if (pInfo.isSingle()){
 						closeTradingWindow();
 					}
@@ -268,9 +272,10 @@ public class TradingPanel extends JDialog{
 			public void mouseExited(MouseEvent e) {}
 		});
 	}
-	public void sendTradeRequestToTarget(String tradeReq, int target) {
+	public void sendTradeRequestToTarget(String tradeReq, int target, Player[] players) {
 		System.out.println("target: " + target);
-		players[target].setTradeRequest(tradeReq);
+		this.players = players;
+		this.players[target].setTradeRequest(tradeReq);
 	}
 	
 
@@ -350,9 +355,9 @@ public class TradingPanel extends JDialog{
 			JTextField j = new JTextField();
 			j.setVisible(false);
 			if(i == 1)
-				j.setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT+40, 200, 20);
+				j.setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT+80, 200, 20);
 			else
-				j.setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT+40, 200, 20);
+				j.setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT+80, 200, 20);
 			moneyTradeField[i] = j;
 			add(moneyTradeField[i]);
 		}
@@ -390,10 +395,15 @@ public class TradingPanel extends JDialog{
 		lblsForThis[1].setText("Trade Their Properties:");
 		lblsForThis[2].setText("Trade Your Money:");
 		lblsForThis[3].setText("Trade Their Money:");
-		lblsForThis[0].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 10, 200, 30);
-		lblsForThis[1].setBounds(WIDTH/2+20, 10, 200, 30);
-		lblsForThis[2].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT + 10, 200, 30);
-		lblsForThis[3].setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT + 10, 200, 30);
+		lblsForThis[4].setText("Your Selected Properties:");
+		lblsForThis[5].setText("Their Selected Properties:");
+		
+		lblsForThis[0].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 50, 200, 30);
+		lblsForThis[1].setBounds(WIDTH/2+20, 50, 200, 30);
+		lblsForThis[2].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 3*SCROLLING_HEIGHT + 50, 200, 30);
+		lblsForThis[3].setBounds(WIDTH/2+20, 3*SCROLLING_HEIGHT + 50, 200, 30);
+		lblsForThis[4].setBounds(WIDTH/2-SCROLLING_WIDTH-20, 162, 200, 30);
+		lblsForThis[5].setBounds(WIDTH/2+20, 162, 200, 30);
 		
 		for (int i = 0; i < NUM_LBLS_FOR_THIS; i++){
 			lblsForThis[i].setVisible(false);
@@ -474,14 +484,15 @@ public class TradingPanel extends JDialog{
 		setTradeConfirmDisplayVisible(false);
 		this.players = players;
 		this.currentPlayerNum = playerNum;
-		isReceiver = false;
-			description.setText("Select a player you would like to trade with.");
-			assignPlayerButtonIcons(playerNum, players);
+		isReceiving = false;
+		description.setText("Select a player you would like to trade with.");
+		assignPlayerButtonIcons(playerNum, players);
 		this.setVisible(true);
 	}
 	
 	public void openTradingWindow(Player[] players, String tradeRequest, HashMap<String, PropertySpace> propertyInfo){
-		isReceiver = true;
+		setPlayerButtonsVisible(false);
+		isReceiving = true;
 		this.propertyInfo = propertyInfo;
 		unpackTradeRequest(tradeRequest);
 		displayTradeRequest();
@@ -621,8 +632,14 @@ public class TradingPanel extends JDialog{
 				+ "</html>");
 		setTradeConfirmDisplayVisible(true);
 		setConfirmButtonsVisible(true);
+		setConfirmButtonsEnabled(!isReceiving || pInfo.isSingle() || pInfo.isMyPlayerNum(tradePlayerNum));
 	}
 	
+	private void setConfirmButtonsEnabled(boolean enabled) {
+		confirmTradeButton[YES].setEnabled(enabled);
+		confirmTradeButton[NO].setEnabled(enabled);
+	}
+
 	public void commenceTrade(boolean b) {
 		if (!b){
 			closeTradingWindow();

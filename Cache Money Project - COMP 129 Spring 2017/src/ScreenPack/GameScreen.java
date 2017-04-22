@@ -1030,7 +1030,7 @@ public class GameScreen extends JFrame{
 		playScheduledMusic();
 	}
 	public void actionForSendTradeRequest(String tradeReq, Integer playerNumTarget) {
-		tradeP.sendTradeRequestToTarget(tradeReq, playerNumTarget);
+		tradeP.sendTradeRequestToTarget(tradeReq, playerNumTarget, players);
 		
 	}
 	public void actionForCommenceTrade(boolean b) {
