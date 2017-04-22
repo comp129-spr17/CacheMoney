@@ -5,9 +5,11 @@ import java.io.OutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import InterfacePack.Sounds;
 import MultiplayerPack.PlayingInfo;
 import ScreenPack.ChanceStack;
 import ScreenPack.CommunityStack;
+import ScreenPack.DicePanel;
 
 public class WildSpace extends Space {
 	private String prompt;
@@ -17,9 +19,13 @@ public class WildSpace extends Space {
 	private GoSpace go;
 	private Space spaces[];
 	private PlayingInfo pInfo;
+	private DicePanel dp;
+	private Player[] players;
 
-	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel, JPanel dicePanel) {
+	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel, DicePanel dicePanel, Player[] p) {
 		super(img, name);
+		players = p;
+		this.dp = dicePanel;
 		this.name = name;
 		pInfo = PlayingInfo.getInstance();
 		chanceStack = new ChanceStack(boardPanel, dicePanel);
@@ -41,12 +47,14 @@ public class WildSpace extends Space {
 			command = chanceStack.getResultingCommand(pInfo.isMyPlayerNum(piece.getPlayer()), playerPosition);
 			System.out.println(command);
 			if(command == "Move0"){
-					System.out.println("Advance to go!");//small bug if you hit the send to go on first roll of game
-					super.removePiece(piece.getPlayer());//you don't get extra $200
+					System.out.println("Advance to go!");
 					chanceStack.displayImage(1);
+					super.removePiece(piece.getPlayer());
 					go.sendToGo(piece, piece.getPlayer());
 					piece.getPlayerClass().checkGo();
 					playerPosition = Board.HOME;
+					simulateGoEffect();
+					movePlayerByCard(playerPosition);
 				}
 			else if(command == "Move24"){
 				System.out.println("Advance to illinois place");
@@ -54,27 +62,51 @@ public class WildSpace extends Space {
 				chanceStack.displayImage(2);
 				spaces[24].receivePiece(piece, piece.getPlayer());
 				playerPosition = 24;
+				if (players[dp.getCurrentPlayerNumber()].getPositionNumber() > 24){
+					simulateGoEffect();
+				}
+				movePlayerByCard(playerPosition);
 			}
 			else if(command == "Move11"){
 				System.out.println("Advance to st.charles place");
-				super.removePiece(piece.getPlayer());
 				chanceStack.displayImage(3);
+				super.removePiece(piece.getPlayer());
 				spaces[11].receivePiece(piece, piece.getPlayer());//functionality bug make sure you can buy space when landed on 
 				playerPosition = 11;
+				if (players[dp.getCurrentPlayerNumber()].getPositionNumber() > 11){
+					simulateGoEffect();
+				}
+				movePlayerByCard(playerPosition);
 			}
 			else if(command == "Move12"){
-				System.out.println("Advance to nearest utility (defaults to electric comp for now)");
-				super.removePiece(piece.getPlayer());
+				System.out.println("Advance to nearest utility");
 				chanceStack.displayImage(4);
-				spaces[12].receivePiece(piece, piece.getPlayer());
-				playerPosition = 12;
+				super.removePiece(piece.getPlayer());
+				int spaceToMoveTo = 0;
+				if (players[dp.getCurrentPlayerNumber()].getPositionNumber() > 12 && players[dp.getCurrentPlayerNumber()].getPositionNumber() < 28 ){
+					spaceToMoveTo = 28;
+				}
+				else{
+					spaceToMoveTo = 12;
+				}
+				spaces[spaceToMoveTo].receivePiece(piece, piece.getPlayer());
+				playerPosition = spaceToMoveTo;
+				if (players[dp.getCurrentPlayerNumber()].getPositionNumber() > 28){
+					simulateGoEffect();
+				}
+				movePlayerByCard(playerPosition);
 			}
 			else if(command == "Move5U"){
-				System.out.println("Advance to nearest railroad(defaults to reading for now)");
-				super.removePiece(piece.getPlayer());
+				System.out.println("Advance to nearest railroad");
 				chanceStack.displayImage(5);
-				spaces[5].receivePiece(piece, piece.getPlayer());
-				playerPosition = 5;
+				super.removePiece(piece.getPlayer());
+				int spaceToMoveTo = (int) Math.floor((((players[dp.getCurrentPlayerNumber()].getPositionNumber() + 5) % 40) / 10)*10 + 5);
+				spaces[spaceToMoveTo].receivePiece(piece, piece.getPlayer());
+				playerPosition = spaceToMoveTo;
+				if (players[dp.getCurrentPlayerNumber()].getPositionNumber() > 35){
+					simulateGoEffect();
+				}
+				movePlayerByCard(playerPosition);
 			}
 			else if(command == "Get$50"){
 				System.out.println("Get $50");
@@ -88,17 +120,20 @@ public class WildSpace extends Space {
 			}
 			else if(command == "Back3"){
 				System.out.println("Move back 3 spaces");
-				super.removePiece(piece.getPlayer());
 				chanceStack.displayImage(8);
+				super.removePiece(piece.getPlayer());
 				spaces[piece.getPlayerClass().getPositionNumber() - 3].receivePiece(piece, piece.getPlayer()); //don't need to check for negatives b/c chance location
 				playerPosition = piece.getPlayerClass().getPositionNumber() - 3;
+				movePlayerByCard(playerPosition);
 			}
 			else if(command == "Move10"){
 				System.out.println("Go to jail, directly to jail");
-				super.removePiece(piece.getPlayer());
 				chanceStack.displayImage(9);
-				spaces[10].receivePiece(piece, piece.getPlayer());
-				playerPosition = 10;
+				super.removePiece(piece.getPlayer());
+				spaces[30].receivePiece(piece, piece.getPlayer());
+				playerPosition = 30;
+				movePlayerByCard(playerPosition);
+				
 			}
 			else if(command == "Pay$H"){//houses/hotels card functionality to come once they are implemented
 				System.out.println("Houses/Hotels card (not yet functional)");
@@ -111,21 +146,27 @@ public class WildSpace extends Space {
 			}
 			else if(command == "Move5"){
 				System.out.println("Advance to Reading Railroad");
-				super.removePiece(piece.getPlayer());
 				chanceStack.displayImage(12);
+				super.removePiece(piece.getPlayer());
 				spaces[5].receivePiece(piece, piece.getPlayer());
 				playerPosition = 5;
+				if (players[dp.getCurrentPlayerNumber()].getPositionNumber() > 5){
+					simulateGoEffect();
+				}
+				movePlayerByCard(playerPosition);
 			}
 			else if(command == "Move39"){
 				System.out.println("Advance to Boardwalk");
-				super.removePiece(piece.getPlayer());
 				chanceStack.displayImage(13);
+				super.removePiece(piece.getPlayer());
 				spaces[39].receivePiece(piece, piece.getPlayer());
 				playerPosition = 39;
+				movePlayerByCard(playerPosition);
 			}
-			else if(command == "Pay$Players"){//will implement functionality later
-				System.out.println("Pay each player $50 (not yet functional)");
+			else if(command == "Pay$Players"){
+				System.out.println("Pay each player $50");
 				chanceStack.displayImage(14);
+				
 			}
 			else if(command == "Get$150"){
 				System.out.println("Receive $150");
@@ -146,10 +187,13 @@ public class WildSpace extends Space {
 			
 			if(command == "Move0"){
 				System.out.println("Advance to go!");
-				super.removePiece(piece.getPlayer());
 				communityStack.displayImage(0);
+				super.removePiece(piece.getPlayer());
 				go.sendToGo(piece, piece.getPlayer());
+				piece.getPlayerClass().checkGo();
 				playerPosition = Board.HOME;
+				simulateGoEffect();
+				movePlayerByCard(playerPosition);
 			}
 			else if(command == "Get$200"){
 				System.out.println("Get $200");
@@ -172,10 +216,12 @@ public class WildSpace extends Space {
 			}
 			else if(command == "Move10"){
 				System.out.println("Go to jail, directly to jail");
-				super.removePiece(piece.getPlayer());
 				communityStack.displayImage(5);
-				spaces[10].receivePiece(piece, piece.getPlayer());
-				playerPosition = 10;
+				super.removePiece(piece.getPlayer());
+				spaces[30].receivePiece(piece, piece.getPlayer());
+				playerPosition = 30;
+				movePlayerByCard(playerPosition);
+				
 			}
 			else if(command == "GetFromEPlayer"){//to add later
 				System.out.println("Free get out of jail card (functionality to come later)");
@@ -234,6 +280,16 @@ public class WildSpace extends Space {
 		}
 		
 		return playerPosition;
+	}
+	private void simulateGoEffect() {
+		players[dp.getCurrentPlayerNumber()].earnMonies(200);
+		Sounds.money.playSound();
+		Sounds.gainMoney.playSound();
+	}
+	private void movePlayerByCard(int playerPosition) {
+		players[dp.getCurrentPlayerNumber()].setPositionNumber(playerPosition);
+		dp.movedSpaceByChance();
+		dp.setChanceMovedPlayer(true);
 	}
 	
 	public String getName(){

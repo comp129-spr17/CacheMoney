@@ -204,7 +204,7 @@ public class BoardPanel extends JPanel{
 						add(spaces[i*10+j]);
 						continue;
 					}else if (j == 2){
-						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel, players);
 						spaces[i*10+j] = ws;
 					}else if(j==4){
 						TaxSpace ts = new TaxSpace(spaceImgs[i*10+j], "Income Tax", 200);
@@ -215,7 +215,7 @@ public class BoardPanel extends JPanel{
 						//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty()); 
 						spaces[i*10+j] = temp;
 					}else if(j == 7){
-						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace) spaces[0], spaces, this, dicePanel, players);
 						spaces[i*10+j] = ws;
 					}else{
 						reader = standard.readLine().split("-");
@@ -243,7 +243,7 @@ public class BoardPanel extends JPanel{
 						//cctemp = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
 						spaces[i*10+j] = temp;
 					}else if (j == 7){
-						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel);
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace) spaces[0], spaces, this, dicePanel, players);
 						spaces[i*10+j] = ws;
 					}else{
 						reader = standard.readLine().split("-");
@@ -260,7 +260,7 @@ public class BoardPanel extends JPanel{
 						add(spaces[i*10+j]);
 						continue;
 					}else if(j == 2){
-						WildSpace ws = new WildSpace(spaceImgs[i*10+j],"Chance", (GoSpace) spaces[0], spaces, this, dicePanel);
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j],"Chance", (GoSpace) spaces[0], spaces, this, dicePanel, players);
 						spaces[i*10+j] = ws;
 					}else if(j == 8){
 						temp = new PropertySpace(spaceImgs[i*10+j], new UtilityProperty(200, "Water Works", 10));
@@ -289,10 +289,10 @@ public class BoardPanel extends JPanel{
 						//cctemp  = new PropertySpace(spaceImgs[i*10+j], new RailroadProperty());
 						spaces[i*10+j] = temp;
 					}else if (j == 3){
-						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel);
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Community Chest", (GoSpace)spaces[0], spaces, this, dicePanel, players);
 						spaces[i*10+j] = ws;
 					}else if (j == 6){
-						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace)spaces[0], spaces, this, dicePanel);
+						WildSpace ws = new WildSpace(spaceImgs[i*10+j], "Chance", (GoSpace)spaces[0], spaces, this, dicePanel, players);
 						spaces[i*10+j] = ws;
 					}else if(j == 8){
 						TaxSpace ts = new TaxSpace(spaceImgs[i*10+j],"Luxury Tax",100);

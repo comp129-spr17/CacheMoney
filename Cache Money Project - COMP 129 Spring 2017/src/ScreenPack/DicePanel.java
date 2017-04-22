@@ -27,7 +27,7 @@ import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private GameScreen gamescreen;
@@ -55,6 +55,7 @@ public class DicePanel extends JPanel{
 	private boolean isSame;
 	private boolean isCelebrating;
 	private boolean movementAllowed;
+	private boolean chanceMovedPlayer;
 	private int previous;
 	private int current;
 	private DoubleCelebrate dCel;
@@ -124,6 +125,8 @@ public class DicePanel extends JPanel{
 		
 		this.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "dicePanelBackground.jpg", this.getWidth(), this.getHeight()));
 		(new alwaysUpdateMoneyLabels()).start();
+		
+		chanceMovedPlayer = false;
 	}
 	private void setPlayerPieceStatus(){
 		showPlayer = new JLabel[4];
@@ -636,6 +639,16 @@ public class DicePanel extends JPanel{
 			}
 		}
 	}
+	
+	public void movedSpaceByChance(){
+		endTurnButton.setVisible(false);
+		waitForDiceMoving();
+	}
+	
+	public void setChanceMovedPlayer(boolean c){
+		chanceMovedPlayer = c;
+	}
+	
 	private void waitForDiceMoving(){
 		while(!board.isDoneAnimating() || isCelebrating){
 			delayThread(1);
@@ -643,15 +656,20 @@ public class DicePanel extends JPanel{
 		if(numOfDoublesInRow >= 3) {
 			threeDoublesPunishment();
 		} else {
-			if (board.isPlayerInPropertySpace(previous)){
-				handlePropertySpaceAction(board.getSpacePlayerLandedOn(previous));
+			String spaceLandedOn = board.getSpacePlayerLandedOn(previous);
+			chanceMovedPlayer = false;
+			board.playerLands(current);
+			if (chanceMovedPlayer){
+				return;
 			}
-			else if (board.getSpacePlayerLandedOn(previous) == "Go to Jail"){
+			if (board.isPlayerInPropertySpace(previous)){
+				handlePropertySpaceAction(spaceLandedOn);
+			}
+			else if (spaceLandedOn == "Go to Jail"){
 				isSame = false;
 				numOfDoublesInRow = 0;
 			}
 		}
-		delayThread(600);
 		mLabel.reinitializeMoneyLabels();
 		if (!isSame || numOfDoublesInRow >= 3 || !movementAllowed || players[current].isInJail()){
 			pInfo.setGamePart(Part.END_TURN);

@@ -147,14 +147,6 @@ public class Board {
 				
 				isDone = true;
 				
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// PLAYER IS SENT TO JAIL HERE IF THEY LAND ON THAT SPACE
-				players[player].setPositionNumber(boardTracker[players[player].getPositionNumber()].landOnSpace(players[player].getPiece(), players[player].getPositionNumber()));
 				
 				
 			}
@@ -162,6 +154,11 @@ public class Board {
 			
 		}, 1200);
 	}
+	
+	public void playerLands(int player){
+		players[player].setPositionNumber(boardTracker[players[player].getPositionNumber()].landOnSpace(players[player].getPiece(), players[player].getPositionNumber()));
+	}
+	
 	public void addPieceOnBoard(int player, int destinationSpace, int previousSpace) {
 		boardTracker[destinationSpace].receivePiece(players[player].getPiece(), player);
 	}

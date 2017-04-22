@@ -11,8 +11,8 @@ public final class PlayingInfo {
 	private boolean isLoggedIn;
 	private String loggedInId;
 	private int gamePart;
-	public final static int PORT_NUM = 7777;
-	public final static String IP_ADDRESS = "10.15.17.88";
+	public final static int PORT_NUM = 7776;
+	public final static String IP_ADDRESS = "10.15.157.201";
 	private boolean isDisconnectedByOther;
 //	public final static String IP_ADDRESS = "10.70.70.80";
 //	public final static String IP_ADDRESS = "10.0.0.3";
