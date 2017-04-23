@@ -1,6 +1,7 @@
 package ScreenPack;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FileDialog;
 import java.awt.FlowLayout;
 
 import GamePack.PathRelated;
@@ -461,20 +462,46 @@ public class MainMenuScreen {
 	}
 
 	private void startSinglePlayer(boolean isLoadGame) {
-		int gNumP;
+		int gNumP; String filenameToLoad = null;
 		if (!isLoadGame){
 			getNumPlayers();
 			Sounds.buttonConfirm.playSound();
+		}
+		else{
+			int a = JOptionPane.showConfirmDialog(null, "Load from previous save?");
+			if (a == 0){
+				Sounds.buttonConfirm.playSound();
+				filenameToLoad = "recentSave.txt";
+			}
+			else if (a == 1){
+				Sounds.buttonPress.playSound();
+				FileDialog fd = new FileDialog(mainmenuframe);
+				fd.setVisible(true);
+				filenameToLoad = fd.getDirectory() + fd.getFile();
+				if (fd.getFile() == null){
+					Sounds.buttonCancel.playSound();
+					return;
+				}
+				Sounds.buttonConfirm.playSound();
+			}
+			else{
+				Sounds.buttonCancel.playSound();
+				return;
+			}
+			
+			
 		}
 		gNumP = (Integer)cmbNumP.getSelectedItem();
 		hideAndDisposeMainMenuScreen();
 		loadingScreen.setResizable(false);
 		loadingScreen.setVisible(true);
-		gameScreen = new GameScreen(true, gNumP, isLoadGame);
+		gameScreen = new GameScreen(true, gNumP, filenameToLoad);
 		gameScreen.setNumPlayer(gNumP);
 		hideAndDisposeLoadingScreen();
 		Sounds.waitingRoomJoin.playSound();
 	}
+	
+	
 	private boolean getNumPlayers(){
 		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of total players:", JOptionPane.YES_NO_OPTION);
 		return res == JOptionPane.YES_OPTION ? true : false;

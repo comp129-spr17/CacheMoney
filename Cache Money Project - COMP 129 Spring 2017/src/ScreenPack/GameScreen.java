@@ -2,6 +2,7 @@ package ScreenPack;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -82,6 +83,7 @@ public class GameScreen extends JFrame{
 	private JComboBox<String> selectMortgage;
 	private JButton sellConfirm;
 	private JButton sellCancel;
+	private JButton exportGame;
 	private JLabel pleaseSelectMortgageChoice;
 	private JComboBox<String> selectMortgageOption;
 	private JLabel pleaseSelectMortgage;
@@ -96,11 +98,13 @@ public class GameScreen extends JFrame{
 	private JLabel priceDisplay;
 	private TradingPanel tradeP;
 	private ChatScreen chatScreen;
+	private String filenameToLoad;
 	// called if user is the host
-	public GameScreen(boolean isSingle, int totalplayers, boolean isLoadGame){
+	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
 		this.totalPlayers = totalplayers;
-		this.loadGame = isLoadGame;
+		loadGame = filenameToLoad != null;
+		this.filenameToLoad = filenameToLoad;
 		initEverything(true,isSingle);
 		if(!isSingle)
 			addHost();
@@ -271,7 +275,7 @@ public class GameScreen extends JFrame{
 	}
 	private void loadGame() {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(FILENAME));
+			BufferedReader reader = new BufferedReader(new FileReader(filenameToLoad));
 			String s = reader.readLine();
 			while (s != null){
 				switch (s){
@@ -325,9 +329,11 @@ public class GameScreen extends JFrame{
 			reader.close();
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("THERE WAS NO FILE TO LOAD. STARTING NEW GAME");
+			System.out.println("THERE WAS NO FILE TO LOAD.");
+			System.exit(1);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		} catch (Exception e){
 			System.out.println("THE FILE IS CORRUPTED; UNABLE TO LOAD DATA.");
 			System.exit(1);
@@ -536,7 +542,26 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 		});
+		exportGame.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (exportGame.isEnabled()){
+					saveGame(false); 
+				}
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		
 	}
+	
 	
 	
 	private void init(boolean isHost){
@@ -617,11 +642,13 @@ public class GameScreen extends JFrame{
 		dicePanel = new DicePanel(players, mLabels, tradeP, this);
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
+		addExportGameButton();
 		addShowMoneyButton();
 		addMortgageButton();
 		addTestingButton();
 		addEndGameScreenButton();
 		setupMortgage();
+		mainPanel.add(exportGame);
 		mainPanel.add(showInfo);
 		mainPanel.add(showMortgage);
 		mainPanel.add(boardPanel);
@@ -645,6 +672,10 @@ public class GameScreen extends JFrame{
 			loadGame();
 		}
 		
+	}
+	private void addExportGameButton() {
+		exportGame = new JButton("Export Game");
+		exportGame.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/5 + 50, 150, 50);
 	}
 	public void switchToGame(){
 		getContentPane().removeAll();
@@ -969,10 +1000,23 @@ public class GameScreen extends JFrame{
                 JOptionPane.WARNING_MESSAGE);
 		System.exit(0);
 	}
-	public void saveGame() {
+	public void saveGame(boolean autoSave) {
 		if(pInfo.isSingle()){
+			String filename = null;
+			if (autoSave){
+				filename = FILENAME;
+			}
+			else{
+				FileDialog fd = new FileDialog(this);
+				fd.setMode(FileDialog.SAVE);
+				exportGame.setEnabled(false);
+				fd.setVisible(true);
+				filename = fd.getDirectory() + fd.getFile();
+				exportGame.setEnabled(true);
+			}
+			
 			try{
-				PrintWriter writer = new PrintWriter(FILENAME, "UTF-8");
+				PrintWriter writer = new PrintWriter(filename, "UTF-8");
 				String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
 				String[] packedPlayerInfo = packPlayerInformation();
 				writer.println(currentPlayer);				// currentPlayer

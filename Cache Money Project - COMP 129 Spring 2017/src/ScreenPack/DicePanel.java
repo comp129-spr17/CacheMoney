@@ -397,7 +397,7 @@ public class DicePanel extends JPanel{
 		turnLabel.setVisible(true);
 		changePlayerTurn();
 		changeTurn();
-		gamescreen.saveGame();
+		gamescreen.saveGame(true);
 		dices[0].hideDice();
 		dices[1].hideDice();
 		propertyPanel.setButtonsEnabled(true);
