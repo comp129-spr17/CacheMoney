@@ -586,8 +586,9 @@ public class GameScreen extends JFrame{
 		mainGameArea = new MainGameArea(getContentPane());
 		waitingArea = mainGameArea.getWaiting();
 		
-		btnExit = new JButton("X");
-		btnExit.setBounds(sizeRelated.getScreenW()-50, 0, 50, 50);
+		btnExit = new JButton();
+		btnExit.setBounds(sizeRelated.getScreenW()-39, 1, 40, 40);
+		btnExit.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "CloseButton.png", btnExit.getWidth(), btnExit.getHeight()));
 		mainPanel.add(btnExit);
 		addExitListener(isHost);
 		initUserInfoWindow();
@@ -687,8 +688,11 @@ public class GameScreen extends JFrame{
 		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png",screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight()));
 	}
 	private void addExportGameButton() {
-		exportButton = new JButton("<html>Export Game" + (pInfo.isSingle() ? "" : "<br />(to local multiplayer)" + "</html>"));
-		exportButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/5 + 50, 150, 50);
+		exportButton = new JButton();
+		exportButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 500, 100, 100);
+		exportButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ExportButton.png", exportButton.getWidth(), exportButton.getHeight()));
+		exportButton.setContentAreaFilled(false);
+		exportButton.setBorder(null);
 	}
 	public void switchToGame(){
 		getContentPane().removeAll();
@@ -965,7 +969,7 @@ public class GameScreen extends JFrame{
 	public void addEndGameScreenButton()
 	{
 		showEndGameScreen = new JButton("Show End Game Stats");
-		showEndGameScreen.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 -175, 200, 50);
+		showEndGameScreen.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 650, 200, 50);
 		showEndGameScreen.setVisible(true);
 	}
 	public void addShowMoneyButton()
@@ -974,25 +978,32 @@ public class GameScreen extends JFrame{
 		JLabel buttonLabel2 = new JLabel("THE $$$");
 		showInfo = new JButton();
 		showInfo.setLayout(new BorderLayout());
-		showInfo.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 100, 100, 50);
-		showInfo.add(BorderLayout.NORTH, buttonLabel1);
-		showInfo.add(BorderLayout.SOUTH, buttonLabel2);
+		showInfo.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 50, 100, 100);
+		showInfo.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ShowMeTheMoneyButton.png", showInfo.getWidth(), showInfo.getHeight()));
+		showInfo.setContentAreaFilled(false);
+		showInfo.setBorder(null);
 		showInfo.setVisible(true);
-		tradeButton = new JButton("Trade");
-		tradeButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 - 25, 200, 50);
+		tradeButton = new JButton();
+		tradeButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 200, 100, 100);
+		tradeButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "TradeButton.png", tradeButton.getWidth(), tradeButton.getHeight()));
+		tradeButton.setContentAreaFilled(false);
+		tradeButton.setBorder(null);
 	}
 	public void addMortgageButton()
 	{
-		showMortgage = new JButton("Mortgage Property!");
+		showMortgage = new JButton();
 		showMortgage.setLayout(new BorderLayout());
-		showMortgage.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 + 50, 150, 50);
+		showMortgage.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 350, 100, 100);
+		showMortgage.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "MortgageButton.png", showInfo.getWidth(), showInfo.getHeight()));
+		showMortgage.setContentAreaFilled(false);
+		showMortgage.setBorder(null);
 		showMortgage.setVisible(true);
 	}
 	public void addTestingButton()
 	{
 		displayTestWindow = new JButton("Testing Window");
 		displayTestWindow.setLayout(new BorderLayout());
-		displayTestWindow.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/2 + 125, 150, 50);
+		displayTestWindow.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 750, 200, 50);
 		displayTestWindow.setVisible(true);
 	}
 

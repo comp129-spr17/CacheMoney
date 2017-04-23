@@ -358,7 +358,7 @@ public class MainMenuScreen {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.quickDisplay.playSound();
+				Sounds.winGame.playSound();
 				creditsScreen.setVisible(true);
 			}
 

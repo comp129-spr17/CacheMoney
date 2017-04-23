@@ -25,6 +25,7 @@ public class MiniGamePractice extends JFrame{
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mgp.addBackButton(new BackButton(this));
+		mgp.repaint();
 		
 		this.setTitle("Play Minigames");
 		setResizable(false);
