@@ -279,6 +279,7 @@ public class GameScreen extends JFrame{
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filenameToLoad));
 			String s = reader.readLine();
+			int numPlayersOn = 0;
 			while (s != null){
 				switch (s){
 				case "*current":
@@ -308,6 +309,9 @@ public class GameScreen extends JFrame{
 							s = reader.readLine();
 						}
 					}
+					if (players[playerNum].isOn()){
+						numPlayersOn += 1;
+					}
 					
 					
 					s = reader.readLine();
@@ -328,6 +332,8 @@ public class GameScreen extends JFrame{
 					// do nothing
 				}
 			}
+			System.out.println(numPlayersOn);
+			pInfo.setNumberOfPlayer(numPlayersOn);
 			reader.close();
 			
 		} catch (FileNotFoundException e) {
@@ -1102,9 +1108,10 @@ public class GameScreen extends JFrame{
 			else{
 				FileDialog fd = new FileDialog(this);
 				fd.setMode(FileDialog.SAVE);
+				fd.setTitle("Save Game...");
 				exportButton.setEnabled(false);
 				fd.setVisible(true);
-				filename = fd.getDirectory() + fd.getFile();
+				filename = fd.getDirectory() + fd.getFile() + ".txt";
 				exportButton.setEnabled(true);
 			}
 			

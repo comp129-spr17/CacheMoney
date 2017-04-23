@@ -5,6 +5,8 @@ import java.awt.FileDialog;
 import java.awt.FlowLayout;
 
 import GamePack.PathRelated;
+import GamePack.Property;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
@@ -488,10 +490,8 @@ public class MainMenuScreen {
 				Sounds.buttonCancel.playSound();
 				return;
 			}
-			
-			
 		}
-		gNumP = (Integer)cmbNumP.getSelectedItem();
+		gNumP = isLoadGame ? getNumPlayersFromFile(filenameToLoad) : (Integer)cmbNumP.getSelectedItem();
 		hideAndDisposeMainMenuScreen();
 		loadingScreen.setResizable(false);
 		loadingScreen.setVisible(true);
@@ -499,6 +499,41 @@ public class MainMenuScreen {
 		gameScreen.setNumPlayer(gNumP);
 		hideAndDisposeLoadingScreen();
 		Sounds.waitingRoomJoin.playSound();
+	}
+	
+	private int getNumPlayersFromFile(String filenameToLoad){
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(filenameToLoad));
+			String s = reader.readLine();
+			int numPlayersOn = 0;
+			while (s != null){
+				switch (s){
+				case "*player":
+					s = reader.readLine();
+					s = reader.readLine();
+					if (s.equals("true")){
+						numPlayersOn += 1;
+					}
+					break;
+				default:
+					s = reader.readLine();
+					// do nothing
+				}
+			}
+			reader.close();
+			return numPlayersOn;
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("THERE WAS NO FILE TO LOAD.");
+			System.exit(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		} catch (Exception e){
+			System.out.println("THE FILE IS CORRUPTED; UNABLE TO LOAD DATA.");
+			System.exit(1);
+		}
+		return -1;
 	}
 	
 	
