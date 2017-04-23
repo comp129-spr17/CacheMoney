@@ -67,7 +67,8 @@ public final class SizeRelated {
 		board_start_y = (int)(0);
 	}
 	private void setSpaceRowCol(){
-		SPACE_ROW_SPACE_WIDTH = SPACE_COL_SPACE_HEIGHT = (int)(screen_h * .85 / 12);
+		//SPACE_ROW_SPACE_WIDTH = SPACE_COL_SPACE_HEIGHT = (int)(screen_h * .85 / 12);
+		SPACE_ROW_SPACE_WIDTH = SPACE_COL_SPACE_HEIGHT = (int)(screen_h * 0.95 / 12);
 		SPACE_COL_SPACE_WIDTH = SPACE_ROW_SPACE_HEIGHT = (int)(1.5 * SPACE_ROW_SPACE_WIDTH);
 		board_w = 9*SPACE_ROW_SPACE_WIDTH + SPACE_COL_SPACE_WIDTH * 2;
 		board_h = 9*SPACE_ROW_SPACE_WIDTH + SPACE_COL_SPACE_WIDTH * 2;

@@ -401,6 +401,7 @@ public class DicePanel extends JPanel{
 		dices[0].hideDice();
 		dices[1].hideDice();
 		propertyPanel.setButtonsEnabled(true);
+		gamescreen.setExportButtonEnabled(true);
 		actionForPlayers();
 
 	}
@@ -519,6 +520,7 @@ public class DicePanel extends JPanel{
 		return diceRes;
 	}
 	public void rollDice(int diceRes1, int diceRes2){
+		gamescreen.setExportButtonEnabled(false);
 		setDiceResult(diceRes1, diceRes2);
 		isAbleToRollDice = false;
 		dices[0].showDice();

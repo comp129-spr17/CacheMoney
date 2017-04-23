@@ -61,7 +61,7 @@ public class MainMenuScreen {
 		
 		init();
 		createMenuWindow();
-		
+		Music.music1.stopMusic();
 		Sounds.register.playSound();
 		addMouseListen(this);
 		Music.music6.playMusic();

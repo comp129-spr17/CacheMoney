@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.Music;
 
 public class MiniGameModePanel extends JPanel{
 	
@@ -28,6 +29,7 @@ public class MiniGameModePanel extends JPanel{
 	
 	private void init(){
 		// single player for now
+		
 		miniGamePanel = new MiniGamePanel(this);
 		ownerPlaceholder = Player.getInstance(0);
 		guestPlaceholder = Player.getInstance(1);
@@ -44,7 +46,13 @@ public class MiniGameModePanel extends JPanel{
 		this.add(titleLabel);
 		
 		initGameButtons();
-		
+		Music.music6.stopMusic();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Music.music1.playMusic();
 	
 	}
 	
