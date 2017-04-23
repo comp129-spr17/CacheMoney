@@ -83,7 +83,7 @@ public class GameScreen extends JFrame{
 	private JComboBox<String> selectMortgage;
 	private JButton sellConfirm;
 	private JButton sellCancel;
-	private JButton exportGame;
+	private JButton exportButton;
 	private JLabel pleaseSelectMortgageChoice;
 	private JComboBox<String> selectMortgageOption;
 	private JLabel pleaseSelectMortgage;
@@ -156,6 +156,9 @@ public class GameScreen extends JFrame{
 		isServerReady = isReady;
 	}
 	private void setWindowVisible(){
+		//mainPanel.add(muteSounds);
+		//mainPanel.add(muteMusic);
+		
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -165,8 +168,7 @@ public class GameScreen extends JFrame{
 		if (pInfo.isSingle()){
 			startGameMusic();
 		}
-		mainPanel.add(muteSounds);
-		mainPanel.add(muteMusic);
+		
 	}
 	
 	private void initEverything(boolean isHost, boolean isSingle){
@@ -543,10 +545,10 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 		});
-		exportGame.addMouseListener(new MouseListener(){
+		exportButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (exportGame.isEnabled()){
+				if (exportButton.isEnabled()){
 					saveGame(false); 
 				}
 				
@@ -656,7 +658,7 @@ public class GameScreen extends JFrame{
 		addTestingButton();
 		addEndGameScreenButton();
 		setupMortgage();
-		mainPanel.add(exportGame);
+		mainPanel.add(exportButton);
 		mainPanel.add(showInfo);
 		mainPanel.add(showMortgage);
 		mainPanel.add(boardPanel);
@@ -679,11 +681,14 @@ public class GameScreen extends JFrame{
 		if (loadGame){
 			loadGame();
 		}
-		
+		mainPanel.add(muteMusic);
+		mainPanel.add(muteSounds);
+		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png",screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight()));
 	}
 	private void addExportGameButton() {
-		exportGame = new JButton("Export Game");
-		exportGame.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/5 + 50, 150, 50);
+		exportButton = new JButton("<html>Export Game" + (pInfo.isSingle() ? "" : "<br />(to local multiplayer)" + "</html>"));
+		exportButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, myComp_height/5 + 50, 150, 50);
 	}
 	public void switchToGame(){
 		getContentPane().removeAll();
@@ -741,7 +746,7 @@ public class GameScreen extends JFrame{
 		muteMusic = new JCheckBox(imgOn); 	
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
-		mainPanel.add(muteMusic);
+		//mainPanel.add(muteMusic);
 		muteMusic.addMouseListener(new MouseListener(){
 
 			@Override
@@ -796,7 +801,7 @@ public class GameScreen extends JFrame{
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
 		muteSounds = new JCheckBox(imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
-		mainPanel.add(muteSounds);
+		//mainPanel.add(muteSounds);
 		muteSounds.addMouseListener(new MouseListener(){
 
 			@Override
@@ -1086,10 +1091,10 @@ public class GameScreen extends JFrame{
 			else{
 				FileDialog fd = new FileDialog(this);
 				fd.setMode(FileDialog.SAVE);
-				exportGame.setEnabled(false);
+				exportButton.setEnabled(false);
 				fd.setVisible(true);
 				filename = fd.getDirectory() + fd.getFile();
-				exportGame.setEnabled(true);
+				exportButton.setEnabled(true);
 			}
 			
 			try{
@@ -1170,5 +1175,9 @@ public class GameScreen extends JFrame{
 	}
 	public void actionForCommenceTrade(boolean b) {
 		tradeP.commenceTrade(b);
+	}
+	
+	public void setExportButtonEnabled(boolean b){
+		exportButton.setEnabled(b);
 	}
 }
