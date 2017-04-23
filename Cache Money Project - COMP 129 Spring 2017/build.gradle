@@ -1,3 +1,5 @@
+import com.mysql.jdbc.Driver
+
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'eclipse'
@@ -7,6 +9,10 @@ version = '1.0'
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    classpath 'mysql:mysql-connector-java:6.0.6'
 }
 
 sourceSets {
