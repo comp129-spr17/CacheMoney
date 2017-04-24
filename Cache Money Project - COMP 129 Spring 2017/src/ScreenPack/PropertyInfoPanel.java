@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.Property;
@@ -576,19 +577,23 @@ public class PropertyInfoPanel extends JPanel{
 
 	private void addBuyButton()
 	{
-		buyButton.setText("BUY"); 
-		buyButton.setSize(100, 30);
+		buyButton.setSize(60, 60);
+		buyButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "BuyButton.png", buyButton.getWidth(), buyButton.getHeight()));
+		buyButton.setContentAreaFilled(false);
+		buyButton.setBorder(null);
 		buyButton.setBackground(Color.GREEN); 
-		buyButton.setLocation(this.getWidth()/4-buyButton.getWidth()/2, this.getHeight()/10*9-buyButton.getHeight()/2);
+		buyButton.setLocation(this.getWidth()/4-buyButton.getWidth()/2, this.getHeight()/10*8-buyButton.getHeight()/2);
 		add(buyButton); 
 		buyButton.setVisible(true);
 	}
 
 	private void addAuctionButton()
 	{
-		auctionButton.setText("AUCTION"); 
-		auctionButton.setSize(100, 30);
-		auctionButton.setLocation(this.getWidth()/4*3-auctionButton.getWidth()/2, this.getHeight()/10*9-auctionButton.getHeight()/2);
+		auctionButton.setSize(60, 60);
+		auctionButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "AuctionButton.png", auctionButton.getWidth(), auctionButton.getHeight()));
+		auctionButton.setContentAreaFilled(false);
+		auctionButton.setBorder(null);
+		auctionButton.setLocation(this.getWidth()/4*3-auctionButton.getWidth()/2, this.getHeight()/10*8-auctionButton.getHeight()/2);
 		auctionButton.setBackground(Color.RED);
 		add(auctionButton);
 		auctionButton.setVisible(true);
@@ -596,8 +601,10 @@ public class PropertyInfoPanel extends JPanel{
 
 	private void addPayButton()
 	{
-		payButton.setText("PAY"); 
-		payButton.setSize(100, 80);
+		payButton.setSize(60, 60);
+		payButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "PayButton.png", payButton.getWidth(), payButton.getHeight()));
+		payButton.setContentAreaFilled(false);
+		payButton.setBorder(null);
 		payButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
 		payButton.setBackground(Color.RED);
 		add(payButton);
