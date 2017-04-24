@@ -72,4 +72,10 @@ public class EndGamePanel extends JPanel {
 	public void updateSizes() {
 		System.out.println(PlayerWinStatus.getSize());
 	}
+
+
+	public void updateInformation() {
+		// TODO Auto-generated method stub
+		
+	}
 }

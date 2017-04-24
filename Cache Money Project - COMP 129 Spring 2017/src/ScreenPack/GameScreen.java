@@ -70,6 +70,7 @@ public class GameScreen extends JFrame{
 	private Insets insets;
 	private JCheckBox muteMusic;
 	private JCheckBox muteSounds;
+	private BackgroundImage bgImage;
 	private int scheduledMusic;
 	private int loadingProgress;
 	private int totalPlayers;
@@ -356,21 +357,14 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Show End Game Screen");
-				if(endGameScreen == null) {
-					endGameScreen = new EndGamePanel(true, players, dicePanel.getCurrentPlayerNumber(), totalPlayers, boardPanel.getSize());
-					endGameScreen.setLayout(null);
-					endGameScreen.updateSizes();
-				}
 				if(!endGameScreen.isVisible()) {
-
-					endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
-					endGameScreen.setVisible(true);
-					endGameScreen.setBackground(new Color(70, 220, 75));
-					mainPanel.add(endGameScreen);
+					endGameScreen.updateInformation();
 					boardPanel.setVisible(false);
+					bgImage.setVisible(false);
+					endGameScreen.setVisible(true);
+					bgImage.setVisible(true);
 				} else {
 					endGameScreen.setVisible(false);
-					mainPanel.remove(endGameScreen);
 					boardPanel.setVisible(true);
 				}
 			}
@@ -660,6 +654,11 @@ public class GameScreen extends JFrame{
 		dicePanel = new DicePanel(players, mLabels, tradeP, this);
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
+		endGameScreen = new EndGamePanel(true, players, dicePanel.getCurrentPlayerNumber(), totalPlayers, boardPanel.getSize());
+		endGameScreen.setLayout(null);
+		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
+		endGameScreen.setBackground(new Color(70, 220, 75));
+		endGameScreen.setVisible(false);
 		addExportGameButton();
 		addShowMoneyButton();
 		addMortgageButton();
@@ -669,6 +668,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(exportButton);
 		mainPanel.add(showInfo);
 		mainPanel.add(showMortgage);
+		mainPanel.add(endGameScreen);
 		mainPanel.add(boardPanel);
 		mainPanel.add(tradeButton);
 		mainPanel.add(displayTestWindow);
@@ -692,7 +692,8 @@ public class GameScreen extends JFrame{
 		mainPanel.add(muteMusic);
 		mainPanel.add(muteSounds);
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png",screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight()));
+		bgImage = new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png",screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight());
+		mainPanel.add(bgImage);
 	}
 	private void addExportGameButton() {
 		exportButton = new JButton();
