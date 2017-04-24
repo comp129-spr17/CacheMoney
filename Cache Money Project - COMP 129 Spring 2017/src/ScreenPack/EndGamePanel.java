@@ -3,6 +3,7 @@ package ScreenPack;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,12 +19,11 @@ public class EndGamePanel extends JPanel {
 	private Player[] players;
 	private int currentPlayerNum;
 	private int totalNumPlayers;
-	private JLabel playerPiece;
-	private JLabel[] otherPieces;
+	private ArrayList<JLabel> playerPieces;
 	private SizeRelated sizeRelated;
 	private ImageRelated imageRelated;
 	private PathRelated pathRelated;
-	private JLabel[] playerNames;
+	private ArrayList<JLabel> playerNames;
 	private JLabel PlayerWinStatus;
 	public EndGamePanel(Player[] players, int totalNumPlayers, Dimension size) {
 		this.players = players;
@@ -33,14 +33,39 @@ public class EndGamePanel extends JPanel {
 		sizeRelated = SizeRelated.getInstance();
 		pathRelated = PathRelated.getInstance();
 		imageRelated = ImageRelated.getInstance();
+		
+		playerNames = new ArrayList<JLabel>();
+		playerPieces = new ArrayList<JLabel>();
+		
+		getPlayerNamesAndPieces();
+	}
+
+
+	private void getPlayerNamesAndPieces() {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < totalNumPlayers; i++) {
+			String temp = players[i].getUserName();
+			JLabel name;
+			if (temp == null) {
+				name = new JLabel("Player " + Integer.toString(i+1));
+			} else {
+				name = new JLabel(temp);
+			}
+			name.setFont(new Font("Serif",Font.BOLD,64));
+			name.setSize(name.getPreferredSize());
+			playerNames.add(name);
+			playerPieces.add(new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + 2*i + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight())));
+		}
 	}
 
 
 	private void showPlayer() {
 		// TODO Auto-generated method stub
-		playerPiece = new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + 2*currentPlayerNum + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight()));
-		add(playerPiece);
-		playerPiece.setBounds(this.getWidth()/2 - 50,PlayerWinStatus.getHeight(),100,150);
+		add(playerPieces.get(currentPlayerNum));
+		add(playerNames.get(currentPlayerNum));
+		
+		playerPieces.get(currentPlayerNum).setBounds(this.getWidth()/4,PlayerWinStatus.getHeight(),100,100);
+		playerNames.get(currentPlayerNum).setLocation(this.getWidth()/4 + playerPieces.get(currentPlayerNum).getWidth(), PlayerWinStatus.getHeight());
 	}
 
 
