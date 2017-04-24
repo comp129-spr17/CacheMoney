@@ -49,7 +49,7 @@ public class MainMenuScreen {
 	private JButton MultiPButton;
 	private JButton CreditsButton;
 	private JLabel HelloThere;
-	private JButton ExitButton;
+	private JButton LoadMultiplayer;
 	private JButton MiniGamesButton;
 	private Integer[] numPlayer = {2,3,4};
 	private JComboBox cmbNumP;
@@ -101,7 +101,7 @@ public class MainMenuScreen {
 		NewGameButton = new JButton();
 		LoadGameButton = new JButton();
 		HelloThere = new JLabel("Cache Money", SwingConstants.CENTER);
-		ExitButton = new JButton("Exit Game");
+		LoadMultiplayer = new JButton();
 		CreditsButton = new JButton();
 		MiniGamesButton = new JButton();
 		cmbNumP = new JComboBox(numPlayer);
@@ -148,6 +148,9 @@ public class MainMenuScreen {
 		
 		screenLabels[5].setText("<html><span style='font-size:11px'>Online</span></html>");
 		screenLabels[5].setBounds(250, 373, 300, 30);
+		
+		screenLabels[5].setLocation(222, 373);		// DEBUG
+		screenLabels[5].setText("<html><span style='font-size:11px'>Coming Soon!</span></html>");	// DEBUG
 		
 		screenLabels[6].setText("<html><span style='font-size:9px'>Minigames</span></html>");
 		screenLabels[6].setBounds(3, 444, 300, 30);
@@ -333,7 +336,7 @@ public class MainMenuScreen {
 
 
 		});
-		ExitButton.addMouseListener(new MouseListener() {
+		LoadMultiplayer.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -356,17 +359,7 @@ public class MainMenuScreen {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Timer t = new Timer();
-				t.schedule(new TimerTask(){
-
-					@Override
-					public void run() {
-						System.exit(0);
-					}
-
-				}, 1500);
-				Sounds.landedOnJail.playSound();
-				hideAndDisposeMainMenuScreen();
+				
 			}
 		});
 		loginBtn.addMouseListener(new MouseListener() {
@@ -478,7 +471,14 @@ public class MainMenuScreen {
 		mainPanel.add(CreditsButton);
 		
 		
-		ExitButton.setFont(mainfont);
+		LoadMultiplayer.setBounds(220,280,100,100);
+		LoadMultiplayer.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "LoadMultiplayer.png", LoadMultiplayer.getWidth(), LoadMultiplayer.getHeight()));
+		LoadMultiplayer.setContentAreaFilled(false);
+		LoadMultiplayer.setBorder(null);
+		mainPanel.add(LoadMultiplayer);
+		
+		LoadMultiplayer.setEnabled(false); // DEBUG
+		
 		
 		
 		loginBtn.setBounds(175,365,150,50);
@@ -486,10 +486,10 @@ public class MainMenuScreen {
 		//mainPanel.add(loginBtn);
 		
 		
-		ExitButton.setBounds(175,485,150,50);
+		
 		//mainPanel.add(ExitButton);
 		
-		setLoadGameButtonEnabled();
+		//setLoadGameButtonEnabled();
 		mainmenuframe.add(mainPanel);
 		mainPanel.add(new BackgroundImage(pathRelated.getImagePath() + "background.jpg", mainmenuframe.getWidth(), mainmenuframe.getHeight()));
 		//		mainPanel.setComponentZOrder(backgroundpic, 0);
@@ -624,9 +624,6 @@ public class MainMenuScreen {
 		if(playingInfo.isLoggedIn())
 			SqlRelated.loginAndOutAction(playingInfo.getLoggedInId(), false);
 		if(gameScreen != null){
-//			if(!playingInfo.getIsDisconnectedByOther())
-//				gameScreen.saveGame();
-			
 			gameScreen.exitForServer();
 		}
 	}
