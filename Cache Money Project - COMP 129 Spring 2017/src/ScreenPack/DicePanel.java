@@ -1,9 +1,4 @@
 package ScreenPack;
-import GamePack.*;
-import MultiplayerPack.*;
-import InterfacePack.BackgroundImage;
-import InterfacePack.Sounds;
-
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,11 +14,23 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.mysql.cj.api.jdbc.result.ResultSetInternalMethods;
+import GamePack.Board;
+import GamePack.Dice;
+import GamePack.DoubleCelebrate;
+import GamePack.ImageRelated;
+import GamePack.JailSpace;
+import GamePack.PathRelated;
+import GamePack.Player;
+import GamePack.SizeRelated;
+import InterfacePack.BackgroundImage;
+import InterfacePack.Sounds;
+import MultiplayerPack.MBytePack;
+import MultiplayerPack.Part;
+import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.UnicodeForServer;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{

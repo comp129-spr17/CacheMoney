@@ -8,15 +8,11 @@ import java.net.ServerSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.sun.jndi.cosnaming.IiopUrl.Address;
 
 public class Server {
 	private static ArrayList<ChatElement> users;

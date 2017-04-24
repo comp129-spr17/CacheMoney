@@ -2,20 +2,13 @@ package MiniGamePack;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.security.KeyStore.PrivateKeyEntry;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.sun.glass.ui.Timer;
-
-import GamePack.GoSpace;
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
@@ -25,7 +18,6 @@ import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
-import ScreenPack.MiniGamePanel;
 // abstract class for MiniGames
 public class MiniGame{
 	protected int GAME_NUM;

@@ -4,11 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 
 public final class MBytePack {

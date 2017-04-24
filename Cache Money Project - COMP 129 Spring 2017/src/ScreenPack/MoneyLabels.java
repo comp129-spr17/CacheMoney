@@ -1,24 +1,17 @@
 package ScreenPack;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JWindow;
-
-import org.junit.experimental.theories.Theories;
 
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
-import sun.java2d.cmm.kcms.KcmsServiceProvider;
-import sun.launcher.resources.launcher;
 
 public final class MoneyLabels {
 	private JDialog PlayerInfo;

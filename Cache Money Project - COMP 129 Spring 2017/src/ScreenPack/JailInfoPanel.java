@@ -3,10 +3,7 @@ package ScreenPack;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
@@ -14,14 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.sun.glass.ui.Timer;
-import com.sun.media.jfxmedia.events.PlayerStateEvent.PlayerState;
-
 import GamePack.PathRelated;
 import GamePack.Player;
-import GamePack.Property;
-import GamePack.PropertySpace;
-import GamePack.UtilityProperty;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;

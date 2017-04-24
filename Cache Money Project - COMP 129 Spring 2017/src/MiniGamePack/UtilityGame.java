@@ -11,7 +11,6 @@ import GamePack.ImageRelated;
 import GamePack.PathRelated;
 import InterfacePack.Sounds;
 import MultiplayerPack.UnicodeForServer;
-import javafx.scene.image.Image;
 
 public class UtilityGame extends MiniGame {
 	
