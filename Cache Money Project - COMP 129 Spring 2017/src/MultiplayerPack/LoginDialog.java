@@ -89,7 +89,7 @@ public class LoginDialog extends JDialog {
                                 "Hi " + getUsername() + "! You have successfully logged in.",
                                 "Login",
                                 JOptionPane.INFORMATION_MESSAGE);
-                		Sounds.buttonCancel.playSound();
+                		Sounds.buttonConfirm.playSound();
                         succeeded = true;
                         SqlRelated.loginAndOutAction(getUsername(), true);
                         playingInfo.setLoggedInId(getUsername());

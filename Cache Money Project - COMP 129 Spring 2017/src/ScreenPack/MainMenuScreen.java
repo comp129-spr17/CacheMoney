@@ -37,6 +37,10 @@ import MultiplayerPack.*;
 import sun.util.resources.cldr.mr.TimeZoneNames_mr;
 
 public class MainMenuScreen {
+	
+	private final int WIDTH = 400;
+	private final int HEIGHT = 500;
+	
 	private Font mainfont;
 	private JPanel mainPanel;
 	private JFrame mainmenuframe;
@@ -58,6 +62,7 @@ public class MainMenuScreen {
 	private PlayingInfo playingInfo;
 	private CreditsScreen creditsScreen;
 	private SizeRelated sizeRelated;
+	private JLabel[] screenLabels;
 
 	public MainMenuScreen(){
 		
@@ -91,14 +96,14 @@ public class MainMenuScreen {
 		scaleBoardToScreenSize();
 		mainfont = new Font("Serif", Font.PLAIN, 18);
 		mainmenuframe = new JFrame("Main Menu");
-		MultiPButton = new JButton("Multiplayer");
-		MultiPButton.setEnabled(false);
-		NewGameButton = new JButton("New Game");
-		LoadGameButton = new JButton("Load Game");
+		MultiPButton = new JButton();
+		MultiPButton.setEnabled(true);
+		NewGameButton = new JButton();
+		LoadGameButton = new JButton();
 		HelloThere = new JLabel("Cache Money", SwingConstants.CENTER);
 		ExitButton = new JButton("Exit Game");
-		CreditsButton = new JButton("Credits");
-		MiniGamesButton = new JButton("Play Minigames");
+		CreditsButton = new JButton();
+		MiniGamesButton = new JButton();
 		cmbNumP = new JComboBox(numPlayer);
 		cmbNumP.setSelectedIndex(0);
 		creditsScreen = new CreditsScreen();
@@ -109,7 +114,7 @@ public class MainMenuScreen {
 
 		loginBtn = new JButton("Login");
 		playingInfo = PlayingInfo.getInstance();
-		disableEnableBtns(playingInfo.isLoggedIn());
+//		disableEnableBtns(playingInfo.isLoggedIn());
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			public void run(){
 				System.out.println("I AM EXITING!");
@@ -117,7 +122,41 @@ public class MainMenuScreen {
 			}
 		});
 
+		screenLabels = new JLabel[8];
+		initScreenLabels();
+		
 	}
+	private void initScreenLabels() {
+		for (int i = 0; i < 8; i++){
+			screenLabels[i] = new JLabel();
+			mainPanel.add(screenLabels[i]);
+		}
+		screenLabels[0].setText("<html><span style='font-size:17px'><b>New Game</b></span></html>");
+		screenLabels[0].setBounds(140, 87, 300, 30);
+		
+		screenLabels[1].setText("<html><span style='font-size:11px'>Local</span></html>");
+		screenLabels[1].setBounds(110, 212, 300, 30);
+		
+		screenLabels[2].setText("<html><span style='font-size:11px'>Online</span></html>");
+		screenLabels[2].setBounds(250, 212, 300, 30);
+		
+		screenLabels[3].setText("<html><span style='font-size:17px'><b>Load Game</b></span></html>");
+		screenLabels[3].setBounds(140, 250, 300, 30);
+		
+		screenLabels[4].setText("<html><span style='font-size:11px'>Local</span></html>");
+		screenLabels[4].setBounds(110, 373, 300, 30);
+		
+		screenLabels[5].setText("<html><span style='font-size:11px'>Online</span></html>");
+		screenLabels[5].setBounds(250, 373, 300, 30);
+		
+		screenLabels[6].setText("<html><span style='font-size:9px'>Minigames</span></html>");
+		screenLabels[6].setBounds(3, 444, 300, 30);
+		
+		screenLabels[7].setText("<html><span style='font-size:9px'>Credits</span></html>");
+		screenLabels[7].setBounds(345, 444, 300, 30);
+		
+	}
+
 	private void scaleBoardToScreenSize() {
 		Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		sizeRelated = SizeRelated.getInstance();
@@ -231,8 +270,14 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(MultiPButton.isEnabled()){
+					
 					Sounds.buttonConfirm.playSound();
-					(new beginMultiplayer()).start();
+					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
+					loginDialog.setVisible(true);
+					System.out.println("Hello devin");
+					if (playingInfo.isLoggedIn()){
+						(new beginMultiplayer()).start();
+					}
 				}
 				
 			}
@@ -347,13 +392,7 @@ public class MainMenuScreen {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(loginBtn.isEnabled()){
-					Sounds.buttonConfirm.playSound();
-					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
-					loginDialog.setVisible(true);
-					disableEnableBtns(playingInfo.isLoggedIn());
-					System.out.println("Hello kadri");
-				}				
+								
 			}
 		});
 		CreditsButton.addMouseListener(new MouseListener(){
@@ -387,7 +426,7 @@ public class MainMenuScreen {
 	}
 	public void createMenuWindow(){
 		setMenuBackgroundColor();
-		mainmenuframe.setSize(500,600);
+		mainmenuframe.setSize(WIDTH, HEIGHT);
 		pathRelated = PathRelated.getInstance();
 		//		backgroundpic = new JLabel(new ImageIcon(pathRelated.getImagePath() + "background.jpg"));
 		//		System.out.println(mainmenuframe.getWidth() + " : " + mainmenuframe.getHeight());
@@ -396,36 +435,60 @@ public class MainMenuScreen {
 
 		mainmenuframe.setResizable(false);
 		addActionListenerForExit();
-		mainmenuframe.setVisible(true);
+		
 
 
 
-		HelloThere.setFont(new Font("Serif", Font.PLAIN, 30));
-		HelloThere.setBounds(100,50,300,50);
+		HelloThere.setFont(new Font("Serif", Font.BOLD, 40));
+		HelloThere.setBounds(60,20,300,50);
 		mainPanel.add(HelloThere);
-		NewGameButton.setFont(mainfont);
-		NewGameButton.setBounds(175,125,150,50);
+		
+		NewGameButton.setBounds(80,120,100,100);
+		NewGameButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "LocalMultiplayerButton.png", NewGameButton.getWidth(), NewGameButton.getHeight()));
+		NewGameButton.setContentAreaFilled(false);
+		NewGameButton.setBorder(null);
 		mainPanel.add(NewGameButton);
-		LoadGameButton.setFont(mainfont);
-		LoadGameButton.setBounds(175,185,150,50);
+		
+		
+		
+		LoadGameButton.setBounds(80,280,100,100);
+		LoadGameButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ImportGameButton.png", LoadGameButton.getWidth(), LoadGameButton.getHeight()));
+		LoadGameButton.setContentAreaFilled(false);
+		LoadGameButton.setBorder(null);
 		mainPanel.add(LoadGameButton);
 		
 		
-		MultiPButton.setFont(mainfont);
-		MultiPButton.setBounds(175,245,150,50);
+		MultiPButton.setBounds(220,120,100,100);
+		MultiPButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "MultiplayerButton.png", MultiPButton.getWidth(), MultiPButton.getHeight()));
+		MultiPButton.setContentAreaFilled(false);
+		MultiPButton.setBorder(null);
 		mainPanel.add(MultiPButton);
-		MiniGamesButton.setFont(mainfont);
-		MiniGamesButton.setBounds(175,305,150,50);
+		
+		MiniGamesButton.setBounds(10,400,50,50);
+		MiniGamesButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "PlayMinigamesButton.png", MiniGamesButton.getWidth(), MiniGamesButton.getHeight()));
+		MiniGamesButton.setContentAreaFilled(false);
+		MiniGamesButton.setBorder(null);
 		mainPanel.add(MiniGamesButton);
+		
+		
+		CreditsButton.setBounds(340, 400, 50, 50);
+		CreditsButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "CreditsButton.png", CreditsButton.getWidth(), CreditsButton.getHeight()));
+		CreditsButton.setContentAreaFilled(false);
+		CreditsButton.setBorder(null);
+		mainPanel.add(CreditsButton);
+		
+		
 		ExitButton.setFont(mainfont);
+		
+		
 		loginBtn.setBounds(175,365,150,50);
 		loginBtn.setFont(mainfont);
-		mainPanel.add(loginBtn);
+		//mainPanel.add(loginBtn);
+		
+		
 		ExitButton.setBounds(175,485,150,50);
-		mainPanel.add(ExitButton);
-		CreditsButton.setBounds(175, 425, 150, 50);
-		CreditsButton.setFont(mainfont);
-		mainPanel.add(CreditsButton);
+		//mainPanel.add(ExitButton);
+		
 		setLoadGameButtonEnabled();
 		mainmenuframe.add(mainPanel);
 		mainPanel.add(new BackgroundImage(pathRelated.getImagePath() + "background.jpg", mainmenuframe.getWidth(), mainmenuframe.getHeight()));
@@ -439,7 +502,10 @@ public class MainMenuScreen {
 		//		mainPanel.setComponentZOrder(MiniGamesButton, 1);
 		//
 		//		mainPanel.setComponentZOrder(ExitButton, 1);
-
+		
+		mainmenuframe.setLocation(sizeRelated.getScreenW() / 2 - WIDTH / 2, sizeRelated.getScreenH() / 2 - HEIGHT / 2);
+		
+		mainmenuframe.setVisible(true);
 		mainPanel.repaint();
 		mainPanel.revalidate();
 		mainmenuframe.repaint();

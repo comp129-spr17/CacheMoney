@@ -48,7 +48,13 @@ import MultiplayerPack.SqlRelated;
 import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
-	private static final String FILENAME = "recentSave.txt";
+	
+	private final boolean DEBUG_BUTTONS_ENABLED = false; // Set this enabled to get TestingWindow and EndGameStats buttons
+	
+	
+	private static final String AUTO_SAVE_FILENAME = "recentSave.txt";
+	private static final String AUTO_SAVE_DIRECTORY = "";
+	
 	private final int NUMBER_OF_MUSIC = 5;
 	private boolean loadGame;
 	private JPanel mainPanel;
@@ -100,6 +106,7 @@ public class GameScreen extends JFrame{
 	private TradingPanel tradeP;
 	private ChatScreen chatScreen;
 	private String filenameToLoad;
+	private BackgroundImage bgi;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
@@ -159,13 +166,15 @@ public class GameScreen extends JFrame{
 	private void setWindowVisible(){
 		//mainPanel.add(muteSounds);
 		//mainPanel.add(muteMusic);
-		
+		this.repaint();
+		mainPanel.repaint();
+		this.setVisible(true);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		this.setVisible(true);
+		
 		if (pInfo.isSingle()){
 			startGameMusic();
 		}
@@ -550,6 +559,7 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (exportButton.isEnabled()){
+					Sounds.buttonConfirm.playSound();
 					saveGame(false); 
 				}
 				
@@ -570,6 +580,11 @@ public class GameScreen extends JFrame{
 	
 	private void init(boolean isHost){
 		// 10
+
+		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		bgImage = new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png",screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight());
+		
+		
 		sizeRelated = SizeRelated.getInstance();
 		pDisplay = PropertyDisplay.getInstance();
 		pInfoDisplay = PlayerInfoDisplay.getInstance();
@@ -671,9 +686,10 @@ public class GameScreen extends JFrame{
 		mainPanel.add(endGameScreen);
 		mainPanel.add(boardPanel);
 		mainPanel.add(tradeButton);
-		mainPanel.add(displayTestWindow);
-		mainPanel.add(showEndGameScreen);
-		
+		if (DEBUG_BUTTONS_ENABLED){
+			mainPanel.add(displayTestWindow);
+			mainPanel.add(showEndGameScreen);
+		}
 		addMuteMusic();
 		addMuteSounds();
 		initButtonListeners();
@@ -691,8 +707,6 @@ public class GameScreen extends JFrame{
 		}
 		mainPanel.add(muteMusic);
 		mainPanel.add(muteSounds);
-		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		bgImage = new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png",screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight());
 		mainPanel.add(bgImage);
 	}
 	private void addExportGameButton() {
@@ -1102,40 +1116,59 @@ public class GameScreen extends JFrame{
 		System.exit(0);
 	}
 	public void saveGame(boolean autoSave) {
-		if(pInfo.isSingle()){
-			String filename = null;
 			if (autoSave){
-				filename = FILENAME;
+				autoSaveGame(pInfo.isSingle());
 			}
 			else{
-				FileDialog fd = new FileDialog(this);
-				fd.setMode(FileDialog.SAVE);
-				fd.setTitle("Save Game...");
-				exportButton.setEnabled(false);
-				fd.setVisible(true);
-				filename = fd.getDirectory() + fd.getFile() + ".txt";
-				exportButton.setEnabled(true);
+				manualSave();
 			}
-			
-			try{
-				PrintWriter writer = new PrintWriter(filename, "UTF-8");
-				String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
-				String[] packedPlayerInfo = packPlayerInformation();
-				writer.println(currentPlayer);				// currentPlayer
-				for (int i = 0; i < 4; i++){
-					writer.println(packedPlayerInfo[i]);	// players and properties
-				}
-				writer.close();
-			}
-			catch (IOException ioe){
-				System.out.println("Failed to write to file :(");
-			}
-		}else{
-//			int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber());
-//			insertPlayerInformation(savedNum);
-//			sqlRelated.insertSavingGame();
+	}
+	private void manualSave() {
+		FileDialog fd = new FileDialog(this);
+		fd.setMode(FileDialog.SAVE);
+		fd.setTitle(pInfo.isSingle() ? "Save Game..." : "Save Game (to local multiplayer)...");
+		exportButton.setEnabled(false);
+		fd.setVisible(true);
+		exportButton.setEnabled(true);
+		System.out.println(fd.getDirectory());
+		System.out.println(fd.getFile());
+		if (fd.getFile() == null){
+			return;
 		}
-		
+		saveGameToFile(fd.getDirectory(), fd.getFile());
+	}
+	private void saveGameToFile(String directory, String filename) {
+		if (filename.length() > 4){
+			System.out.println(filename.substring(filename.length() - 4, filename.length()));
+			if (!filename.substring(filename.length() - 4, filename.length()).equals(".txt")){
+				filename += ".txt";
+			}
+		}
+		try{
+			PrintWriter writer = new PrintWriter(directory + filename, "UTF-8");
+			String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
+			String[] packedPlayerInfo = packPlayerInformation();
+			writer.println(currentPlayer);				// currentPlayer
+			for (int i = 0; i < 4; i++){
+				writer.println(packedPlayerInfo[i]);	// players and properties
+			}
+			writer.close();
+		}
+		catch (IOException ioe){
+			System.out.println("Failed to write to file :(");
+		}
+	}
+	
+	
+	private void autoSaveGame(boolean single) {
+		if (single){
+			saveGameToFile("", AUTO_SAVE_FILENAME);
+		}
+		else{
+////			int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber());
+////			insertPlayerInformation(savedNum);
+////			sqlRelated.insertSavingGame();
+		}
 		
 	}
 	private void insertPlayerInformation(int savedNum) {
