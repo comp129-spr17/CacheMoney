@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GamePack.Player;
+import GamePack.SizeRelated;
+import GamePack.ImageRelated;
+import GamePack.PathRelated;
 
 
 public class EndGamePanel extends JPanel {
@@ -15,35 +18,33 @@ public class EndGamePanel extends JPanel {
 	private Player[] players;
 	private int currentPlayerNum;
 	private int totalNumPlayers;
-	
+	private JLabel playerPiece;
+	private JLabel[] otherPieces;
+	private SizeRelated sizeRelated;
+	private ImageRelated imageRelated;
+	private PathRelated pathRelated;
 	private JLabel[] playerNames;
 	private JLabel PlayerWinStatus;
-	public EndGamePanel(boolean winStatus, Player[] players, int currentPlayerNum, int totalNumPlayers, Dimension size) {
-		playerWon = winStatus;
+	public EndGamePanel(Player[] players, int totalNumPlayers, Dimension size) {
 		this.players = players;
-		this.currentPlayerNum = currentPlayerNum;
 		this.totalNumPlayers = totalNumPlayers;
 		this.setSize(size);
-		createWinStatusLabel();
-		createTable();
-		createButtons();
-	}
-
-
-	private void createTable() {
-		// TODO Auto-generated method stub
-		createColumnTitles();
-		createPlayerRows();
-	}
-
-
-	private void createColumnTitles() {
-		// TODO Auto-generated method stub
 		
+		sizeRelated = SizeRelated.getInstance();
+		pathRelated = PathRelated.getInstance();
+		imageRelated = ImageRelated.getInstance();
 	}
 
 
-	private void createPlayerRows() {
+	private void showPlayer() {
+		// TODO Auto-generated method stub
+		playerPiece = new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + 2*currentPlayerNum + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight()));
+		add(playerPiece);
+		playerPiece.setBounds(this.getWidth()/2 - 50,PlayerWinStatus.getHeight(),100,150);
+	}
+
+
+	private void showOtherPlayers() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -74,8 +75,14 @@ public class EndGamePanel extends JPanel {
 	}
 
 
-	public void updateInformation() {
+	public void updateInformation(boolean winStatus, int currentPlayerNum) {
 		// TODO Auto-generated method stub
-		
+		this.playerWon = winStatus;
+		this.currentPlayerNum = currentPlayerNum;
+		removeAll();
+		createWinStatusLabel();
+		showPlayer();
+		showOtherPlayers();
+		createButtons();
 	}
 }

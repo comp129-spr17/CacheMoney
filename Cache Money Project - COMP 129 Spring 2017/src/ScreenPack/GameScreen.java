@@ -358,7 +358,7 @@ public class GameScreen extends JFrame{
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Show End Game Screen");
 				if(!endGameScreen.isVisible()) {
-					endGameScreen.updateInformation();
+					endGameScreen.updateInformation(true, dicePanel.getCurrentPlayerNumber());
 					boardPanel.setVisible(false);
 					bgImage.setVisible(false);
 					endGameScreen.setVisible(true);
@@ -654,7 +654,7 @@ public class GameScreen extends JFrame{
 		dicePanel = new DicePanel(players, mLabels, tradeP, this);
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
-		endGameScreen = new EndGamePanel(true, players, dicePanel.getCurrentPlayerNumber(), totalPlayers, boardPanel.getSize());
+		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize());
 		endGameScreen.setLayout(null);
 		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
 		endGameScreen.setBackground(new Color(70, 220, 75));
