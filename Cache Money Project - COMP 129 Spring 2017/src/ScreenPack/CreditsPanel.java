@@ -50,13 +50,13 @@ public class CreditsPanel extends JPanel {
 		
 		creditsLabels[1].setText("<html>"
 				+ "<h" + cacheMoneyTitleStyle + "><span style='font-size:" + cacheMoneyTitleFontSize + "px'><font color = '" + cacheMoneyTitleColor + "'>Team Cache Money:</color></span></h" + cacheMoneyTitleStyle + "><br />"
-				+ "<span style='font-size:" + cmNameFontSize + "px'><font color = '" + cmNamesColor + "'>Jeremy Ronquillo - Product Owner<br />"
-				+ "Nathan Verlin - Scrum Master<br />"
-				+ "Devin Lim - Databases<br />"
-				+ "Kadri Nizam - Server System<br />"
-				+ "Michael Myers - Story Manager<br />"
-				+ "Mitchell Chang - Gameplay Management<br />"
-				+ "Osvaldo Jiminez - Professor/Director"
+				+ "<span style='font-size:" + cmNameFontSize + "px'><font color = '" + cmNamesColor + "'>Jeremy Ronquillo<br />"
+				+ "Nathan Verlin<br />"
+				+ "Devin Lim<br />"
+				+ "Kadri Nizam<br />"
+				+ "Michael Myers<br />"
+				+ "Mitchell Chang<br />"
+				+ "Osvaldo Jiminez"
 				+ "<br /><br /></font></span></html>");
 		
 		
@@ -115,6 +115,8 @@ public class CreditsPanel extends JPanel {
 				+ "Gradle<br />"
 				+ "PHPMyAdmin<br />"
 				+ "Logic Pro X<br />"
+				+ "Pixelmator<br />"
+				+ "Freesound.org<br />"
 				+ "</font></span></html>");
 		
 		

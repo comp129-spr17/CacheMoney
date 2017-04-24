@@ -135,7 +135,7 @@ public class MainMenuScreen {
 		screenLabels[0].setBounds(140, 87, 300, 30);
 		
 		screenLabels[1].setText("<html><span style='font-size:11px'>Local</span></html>");
-		screenLabels[1].setBounds(110, 212, 300, 30);
+		screenLabels[1].setBounds(112, 212, 300, 30);
 		
 		screenLabels[2].setText("<html><span style='font-size:11px'>Online</span></html>");
 		screenLabels[2].setBounds(250, 212, 300, 30);
@@ -143,8 +143,8 @@ public class MainMenuScreen {
 		screenLabels[3].setText("<html><span style='font-size:17px'><b>Load Game</b></span></html>");
 		screenLabels[3].setBounds(140, 250, 300, 30);
 		
-		screenLabels[4].setText("<html><span style='font-size:11px'>Local</span></html>");
-		screenLabels[4].setBounds(110, 373, 300, 30);
+		screenLabels[4].setText("<html><span style='font-size:11px'>From File</span></html>");
+		screenLabels[4].setBounds(99, 373, 300, 30);
 		
 		screenLabels[5].setText("<html><span style='font-size:11px'>Online</span></html>");
 		screenLabels[5].setBounds(250, 373, 300, 30);
@@ -153,7 +153,7 @@ public class MainMenuScreen {
 		screenLabels[5].setText("<html><span style='font-size:11px'>Coming Soon!</span></html>");	// DEBUG
 		
 		screenLabels[6].setText("<html><span style='font-size:9px'>Minigames</span></html>");
-		screenLabels[6].setBounds(3, 444, 300, 30);
+		screenLabels[6].setBounds(4, 444, 300, 30);
 		
 		screenLabels[7].setText("<html><span style='font-size:9px'>Credits</span></html>");
 		screenLabels[7].setBounds(345, 444, 300, 30);
@@ -351,7 +351,7 @@ public class MainMenuScreen {
 
 
 		HelloThere.setFont(new Font("Serif", Font.BOLD, 40));
-		HelloThere.setBounds(60,20,300,50);
+		HelloThere.setBounds(52,20,300,50);
 		mainPanel.add(HelloThere);
 		
 		NewGameButton.setBounds(80,120,100,100);

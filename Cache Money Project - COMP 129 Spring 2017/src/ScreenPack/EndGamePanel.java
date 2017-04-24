@@ -54,7 +54,7 @@ public class EndGamePanel extends JPanel {
 			name.setFont(new Font("Serif",Font.BOLD,64));
 			name.setSize(name.getPreferredSize());
 			playerNames.add(name);
-			playerPieces.add(new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + 2*i + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight())));
+			//playerPieces.add(new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + 2*i + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight())));
 		}
 	}
 
