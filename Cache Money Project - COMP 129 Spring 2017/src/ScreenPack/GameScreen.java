@@ -357,8 +357,9 @@ public class GameScreen extends JFrame{
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Show End Game Screen");
 				if(endGameScreen == null) {
-					endGameScreen = new EndGamePanel(true, players, dicePanel.getCurrentPlayerNumber());
-					endGameScreen.setVisible(false);
+					endGameScreen = new EndGamePanel(true, players, dicePanel.getCurrentPlayerNumber(), totalPlayers, boardPanel.getSize());
+					endGameScreen.setLayout(null);
+					endGameScreen.updateSizes();
 				}
 				if(!endGameScreen.isVisible()) {
 
