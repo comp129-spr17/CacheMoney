@@ -195,7 +195,6 @@ public class SignUpDialog extends JDialog {
 					SqlRelated.loginAndOutAction(getUsername(), true);
                     playingInfo.setLoggedInId(getUsername());
                     playingInfo.setLoggedIn();
-                    mainMenu.disableEnableBtns(true);
 					dispose();
 				} else {
 					Sounds.buttonCancel.playSound();

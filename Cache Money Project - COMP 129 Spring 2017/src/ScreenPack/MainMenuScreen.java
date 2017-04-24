@@ -168,27 +168,14 @@ public class MainMenuScreen {
 
 	private void addMouseListen(final MainMenuScreen mainMenu){
 		NewGameButton.addMouseListener(new MouseListener() {
-
 			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mousePressed(MouseEvent e){
-
-			}
-
+			public void mousePressed(MouseEvent e){}
 			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
+			public void mouseExited(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
@@ -207,34 +194,20 @@ public class MainMenuScreen {
 		});
 		
 		LoadGameButton.addMouseListener(new MouseListener() {
-
 			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mousePressed(MouseEvent e){
-
-			}
-
+			public void mousePressed(MouseEvent e){}
 			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
+			public void mouseExited(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (LoadGameButton.isEnabled()){
 					Sounds.buttonConfirm.playSound();
 					(new startSinglePlayer(true)).start();
 				}
-				
 			}
 			class startSinglePlayer extends Thread{
 				boolean isLoadGame;
@@ -249,27 +222,14 @@ public class MainMenuScreen {
 		});
 		
 		MultiPButton.addMouseListener(new MouseListener() {
-
 			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mousePressed(MouseEvent e){
-
-			}
-
+			public void mousePressed(MouseEvent e){}
 			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
+			public void mouseExited(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(MultiPButton.isEnabled()){
@@ -282,9 +242,7 @@ public class MainMenuScreen {
 						(new beginMultiplayer()).start();
 					}
 				}
-				
 			}
-
 			class beginMultiplayer extends Thread{
 				@Override
 				public void run(){
@@ -293,36 +251,22 @@ public class MainMenuScreen {
 					setupClient();
 				}
 			}
-
 		});
 		MiniGamesButton.addMouseListener(new MouseListener()
 		{
 			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mousePressed(MouseEvent e){
-
-			}
-
+			public void mousePressed(MouseEvent e){}
 			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
+			public void mouseExited(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Sounds.buttonConfirm.playSound();
 				(new playMinigames()).start();
 			}
-
 			class playMinigames extends Thread{
 				@Override
 				public void run(){
@@ -333,60 +277,34 @@ public class MainMenuScreen {
 					Sounds.waitingRoomJoin.playSound();
 				}
 			}
-
-
 		});
 		LoadMultiplayer.addMouseListener(new MouseListener() {
-
 			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mousePressed(MouseEvent e){
-			}
-
+			public void mousePressed(MouseEvent e){}
 			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
+			public void mouseExited(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				// FUNCTIONALITY GOES HERE
+				// FUNCTIONALITY GOES HERE
+				// FUNCTIONALITY GOES HERE
 			}
 		});
 		loginBtn.addMouseListener(new MouseListener() {
-
 			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
+			public void mouseReleased(MouseEvent e) {}
 			@Override
-			public void mousePressed(MouseEvent e){
-			}
-
+			public void mousePressed(MouseEvent e){}
 			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
+			public void mouseExited(MouseEvent e) {}
 			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+			public void mouseEntered(MouseEvent e) {}
 			@Override
-			public void mouseClicked(MouseEvent e) {
-								
-			}
+			public void mouseClicked(MouseEvent e) {}
 		});
 		CreditsButton.addMouseListener(new MouseListener(){
 
@@ -411,14 +329,14 @@ public class MainMenuScreen {
 		});
 	}
 
-	public void disableEnableBtns(boolean isLoggedIn){
-		if(isLoggedIn)
-			loginBtn.setText("Hi " + playingInfo.getLoggedInId() + "!");
-		loginBtn.setEnabled(!isLoggedIn);
-		MultiPButton.setEnabled(isLoggedIn);
-	}
+//	public void disableEnableBtns(boolean isLoggedIn){
+//		if(isLoggedIn)
+//			loginBtn.setText("Hi " + playingInfo.getLoggedInId() + "!");
+//		loginBtn.setEnabled(!isLoggedIn);
+//		MultiPButton.setEnabled(isLoggedIn);
+//	}
 	public void createMenuWindow(){
-		setMenuBackgroundColor();
+		//setMenuBackgroundColor();
 		mainmenuframe.setSize(WIDTH, HEIGHT);
 		pathRelated = PathRelated.getInstance();
 		//		backgroundpic = new JLabel(new ImageIcon(pathRelated.getImagePath() + "background.jpg"));
@@ -512,22 +430,22 @@ public class MainMenuScreen {
 		mainmenuframe.revalidate();
 	}
 	
-	private void setLoadGameButtonEnabled(){
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("recentSave.txt"));
-			LoadGameButton.setEnabled(true);
-			reader.close();
-		} catch (FileNotFoundException e) {
-			LoadGameButton.setEnabled(false);
-		} catch (IOException e) {
-			LoadGameButton.setEnabled(false);
-		}
-	}
+//	private void setLoadGameButtonEnabled(){
+//		try {
+//			BufferedReader reader = new BufferedReader(new FileReader("recentSave.txt"));
+//			LoadGameButton.setEnabled(true);
+//			reader.close();
+//		} catch (FileNotFoundException e) {
+//			LoadGameButton.setEnabled(false);
+//		} catch (IOException e) {
+//			LoadGameButton.setEnabled(false);
+//		}
+//	}
 
-	private void setMenuBackgroundColor() {
-		Color menuBackgroundColor = new Color(105, 177, 255); // LIGHT BLUE
-		//		mainPanel.setBackground(menuBackgroundColor);
-	}
+//	private void setMenuBackgroundColor() {
+//		Color menuBackgroundColor = new Color(105, 177, 255); // LIGHT BLUE
+//		//		mainPanel.setBackground(menuBackgroundColor);
+//	}
 
 	private void startSinglePlayer(boolean isLoadGame) {
 		int gNumP; String filenameToLoad = null;
@@ -603,9 +521,8 @@ public class MainMenuScreen {
 	}
 	
 	
-	private boolean getNumPlayers(){
-		int res = JOptionPane.showConfirmDialog(null, messages,"Enter the number of total players:", JOptionPane.YES_NO_OPTION);
-		return res == JOptionPane.YES_OPTION ? true : false;
+	private void getNumPlayers(){
+		JOptionPane.showMessageDialog(null, messages,"Enter the number of total players:", JOptionPane.OK_OPTION);
 	}
 	private void hideAndDisposeMainMenuScreen() {
 		mainmenuframe.setVisible(false);
