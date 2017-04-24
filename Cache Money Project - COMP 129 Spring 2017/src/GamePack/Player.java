@@ -1,4 +1,4 @@
-	package GamePack;
+package GamePack;
 import ScreenPack.*;
 
 import java.util.ArrayList;

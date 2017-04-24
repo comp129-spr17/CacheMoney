@@ -107,6 +107,7 @@ public class GameScreen extends JFrame{
 	private ChatScreen chatScreen;
 	private String filenameToLoad;
 	private BackgroundImage bgi;
+	private JLabel[] buttonLabels;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
@@ -674,6 +675,9 @@ public class GameScreen extends JFrame{
 		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
 		endGameScreen.setBackground(new Color(70, 220, 75));
 		endGameScreen.setVisible(false);
+		buttonLabels = new JLabel[4];
+		initButtonLabels();
+		
 		addExportGameButton();
 		addShowMoneyButton();
 		addMortgageButton();
@@ -696,6 +700,7 @@ public class GameScreen extends JFrame{
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
+		
 //		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 //		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 		
@@ -708,6 +713,23 @@ public class GameScreen extends JFrame{
 		mainPanel.add(muteMusic);
 		mainPanel.add(muteSounds);
 		mainPanel.add(bgImage);
+	}
+	private void initButtonLabels() {
+		for (int i = 0; i < 4; i++){
+			buttonLabels[i] = new JLabel();
+			mainPanel.add(buttonLabels[i]);
+		}
+		buttonLabels[0].setText("<html><font color = '" + "white" + "'>Player Balances</font></html>");
+		buttonLabels[0].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 145, 300, 30);
+		
+		buttonLabels[1].setText("<html><font color = '" + "white" + "'>Trade</font></html>");
+		buttonLabels[1].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 295, 300, 30);
+		
+		buttonLabels[2].setText("<html><font color = '" + "white" + "'>Mortgage</font></html>");
+		buttonLabels[2].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 445, 300, 30);
+		
+		buttonLabels[3].setText("<html><font color = '" + "white" + "'>Export Game</font></html>");
+		buttonLabels[3].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 595, 300, 30);
 	}
 	private void addExportGameButton() {
 		exportButton = new JButton();
