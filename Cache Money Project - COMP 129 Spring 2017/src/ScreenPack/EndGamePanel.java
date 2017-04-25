@@ -53,7 +53,13 @@ public class EndGamePanel extends JPanel {
 			} else {
 				name = new JLabel(temp);
 			}
-			name.setFont(new Font("Serif",Font.BOLD,64));
+			Font font;
+			if(i == currentPlayerNum) {
+				font = new Font("Serif",Font.BOLD,64);
+			} else {
+				font = new Font("Serif",Font.BOLD,48);
+			}
+			name.setFont(font);
 			name.setSize(name.getPreferredSize());
 			playerNames.add(name);
 			playerPieces.add(new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + i + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight())));
@@ -64,7 +70,7 @@ public class EndGamePanel extends JPanel {
 			} else {
 				money = new JLabel("$" + Integer.toString(players[i].getTotalMonies()));
 			}
-			money.setFont(new Font("Serif",Font.BOLD,64));
+			money.setFont(font);
 			money.setSize(money.getPreferredSize());
 			playerMoney.add(money);
 		}
@@ -72,17 +78,17 @@ public class EndGamePanel extends JPanel {
 
 
 	private void showCurrentPlayer() {
-		showAPlayer(currentPlayerNum, PlayerWinStatus.getHeight()+50);
+		showAPlayer(currentPlayerNum, PlayerWinStatus.getHeight()+50, 100);
 	}
 
-	private void showAPlayer(int playerNum, int height) {
+	private void showAPlayer(int playerNum, int height, int size) {
 		add(playerPieces.get(playerNum));
 		add(playerNames.get(playerNum));
 		add(playerMoney.get(playerNum));
 		
 		int width = (this.getWidth() - 100 - 100 - playerNames.get(playerNum).getWidth() - playerMoney.get(playerNum).getWidth())/2;
 		
-		playerPieces.get(playerNum).setBounds(width,height,100,100);
+		playerPieces.get(playerNum).setBounds(width,height,size,size);
 		playerNames.get(playerNum).setLocation(width + playerPieces.get(playerNum).getWidth() + 50, height);
 		playerMoney.get(playerNum).setLocation(width + playerPieces.get(playerNum).getWidth() + 50 + playerNames.get(playerNum).getWidth() + 50, height);
 	}
@@ -96,7 +102,7 @@ public class EndGamePanel extends JPanel {
 		
 		for(int i = 0; i < totalNumPlayers; i++) {
 			if(i != currentPlayerNum) {
-				showAPlayer(i, starting_height + ref_height*inc);
+				showAPlayer(i, starting_height + ref_height*inc, 75);
 				inc++;
 			}
 		}
