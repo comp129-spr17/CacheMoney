@@ -73,8 +73,14 @@ public class MainMenuScreen {
 		createMenuWindow();
 		Music.music1.stopMusic();
 		Sounds.register.playSound();
-		addMouseListen(this);
 		Music.music6.playMusic();
+		addMouseListen(this);
+		mainmenuframe.setVisible(true);
+		mainPanel.repaint();
+		mainPanel.revalidate();
+		mainmenuframe.repaint();
+		mainmenuframe.revalidate();
+
 
 	}
 
@@ -440,11 +446,7 @@ public class MainMenuScreen {
 		
 		mainmenuframe.setLocation(sizeRelated.getScreenW() / 2 - WIDTH / 2, sizeRelated.getScreenH() / 2 - HEIGHT / 2);
 		
-		mainmenuframe.setVisible(true);
-		mainPanel.repaint();
-		mainPanel.revalidate();
-		mainmenuframe.repaint();
-		mainmenuframe.revalidate();
+		
 	}
 	
 //	private void setLoadGameButtonEnabled(){
@@ -628,6 +630,7 @@ public class MainMenuScreen {
 						muteSounds.setIcon(imgOff);
 					}
 					else{
+						Sounds.register.playSound();
 						muteSounds.setIcon(imgOn);
 					}
 				}

@@ -863,6 +863,7 @@ public class GameScreen extends JFrame{
 					}
 					else{
 						muteSounds.setIcon(imgOn);
+						Sounds.register.playSound();
 					}
 				}
 				else if (e.getButton() == 3){
