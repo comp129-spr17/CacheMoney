@@ -223,10 +223,12 @@ public class TradingPanel extends JDialog{
 				else{
 					if (isReceiving){
 						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.COMMENCE_TRADE, true));
+						return;
 					}
 					else{
 						pInfo.sendMessageToServer(mPack.packStringAndInt(UnicodeForServer.TRADE_REQUEST, packTradeRequest(), tradePlayerNum));
 					}
+					
 				}
 				closeTradingWindow();
 			}
@@ -248,13 +250,10 @@ public class TradingPanel extends JDialog{
 				}
 				Sounds.buttonCancel.playSound();
 				if (isReceiving){
-					if (pInfo.isSingle()){
-						closeTradingWindow();
-					}
-					else{
+					if (!pInfo.isSingle()){
 						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.COMMENCE_TRADE, false));
-						closeTradingWindow();
 					}
+					closeTradingWindow();
 				}
 				else{
 					setTradeConfirmDisplayVisible(false);
@@ -519,8 +518,8 @@ public class TradingPanel extends JDialog{
 		ownedProperties.get(TRADE_TARGET).setScrollingPaneVisible(true);
 		trades.get(TRADE_HOST).setScrollingPaneVisible(true);
 		trades.get(TRADE_TARGET).setScrollingPaneVisible(true);
-		System.out.println("currentPlayerNum: " + currentPlayerNum);
-		System.out.println("tradePlayerNum: " + tradePlayerNum);
+//		System.out.println("currentPlayerNum: " + currentPlayerNum);
+//		System.out.println("tradePlayerNum: " + tradePlayerNum);
 //		propertiesToTrade[TRADE_HOST].clear();
 //		propertiesToTrade[TRADE_TARGET].clear();
 		clearScrollingPanel();
@@ -650,6 +649,8 @@ public class TradingPanel extends JDialog{
 			closeTradingWindow();
 			return;
 		}
+		System.out.println("currentPlayerNum: " + currentPlayerNum);
+		System.out.println("tradePlayerNum: " + tradePlayerNum);
 		Sounds.gainMoney.playSound();
 		players[currentPlayerNum].pay(offeredMoney);
 		players[currentPlayerNum].earnMonies(requestedMoney);
@@ -657,16 +658,16 @@ public class TradingPanel extends JDialog{
 		players[tradePlayerNum].earnMonies(offeredMoney);
 		
 		for (String s : trades.get(TRADE_TARGET).getListOfObjects()){
-			Property tradedProperty = propertyInfo.get(s).getPropertyInfo();
-			tradedProperty.setOwner(currentPlayerNum);
-			players[currentPlayerNum].addProperty(tradedProperty);
-			players[tradePlayerNum].removeProperty(tradedProperty);
+			System.out.println(s);
+			propertyInfo.get(s).getPropertyInfo().setOwner(currentPlayerNum);
+			players[currentPlayerNum].addProperty(propertyInfo.get(s).getPropertyInfo());
+			players[tradePlayerNum].removeProperty(propertyInfo.get(s).getPropertyInfo());
 		}
 		for (String s : trades.get(TRADE_HOST).getListOfObjects()){
-			Property tradedProperty = propertyInfo.get(s).getPropertyInfo();
-			tradedProperty.setOwner(tradePlayerNum);
-			players[tradePlayerNum].addProperty(tradedProperty);
-			players[currentPlayerNum].removeProperty(tradedProperty);
+			System.out.println(s);
+			propertyInfo.get(s).getPropertyInfo().setOwner(tradePlayerNum);
+			players[tradePlayerNum].addProperty(propertyInfo.get(s).getPropertyInfo());
+			players[currentPlayerNum].removeProperty(propertyInfo.get(s).getPropertyInfo());
 		}
 		closeTradingWindow();
 		

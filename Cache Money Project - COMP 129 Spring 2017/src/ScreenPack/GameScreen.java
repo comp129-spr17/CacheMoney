@@ -51,7 +51,7 @@ import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
 	
-	private final boolean DEBUG_BUTTONS_ENABLED = false; // Set this enabled to get TestingWindow and EndGameStats buttons
+	private final boolean DEBUG_BUTTONS_ENABLED = true; // Set this enabled to get TestingWindow and EndGameStats buttons
 	
 	
 	private static final String AUTO_SAVE_FILENAME = "recentSave.txt";
@@ -499,14 +499,16 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
-				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
-				if (selectMortgage.getItemCount() == 0)
-				{
-					mortgagePrice.setText("");
+				if (showMortgage.isEnabled()){
+					Sounds.buttonConfirm.playSound();
+					updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
+					if (selectMortgage.getItemCount() == 0)
+					{
+						mortgagePrice.setText("");
+					}
+					mortgageUpdateTextField();
+					mortgageWindow.setVisible(true);
 				}
-				mortgageUpdateTextField();
-				mortgageWindow.setVisible(true);
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -750,7 +752,10 @@ public class GameScreen extends JFrame{
 		initButtonLabels();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-		
+		if(!pInfo.isSingle()){
+			chatScreen.setVisible(false);
+			mainPanel.add(chatScreen);
+		}
 //		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 //		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 		
@@ -794,8 +799,7 @@ public class GameScreen extends JFrame{
 	public void switchToGame(){
 		getContentPane().removeAll();
 		getContentPane().add(mainPanel);
-		if(!pInfo.isSingle())
-			mainPanel.add(chatScreen);
+		chatScreen.setVisible(true);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
@@ -844,7 +848,7 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/music_on.png");
 		imgOff = new ImageIcon("src/Images/music_off.png");
 		//muteMusic = new JCheckBox(imgOff); 	// DEBUG
-		muteMusic = new JCheckBox(imgOn); 	
+		muteMusic = new JCheckBox(Music.music1.getIsMuted() ? imgOff : imgOn); 	
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
 		//mainPanel.add(muteMusic);
@@ -900,7 +904,7 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/sound_on.png");
 		imgOff = new ImageIcon("src/Images/sound_off.png");
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
-		muteSounds = new JCheckBox(imgOn);	// DEBUG
+		muteSounds = new JCheckBox(Sounds.bomb.getIsMuted() ? imgOff : imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
 		//mainPanel.add(muteSounds);
 		muteSounds.addMouseListener(new MouseListener(){
@@ -1096,6 +1100,7 @@ public class GameScreen extends JFrame{
 		showMortgage.setContentAreaFilled(false);
 		showMortgage.setBorder(null);
 		showMortgage.setVisible(true);
+		showMortgage.setEnabled(false); // DEBUG
 	}
 	public void addTestingButton()
 	{
