@@ -420,6 +420,9 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Show End Game Screen");
+
+				//TODO clients do not know the totalPlayers int. It is set to 0 on clients
+				System.out.println("Total Num of Players: " + Integer.toString(totalPlayers));
 				if(!endGameScreen.isVisible()) {
 					endGameScreen.updateInformation(true, dicePanel.getCurrentPlayerNumber());
 					boardPanel.setVisible(false);
