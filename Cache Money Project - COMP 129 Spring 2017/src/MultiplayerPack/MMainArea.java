@@ -78,7 +78,8 @@ public class MMainArea extends Thread{
 						forCreatingRoom();
 						continue;
 					}else if(specialCode == 3){
-						forJoiningRoom();
+						if(!forJoiningRoom())
+							continue;
 					}else if(specialCode == 5){
 						mWaitingRoom.notifyUserEnter(userId);
 					}else if(specialCode == 6){
@@ -149,7 +150,7 @@ public class MMainArea extends Thread{
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
 	}
-	private void forJoiningRoom(){
+	private boolean forJoiningRoom(){
 		result = mUnpack.getResult(msg);
 		System.out.println(result.get(1));
 		roomNum = (Long)result.get(1);
@@ -159,9 +160,11 @@ public class MMainArea extends Thread{
 			if(waitingRooms.get(roomNum).isLoadingGame())
 				mWaitingRoom.setLoadNum(waitingRooms.get(roomNum).getLoadNum());
 			mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
-		}else{
-			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packSimpleRequest(UnicodeForServer.LOADING_GAME_INVALID_USER));
+			return true;
 		}
+			
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packSimpleRequest(UnicodeForServer.LOADING_GAME_INVALID_USER));
+		return false;
 		
 	}
 	

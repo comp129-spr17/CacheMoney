@@ -510,7 +510,7 @@ public class MClient {
 		playingInfo.setGameStarted();
 		gameScreen.loadForMulti((Integer)result.get(1));
 		gameScreen.switchToGame();
-		
+		diceP.actionForStart();
 	}
 
 	private void setPlayer(int i){
