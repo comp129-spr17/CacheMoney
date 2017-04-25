@@ -238,7 +238,7 @@ public class GameScreen extends JFrame{
 	public void exitForServer(){
 		System.out.println("Received request to disconnect.");
 		if(!pInfo.isSingle()){
-			if(!pInfo.getIsDisconnectedByOther())
+			if(!pInfo.getIsDisconnectedByOther() && pInfo.getHasGameStarted())
 				multiSaveGame();
 			System.out.println("Disconnecting...");
 			pInfo.sendMessageToServer(mPack.packString(UnicodeForServer.DISCONNECTED,pInfo.getLoggedInId()));

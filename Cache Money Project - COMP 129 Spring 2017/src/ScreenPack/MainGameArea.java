@@ -181,6 +181,7 @@ public class MainGameArea extends JPanel{
 	private void getLoadingGames(){
 		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());
 		loadGame.setEnabled(loadingListInt.size()!=0);
+		loadingList.removeAllItems();
 		for(int gameNum : loadingListInt){
 			loadingList.addItem(gameNum);
 		}

@@ -11,6 +11,7 @@ public final class PlayingInfo {
 	private boolean isLoggedIn;
 	private String loggedInId;
 	private int gamePart;
+	private boolean hasGameStarted;
 	public final static int PORT_NUM = 7777;
 	//public final static String IP_ADDRESS = "10.15.157.201";
 	private boolean isDisconnectedByOther;
@@ -91,5 +92,11 @@ public final class PlayingInfo {
 	}
 	public void setIsDisconnectedByOther(){
 		isDisconnectedByOther = true;
+	}
+	public boolean getHasGameStarted(){
+		return hasGameStarted;
+	}
+	public void setGameStarted(){
+		hasGameStarted = true;
 	}
 }

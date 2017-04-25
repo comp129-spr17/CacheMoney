@@ -281,6 +281,7 @@ public class MClient {
 		diceP.actionForDiceEnd();
 	}
 	private void doStartGame(ArrayList<Object> result){
+		playingInfo.setGameStarted();
 		System.out.println("received start game");
 		setPlayer((Integer)result.get(2));
 		gameScreen.switchToGame();
@@ -506,6 +507,7 @@ public class MClient {
 	}
 	private void doLoadingGame(ArrayList<Object> result){
 		System.out.println("received Loading game");
+		playingInfo.setGameStarted();
 		gameScreen.loadForMulti((Integer)result.get(1));
 		gameScreen.switchToGame();
 		
