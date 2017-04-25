@@ -699,7 +699,10 @@ public class GameScreen extends JFrame{
 		initButtonLabels();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-		
+		if(!pInfo.isSingle()){
+			chatScreen.setVisible(false);
+			mainPanel.add(chatScreen);
+		}
 //		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 //		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 		
@@ -743,8 +746,7 @@ public class GameScreen extends JFrame{
 	public void switchToGame(){
 		getContentPane().removeAll();
 		getContentPane().add(mainPanel);
-		if(!pInfo.isSingle())
-			mainPanel.add(chatScreen);
+		chatScreen.setVisible(true);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
@@ -793,7 +795,7 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/music_on.png");
 		imgOff = new ImageIcon("src/Images/music_off.png");
 		//muteMusic = new JCheckBox(imgOff); 	// DEBUG
-		muteMusic = new JCheckBox(imgOn); 	
+		muteMusic = new JCheckBox(Music.music1.getIsMuted() ? imgOff : imgOn); 	
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
 		//mainPanel.add(muteMusic);
@@ -849,7 +851,7 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/sound_on.png");
 		imgOff = new ImageIcon("src/Images/sound_off.png");
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
-		muteSounds = new JCheckBox(imgOn);	// DEBUG
+		muteSounds = new JCheckBox(Sounds.bomb.getIsMuted() ? imgOff : imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
 		//mainPanel.add(muteSounds);
 		muteSounds.addMouseListener(new MouseListener(){

@@ -240,7 +240,7 @@ public class PropertyInfoPanel extends JPanel{
 		bPanel.add(mPanel);
 		loadPropertyInfo(property, utilityLightsOn);
 		infoPanel.removeAll();
-		setButtonsEnabled((pInfo.isSingle() || isCurrent)); 
+		setButtonsEnabled(isCurrent); 
 		renderPropertyInfo(currentPlayer, isCurrent);
 		hidePreviousPanel();
 		
@@ -278,6 +278,10 @@ public class PropertyInfoPanel extends JPanel{
 		//Set up them buttons
 		if(property.isOwned()){
 			if (property.getOwner() == currentPlayer.getPlayerNum()){
+				System.out.println("checkIfUserCanBuyHouses() " + checkIfUserCanBuyHouses());
+				System.out.println("isCurrent " + isCurrent);
+				
+				
 				if (checkIfUserCanBuyHouses() && property.getBuildHouseCost() > 0 && isCurrent){
 					addBuyHousesButton();
 				}
@@ -375,10 +379,16 @@ public class PropertyInfoPanel extends JPanel{
 			if (playerProperty.getPropertyFamilyIdentifier() == property.getPropertyFamilyIdentifier()){
 				propertyFamilyMembers += 1;
 				if (playerProperty.getMultiplier() < property.getMultiplier()){
+					System.out.println("returned false at: playerProperty.getMultiplier() < property.getMultiplier()");
 					return false;
 				}
 			}
 		}
+		System.out.println("propertyFamilyMembers: " + propertyFamilyMembers);
+		System.out.println("property.getPropertyFamilyIdentifier(): " + property.getPropertyFamilyIdentifier());
+		
+		
+		
 		return (((property.getPropertyFamilyIdentifier() == 1 || property.getPropertyFamilyIdentifier() == 8) && propertyFamilyMembers == 2) || propertyFamilyMembers == 3) && property.getMultiplier() < 5 && currentPlayer.getTotalMonies() >= property.getBuildHouseCost();
 	}
 

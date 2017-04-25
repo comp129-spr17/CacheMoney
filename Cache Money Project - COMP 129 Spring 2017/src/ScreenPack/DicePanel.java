@@ -695,12 +695,12 @@ public class DicePanel extends JPanel{
 			checkForPlayerPropertyAction(curSpaceName);
 		}
 		else{
-			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current), -1);
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1);
 		}
 	}
 	private void checkForPlayerPropertyAction(String curSpaceName) {
 		if (propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
-			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current), -1);
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1);
 		}
 		else if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
 			browseMiniGame(curSpaceName);
