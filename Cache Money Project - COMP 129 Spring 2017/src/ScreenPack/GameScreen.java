@@ -1160,22 +1160,16 @@ public class GameScreen extends JFrame{
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
 			{
-				if (tempComboBox.getSelectedItem().equals("Un-Mortgage"))
+				if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 				{
 					double temp = players[num].getOwnedProperties().get(h).getMortgageValue() * 1.1;	
 					players[num].pay((int)temp);
-				}
-				else
-				{
-					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
-				}
-				if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
-				{
 					System.out.print("Un-Mortgaging");
 					players[num].getOwnedProperties().get(h).setMortgagedTo(false);
 				}
 				else
 				{
+					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
 					System.out.print("Mortgaging");
 					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
 				}
