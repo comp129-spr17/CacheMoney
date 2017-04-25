@@ -3,8 +3,11 @@ package ScreenPack;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -26,10 +29,14 @@ public class EndGamePanel extends JPanel {
 	private ArrayList<JLabel> playerNames;
 	private ArrayList<JLabel> playerMoney;
 	private JLabel PlayerWinStatus;
-	public EndGamePanel(Player[] players, int totalNumPlayers, Dimension size) {
+	private JButton backButton;
+	private BoardPanel bPanel;
+	
+	public EndGamePanel(Player[] players, int totalNumPlayers, Dimension size, BoardPanel bPanel) {
 		this.players = players;
 		this.totalNumPlayers = totalNumPlayers;
 		this.setSize(size);
+		this.bPanel = bPanel;
 		
 		sizeRelated = SizeRelated.getInstance();
 		pathRelated = PathRelated.getInstance();
@@ -78,19 +85,29 @@ public class EndGamePanel extends JPanel {
 
 
 	private void showCurrentPlayer() {
-		showAPlayer(currentPlayerNum, PlayerWinStatus.getHeight()+50, 100);
+		showAPlayer(currentPlayerNum, PlayerWinStatus.getHeight()+50, 100, new Font("Serif",Font.BOLD,64));
 	}
 
-	private void showAPlayer(int playerNum, int height, int size) {
-		add(playerPieces.get(playerNum));
-		add(playerNames.get(playerNum));
-		add(playerMoney.get(playerNum));
+	private void showAPlayer(int playerNum, int height, int size, Font font) {
+		JLabel piece = playerPieces.get(playerNum);
+		JLabel name = playerNames.get(playerNum);
+		JLabel money = playerMoney.get(playerNum);
+		int buffer = 50;
 		
-		int width = (this.getWidth() - 100 - 100 - playerNames.get(playerNum).getWidth() - playerMoney.get(playerNum).getWidth())/2;
+		name.setFont(font);
+		money.setFont(font);
+		name.setSize(name.getPreferredSize());
+		money.setSize(money.getPreferredSize());
 		
-		playerPieces.get(playerNum).setBounds(width,height,size,size);
-		playerNames.get(playerNum).setLocation(width + playerPieces.get(playerNum).getWidth() + 50, height);
-		playerMoney.get(playerNum).setLocation(width + playerPieces.get(playerNum).getWidth() + 50 + playerNames.get(playerNum).getWidth() + 50, height);
+		add(piece);
+		add(name);
+		add(money);
+		
+		int width = (this.getWidth() - 100 - 2*buffer - playerNames.get(playerNum).getWidth() - playerMoney.get(playerNum).getWidth())/2;
+		
+		piece.setBounds(width,height,size,size);
+		name.setLocation(width + piece.getWidth() + buffer, height);
+		money.setLocation(width + piece.getWidth() + buffer + name.getWidth() + buffer, height);
 	}
 
 	private void showOtherPlayers() {
@@ -102,7 +119,7 @@ public class EndGamePanel extends JPanel {
 		
 		for(int i = 0; i < totalNumPlayers; i++) {
 			if(i != currentPlayerNum) {
-				showAPlayer(i, starting_height + ref_height*inc, 75);
+				showAPlayer(i, starting_height + ref_height*inc, 75, new Font("Serif",Font.BOLD,48));
 				inc++;
 			}
 		}
@@ -111,9 +128,34 @@ public class EndGamePanel extends JPanel {
 
 	private void createButtons() {
 		// TODO Auto-generated method stub
-		
+		backButton = new JButton("Back to Game");
+		int height = 50;
+		int width = 150;
+		backButton.setSize(backButton.getPreferredSize());
+		backButton.setLocation(this.getWidth()/5 * 4,this.getHeight()-backButton.getHeight()-15);
+		add(backButton);
+		initButtonListeners(this);
 	}
 
+	private void initButtonListeners(EndGamePanel thisPanel) {
+		backButton.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				//Set this visibility to false
+				thisPanel.setVisible(false);
+				bPanel.setVisible(true);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+	}
 
 	private void createWinStatusLabel() {
 		// TODO Auto-generated method stub
@@ -139,9 +181,18 @@ public class EndGamePanel extends JPanel {
 		this.playerWon = winStatus;
 		this.currentPlayerNum = currentPlayerNum;
 		removeAll();
+		updateMoney();
 		createWinStatusLabel();
 		showCurrentPlayer();
 		showOtherPlayers();
 		createButtons();
+	}
+
+
+	private void updateMoney() {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < totalNumPlayers; i++) {
+			playerMoney.get(i).setText("$" + Integer.toString(players[i].getTotalMonies()));
+		}
 	}
 }
