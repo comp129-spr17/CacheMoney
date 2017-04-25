@@ -161,8 +161,8 @@ public class MainMenuScreen {
 		screenLabels[5].setText("<html><span style='font-size:11px'>Online</span></html>");
 		screenLabels[5].setBounds(250, 373, 300, 30);
 		
-		screenLabels[5].setLocation(222, 373);		// DEBUG
-		screenLabels[5].setText("<html><span style='font-size:11px'>Coming Soon!</span></html>");	// DEBUG
+		screenLabels[5].setLocation(216, 373);		
+		screenLabels[5].setText("<html><span style='font-size:11px'>From Database</span></html>");	// DEBUG
 		
 		screenLabels[6].setText("<html><span style='font-size:9px'>Minigames</span></html>");
 		screenLabels[6].setBounds(4, 444, 300, 30);
@@ -312,9 +312,25 @@ public class MainMenuScreen {
 			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// FUNCTIONALITY GOES HERE
-				// FUNCTIONALITY GOES HERE
-				// FUNCTIONALITY GOES HERE
+				if(LoadMultiplayer.isEnabled()){ // TEMPORARY
+					
+					Sounds.buttonConfirm.playSound();
+					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
+					loginDialog.setVisible(true);
+					System.out.println("Hello devin");
+					if (playingInfo.isLoggedIn()){
+						(new beginMultiplayer()).start();
+					}
+				}
+			}
+			class beginMultiplayer extends Thread{
+				@Override
+				public void run(){
+//					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+//					displayHostOrClientDialogBox(mwr);
+					loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
+					setupClient();
+				}
 			}
 		});
 		loginBtn.addMouseListener(new MouseListener() {
@@ -418,7 +434,7 @@ public class MainMenuScreen {
 		LoadMultiplayer.setBorder(null);
 		mainPanel.add(LoadMultiplayer);
 		
-		LoadMultiplayer.setEnabled(false); // DEBUG
+		//LoadMultiplayer.setEnabled(false); // DEBUG
 		
 		
 		

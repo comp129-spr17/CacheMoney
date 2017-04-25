@@ -460,10 +460,12 @@ public final class Player {
 			if (enoughMonies(cost))
 			{
 				System.out.print("You will have enough money after you mortgage!");
+				//Open Mortgage menu
 			}
 			else
 			{
 				System.out.print("Even after mortgaging all your property, you still don't have enough money! You lose!"); //Need to implement mortgage backup stuff
+				isAlive = false;
 			}
 		}
 	}

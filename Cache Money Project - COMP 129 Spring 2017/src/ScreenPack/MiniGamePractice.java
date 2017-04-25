@@ -14,7 +14,7 @@ import InterfacePack.BackgroundImage;
 
 public class MiniGamePractice extends JFrame{
 	public final static int WIDTH = SizeRelated.getInstance().getDicePanelWidth();
-	public final static int HEIGHT = 400;
+	public final static int HEIGHT = SizeRelated.getInstance().getDicePanelHeight();
 	
 	private SizeRelated sizeRelated;
 	

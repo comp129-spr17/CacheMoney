@@ -51,7 +51,7 @@ import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
 	
-	private final boolean DEBUG_BUTTONS_ENABLED = true; // Set this enabled to get TestingWindow and EndGameStats buttons
+	private final boolean DEBUG_BUTTONS_ENABLED = false; // Set this enabled to get TestingWindow and EndGameStats buttons
 	
 	
 	private static final String AUTO_SAVE_FILENAME = "recentSave.txt";
@@ -725,7 +725,7 @@ public class GameScreen extends JFrame{
 		dicePanel = new DicePanel(players, mLabels, tradeP, this);
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
-		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize());
+		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize(), boardPanel);
 		endGameScreen.setLayout(null);
 		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
 		endGameScreen.setBackground(new Color(70, 220, 75));
@@ -985,7 +985,7 @@ public class GameScreen extends JFrame{
 		{
 			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
-				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
+				if (tempComboBox.getSelectedItem().equals(players[playerNum].getOwnedProperties().get(j).getName()))
 				{
 					if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 					{
@@ -994,7 +994,7 @@ public class GameScreen extends JFrame{
 					}
 					else
 					{
-						mortgagePrice.setText(" $" + Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
+						mortgagePrice.setText(" $" + Integer.toString(players[playerNum].getOwnedProperties().get(j).getMortgageValue()));
 					}
 				}
 			}
@@ -1037,7 +1037,7 @@ public class GameScreen extends JFrame{
 		{
 			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
-				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
+				if (tempComboBox.getSelectedItem().equals(players[playerNum].getOwnedProperties().get(j).getName()))
 				{
 					if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 					{
@@ -1046,7 +1046,7 @@ public class GameScreen extends JFrame{
 					}
 					else
 					{
-						mortgagePrice.setText(" $" + Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
+						mortgagePrice.setText(" $" + Integer.toString(players[playerNum].getOwnedProperties().get(j).getMortgageValue()));
 					}
 				}
 			}
@@ -1100,7 +1100,7 @@ public class GameScreen extends JFrame{
 		showMortgage.setContentAreaFilled(false);
 		showMortgage.setBorder(null);
 		showMortgage.setVisible(true);
-		showMortgage.setEnabled(false); // DEBUG
+		//showMortgage.setEnabled(false); // DEBUG
 	}
 	public void addTestingButton()
 	{
@@ -1160,22 +1160,16 @@ public class GameScreen extends JFrame{
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
 			{
-				if (tempComboBox.getSelectedItem().equals("Un-Mortgage"))
+				if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 				{
 					double temp = players[num].getOwnedProperties().get(h).getMortgageValue() * 1.1;	
 					players[num].pay((int)temp);
-				}
-				else
-				{
-					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
-				}
-				if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
-				{
 					System.out.print("Un-Mortgaging");
 					players[num].getOwnedProperties().get(h).setMortgagedTo(false);
 				}
 				else
 				{
+					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
 					System.out.print("Mortgaging");
 					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
 				}
@@ -1191,16 +1185,16 @@ public class GameScreen extends JFrame{
 	public void actionForLoadingInvalidUser(){
 		waitingArea.switchToMainGameArea();
 		JOptionPane.showMessageDialog(this,
-                "You were not part of this loading game.",
-                "Warning.",
-                JOptionPane.WARNING_MESSAGE);
+                "Cannot join a saved game that you have not participated in.",
+                "Error Joining Game",
+                JOptionPane.ERROR_MESSAGE);
 	}
 	public void actionForDiscconectingGame(int playerNo){
 		pInfo.setIsDisconnectedByOther();
 		JOptionPane.showMessageDialog(this,
-                "Player "+playerNo +" has left.\n Exiting Game....",
-                "Warning.",
-                JOptionPane.WARNING_MESSAGE);
+                players[playerNo].getUserId() + " has left.\nThe game has been saved online.\nClick to exit.",
+                "Disconnected from Game",
+                JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
 	}
 	public void saveGame(boolean autoSave) {
