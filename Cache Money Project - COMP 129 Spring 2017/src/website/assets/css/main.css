@@ -53,6 +53,9 @@
 
 /* Containers */
 
+	.post-content{
+		margin-left: 210px
+	}
 	.container {
 		margin-left: auto;
 		margin-right: auto;
@@ -1921,6 +1924,29 @@
 		.flex.flex-4 .box {
 			width: 21%;
 		}
+		
+		.flex-5 .box {
+			width:21%;
+			float: left;
+			border-right: 1px solid #dbdbdb;
+			border-top: none;
+			border-left: none;
+			border-bottom: none;
+		}
+		/*.flex.flex-6 .box {
+			margin-left: 280px;
+			width: 60%;
+			float: right;
+			/*text-align: left;
+		}*/
+		.flex-6 .box {
+			position: absolute:
+			width:70%;
+			margin-top:100px;
+			margin-bottom:100px;
+			float: left;
+			border-top: none;
+		}
 
 		@media screen and (max-width: 980px) {
 
@@ -2192,6 +2218,11 @@
 
 		.box.person {
 			border: solid 1px rgba(255, 255, 255, 0.25);
+			padding: 3em 1.5em;
+		}
+		
+		.box.text {
+			border: none;
 			padding: 3em 1.5em;
 		}
 
