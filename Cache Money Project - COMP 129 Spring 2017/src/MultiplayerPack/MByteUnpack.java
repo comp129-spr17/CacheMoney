@@ -132,6 +132,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.LOADING_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackInteger(result);
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.LOADING_GAME_INVALID_USER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
 	}
 	
 	private ArrayList<Object> cleanUpAndReturn(){

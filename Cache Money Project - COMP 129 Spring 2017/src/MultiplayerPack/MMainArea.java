@@ -70,7 +70,7 @@ public class MMainArea extends Thread{
 				}else if(specialCode == 0){
 					forChatting();
 				}
-				else if(specialCode != 6){
+				else if(specialCode != 7){
 					if(specialCode == 1){
 						forDisconnected();
 						break;
