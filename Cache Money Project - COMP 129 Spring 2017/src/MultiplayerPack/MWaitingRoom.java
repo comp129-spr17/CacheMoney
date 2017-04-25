@@ -57,8 +57,11 @@ public class MWaitingRoom extends Thread{
 		msg=new byte[512];
 	}
 	public void forLoadingGame(){
-		SqlRelated sqlRelated =SqlRelated.getInstance();
+		SqlRelated sqlRelated = SqlRelated.getInstance();
 		loadingUsers = sqlRelated.getLoadingUserList(loadingNum);
+		System.out.println("Original users:");
+		for(String user:loadingUsers)
+			System.out.println(user);
 	}
 	public void setLoadNum(int loadNum){
 		loadingNum = loadNum;

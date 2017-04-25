@@ -139,8 +139,9 @@ public class MMainArea extends Thread{
 	}
 	private void forLoadingGameRoom(){
 		roomNum = mMaps.getRoomNum();
-		System.out.println("LOADING GAME ROOM" + roomNum);
 		result = mUnpack.getResult(msg);
+
+		System.out.println("LOADING GAME " + (Integer)result.get(1));
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, true);
 		mWaitingRoom.setLoadNum((Integer)result.get(1));
 		mWaitingRoom.forLoadingGame();
