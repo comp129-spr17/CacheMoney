@@ -185,22 +185,22 @@ public class MiniGame{
 			setInstructions("Reaction Game", "<html>Instructions: <br />React faster than your opponent when you see: GOOOOOO!!! <br /><br />Controls:<br />Owner: Press 'q' to react! <br />Guest: Press 'p' to react! <html>");
 			break;
 		case 2:
-			setInstructions("Box Selecting Game", "<html>Instructions: <br />On your turn, select a box. You'll know what's inside once you and your opponent have chosen! <br /><br />Controls:<br />Owner: Press 1, 2, or 3 to select a box on your turn. <br />Guest: Press 1, 2, or 3 to select a box on your turn. <html>");
+			setInstructions("Box Selecting Game", "<html>Instructions: <br />On your turn, select a box. You'll know what's inside once you and your opponent have chosen! <br /><br />Controls:<br />Owner & Guest: Press 1, 2, or 3 to select a box on your turn.<html>");
 			break;
 		case 3:
-			setInstructions("Rock Scissors Paper", "<html>Instructions: <br />Duel your opponent in an epic rock-paper-scissors match! You may change your decision before time expires. <br /><br />Controls:<br />Owner: 'q' = rock / 'w' = scissors / 'e' = paper. <br />Guest: 'i' = rock / 'o' = scissors / 'p' = paper. <html>");
+			setInstructions("Rock Scissors Paper", "<html>Instructions: <br />Duel your opponent in rock-paper-scissors! You may change your decision before time expires.<br />Controls:<br />Owner: 'q' = rock / 'w' = scissors / 'e' = paper. <br />Guest: 'i' = rock / 'o' = scissors / 'p' = paper. <html>");
 			break;
 		case 4:
-			setInstructions("Elimination Game", "<html>Instructions: <br />On your turn, take 1, 2, or 3 apples. Do not take the rotten apple! <br /><br />Controls:<br />Owner: Select an apple using the num keys, then press enter to end your turn. <br />Guest: Select an apple using the num keys, then press enter to end your turn. <html>");
+			setInstructions("Elimination Game", "<html>Instructions: <br />On your turn, take 1, 2, or 3 apples. Do not take the rotten apple! <br /><br />Controls:<br />Owner & Guest: Select an apple using the num keys, then press enter to end your turn.<html>");
 			break;
 		case 5:
-			setInstructions("Math Game", "<html>Instructions: <br />Solve more math problems than your opponent before time expires! <br /><br />Controls:<br />Owner: Type your answer in the text field, then press enter to submit the answer. <br />Guest: Type your answer in the text field, then press enter to submit the answer. <html>");
+			setInstructions("Math Game", "<html>Instructions: <br />Solve more math problems than your opponent before time expires! <br /><br />Controls:<br />Owner & Guest: Type your answer in the text field, then press enter to submit the answer.<html>");
 			break;
 		case 6:
-			setInstructions("Memorization Game", "<html>Instructions: <br />Memorize how many of each color dot there are. Then answer a question on your turn.<br /><br />Controls:<br />Owner: Press a num key to enter and lock in a 1-digit answer. <br />Guest: Press a num key to enter and lock in a 1-digit answer.<html>");
+			setInstructions("Memorization Game", "<html>Instructions: <br />Memorize how many of each color dot there are. Then answer a question on your turn.<br /><br />Controls:<br />Owner & Guest: Press a num key to enter and lock in a 1-digit answer.<html>");
 			break;
 		case 7:
-			setInstructions("Tic-Tac-Toe", "<html>Instructions: <br />Defeat your opponent in a tic-tac-toe match, but the game starts with 1 spot randomly filled! Tie favors the owner of the property.<br /><br />Controls:<br />Owner: Press a num key to place X on your turn. <br />Guest: Press a num key to place O on your turn.<html>");
+			setInstructions("Tic-Tac-Toe", "<html>Instructions: <br />Defeat your opponent in tic-tac-toe, but the game starts with 1 O randomly filled! Tie favors owner of the property.<br /><br />Controls:<br />Owner: Press a num key to place X.<br />Guest: Press a num key to place O.<html>");
 			break;
 		case 8:
 			setInstructions("Utility Game", "<html>Instructions: <br />You have 10 seconds to make sure all of the lights are turned off, but some of the light switches have reversed functionality!<br /><br />Controls:<br />Guest: Press a num key to flip the respective light switch.<html>");

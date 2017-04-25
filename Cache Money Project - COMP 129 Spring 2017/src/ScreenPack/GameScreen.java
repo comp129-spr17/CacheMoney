@@ -1191,16 +1191,16 @@ public class GameScreen extends JFrame{
 	public void actionForLoadingInvalidUser(){
 		waitingArea.switchToMainGameArea();
 		JOptionPane.showMessageDialog(this,
-                "You were not part of this loading game.",
-                "Warning.",
-                JOptionPane.WARNING_MESSAGE);
+                "Cannot join a saved game that you have not participated in.",
+                "Error Joining Game",
+                JOptionPane.ERROR_MESSAGE);
 	}
 	public void actionForDiscconectingGame(int playerNo){
 		pInfo.setIsDisconnectedByOther();
 		JOptionPane.showMessageDialog(this,
-                "Player "+playerNo +" has left.\n Exiting Game....",
-                "Warning.",
-                JOptionPane.WARNING_MESSAGE);
+                players[playerNo].getUserId() + " has left.\nThe game has been saved online.\nClick to exit.",
+                "Disconnected from Game",
+                JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
 	}
 	public void saveGame(boolean autoSave) {
