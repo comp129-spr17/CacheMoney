@@ -985,7 +985,7 @@ public class GameScreen extends JFrame{
 		{
 			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
-				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
+				if (tempComboBox.getSelectedItem().equals(players[playerNum].getOwnedProperties().get(j).getName()))
 				{
 					if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 					{
@@ -994,7 +994,7 @@ public class GameScreen extends JFrame{
 					}
 					else
 					{
-						mortgagePrice.setText(" $" + Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
+						mortgagePrice.setText(" $" + Integer.toString(players[playerNum].getOwnedProperties().get(j).getMortgageValue()));
 					}
 				}
 			}
@@ -1037,7 +1037,7 @@ public class GameScreen extends JFrame{
 		{
 			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
-				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
+				if (tempComboBox.getSelectedItem().equals(players[playerNum].getOwnedProperties().get(j).getName()))
 				{
 					if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 					{
@@ -1046,7 +1046,7 @@ public class GameScreen extends JFrame{
 					}
 					else
 					{
-						mortgagePrice.setText(" $" + Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
+						mortgagePrice.setText(" $" + Integer.toString(players[playerNum].getOwnedProperties().get(j).getMortgageValue()));
 					}
 				}
 			}
@@ -1100,7 +1100,7 @@ public class GameScreen extends JFrame{
 		showMortgage.setContentAreaFilled(false);
 		showMortgage.setBorder(null);
 		showMortgage.setVisible(true);
-		showMortgage.setEnabled(false); // DEBUG
+		//showMortgage.setEnabled(false); // DEBUG
 	}
 	public void addTestingButton()
 	{
