@@ -725,7 +725,7 @@ public class GameScreen extends JFrame{
 		dicePanel = new DicePanel(players, mLabels, tradeP, this);
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
-		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize());
+		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize(), boardPanel);
 		endGameScreen.setLayout(null);
 		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
 		endGameScreen.setBackground(new Color(70, 220, 75));
