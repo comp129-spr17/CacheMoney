@@ -35,12 +35,16 @@ public class MThread extends Thread{
 	private int specialCode;
 	private boolean exitCode;
 	private MManagingMaps mMaps;
-	public MThread(ArrayList<OutputStream> usersOutput,ArrayList<String> usersId, int numPlayer, int myPlayerNum, InputStream inputStream){
+	private boolean isLoading;
+	private int loadingNum;
+	public MThread(ArrayList<OutputStream> usersOutput,ArrayList<String> usersId, int numPlayer, int myPlayerNum, InputStream inputStream, boolean isLoading, int loadingNum){
 		
 		this.usersOutput = usersOutput;
 		this.numPlayer = numPlayer;
 		this.myPlayerNum = myPlayerNum;
 		this.usersId = usersId;
+		this.isLoading = isLoading;
+		this.loadingNum = loadingNum;
 		mMaps = MManagingMaps.getInstance();
 		mPack = MBytePack.getInstance();
 		mUnpack = MByteUnpack.getInstance();
@@ -56,7 +60,12 @@ public class MThread extends Thread{
 	public void run(){
 		try{
 			usersOutput.get(myPlayerNum).flush();
-			sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum, usersId));
+			if(isLoading){
+				sendPlayerNum(mPack.packIntValue(UnicodeForServer.LOADING_GAME, loadingNum));
+			}else{
+				sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum, usersId));
+			}
+			
 			while(!exitCode){
 				getMsg();
 				

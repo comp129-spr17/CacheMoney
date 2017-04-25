@@ -18,6 +18,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.UnknownHostException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -236,13 +238,8 @@ public class GameScreen extends JFrame{
 	public void exitForServer(){
 		System.out.println("Received request to disconnect.");
 		if(!pInfo.isSingle()){
-//			while(pInfo.getOutputStream() == null){
-//	    		try {
-//					Thread.sleep(1);
-//				} catch (InterruptedException e1) {
-//					e1.printStackTrace();
-//				}
-//	    	}
+			if(!pInfo.getIsDisconnectedByOther())
+				multiSaveGame();
 			System.out.println("Disconnecting...");
 			pInfo.sendMessageToServer(mPack.packString(UnicodeForServer.DISCONNECTED,pInfo.getLoggedInId()));
 		}
@@ -265,7 +262,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				exitForServer();
+//				exitForServer();
 
 		        System.exit(0);
 			}
@@ -359,6 +356,60 @@ public class GameScreen extends JFrame{
 			System.out.println("THE FILE IS CORRUPTED; UNABLE TO LOAD DATA.");
 			System.exit(1);
 		}
+		
+	}
+	public void loadForMulti(int savedNum){
+		int[] beginningInfo = sqlRelated.getLoadingBeginning(savedNum);
+		int playerNum;
+		String trade;
+		Property p;
+		ResultSet rsForUser, rsForProp;
+		dicePanel.setCurrentPlayerNum(beginningInfo[0]);
+		pInfo.setNumberOfPlayer(beginningInfo[1]);
+		rsForUser = sqlRelated.importUserInfo(savedNum);
+		String userId;
+		try{
+			for(int i=0; i<pInfo.getNumberOfPlayer(); i++){
+				rsForUser.next();
+				playerNum = rsForUser.getInt(1);
+				userId = rsForUser.getString(2);
+				if(pInfo.isLoggedInId(userId))
+					pInfo.setMyPlayerNum(playerNum);
+				players[playerNum].setUserId(userId);
+				players[playerNum].setIsAlive(rsForUser.getBoolean(3));
+				players[playerNum].setJailFreeCard(rsForUser.getInt(4));
+				players[playerNum].setPositionNumber(rsForUser.getInt(5));
+				players[playerNum].setTotalMonies(rsForUser.getInt(6));
+				players[playerNum].setInJail(rsForUser.getBoolean(7));
+				trade = rsForUser.getString(8);
+				players[playerNum].setTradeRequest(trade.equals("null")?null:trade);
+				players[playerNum].setIsOn(true);
+				
+				SqlRelated.generateUserInfo(userId);
+				players[playerNum].setUserName(SqlRelated.getUserName());
+				players[playerNum].setNumWin(SqlRelated.getWin());
+				players[playerNum].setNumLose(SqlRelated.getLose());
+				
+				rsForProp = sqlRelated.importPropInfo(savedNum, playerNum);
+				
+				while(rsForProp.next()){
+					p = boardPanel.getMappings().get(rsForProp.getString(9)).getPropertyInfo();
+					p.setOwner(rsForProp.getInt(1));
+					p.setNumHouse(rsForProp.getInt(2));
+					p.setNumHotel(rsForProp.getInt(3));
+					p.setMultiplier(rsForProp.getInt(4));
+					p.setMortgagedTo(rsForProp.getBoolean(5));
+					p.setIsOwned();
+					players[playerNum].addProperty(p);
+				}
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		loadGame = true;
+		setNumPlayer(pInfo.getNumberOfPlayer());
+		mLabels.setNumPlayer(pInfo.getNumberOfPlayer());
+		mLabels.removeNonPlayers();
 	}
 	private void initButtonListeners()
 	{
@@ -1132,6 +1183,12 @@ public class GameScreen extends JFrame{
 		updateMortgage(playerNum);
 		mortgageWindow.setVisible(false);
 	}
+	public void actionForLoadingInvalidUser(){
+		JOptionPane.showMessageDialog(this,
+                "You were not part of this loading game.",
+                "Warning.",
+                JOptionPane.WARNING_MESSAGE);
+	}
 	public void actionForDiscconectingGame(int playerNo){
 		pInfo.setIsDisconnectedByOther();
 		JOptionPane.showMessageDialog(this,
@@ -1194,6 +1251,11 @@ public class GameScreen extends JFrame{
 ////			insertPlayerInformation(savedNum);
 ////			sqlRelated.insertSavingGame();
 		}
+		
+	}
+	private void multiSaveGame(){
+		int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber(), pInfo.getNumberOfPlayer());
+		insertPlayerInformation(savedNum);
 		
 	}
 	private void insertPlayerInformation(int savedNum) {

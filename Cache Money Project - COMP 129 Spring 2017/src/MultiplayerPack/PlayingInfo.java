@@ -72,7 +72,7 @@ public final class PlayingInfo {
 		return outputStream!=null;
 	}
 	public boolean isLoggedInId(String id){
-		return loggedInId.equals(id);
+		return loggedInId.toUpperCase().equals(id.toUpperCase());
 	}
 	public int getGamePart(){
 		return gamePart;

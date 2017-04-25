@@ -21,11 +21,13 @@ import javax.swing.JPanel;
 import GamePack.SizeRelated;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.SqlRelated;
 import MultiplayerPack.UnicodeForServer;
 
 public class MainGameArea extends JPanel{
 	private HashMap<Long,JButton> rooms;
 	private JButton createNewRoom;
+	private JButton loadGame;
 	private GridLayout gLayout;
 	private Container container;
 	private int oldContainerRow;
@@ -37,11 +39,12 @@ public class MainGameArea extends JPanel{
 	private infoThatScrolls friendList;
 	private infoThatScrolls onlineUsers;
 	private ChatScreen chatScreen;
-	
+	private JComboBox<Integer> loadingList;
 	private JPanel chatAndFriends;
 	private JPanel controlPanel;
 	private JPanel mainPanel;
-	
+	private SqlRelated sqlRelated;
+	private ArrayList<Integer> loadingListInt;
 	public MainGameArea(final Container container) {
 		this.container = container;
 		init();
@@ -52,6 +55,7 @@ public class MainGameArea extends JPanel{
 		createOnlineUserAndCreateRoomPanel();
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
+		sqlRelated = SqlRelated.getInstance();
 		rooms = new HashMap<>();
 		waitingArea = new WaitingArea(container, this);
 		
@@ -78,11 +82,12 @@ public class MainGameArea extends JPanel{
 		controlPanel = new JPanel();
 		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/3, SizeRelated.getInstance().getScreenH()));
 		controlPanel.setLayout(new GridBagLayout());
-		
+		loadGame = new JButton("Load the game");
 		onlineUsers = new infoThatScrolls(false);
 		onlineUsers.setScrollingPaneVisible(true);
 		createNewRoom = new JButton("Create Room");
 		jLabel = new JLabel("Online users:");
+		loadingList = new JComboBox<>();
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(5,1,30,5);
@@ -97,10 +102,34 @@ public class MainGameArea extends JPanel{
 		gbc.weightx = 1;
 		controlPanel.add(createNewRoom, gbc);
 		
-		gbc.insets = new Insets(1,1,0,5);
+		gbc.insets = new Insets(5,1,30,5);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 2;
+		gbc.gridwidth = 4;
+		gbc.gridheight = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weighty = 0.;
+		gbc.weightx = 1;
+		controlPanel.add(loadingList, gbc);
+		
+		gbc.insets = new Insets(5,1,30,5);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.gridwidth = 4;
+		gbc.gridheight = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weighty = 0.;
+		gbc.weightx = 1;
+		controlPanel.add(loadGame, gbc);
+		
+		gbc.insets = new Insets(1,1,0,5);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 4;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -112,13 +141,16 @@ public class MainGameArea extends JPanel{
 		gbc.insets = new Insets(10,1,500,5);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 7;
 		gbc.gridheight = 2;
 		gbc.gridwidth = 4;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.weighty = 0.1;
 		controlPanel.add(onlineUsers.getScrollingPanel(), gbc);
+		
+		
+		
 	}
 	
 	public WaitingArea getWaiting(){
@@ -141,11 +173,15 @@ public class MainGameArea extends JPanel{
 		mainPanel.add(controlPanel,BorderLayout.EAST);
 		
 		container.add(mainPanel);
+		getLoadingGames();
 		/*container.add(this,BorderLayout.WEST);
 		container.add(chatAndFriends,BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.EAST);*/
 	}
-
+	private void getLoadingGames(){
+		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());
+		loadGame.setEnabled(loadingListInt.size()!=0);
+	}
 	public void updatelist(ArrayList<Object> userList){
 		onlineUsers.clearList();
 		System.out.println("Update user lists : . size:" + userList.get(0));
@@ -186,6 +222,31 @@ public class MainGameArea extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				switchToWaiting();
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
+
+			}
+		});
+		loadGame.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				switchToWaiting();
+				playingInfo.sendMessageToServer(mPack.packIntValue(UnicodeForServer.LOADING_GAME, (Integer)loadingList.getSelectedItem()));
 
 			}
 		});

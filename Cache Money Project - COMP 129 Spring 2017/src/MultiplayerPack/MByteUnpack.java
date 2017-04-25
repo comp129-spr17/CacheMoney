@@ -130,7 +130,8 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.COMMENCE_TRADE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackBoolean(result);
 		return cleanUpAndReturn();}});
-		
+		GetResults.put(UnicodeForServer.LOADING_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackInteger(result);
+		return cleanUpAndReturn();}});
 	}
 	
 	private ArrayList<Object> cleanUpAndReturn(){

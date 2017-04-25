@@ -81,6 +81,8 @@ public class MMainArea extends Thread{
 						forJoiningRoom();
 					}else if(specialCode == 5){
 						mWaitingRoom.notifyUserEnter(userId);
+					}else if(specialCode == 6){
+						forLoadingGameRoom();
 					}
 						
 					mWaitingRoom.start();
@@ -129,7 +131,18 @@ public class MMainArea extends Thread{
 	private void forCreatingRoom(){
 		roomNum = mMaps.getRoomNum();
 		System.out.println("CREATING ROOM" + roomNum);
-		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum);
+		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, false);
+		waitingRooms.put(roomNum, mWaitingRoom);
+		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
+	}
+	private void forLoadingGameRoom(){
+		roomNum = mMaps.getRoomNum();
+		System.out.println("LOADING GAME ROOM" + roomNum);
+		result = mUnpack.getResult(msg);
+		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, true);
+		mWaitingRoom.setLoadNum((Integer)result.get(1));
+		mWaitingRoom.forLoadingGame();
 		waitingRooms.put(roomNum, mWaitingRoom);
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
@@ -138,9 +151,17 @@ public class MMainArea extends Thread{
 		result = mUnpack.getResult(msg);
 		System.out.println(result.get(1));
 		roomNum = (Long)result.get(1);
-		waitingRooms.get(roomNum).notifyUserEnter(userId);
-		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum);
-		mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
+		if(waitingRooms.get(roomNum).isAbleToJoin(userId)){
+			waitingRooms.get(roomNum).notifyUserEnter(userId);
+			mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum, waitingRooms.get(roomNum).isLoadingGame());
+			if(waitingRooms.get(roomNum).isLoadingGame())
+				mWaitingRoom.setLoadNum(waitingRooms.get(roomNum).getLoadNum());
+			mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
+		}else{
+			
+			
+		}
+		
 	}
 	
 	private void getMsg(){
@@ -161,9 +182,11 @@ public class MMainArea extends Thread{
 				return 4;
 			else if(UnicodeForServer.CREATE_ROOM_REST == code)
 				return 5;
+			else if(UnicodeForServer.LOADING_GAME == code)
+				return 6;
 			else if(UnicodeForServer.CHAT_LOBBY == code)
 				return 0;
-			return 6;
+			return 7;
 	}
 	
 }
