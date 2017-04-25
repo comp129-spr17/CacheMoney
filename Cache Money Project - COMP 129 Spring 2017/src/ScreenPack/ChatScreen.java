@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -36,6 +37,7 @@ import MultiplayerPack.PlayingInfo;
 		private JScrollPane displayPane;
 		private JScrollPane typePane;
 		private JButton titleBar;
+		private LayoutManager gbl;
 		public ChatScreen(int msgType){
 			setting();
 			MSG_TYPE = msgType;
@@ -96,6 +98,8 @@ import MultiplayerPack.PlayingInfo;
 			gbc.gridheight = 2;
 			gbc.gridwidth = 2;
 			add(btnSend,gbc);
+			
+			gbl = this.getLayout();
 			
 			addListeners();
 			msgDisplayArea.setLineWrap(true);
@@ -170,10 +174,21 @@ import MultiplayerPack.PlayingInfo;
 			msgDisplayArea.setText("Welcome to Cache Chat!\n\n------------------------------------------------\n\n");
 		}
 		private void minimizeAndMaximize(){
-			titleBar.setLocation(0,isHide?0 : SCREEN_HEIGHT-TITLE_HEIGHT);
 			displayPane.setVisible(isHide);
 			typePane.setVisible(isHide);
 			btnSend.setVisible(isHide);
+			if(isHide){
+				this.setLayout(gbl);
+				this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT+200);
+				titleBar.setLocation(0,0);
+			}else{
+				this.setLayout(null);
+				//this.setSize(titleBar.getSize());
+				titleBar.setLocation(0,0);
+				this.setSize(titleBar.getSize());
+				
+			}
+			
 			isHide = !isHide;
 		}
 		private void sendMsg(){
