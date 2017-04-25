@@ -160,8 +160,7 @@ public class MMainArea extends Thread{
 				mWaitingRoom.setLoadNum(waitingRooms.get(roomNum).getLoadNum());
 			mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
 		}else{
-			
-			
+			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packSimpleRequest(UnicodeForServer.LOADING_GAME_INVALID_USER));
 		}
 		
 	}

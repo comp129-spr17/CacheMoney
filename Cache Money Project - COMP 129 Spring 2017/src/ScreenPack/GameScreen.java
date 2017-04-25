@@ -393,12 +393,12 @@ public class GameScreen extends JFrame{
 				rsForProp = sqlRelated.importPropInfo(savedNum, playerNum);
 				
 				while(rsForProp.next()){
-					p = boardPanel.getMappings().get(rsForProp.getString(9)).getPropertyInfo();
-					p.setOwner(rsForProp.getInt(1));
-					p.setNumHouse(rsForProp.getInt(2));
-					p.setNumHotel(rsForProp.getInt(3));
-					p.setMultiplier(rsForProp.getInt(4));
-					p.setMortgagedTo(rsForProp.getBoolean(5));
+					p = boardPanel.getMappings().get(rsForProp.getString(1)).getPropertyInfo();
+					p.setOwner(rsForProp.getInt(2));
+					p.setNumHouse(rsForProp.getInt(3));
+					p.setNumHotel(rsForProp.getInt(4));
+					p.setMultiplier(rsForProp.getInt(5));
+					p.setMortgagedTo(rsForProp.getBoolean(6));
 					p.setIsOwned();
 					players[playerNum].addProperty(p);
 				}
@@ -1189,6 +1189,7 @@ public class GameScreen extends JFrame{
 		mortgageWindow.setVisible(false);
 	}
 	public void actionForLoadingInvalidUser(){
+		waitingArea.switchToMainGameArea();
 		JOptionPane.showMessageDialog(this,
                 "You were not part of this loading game.",
                 "Warning.",
