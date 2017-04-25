@@ -339,6 +339,39 @@ public final class SqlRelated {
 //				saving_statement += "INSERT INTO saved_game_property " +
 //				"VALUES ("+gameNum+",'"+propName+"', "+multiplier+", "+isMortgaged+", "+numHouse+", "+numHotel+", "+ownedBy+"); ";
 	}
+	public void updateGameSaved(int gameNum, int turn){
+		try {
+			statement = connection.createStatement();
+			statement.execute("UPDATE saved_game " 
+					+ "SET current_turn = "+turn+" "
+					+ "WHERE saved_num = "+gameNum+";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public void updateGameUser(int gameNum, String user_id, boolean isAlive, boolean inJail, int posNum ,int totMoney, int jailFree, String tradeRequest){
+		try {
+			statement = connection.createStatement();
+			statement.execute("UPDATE saved_game_user " 
+					+ "SET is_alive = "+isAlive+", in_jail="+inJail+", pos_num = "+posNum+", tot_money = "+totMoney+", jail_free = "+jailFree+", trade_request = '"+tradeRequest+"' "
+					+ "WHERE saved_num = "+gameNum+" AND user_id='"+user_id+"';");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		saving_statement += "INSERT INTO saved_game_user " +
+//				"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"'); ";
+	}
+	public void deleteAllProp(int gameNum){
+		try {
+			statement = connection.createStatement();
+			statement.execute("DELETE FROM saved_game_property " 
+					+ "WHERE saved_num = "+gameNum+";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		saving_statement += "INSERT INTO saved_game_user " +
+//				"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"'); ";
+	}
 	public void insertSavingGame(){
 		try {
 			System.out.println(saving_statement);

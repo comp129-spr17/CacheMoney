@@ -1260,18 +1260,30 @@ public class GameScreen extends JFrame{
 		
 	}
 	private void multiSaveGame(){
-		int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber(), pInfo.getNumberOfPlayer());
-		insertPlayerInformation(savedNum);
+		System.out.println("multiSave called");
+		int savedNum = pInfo.isLoadingGame() ? pInfo.getLoadingGameNum() : sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber(), pInfo.getNumberOfPlayer());
+		
+		insertPlayerInformation(savedNum, pInfo.isLoadingGame());
 		
 	}
-	private void insertPlayerInformation(int savedNum) {
+	private void insertPlayerInformation(int savedNum, boolean isLoading) {
+		if(isLoading){
+			sqlRelated.updateGameSaved(savedNum, dicePanel.getCurrentPlayerNumber());
+			sqlRelated.deleteAllProp(savedNum);
+		}
 		for(int i=0;i<pInfo.getNumberOfPlayer(); i++){
-			sqlRelated.saveGameUser(savedNum,players[i].getUserId(), players[i].getIsAlive(), players[i].getPlayerNum(), players[i].isInJail(), players[i].getPositionNumber(), players[i].getTotalMonies(), players[i].getJailFreeCard(), players[i].getTradeRequest());
+			System.out.println("Player " + i + "called");
+			if(isLoading){
+				sqlRelated.updateGameUser(savedNum,players[i].getUserId(), players[i].getIsAlive(), players[i].isInJail(), players[i].getPositionNumber(), players[i].getTotalMonies(), players[i].getJailFreeCard(), players[i].getTradeRequest());
+			}else{
+				sqlRelated.saveGameUser(savedNum,players[i].getUserId(), players[i].getIsAlive(), players[i].getPlayerNum(), players[i].isInJail(), players[i].getPositionNumber(), players[i].getTotalMonies(), players[i].getJailFreeCard(), players[i].getTradeRequest());
+			}
 			insertPlayerProperties(savedNum,i);
 		}
 	}
 	private void insertPlayerProperties(int savedNum, int i) {
 		for (Property p : players[i].getOwnedProperties()){
+			System.out.println("Prop: "+ p.getName());
 			sqlRelated.saveProperty(savedNum,p.getName(), p.getMultiplier(), p.isMortgaged(), p.getNumHouse(), p.getNumHotel(), i);
 		}
 	}

@@ -507,8 +507,11 @@ public class MClient {
 	}
 	private void doLoadingGame(ArrayList<Object> result){
 		System.out.println("received Loading game");
+		int loadingNum = (Integer)result.get(1);
 		playingInfo.setGameStarted();
-		gameScreen.loadForMulti((Integer)result.get(1));
+		playingInfo.setLoadingGame();
+		playingInfo.setLoadingGameNum(loadingNum);
+		gameScreen.loadForMulti(loadingNum);
 		gameScreen.switchToGame();
 		diceP.actionForStart();
 	}

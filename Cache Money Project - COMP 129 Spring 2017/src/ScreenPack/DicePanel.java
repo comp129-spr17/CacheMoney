@@ -371,6 +371,7 @@ public class DicePanel extends JPanel{
 		}
 		else{
 			gamescreen.startGameMusic();
+			gamescreen.setExportButtonEnabled(false);
 		}
 		setRollButtonVisible();
 		turnLabel.setVisible(true);
@@ -382,7 +383,7 @@ public class DicePanel extends JPanel{
 		Sounds.turnBegin.playSound();
 		//showPlayer[2].setVisible(true);
 		//showPlayer[3].setIcon(imageRelated.getPieceImg(current));
-		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1) + "'s Turn!") : "Host moves first!") + "<br />Click to roll! <br /></html>");
+		turnLabel.setText("<html> " + ("Player " + (current + 1) + "'s Turn!") + "<br />Click to roll! <br /></html>");
 		//showPlayer[3].setVisible(true);
 		actionForPlayers();
 		
@@ -401,7 +402,7 @@ public class DicePanel extends JPanel{
 		dices[0].hideDice();
 		dices[1].hideDice();
 		propertyPanel.setButtonsEnabled(true);
-		gamescreen.setExportButtonEnabled(true);
+		gamescreen.setExportButtonEnabled(pInfo.isSingle());
 		actionForPlayers();
 
 	}
