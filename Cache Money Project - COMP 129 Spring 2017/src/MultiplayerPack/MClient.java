@@ -76,7 +76,8 @@ public class MClient {
 		variableCodeString.add(new String("REQUESTING_STATUS_WAITING"));
 		
 		variableCodeString.add(new String("BOX_MINI_GAME_SURPRISE_BOXES"));
-		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
+		variableCodeString.add(new String("LOADING_GAME"));
+		
 		variableCodeString.add(new String("GENERIC_SEND_INTEGER"));
 		variableCodeString.add(new String("MATH_MINI_GAME_RANDS"));
 		variableCodeString.add(new String("MATH_MINI_GAME_ANS"));
@@ -114,6 +115,8 @@ public class MClient {
 		variableCodeString.add(new String("CHAT_GAME"));
 		variableCodeString.add(new String("TRADE_REQUEST"));
 		variableCodeString.add(new String("COMMENCE TRADE"));
+		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
+		variableCodeString.add(new String("LOADING_GAME_INVALID_USER"));
 	}
 	
 	

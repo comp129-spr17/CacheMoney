@@ -83,6 +83,7 @@ public class MMainArea extends Thread{
 						mWaitingRoom.notifyUserEnter(userId);
 					}else if(specialCode == 6){
 						forLoadingGameRoom();
+						continue;
 					}
 						
 					mWaitingRoom.start();
