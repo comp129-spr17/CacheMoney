@@ -271,10 +271,20 @@ public class MainMenuScreen {
 				@Override
 				public void run(){
 					hideAndDisposeMainMenuScreen();
+					loadingScreen.displaySQLLoadingMessage(false);
+					loadingScreen.setResizable(false);
 					loadingScreen.setVisible(true);
 					new MiniGamePractice();
 					hideAndDisposeLoadingScreen();
 					Sounds.waitingRoomJoin.playSound();
+					Music.music6.stopMusic();
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					Music.music1.playMusic();
+					loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
 				}
 			}
 		});
@@ -477,12 +487,12 @@ public class MainMenuScreen {
 		}
 		gNumP = isLoadGame ? getNumPlayersFromFile(filenameToLoad) : (Integer)cmbNumP.getSelectedItem();
 		hideAndDisposeMainMenuScreen();
-		loadingScreen.setResizable(false);
 		loadingScreen.setVisible(true);
 		gameScreen = new GameScreen(true, gNumP, filenameToLoad);
 		gameScreen.setNumPlayer(gNumP);
 		hideAndDisposeLoadingScreen();
 		Sounds.waitingRoomJoin.playSound();
+		
 	}
 	
 	private int getNumPlayersFromFile(String filenameToLoad){

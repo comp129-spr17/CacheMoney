@@ -107,6 +107,9 @@ public class GameScreen extends JFrame{
 	private ChatScreen chatScreen;
 	private String filenameToLoad;
 	private BackgroundImage bgi;
+
+
+	private JLabel[] buttonLabels;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
@@ -693,6 +696,7 @@ public class GameScreen extends JFrame{
 		addMuteMusic();
 		addMuteSounds();
 		initButtonListeners();
+		initButtonLabels();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
@@ -716,6 +720,26 @@ public class GameScreen extends JFrame{
 		exportButton.setContentAreaFilled(false);
 		exportButton.setBorder(null);
 	}
+	
+	private void initButtonLabels() {
+		buttonLabels = new JLabel[4];
+		for (int i = 0; i < 4; i++){
+			buttonLabels[i] = new JLabel();
+			mainPanel.add(buttonLabels[i]);
+		}
+		buttonLabels[0].setText("<html><font color = '" + "white" + "'><b>Player Balances</b></font></html>");
+		buttonLabels[0].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 145, 300, 30);
+		
+		buttonLabels[1].setText("<html><font color = '" + "white" + "'><b>Trade</b></font></html>");
+		buttonLabels[1].setBounds(boardPanel.getX() + boardPanel.getWidth() + 40, 295, 300, 30);
+		
+		buttonLabels[2].setText("<html><font color = '" + "white" + "'><b>Mortgage</b></font></html>");
+		buttonLabels[2].setBounds(boardPanel.getX() + boardPanel.getWidth() + 29, 445, 300, 30);
+		
+		buttonLabels[3].setText("<html><font color = '" + "white" + "'><b>Export Game</b></font></html>");
+		buttonLabels[3].setBounds(boardPanel.getX() + boardPanel.getWidth() + 18, 595, 300, 30);
+	}
+	
 	public void switchToGame(){
 		getContentPane().removeAll();
 		getContentPane().add(mainPanel);

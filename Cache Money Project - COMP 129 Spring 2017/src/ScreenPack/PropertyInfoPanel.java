@@ -52,6 +52,7 @@ public class PropertyInfoPanel extends JPanel{
 	private MortgagePanel mPanel;
 	private PlayingInfo pInfo;
 	private BackgroundImage bi;
+	private JLabel[] buttonLabels;
 
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b)
 	{
@@ -82,7 +83,35 @@ public class PropertyInfoPanel extends JPanel{
 		buyHousePrice = new JLabel();
 		minigameInfo = new JLabel();
 		
+		buttonLabels = new JLabel[3];
+		initButtonLabels();
+		
 		bi = new BackgroundImage(PathRelated.getInstance().getImagePath() + "propertyBackground.png", this.getWidth(), this.getHeight());
+	}
+
+	private void initButtonLabels() {
+		for (int i = 0; i < 3; i++){
+			buttonLabels[i] = new JLabel();
+			buttonLabels[i].setSize(300, 30);
+		}
+		buttonLabels[0].setText("<html><b>Buy<b></html>");
+		buttonLabels[0].setLocation(this.getWidth()/4-buyButton.getWidth()/2 - 12, this.getHeight()/10*8-buyButton.getHeight()/2 + 24);
+		
+		buttonLabels[1].setText("<html><b>Auction<b></html>");
+		buttonLabels[1].setLocation(this.getWidth()/4*3-auctionButton.getWidth()/2 - 24, this.getHeight()/10*8-auctionButton.getHeight()/2 + 24);
+		
+		buttonLabels[2].setText("<html><b>Pay<b></html>");
+		buttonLabels[2].setLocation(this.getWidth()/2 - 10, this.getHeight()/4*3 + 34);
+		
+	}
+	
+	private void addBuyLabels(){
+		this.add(buttonLabels[0]);
+		this.add(buttonLabels[1]);
+	}
+	
+	private void addPayLabel(){
+		this.add(buttonLabels[2]);
 	}
 
 	private void configureInfoPanel() {
@@ -256,12 +285,14 @@ public class PropertyInfoPanel extends JPanel{
 			}
 			else{
 				addPayButton();
+				addPayLabel();
 				checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent);
 				(new waitForPayEnabled()).start();
 			}
 		}else{
 			addBuyButton();
 			addAuctionButton();
+			addBuyLabels();
 			buyButton.setEnabled(property.getBuyingPrice() < this.currentPlayer.getTotalMonies() && (pInfo.isSingle() || isCurrent));
 			(new waitForBuyEnabled()).start();
 			Sounds.landedOnUnownedProperty.playSound();
@@ -354,7 +385,7 @@ public class PropertyInfoPanel extends JPanel{
 	private void addBuyHousesButton(){
 		buyHouseButton.setText("BUY HOUSE");
 		buyHouseButton.setSize(150, 40);
-		buyHouseButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/6*4-auctionButton.getHeight()/2);
+		buyHouseButton.setLocation(this.getWidth()/2, this.getHeight()/6*4);
 		add(buyHouseButton);
 		buyHouseButton.setVisible(true);
 		
@@ -363,7 +394,7 @@ public class PropertyInfoPanel extends JPanel{
 	private void addReturnButton(){
 		returnButton.setText("Dismiss");
 		returnButton.setSize(150, 40);
-		returnButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/6*5-auctionButton.getHeight()/3);
+		returnButton.setLocation(this.getWidth()/2, this.getHeight()/6*5);
 		add(returnButton);
 	}
 	
@@ -605,7 +636,7 @@ public class PropertyInfoPanel extends JPanel{
 		payButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "PayButton.png", payButton.getWidth(), payButton.getHeight()));
 		payButton.setContentAreaFilled(false);
 		payButton.setBorder(null);
-		payButton.setLocation(this.getWidth()/2-auctionButton.getWidth()/2, this.getHeight()/4*3-auctionButton.getHeight()/2);
+		payButton.setLocation(this.getWidth()/2 - payButton.getWidth()/2, this.getHeight()/4*3 - payButton.getHeight()/3);
 		payButton.setBackground(Color.RED);
 		add(payButton);
 	}

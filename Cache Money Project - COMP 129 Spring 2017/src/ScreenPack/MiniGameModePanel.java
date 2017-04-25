@@ -8,8 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
 
 public class MiniGameModePanel extends JPanel{
@@ -22,6 +24,8 @@ public class MiniGameModePanel extends JPanel{
 	private int miniGameToPlay;
 	private int keyListenerIterator;
 	private Random rand;
+	private BackgroundImage bgi;
+	private SizeRelated sizeRelated;
 	
 	public MiniGameModePanel(){
 		init();
@@ -29,7 +33,7 @@ public class MiniGameModePanel extends JPanel{
 	
 	private void init(){
 		// single player for now
-		
+		sizeRelated = SizeRelated.getInstance();
 		miniGamePanel = new MiniGamePanel(this);
 		ownerPlaceholder = Player.getInstance(0);
 		guestPlaceholder = Player.getInstance(1);
@@ -41,21 +45,16 @@ public class MiniGameModePanel extends JPanel{
 		this.add(miniGamePanel);
 		
 		
-		JLabel titleLabel = new JLabel("Choose a minigame you'd like to play:");
+		JLabel titleLabel = new JLabel("<html><font color = '" + "white" + "'><b>Choose a minigame you'd like to play:</b></font></html>");
 		titleLabel.setBounds(MiniGamePractice.WIDTH / 6 - 20, 5, 500, 20);
 		this.add(titleLabel);
 		
 		initGameButtons();
-		Music.music6.stopMusic();
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		Music.music1.playMusic();
-	
 	}
 	
+	public void addBackgroundImage(BackgroundImage b){
+		this.add(b);
+	}
 	
 	public void addBackButton(BackButton b){
 		backButton = b;
@@ -161,7 +160,6 @@ public class MiniGameModePanel extends JPanel{
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
