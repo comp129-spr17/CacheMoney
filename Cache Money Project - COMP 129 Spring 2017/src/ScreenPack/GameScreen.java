@@ -448,14 +448,16 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
-				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
-				if (selectMortgage.getItemCount() == 0)
-				{
-					mortgagePrice.setText("");
+				if (showMortgage.isEnabled()){
+					Sounds.buttonConfirm.playSound();
+					updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
+					if (selectMortgage.getItemCount() == 0)
+					{
+						mortgagePrice.setText("");
+					}
+					mortgageUpdateTextField();
+					mortgageWindow.setVisible(true);
 				}
-				mortgageUpdateTextField();
-				mortgageWindow.setVisible(true);
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -1047,6 +1049,7 @@ public class GameScreen extends JFrame{
 		showMortgage.setContentAreaFilled(false);
 		showMortgage.setBorder(null);
 		showMortgage.setVisible(true);
+		showMortgage.setEnabled(false); // DEBUG
 	}
 	public void addTestingButton()
 	{
