@@ -62,7 +62,7 @@ public class MThread extends Thread{
 			usersOutput.get(myPlayerNum).flush();
 			if(isLoading){
 				System.out.println("loading num : "+loadingNum);
-				sendPlayerNum(mPack.packIntValue(UnicodeForServer.LOADING_GAME, loadingNum));
+				sendPlayerNum(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[] {loadingNum,0}));
 			}else{
 				sendPlayerNum(mPack.packTotalPlayerPlaying(UnicodeForServer.START_GAME_REPLY, numPlayer, myPlayerNum, usersId));
 			}
