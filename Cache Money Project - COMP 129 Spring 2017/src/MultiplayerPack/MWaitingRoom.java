@@ -92,6 +92,7 @@ public class MWaitingRoom extends Thread{
 		public LiveInThread() {
 		}
 		public void run(){
+			System.out.println("live is going on");;
 			while(!gameStarting){
 				if(curNumPlayer != userForThisRoom.size()){
 					curNumPlayer = userForThisRoom.size();
@@ -99,6 +100,7 @@ public class MWaitingRoom extends Thread{
 					System.out.println("notifying user leaves. Cur num = " + curNumPlayer + " User num = " + loadingNumPlayer);
 				}
 			}
+			System.out.println("live is ended");;
 		}
 	}
 	class SendInThread extends Thread{
