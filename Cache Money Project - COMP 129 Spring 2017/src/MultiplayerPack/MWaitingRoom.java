@@ -155,7 +155,7 @@ public class MWaitingRoom extends Thread{
 	}
 	public void forLoadingUserLeave(){
 		if(isLoadingGame){
-			loadingNumPlayer--;
+			curNumPlayer--;
 			System.out.println("notifying user leave. User num = " + curNumPlayer);;
 			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
 			
