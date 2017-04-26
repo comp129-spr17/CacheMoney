@@ -437,9 +437,9 @@ public final class SqlRelated {
 		list.add(new ArrayList<>());
 		try {
 			statement = connection.createStatement();
-			rSet = statement.executeQuery("SELECT saved_num, num_Player"
-						+ "FROM saved_game_user "
-						+ "WHERE user_id='"+userId+"' AND is_host;");
+			rSet = statement.executeQuery("SELECT u.saved_num, g.num_Player "
+						+ "FROM saved_game g, saved_game_user u "
+						+ "WHERE u.user_id='"+userId+"' AND u.is_host AND g.saved_num=u.saved_num;");
 			while(rSet.next()){
 				list.get(0).add(rSet.getInt(1));
 				list.get(1).add(rSet.getInt(2));

@@ -136,7 +136,7 @@ public class MMainArea extends Thread{
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, false);
 		waitingRooms.put(roomNum, mWaitingRoom);
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
-		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongBool(UnicodeForServer.CREATE_ROOM, roomNum, false));
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongBool(UnicodeForServer.CREATE_ROOM, roomNum, true));
 	}
 	private void forLoadingGameRoom(){
 		roomNum = mMaps.getRoomNum();
@@ -148,7 +148,7 @@ public class MMainArea extends Thread{
 		mWaitingRoom.forLoadingGame();
 		waitingRooms.put(roomNum, mWaitingRoom);
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
-		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongBool(UnicodeForServer.CREATE_ROOM, roomNum, true));
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongBool(UnicodeForServer.CREATE_ROOM, roomNum, false));
 	}
 	private boolean forJoiningRoom(){
 		result = mUnpack.getResult(msg);
