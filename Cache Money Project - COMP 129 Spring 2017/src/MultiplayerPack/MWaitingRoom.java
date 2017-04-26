@@ -135,8 +135,11 @@ public class MWaitingRoom extends Thread{
 		isGameStartedOrDisconnected = true;
 		exitCode = true;
 		decNumPlayerLoading();
-		if(isHost)
+		if(isHost){
+			if(isLoadingGame)
+				(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
 			actionToRemoveRoom(false);
+		}
 		else{
 			actionToLeaveUser();
 			notifyUserLeave(userId);
@@ -150,8 +153,12 @@ public class MWaitingRoom extends Thread{
 		isGameStartedOrDisconnected = false;
 		exitCode = true;
 		decNumPlayerLoading();
-		if(isHost)
+		if(isHost){
+			if(isLoadingGame)
+				(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
 			actionToRemoveRoom(false);
+		}
+			
 		else{
 			actionToLeaveUser();
 			notifyUserLeave(userId);
@@ -233,8 +240,7 @@ public class MWaitingRoom extends Thread{
 		// To do : Update rest of the rooms other than the one just quited.
 		// suggest : make a function that gathers all the number of people from the room and pack tham all 
 		System.out.println(uId + " left");
-		if(isLoadingGame)
-			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
+		
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.LEAVE_ROOM, userForThisRoom));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
 		
