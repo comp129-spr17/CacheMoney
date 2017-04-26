@@ -76,6 +76,7 @@ public class MWaitingRoom extends Thread{
 	}
 	private void notifyEnterPlayer(){
 		if(++curNumPlayer==loadingNumPlayer){
+			System.out.println("notifying user enter. User num = " + curNumPlayer);;
 			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true))).start();
 //			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true));
 		}
@@ -130,14 +131,21 @@ public class MWaitingRoom extends Thread{
 		System.out.println("Request for Waiting Chatting");
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, msg);
 	}
+	private void forLoadingUserLeave(){
+		if(isLoadingGame){
+			loadingNumPlayer--;
+			System.out.println("notifying user leave. User num = " + curNumPlayer);;
+			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
+		}
+			
+	}
 	private void forDisconnected(){
 		result = mUnpack.getResult(msg);
 		isGameStartedOrDisconnected = true;
 		exitCode = true;
 		decNumPlayerLoading();
 		if(isHost){
-			if(isLoadingGame)
-				(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
+			forLoadingUserLeave();
 			actionToRemoveRoom(false);
 		}
 		else{
@@ -154,11 +162,9 @@ public class MWaitingRoom extends Thread{
 		exitCode = true;
 		decNumPlayerLoading();
 		if(isHost){
-			if(isLoadingGame)
-				(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
+			forLoadingUserLeave();
 			actionToRemoveRoom(false);
 		}
-			
 		else{
 			actionToLeaveUser();
 			notifyUserLeave(userId);

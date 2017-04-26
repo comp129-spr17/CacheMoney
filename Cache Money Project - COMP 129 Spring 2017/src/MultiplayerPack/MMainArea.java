@@ -145,6 +145,7 @@ public class MMainArea extends Thread{
 		System.out.println("LOADING GAME " + (Integer)result.get(1) + " NumPpl :" + (Integer)result.get(2));
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, true);
 		mWaitingRoom.setLoadNum((Integer)result.get(1));
+		mWaitingRoom.setLoadNumPlayer((Integer)result.get(2));
 		mWaitingRoom.forLoadingGame();
 		waitingRooms.put(roomNum, mWaitingRoom);
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
