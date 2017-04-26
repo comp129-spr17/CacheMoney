@@ -81,7 +81,8 @@ public class MWaitingRoom extends Thread{
 		System.out.println("notifying user enter. Cur num = " + curNumPlayer + " User num = " + loadingNumPlayer);
 		if(curNumPlayer==loadingNumPlayer){
 			System.out.println("Is Equal");;
-			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true))).start();
+			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true));
+			
 //			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true));
 		}
 			
@@ -94,7 +95,8 @@ public class MWaitingRoom extends Thread{
 			while(!gameStarting){
 				if(curNumPlayer != userForThisRoom.size()){
 					curNumPlayer = userForThisRoom.size();
-					(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
+					MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
+					System.out.println("notifying user leaves. Cur num = " + curNumPlayer + " User num = " + loadingNumPlayer);
 				}
 			}
 		}
