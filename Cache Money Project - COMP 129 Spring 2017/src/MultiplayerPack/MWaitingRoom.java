@@ -94,6 +94,7 @@ public class MWaitingRoom extends Thread{
 		public void run(){
 			System.out.println("live is going on");;
 			while(!gameStarting){
+				System.out.println("Cur:" + curNumPlayer + " In:" + userForThisRoom.size());
 				if(curNumPlayer != userForThisRoom.size()){
 					curNumPlayer = userForThisRoom.size();
 					MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
