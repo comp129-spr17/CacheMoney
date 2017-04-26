@@ -32,6 +32,8 @@ public class MWaitingRoom extends Thread{
 	private boolean isLoadingGame;
 	private int loadingNum;
 	private ArrayList<String> loadingUsers;
+	private int loadingNumPlayer;
+	private int curNumPlayer;
 	public MWaitingRoom(HashMap<String,OutputStream> usersOutput, HashMap<String,InputStream> usersInput,  HashMap<String, String> userIds, InputStream inputStream, String userId, boolean isHost, long roomNum, boolean isLoadingGame){
 		this.usersOutput = usersOutput;
 		this.usersInput = usersInput;
@@ -68,6 +70,15 @@ public class MWaitingRoom extends Thread{
 	}
 	public int getLoadNum(){
 		return loadingNum;
+	}
+	public void setLoadNumPlayer(int numPlayer){
+		loadingNumPlayer = numPlayer;
+	}
+	private void notifyEnterPlayer(){
+		if(++curNumPlayer==loadingNumPlayer){
+			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true));
+		}
+			
 	}
 	public boolean isGameStartedOrDisconnected(){
 		return isGameStartedOrDisconnected;
@@ -113,6 +124,7 @@ public class MWaitingRoom extends Thread{
 		result = mUnpack.getResult(msg);
 		isGameStartedOrDisconnected = true;
 		exitCode = true;
+		decNumPlayerLoading();
 		if(isHost)
 			actionToRemoveRoom(false);
 		else{
@@ -127,12 +139,18 @@ public class MWaitingRoom extends Thread{
 		System.out.println("user leaving called");
 		isGameStartedOrDisconnected = false;
 		exitCode = true;
+		decNumPlayerLoading();
 		if(isHost)
 			actionToRemoveRoom(false);
 		else{
 			actionToLeaveUser();
 			notifyUserLeave(userId);
 		}
+		
+	}
+	private void decNumPlayerLoading(){
+		if(isLoadingGame)
+			loadingNumPlayer--;
 	}
 	private void forStartReceived(){
 		if(isHost){
@@ -197,7 +215,7 @@ public class MWaitingRoom extends Thread{
 		userForThisRoom.add(uId);
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.JOIN_ROOM_TO_CLIENT, userForThisRoom));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
-		
+		notifyEnterPlayer();
 	}
 	public void notifyUserLeave(String uId){
 		// To do : Update rest of the rooms other than the one just quited.
@@ -205,7 +223,7 @@ public class MWaitingRoom extends Thread{
 		System.out.println(uId + " left");
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.LEAVE_ROOM, userForThisRoom));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
-
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
 	}
 	public void getUpdatedWaitingArea(String userId){
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));

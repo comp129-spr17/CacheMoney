@@ -90,7 +90,7 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.SEND_USER_ID, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringInt(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CREATE_ROOM, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.CREATE_ROOM, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongBool(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.REQUESTING_STATUS_MAIN, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
@@ -130,10 +130,12 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.COMMENCE_TRADE, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackBoolean(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.LOADING_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackInteger(result);
+		GetResults.put(UnicodeForServer.LOADING_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackIntArrays(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.LOADING_GAME_INVALID_USER, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.ABLE_START_BTN, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackBoolean(result);
+			return cleanUpAndReturn();}});
 	}
 	
 	private ArrayList<Object> cleanUpAndReturn(){
@@ -325,6 +327,16 @@ public final class MByteUnpack {
 			sizeOfArray = dInputStream.readInt();
 			for(int i=0; i<sizeOfArray; i++)
 				resultList.add(dInputStream.readLong());
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackLongBool(byte[] result){
+		try{
+			System.out.println("At least this");
+			resultList.add(dInputStream.readLong());
+			resultList.add(dInputStream.readBoolean());
 		}
 		catch(IOException e){
 			e.printStackTrace();

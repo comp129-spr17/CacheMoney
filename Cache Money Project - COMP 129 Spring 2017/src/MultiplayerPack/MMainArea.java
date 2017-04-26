@@ -136,19 +136,19 @@ public class MMainArea extends Thread{
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, false);
 		waitingRooms.put(roomNum, mWaitingRoom);
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
-		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongBool(UnicodeForServer.CREATE_ROOM, roomNum, false));
 	}
 	private void forLoadingGameRoom(){
 		roomNum = mMaps.getRoomNum();
 		result = mUnpack.getResult(msg);
 
-		System.out.println("LOADING GAME " + (Integer)result.get(1));
+		System.out.println("LOADING GAME " + (Integer)result.get(1) + " NumPpl :" + (Integer)result.get(2));
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, true);
 		mWaitingRoom.setLoadNum((Integer)result.get(1));
 		mWaitingRoom.forLoadingGame();
 		waitingRooms.put(roomNum, mWaitingRoom);
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLong(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, roomNum));
-		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLong(UnicodeForServer.CREATE_ROOM, roomNum));
+		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongBool(UnicodeForServer.CREATE_ROOM, roomNum, true));
 	}
 	private boolean forJoiningRoom(){
 		result = mUnpack.getResult(msg);
@@ -157,8 +157,11 @@ public class MMainArea extends Thread{
 		if(waitingRooms.get(roomNum).isAbleToJoin(userId)){
 			waitingRooms.get(roomNum).notifyUserEnter(userId);
 			mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, false, roomNum, waitingRooms.get(roomNum).isLoadingGame());
-			if(waitingRooms.get(roomNum).isLoadingGame())
+			if(waitingRooms.get(roomNum).isLoadingGame()){
 				mWaitingRoom.setLoadNum(waitingRooms.get(roomNum).getLoadNum());
+				
+			}
+				
 			mWaitingRoom.setList(waitingRooms.get(roomNum).getListForOutput(),waitingRooms.get(roomNum).getListForUser());
 			return true;
 		}

@@ -833,9 +833,13 @@ public class GameScreen extends JFrame{
 		JOptionPane.showMessageDialog(this, "The host of the waiting room has left.");
 		waitingArea.switchToMainGameArea();		
 	}
-	public void EnableHostButton(){
+	public void EnableHostButton(boolean isLoading){
 //		mainGameArea.switchToWaiting();
-		waitingArea.actionToHost();
+		waitingArea.actionToHost(isLoading);
+	}
+	public void ableHostButton(boolean yesOrNo){
+//		mainGameArea.switchToWaiting();
+		waitingArea.ableStartBtn(yesOrNo);
 	}
 	public void updateWaitingArea(ArrayList<Object> userId){
 		waitingArea.updateUserInfos(userId);

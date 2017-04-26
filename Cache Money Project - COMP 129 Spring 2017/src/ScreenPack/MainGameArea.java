@@ -44,7 +44,7 @@ public class MainGameArea extends JPanel{
 	private JPanel controlPanel;
 	private JPanel mainPanel;
 	private SqlRelated sqlRelated;
-	private ArrayList<Integer> loadingListInt;
+	private ArrayList<ArrayList<Integer>> loadingListInt;
 	public MainGameArea(final Container container) {
 		this.container = container;
 		init();
@@ -182,7 +182,7 @@ public class MainGameArea extends JPanel{
 		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());
 		loadGame.setEnabled(loadingListInt.size()!=0);
 		loadingList.removeAllItems();
-		for(int gameNum : loadingListInt){
+		for(int gameNum : loadingListInt.get(0)){
 			loadingList.addItem(gameNum);
 		}
 	}
@@ -250,7 +250,7 @@ public class MainGameArea extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				switchToWaiting();
-				playingInfo.sendMessageToServer(mPack.packIntValue(UnicodeForServer.LOADING_GAME, (Integer)loadingList.getSelectedItem()));
+				playingInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[]{(Integer)loadingList.getSelectedItem(), loadingListInt.get(1).get(loadingList.getSelectedIndex())}));
 
 			}
 		});

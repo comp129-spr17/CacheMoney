@@ -117,6 +117,7 @@ public class MClient {
 		variableCodeString.add(new String("COMMENCE TRADE"));
 		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
 		variableCodeString.add(new String("LOADING_GAME_INVALID_USER"));
+		variableCodeString.add(new String("ABLE_START_BTN"));
 	}
 	
 	
@@ -176,7 +177,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result);}});
 		doActions.put(UnicodeForServer.HOST_LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doDestroyRoom(result);}});
 		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
-		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom();}});
+		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom(result);}});
 		doActions.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUserEntersMainArea(result);}});
 		doActions.put(UnicodeForServer.MORTGAGE_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doMortgageProperty(result);;}});
 		doActions.put(UnicodeForServer.UPDATE_ROOM_STAT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateRoomStat(result);;}});
@@ -187,6 +188,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.COMMENCE_TRADE, new DoAction(){public void doAction(ArrayList<Object> result){doCommenceTrade(result);}});
 		doActions.put(UnicodeForServer.LOADING_GAME_INVALID_USER, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingInvalidMsg();}});
 		doActions.put(UnicodeForServer.LOADING_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingGame(result);}});
+		doActions.put(UnicodeForServer.ABLE_START_BTN, new DoAction(){public void doAction(ArrayList<Object> result){doAbleStartBtn(result);}});
 		
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -448,8 +450,8 @@ public class MClient {
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
 		gameScreen.hostLeftWaitingArea();
 	}
-	private void doForCreatingRoom(){
-		gameScreen.EnableHostButton();
+	private void doForCreatingRoom(ArrayList<Object> result){
+		gameScreen.EnableHostButton((Boolean)result.get(2));
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM_REST));
 	}
 	private void doUserEntersMainArea(ArrayList<Object> result){
@@ -504,6 +506,9 @@ public class MClient {
 	}
 	private void doLoadingInvalidMsg(){
 		gameScreen.actionForLoadingInvalidUser();
+	}
+	private void doAbleStartBtn(ArrayList<Object> result){
+		gameScreen.ableHostButton((Boolean)result.get(1));
 	}
 	private void doLoadingGame(ArrayList<Object> result){
 		System.out.println("received Loading game");

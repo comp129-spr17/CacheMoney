@@ -431,15 +431,18 @@ public final class SqlRelated {
 		}
 		return list;
 	}
-	public ArrayList<Integer> getLoadingGameList(String userId){
-		ArrayList<Integer> list = new ArrayList<>();
+	public ArrayList<ArrayList<Integer>> getLoadingGameList(String userId){
+		ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+		list.add(new ArrayList<>());
+		list.add(new ArrayList<>());
 		try {
 			statement = connection.createStatement();
-			rSet = statement.executeQuery("SELECT saved_num "
+			rSet = statement.executeQuery("SELECT saved_num, num_Player"
 						+ "FROM saved_game_user "
 						+ "WHERE user_id='"+userId+"' AND is_host;");
 			while(rSet.next()){
-				list.add(rSet.getInt(1));
+				list.get(0).add(rSet.getInt(1));
+				list.get(1).add(rSet.getInt(2));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
