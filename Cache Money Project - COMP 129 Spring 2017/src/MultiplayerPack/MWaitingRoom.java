@@ -34,6 +34,7 @@ public class MWaitingRoom extends Thread{
 	private ArrayList<String> loadingUsers;
 	private int loadingNumPlayer;
 	private int curNumPlayer;
+	private boolean gameStarting;
 	public MWaitingRoom(HashMap<String,OutputStream> usersOutput, HashMap<String,InputStream> usersInput,  HashMap<String, String> userIds, InputStream inputStream, String userId, boolean isHost, long roomNum, boolean isLoadingGame){
 		this.usersOutput = usersOutput;
 		this.usersInput = usersInput;
@@ -73,14 +74,30 @@ public class MWaitingRoom extends Thread{
 	}
 	public void setLoadNumPlayer(int numPlayer){
 		loadingNumPlayer = numPlayer;
+		(new LiveInThread()).start();
 	}
 	private void notifyEnterPlayer(){
-		if(++curNumPlayer==loadingNumPlayer){
-			System.out.println("notifying user enter. User num = " + curNumPlayer);;
+		++curNumPlayer;
+		System.out.println("notifying user enter. Cur num = " + curNumPlayer + " User num = " + loadingNumPlayer);
+		if(curNumPlayer==loadingNumPlayer){
+			System.out.println("Is Equal");;
 			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true))).start();
 //			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true));
 		}
 			
+	}
+	private 
+	class LiveInThread extends Thread{
+		public LiveInThread() {
+		}
+		public void run(){
+			while(!gameStarting){
+				if(curNumPlayer != userForThisRoom.size()){
+					curNumPlayer = userForThisRoom.size();
+					(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
+				}
+			}
+		}
 	}
 	class SendInThread extends Thread{
 		byte[] msg;
@@ -182,6 +199,7 @@ public class MWaitingRoom extends Thread{
 		}
 	}
 	private void forStartingGame() throws InterruptedException{
+		gameStarting = true;
 		int numPpl = userForThisRoom.size();
 		isGameStartedOrDisconnected = true;
 		exitCode = true;
@@ -233,11 +251,12 @@ public class MWaitingRoom extends Thread{
 		userForThisRoom = uList;
 	}
 	public void notifyUserEnter(String uId){
-		if(isLoadingGame)
-			notifyEnterPlayer();
+		
 		System.out.println(uId + " joined");
 		outputForThisRoom.add(usersOutput.get(uId));
 		userForThisRoom.add(uId);
+		if(isLoadingGame)
+			notifyEnterPlayer();
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.JOIN_ROOM_TO_CLIENT, userForThisRoom));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
 	
