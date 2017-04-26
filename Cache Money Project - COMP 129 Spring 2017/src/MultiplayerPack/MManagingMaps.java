@@ -53,6 +53,9 @@ public final class MManagingMaps {
 	public HashMap<Long, MWaitingRoom> getWaitingRooms(){
 		return waitingRooms;
 	}
+	public static MWaitingRoom getWaitingRoomAt(Long i){
+		return waitingRooms.get(i);
+	}
 	public static long getRoomNum(){
 		
 		return findNextAvailableWaiting();

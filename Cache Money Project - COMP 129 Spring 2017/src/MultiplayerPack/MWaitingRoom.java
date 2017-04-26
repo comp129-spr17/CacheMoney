@@ -74,7 +74,7 @@ public class MWaitingRoom extends Thread{
 	}
 	public void setLoadNumPlayer(int numPlayer){
 		loadingNumPlayer = numPlayer;
-		(new LiveInThread()).start();
+//		(new LiveInThread()).start();
 	}
 	private void notifyEnterPlayer(){
 		++curNumPlayer;
@@ -153,11 +153,12 @@ public class MWaitingRoom extends Thread{
 		System.out.println("Request for Waiting Chatting");
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, msg);
 	}
-	private void forLoadingUserLeave(){
+	public void forLoadingUserLeave(){
 		if(isLoadingGame){
 			loadingNumPlayer--;
 			System.out.println("notifying user leave. User num = " + curNumPlayer);;
-			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
+			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
+			
 		}
 			
 	}
@@ -235,6 +236,9 @@ public class MWaitingRoom extends Thread{
 	private void actionToLeaveUser(){
 		userForThisRoom.remove(userId);
 		outputForThisRoom.remove(usersOutput.get(userId));
+		if(isLoadingGame){
+			MManagingMaps.getWaitingRoomAt(roomNum).forLoadingUserLeave();
+		}
 	}
 	private void getMsg(){
 		try {
