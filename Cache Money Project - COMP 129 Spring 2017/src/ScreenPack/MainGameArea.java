@@ -250,6 +250,7 @@ public class MainGameArea extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				switchToWaiting();
+				System.out.println("Sending load # " +(Integer)loadingList.getSelectedItem() + "numPpl:" + loadingListInt.get(1).get(loadingList.getSelectedIndex()));
 				playingInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[]{(Integer)loadingList.getSelectedItem(), loadingListInt.get(1).get(loadingList.getSelectedIndex())}));
 
 			}
