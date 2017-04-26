@@ -838,7 +838,6 @@ public class GameScreen extends JFrame{
 		waitingArea.actionToHost(isLoading);
 	}
 	public void ableHostButton(boolean yesOrNo){
-//		mainGameArea.switchToWaiting();
 		waitingArea.ableStartBtn(yesOrNo);
 	}
 	public void updateWaitingArea(ArrayList<Object> userId){
