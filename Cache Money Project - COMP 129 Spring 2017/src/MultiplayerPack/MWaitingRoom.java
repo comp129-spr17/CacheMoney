@@ -76,9 +76,19 @@ public class MWaitingRoom extends Thread{
 	}
 	private void notifyEnterPlayer(){
 		if(++curNumPlayer==loadingNumPlayer){
-			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true));
+			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true))).start();
+//			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,true));
 		}
 			
+	}
+	class SendInThread extends Thread{
+		byte[] msg;
+		public SendInThread(byte[] msg) {
+			this.msg = msg;
+		}
+		public void run(){
+			MServerMethod.sendMsgToMyself(usersOutput, userId, msg);
+		}
 	}
 	public boolean isGameStartedOrDisconnected(){
 		return isGameStartedOrDisconnected;
@@ -210,22 +220,25 @@ public class MWaitingRoom extends Thread{
 		userForThisRoom = uList;
 	}
 	public void notifyUserEnter(String uId){
+		if(isLoadingGame)
+			notifyEnterPlayer();
 		System.out.println(uId + " joined");
 		outputForThisRoom.add(usersOutput.get(uId));
 		userForThisRoom.add(uId);
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.JOIN_ROOM_TO_CLIENT, userForThisRoom));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
-		if(isLoadingGame)
-			notifyEnterPlayer();
+	
 	}
 	public void notifyUserLeave(String uId){
 		// To do : Update rest of the rooms other than the one just quited.
 		// suggest : make a function that gathers all the number of people from the room and pack tham all 
 		System.out.println(uId + " left");
+		if(isLoadingGame)
+			(new SendInThread(mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false))).start();
 		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, mPack.packStringArray(UnicodeForServer.LEAVE_ROOM, userForThisRoom));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
-		if(isLoadingGame)
-			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
+		
+//			MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
 	}
 	public void getUpdatedWaitingArea(String userId){
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,userForThisRoom.size(),false));
