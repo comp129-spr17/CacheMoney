@@ -7,6 +7,7 @@ import java.time.Year;
 
 import javax.swing.ImageIcon;
 
+import ScreenPack.PlayerInfoDisplay;
 import ScreenPack.PropertyDisplay;
 
 public class PropertySpace extends Space {
@@ -48,6 +49,7 @@ public class PropertySpace extends Space {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				PlayerInfoDisplay.getInstance().setVisible(false);
 				pDisplay.setProperty(info);
 				pDisplay.setVisible(true);
 				setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());

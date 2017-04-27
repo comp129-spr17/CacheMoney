@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,6 +36,8 @@ public class MainGameArea extends JPanel{
 	private int oldContainerRow;
 	private int oldContainerCol;
 	private JLabel jLabel;
+	private JLabel lblFriend;
+	
 	private WaitingArea waitingArea;
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
@@ -45,6 +49,7 @@ public class MainGameArea extends JPanel{
 	private JPanel controlPanel;
 	private JPanel mainPanel;
 	private SqlRelated sqlRelated;
+	private ResultSet friends;
 	private ArrayList<ArrayList<Integer>> loadingListInt;
 	public MainGameArea(final Container container) {
 		this.container = container;
@@ -74,10 +79,13 @@ public class MainGameArea extends JPanel{
 		friendList.setScrollingPaneVisible(true);
 		
 		chatAndFriends = new JPanel();
-		GridLayout gl = new GridLayout(2,1);
+		GridLayout gl = new GridLayout(3,1);
 		gl.setVgap(10);
 		chatAndFriends.setLayout(gl);
 		chatAndFriends.add(chatScreen);
+
+		lblFriend = new JLabel("Friend list:");
+		chatAndFriends.add(lblFriend);
 		chatAndFriends.add(friendList.getScrollingPanel());
 	}
 	
@@ -176,10 +184,21 @@ public class MainGameArea extends JPanel{
 		mainPanel.add(controlPanel,BorderLayout.EAST);
 		
 		container.add(mainPanel);
+		loadFriendList();
 		getLoadingGames();
 		/*container.add(this,BorderLayout.WEST);
 		container.add(chatAndFriends,BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.EAST);*/
+	}
+	private void loadFriendList(){
+		friendList.clearList();
+		friends = sqlRelated.getFriend(playingInfo.getLoggedInId());
+		try {
+			while(friends.next())
+				friendList.addObject(friends.getString(1));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	private void getLoadingGames(){
 		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());

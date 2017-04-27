@@ -411,14 +411,84 @@ public class GameScreen extends JFrame{
 	}
 	private void initButtonListeners()
 	{
+		mainPanel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				pInfoDisplay.setVisible(false);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		boardPanel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				pInfoDisplay.setVisible(false);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		dicePanel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				pInfoDisplay.setVisible(false);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
 		showEndGameScreen.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				pInfoDisplay.setVisible(false);
 				System.out.println("Show End Game Screen");
-
+				
 				//TODO clients do not know the totalPlayers int. It is set to 0 on clients
 				System.out.println("Total Num of Players: " + Integer.toString(totalPlayers));
 				if(!endGameScreen.isVisible()) {
@@ -443,12 +513,13 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				Sounds.quickDisplay.playSound();
 					playerInfo.setVisible(true);
 					//playerInfo.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 			}
 			@Override
-			public void mousePressed(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {pInfoDisplay.setVisible(false);}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 			@Override
@@ -478,7 +549,7 @@ public class GameScreen extends JFrame{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				pInfoDisplay.setVisible(false);
 				
 			}
 			@Override
@@ -513,7 +584,7 @@ public class GameScreen extends JFrame{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				pInfoDisplay.setVisible(false);
 				
 			}
 			@Override
@@ -601,7 +672,7 @@ public class GameScreen extends JFrame{
 			}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {pInfoDisplay.setVisible(false);}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {}
@@ -622,7 +693,7 @@ public class GameScreen extends JFrame{
 				
 			}
 			@Override
-			public void mousePressed(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {pInfoDisplay.setVisible(false);}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 			@Override
@@ -884,7 +955,7 @@ public class GameScreen extends JFrame{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				pInfoDisplay.setVisible(false);
 			}
 
 			@Override
@@ -934,7 +1005,7 @@ public class GameScreen extends JFrame{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				pInfoDisplay.setVisible(false);
 			}
 
 			@Override

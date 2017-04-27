@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.mysql.cj.api.xdevapi.Result;
+
 public final class SqlRelated {
 	private static SqlRelated sqlRelated = new SqlRelated();
 	private static final String IP_ADDRESS = "10.15.17.88";
@@ -199,15 +201,6 @@ public final class SqlRelated {
 	}
 	private static String getWinOrLose(boolean isWin){
 		return isWin?"win" : "lose";
-	}
-	public static void addFriend(String my_user_id, String other_user_id){
-		try {
-			statement = connection.createStatement();
-			statement.executeUpdate("INSERT INTO friend_list "
-					+ "VALUES ('"+my_user_id+"','"+other_user_id+"', CURRENT_TIMESTAMP);");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	public static boolean isIdExisting(String user_id){
 		try {
@@ -448,5 +441,50 @@ public final class SqlRelated {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	public static void addFriend(String firstId, String secondId){
+		try {
+			statement = connection.createStatement();
+			statement.executeUpdate("INSERT INTO friend_list "
+					+ "VALUES ('"+firstId+"','"+secondId+"', NOW()),"
+							+ "('"+secondId+"','"+firstId+"', NOW());");
+			
+		} catch (SQLException e) {
+//			e.printStackTrace();
+		}
+	}
+	public static void removeFriend(String firstId, String secondId){
+		try {
+			statement = connection.createStatement();
+			statement.executeUpdate("DELETE FROM friend_list "
+					+ "WHERE user_id = '"+firstId+"' AND friend_id='"+secondId+"'"+" OR user_id = '"+secondId+"' AND friend_id='"+firstId+"';");
+			
+		} catch (SQLException e) {
+//			e.printStackTrace();
+		}
+	}
+	public ResultSet getFriend(String myId){
+		try {
+			statement = connection.createStatement();
+			return statement.executeQuery("SELECT friend_id "
+					+ "FROM friend_list "
+					+ "WHERE user_id = '"+myId+"';");
+		} catch (SQLException e) {
+//			e.printStackTrace();
+		}
+		return null;
+	}
+	public static boolean isFriend(String firstId, String secondId){
+		try {
+			statement = connection.createStatement();
+			ResultSet rSet = statement.executeQuery("SELECT COUNT(user_id) "
+					+ "FROM friend_list "
+					+ "WHERE user_id = '"+firstId+"' AND friend_id='"+secondId+"';");
+			rSet.next();
+			return rSet.getInt(1)>0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

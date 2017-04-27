@@ -1,9 +1,12 @@
 package GamePack;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import MultiplayerPack.PlayingInfo;
 import ScreenPack.PlayerInfoDisplay;
@@ -44,22 +47,42 @@ public class Piece extends JLabel{
 			setClickListener();
 	}
 	private void setClickListener(){
-		
+		addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				System.out.println("Lost Focus");
+				pInfoDisplay.setVisible(false);
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+
+				System.out.println("Gain Focus");
+			}
+		});
 		addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
-				repaint();
+//				pInfoDisplay.setVisible(false);
+//				repaint();
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				System.out.println("pressed");
-				pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose);
-				pInfoDisplay.setVisible(true);
-				setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
-				repaint();
+				if(SwingUtilities.isRightMouseButton(e)){
+					requestFocus();
+					System.out.println("pressed");
+					pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose);
+					pInfoDisplay.setVisible(true);
+					pInfoDisplay.setFriend(pInfo.getLoggedInId(), user_id);
+					
+					setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
+					
+				}else{
+					pInfoDisplay.setVisible(false);
+				}
 			}
 			
 			@Override
