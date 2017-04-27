@@ -139,23 +139,20 @@ public class MainMenuScreen {
 			screenLabels[i] = new JLabel();
 			mainPanel.add(screenLabels[i]);
 		}
-		screenLabels[0].setText("<html><span style='font-size:17px'><b>New Game</b></span></html>");
-		screenLabels[0].setBounds(140, 87, 300, 30);
+		screenLabels[0].setText("<html><span style='font-size:18px'><b>Local</b></span></html>");
+		screenLabels[0].setBounds(170, 87, 300, 30);
 		
-		screenLabels[1].setText("<html><span style='font-size:11px'>Local</span></html>");
-		screenLabels[1].setBounds(112, 212, 300, 30);
+		screenLabels[1].setText("<html><span style='font-size:11px'>New Game</span></html>");
+		screenLabels[1].setBounds(94, 212, 300, 30);
 		
-		screenLabels[2].setText("<html><span style='font-size:11px'>Online</span></html>");
-		screenLabels[2].setBounds(250, 212, 300, 30);
+		screenLabels[2].setText("<html><span style='font-size:11px'>Load Game</span></html>");
+		screenLabels[2].setBounds(233, 212, 300, 30);
 		
-		screenLabels[3].setText("<html><span style='font-size:17px'><b>Load Game</b></span></html>");
-		screenLabels[3].setBounds(140, 250, 300, 30);
+		screenLabels[3].setText("<html><span style='font-size:17px'><b>Online</b></span></html>");
+		screenLabels[3].setBounds(165, 250, 300, 30);
 		
-		screenLabels[4].setText("<html><span style='font-size:11px'>From File</span></html>");
-		screenLabels[4].setBounds(99, 373, 300, 30);
-		
-		screenLabels[5].setText("<html><span style='font-size:11px'>Online</span></html>");
-		screenLabels[5].setBounds(250, 373, 300, 30);
+		screenLabels[4].setText("<html><span style='font-size:11px'>Join Lobby</span></html>");
+		screenLabels[4].setBounds(166, 373, 300, 30);
 		
 		screenLabels[5].setLocation(216, 373);		
 		screenLabels[5].setText("<html><span style='font-size:11px'>From Database</span></html>");	// DEBUG
@@ -397,14 +394,14 @@ public class MainMenuScreen {
 		
 		
 		
-		LoadGameButton.setBounds(80,280,100,100);
+		LoadGameButton.setBounds(220,120,100,100);
 		LoadGameButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ImportGameButton.png", LoadGameButton.getWidth(), LoadGameButton.getHeight()));
 		LoadGameButton.setContentAreaFilled(false);
 		LoadGameButton.setBorder(null);
 		mainPanel.add(LoadGameButton);
 		
-		
-		MultiPButton.setBounds(220,120,100,100);
+		//LoadGameButton.setBounds(80,280,100,100);
+		MultiPButton.setBounds(150,280,100,100);
 		MultiPButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "MultiplayerButton.png", MultiPButton.getWidth(), MultiPButton.getHeight()));
 		MultiPButton.setContentAreaFilled(false);
 		MultiPButton.setBorder(null);
@@ -424,11 +421,11 @@ public class MainMenuScreen {
 		mainPanel.add(CreditsButton);
 		
 		
-		LoadMultiplayer.setBounds(220,280,100,100);
-		LoadMultiplayer.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "LoadMultiplayer.png", LoadMultiplayer.getWidth(), LoadMultiplayer.getHeight()));
-		LoadMultiplayer.setContentAreaFilled(false);
-		LoadMultiplayer.setBorder(null);
-		mainPanel.add(LoadMultiplayer);
+//		LoadMultiplayer.setBounds(220,280,100,100);
+//		LoadMultiplayer.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "LoadMultiplayer.png", LoadMultiplayer.getWidth(), LoadMultiplayer.getHeight()));
+//		LoadMultiplayer.setContentAreaFilled(false);
+//		LoadMultiplayer.setBorder(null);
+//		mainPanel.add(LoadMultiplayer);
 		
 		//LoadMultiplayer.setEnabled(false); // DEBUG
 		
