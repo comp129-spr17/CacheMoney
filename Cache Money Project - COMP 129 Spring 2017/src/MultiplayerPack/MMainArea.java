@@ -131,7 +131,7 @@ public class MMainArea extends Thread{
 		exitCode = true;
 	}
 	private void forCreatingRoom(){
-		roomNum = mMaps.getRoomNum();
+		roomNum = MManagingMaps.getRoomNum();
 		System.out.println("CREATING ROOM" + roomNum);
 		mWaitingRoom = new MWaitingRoom(usersOutput, usersInput, userIds, inputStream, userId, true, roomNum, false);
 		waitingRooms.put(roomNum, mWaitingRoom);
@@ -139,7 +139,7 @@ public class MMainArea extends Thread{
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packLongBool(UnicodeForServer.CREATE_ROOM, roomNum, true));
 	}
 	private void forLoadingGameRoom(){
-		roomNum = mMaps.getRoomNum();
+		roomNum = MManagingMaps.getRoomNum();
 		result = mUnpack.getResult(msg);
 
 		System.out.println("LOADING GAME " + (Integer)result.get(1) + " NumPpl :" + (Integer)result.get(2));

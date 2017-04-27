@@ -108,7 +108,7 @@ public class GameScreen extends JFrame{
 	private TradingPanel tradeP;
 	private ChatScreen chatScreen;
 	private String filenameToLoad;
-	private BackgroundImage bgi;
+//	private BackgroundImage bgi;
 	private JLabel[] buttonLabels;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
@@ -137,11 +137,9 @@ public class GameScreen extends JFrame{
 			switchToGame();
 		else{
 			while (!client.isReadyToUse() || !isServerReady){
-				System.out.println("spinning......");
+				System.out.print("");
 			}
-			System.out.println("hmmmmm");
 			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
-			System.out.println("requesting");
 		}
 		
 		setWindowVisible();
@@ -188,7 +186,7 @@ public class GameScreen extends JFrame{
 		
 		
 		
-		chatScreen = new ChatScreen(unicode.CHAT_GAME);
+		chatScreen = new ChatScreen(UnicodeForServer.CHAT_GAME);
 		
 		if (Property.isSQLEnabled){
 			sqlRelated = SqlRelated.getInstance();
@@ -824,10 +822,11 @@ public class GameScreen extends JFrame{
 		addMuteMusic();
 		addMuteSounds();
 		initButtonListeners();
-		initButtonLabels();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
 		if(!pInfo.isSingle()){
+			mainPanel.remove(exportButton);
+			mainPanel.remove(buttonLabels[3]);
 			chatScreen.setVisible(false);
 			mainPanel.add(chatScreen);
 		}
@@ -849,16 +848,16 @@ public class GameScreen extends JFrame{
 			buttonLabels[i] = new JLabel();
 			mainPanel.add(buttonLabels[i]);
 		}
-		buttonLabels[0].setText("<html><font color = '" + "white" + "'>Player Balances</font></html>");
+		buttonLabels[0].setText("<html><font color = '" + "white" + "'><b>Player Balances</b></font></html>");
 		buttonLabels[0].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 145, 300, 30);
 		
-		buttonLabels[1].setText("<html><font color = '" + "white" + "'>Trade</font></html>");
+		buttonLabels[1].setText("<html><font color = '" + "white" + "'><b>Trade</b></font></html>");
 		buttonLabels[1].setBounds(boardPanel.getX() + boardPanel.getWidth() + 40, 295, 300, 30);
 		
-		buttonLabels[2].setText("<html><font color = '" + "white" + "'>Mortgage</font></html>");
+		buttonLabels[2].setText("<html><font color = '" + "white" + "'><b>Mortgage</b></font></html>");
 		buttonLabels[2].setBounds(boardPanel.getX() + boardPanel.getWidth() + 29, 445, 300, 30);
 		
-		buttonLabels[3].setText("<html><font color = '" + "white" + "'>Export Game</font></html>");
+		buttonLabels[3].setText("<html><font color = '" + "white" + "'><b>Export Game</b></font></html>");
 		buttonLabels[3].setBounds(boardPanel.getX() + boardPanel.getWidth() + 18, 595, 300, 30);
 	}
 	private void addExportGameButton() {
@@ -892,9 +891,9 @@ public class GameScreen extends JFrame{
 			mainGameArea.updateRooms(roomLIst);
 	}
 	public void receiveMainChatMsg(int which, String id, String msg){
-		if(which == unicode.CHAT_LOBBY)
+		if(which == UnicodeForServer.CHAT_LOBBY)
 			mainGameArea.receiveMsg(id, msg);
-		else if(which == unicode.CHAT_WAITING)
+		else if(which == UnicodeForServer.CHAT_WAITING)
 			waitingArea.receiveMsg(id, msg);
 		else
 			chatScreen.receiveMsg(id, msg);
@@ -928,18 +927,23 @@ public class GameScreen extends JFrame{
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
 		//mainPanel.add(muteMusic);
+		muteMusic.setContentAreaFilled(false);
+		muteMusic.setBorder(null);
 		muteMusic.addMouseListener(new MouseListener(){
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 1){ // left click
 					Music.music1.toggleMuteMusic();
 					if (Music.music1.getIsMuted()){
 						muteMusic.setIcon(imgOff);
+						muteMusic.setContentAreaFilled(false);
+						muteMusic.setBorder(null);
 					}
 					else{
 						playScheduledMusic();
 						muteMusic.setIcon(imgOn);
+						muteMusic.setContentAreaFilled(false);
+						muteMusic.setBorder(null);
 					}
 					muteMusic.setBorder(null);
 				}
@@ -983,6 +987,8 @@ public class GameScreen extends JFrame{
 		muteSounds = new JCheckBox(Sounds.bomb.getIsMuted() ? imgOff : imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
 		//mainPanel.add(muteSounds);
+		muteSounds.setContentAreaFilled(false);
+		muteSounds.setBorder(null);
 		muteSounds.addMouseListener(new MouseListener(){
 
 			@Override
@@ -991,9 +997,13 @@ public class GameScreen extends JFrame{
 					Sounds.buildingHouse.toggleMuteSounds();
 					if (Sounds.buildingHouse.getIsMuted()){
 						muteSounds.setIcon(imgOff);
+						muteSounds.setContentAreaFilled(false);
+						muteSounds.setBorder(null);
 					}
 					else{
 						muteSounds.setIcon(imgOn);
+						muteSounds.setContentAreaFilled(false);
+						muteSounds.setBorder(null);
 						Sounds.register.playSound();
 					}
 				}
@@ -1152,8 +1162,8 @@ public class GameScreen extends JFrame{
 	}
 	public void addShowMoneyButton()
 	{
-		JLabel buttonLabel1 = new JLabel("SHOW ME");
-		JLabel buttonLabel2 = new JLabel("THE $$$");
+//		JLabel buttonLabel1 = new JLabel("SHOW ME");
+//		JLabel buttonLabel2 = new JLabel("THE $$$");
 		showInfo = new JButton();
 		showInfo.setLayout(new BorderLayout());
 		showInfo.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 50, 100, 100);
@@ -1320,12 +1330,7 @@ public class GameScreen extends JFrame{
 	
 	private void autoSaveGame(boolean single) {
 		if (single){
-			saveGameToFile("", AUTO_SAVE_FILENAME);
-		}
-		else{
-////			int savedNum = sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber());
-////			insertPlayerInformation(savedNum);
-////			sqlRelated.insertSavingGame();
+			saveGameToFile(AUTO_SAVE_DIRECTORY, AUTO_SAVE_FILENAME);
 		}
 		
 	}
@@ -1408,4 +1413,5 @@ public class GameScreen extends JFrame{
 	public void setExportButtonEnabled(boolean b){
 		exportButton.setEnabled(b);
 	}
+	
 }

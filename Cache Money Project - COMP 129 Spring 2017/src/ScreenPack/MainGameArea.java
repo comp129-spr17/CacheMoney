@@ -20,8 +20,11 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.ImageRelated;
+import GamePack.PathRelated;
 import GamePack.Property;
 import GamePack.SizeRelated;
+import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.SqlRelated;
@@ -93,10 +96,12 @@ public class MainGameArea extends JPanel{
 		controlPanel = new JPanel();
 		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/3, SizeRelated.getInstance().getScreenH()));
 		controlPanel.setLayout(new GridBagLayout());
-		loadGame = new JButton("Load the game");
+		loadGame = new JButton();
+		addLoadGameButton();
 		onlineUsers = new infoThatScrolls(false);
 		onlineUsers.setScrollingPaneVisible(true);
-		createNewRoom = new JButton("Create Room");
+		createNewRoom = new JButton();
+		addCreateNewRoomButton();
 		jLabel = new JLabel("Online users:");
 		loadingList = new JComboBox<>();
 		
@@ -112,6 +117,10 @@ public class MainGameArea extends JPanel{
 		gbc.weighty = 0.;
 		gbc.weightx = 1;
 		controlPanel.add(createNewRoom, gbc);
+		
+		
+		
+		
 		
 		gbc.insets = new Insets(5,1,30,5);
 		
@@ -164,6 +173,18 @@ public class MainGameArea extends JPanel{
 		
 	}
 	
+	private void addLoadGameButton() {
+		loadGame.setSize(50, 50);
+		loadGame.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "LoadMultiplayer.png", loadGame.getWidth(), loadGame.getHeight()));
+		loadGame.setContentAreaFilled(false);
+		loadGame.setBorder(null);
+	}
+	private void addCreateNewRoomButton() {
+		createNewRoom.setSize(50, 50);
+		createNewRoom.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "CreateRoomButton.png", loadGame.getWidth(), loadGame.getHeight()));
+		createNewRoom.setContentAreaFilled(false);
+		createNewRoom.setBorder(null);
+	}
 	public WaitingArea getWaiting(){
 		return waitingArea;
 	}
@@ -246,6 +267,7 @@ public class MainGameArea extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
 				switchToWaiting();
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
 
@@ -271,6 +293,7 @@ public class MainGameArea extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Sounds.buttonConfirm.playSound();
 				switchToWaiting();
 				System.out.println("Sending load # " +(Integer)loadingList.getSelectedItem() + "numPpl:" + loadingListInt.get(1).get(loadingList.getSelectedIndex()));
 				playingInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[]{(Integer)loadingList.getSelectedItem(), loadingListInt.get(1).get(loadingList.getSelectedIndex())}));
@@ -308,6 +331,7 @@ public class MainGameArea extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(room.isEnabled()){
+					Sounds.buttonConfirm.playSound();
 					switchToWaiting();
 					playingInfo.sendMessageToServer(mPack.packLong(UnicodeForServer.JOIN_ROOM, roomNum));
 				}

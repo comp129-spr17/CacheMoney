@@ -378,7 +378,6 @@ public class DicePanel extends JPanel{
 		}
 		else{
 			gamescreen.startGameMusic();
-			gamescreen.setExportButtonEnabled(false);
 		}
 		setRollButtonVisible();
 		turnLabel.setVisible(true);

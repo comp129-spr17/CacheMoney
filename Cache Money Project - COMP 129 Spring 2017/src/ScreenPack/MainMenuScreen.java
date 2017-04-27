@@ -481,8 +481,13 @@ public class MainMenuScreen {
 	private void startSinglePlayer(boolean isLoadGame) {
 		int gNumP; String filenameToLoad = null;
 		if (!isLoadGame){
-			getNumPlayers();
-			Sounds.buttonConfirm.playSound();
+			if (getNumPlayers()){
+				Sounds.buttonConfirm.playSound();
+			}
+			else{
+				Sounds.buttonCancel.playSound();
+				return;
+			}
 		}
 		else{
 			int a = JOptionPane.showConfirmDialog(null, "Load from previous save?");
@@ -553,8 +558,10 @@ public class MainMenuScreen {
 	}
 	
 	
-	private void getNumPlayers(){
-		JOptionPane.showMessageDialog(null, messages,"Enter the number of total players:", JOptionPane.OK_OPTION);
+	private boolean getNumPlayers(){
+		int a = JOptionPane.showConfirmDialog(null, messages,"Enter the number of total players:", JOptionPane.OK_OPTION);
+		return (a == JOptionPane.OK_OPTION);
+	
 	}
 	private void hideAndDisposeMainMenuScreen() {
 		mainmenuframe.setVisible(false);

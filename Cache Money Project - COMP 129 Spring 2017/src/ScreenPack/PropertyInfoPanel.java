@@ -671,7 +671,7 @@ public class PropertyInfoPanel extends JPanel{
 				public void run() {
 					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_PROPERTY));
 				}
-			}, 1000);
+			}, 0);
 		}
 
 	}
