@@ -133,7 +133,7 @@ public final class Player {
 	}
 	public void setJailFreeCard(int x)
 	{
-		jailFreeCard = 1;
+		jailFreeCard = x;
 	}
 	void setFiveHunneds(int newFiveHunneds) {
 		fivehunneds = newFiveHunneds;

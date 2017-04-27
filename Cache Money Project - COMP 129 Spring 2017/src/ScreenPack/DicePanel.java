@@ -34,7 +34,7 @@ import MultiplayerPack.UnicodeForServer;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private GameScreen gamescreen;
@@ -489,7 +489,7 @@ public class DicePanel extends JPanel{
 		mGamePanel.actionForGame(num);
 	}
 	public void actionForGotOutOfJail(){
-		jailInfoScreen.actionForGetOutOfJail();
+		jailInfoScreen.actionForGetOutOfJail(false);
 	}
 	public void actionForReceiveAnswer(int ith, int playerN, boolean isOwner, int enteredAns){
 		mGamePanel.actionForGame(ith, playerN, isOwner, enteredAns);

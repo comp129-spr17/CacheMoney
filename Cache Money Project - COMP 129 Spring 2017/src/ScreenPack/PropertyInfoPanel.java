@@ -53,6 +53,7 @@ public class PropertyInfoPanel extends JPanel{
 	private PlayingInfo pInfo;
 	private BackgroundImage bi;
 	private JLabel[] buttonLabels;
+	private JButton declareLossButton;
 
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b)
 	{
@@ -82,6 +83,7 @@ public class PropertyInfoPanel extends JPanel{
 		mortgagePrice = new JLabel();
 		buyHousePrice = new JLabel();
 		minigameInfo = new JLabel();
+		
 		
 		buttonLabels = new JLabel[3];
 		initButtonLabels();

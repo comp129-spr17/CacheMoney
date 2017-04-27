@@ -42,7 +42,7 @@ public class Board {
 		propertyCheck = new boolean[40];
 		initPropertyCheck();
 		setBoardTrack(board);
-		
+		isDone = true;
 	}
 	private void initPropertyCheck(){
 		for(int i=0; i<40; i++)
