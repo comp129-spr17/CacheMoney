@@ -116,9 +116,12 @@ public class WaitingArea extends JPanel{
 		btnGoBack.setEnabled(false);
 		lblCount.setVisible(true);
 	}
-	public void actionToHost(){
+	public void actionToHost(boolean isLoading){
 		resetPlayerDisplay();
-		btnStart.setEnabled(true);
+		btnStart.setEnabled(isLoading);
+	}
+	public void ableStartBtn(boolean yesOrNo){
+		btnStart.setEnabled(yesOrNo);
 	}
 	private void addListener(){
 		btnStart.addMouseListener(new MouseListener() {

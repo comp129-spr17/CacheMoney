@@ -11,6 +11,9 @@ public final class PlayingInfo {
 	private boolean isLoggedIn;
 	private String loggedInId;
 	private int gamePart;
+	private boolean hasGameStarted;
+	private boolean isLoadingGame;
+	private int loadingGameNum;
 	public final static int PORT_NUM = 7777;
 	//public final static String IP_ADDRESS = "10.15.157.201";
 	private boolean isDisconnectedByOther;
@@ -72,7 +75,7 @@ public final class PlayingInfo {
 		return outputStream!=null;
 	}
 	public boolean isLoggedInId(String id){
-		return loggedInId.equals(id);
+		return loggedInId.toUpperCase().equals(id.toUpperCase());
 	}
 	public int getGamePart(){
 		return gamePart;
@@ -92,4 +95,23 @@ public final class PlayingInfo {
 	public void setIsDisconnectedByOther(){
 		isDisconnectedByOther = true;
 	}
+	public boolean getHasGameStarted(){
+		return hasGameStarted;
+	}
+	public void setGameStarted(){
+		hasGameStarted = true;
+	}
+	public boolean isLoadingGame(){
+		return isLoadingGame;
+	}
+	public void setLoadingGame(){
+		isLoadingGame = true;
+	}
+	public int getLoadingGameNum(){
+		return loadingGameNum;
+	}
+	public void setLoadingGameNum(int num){
+		loadingGameNum = num;
+	}
+	
 }

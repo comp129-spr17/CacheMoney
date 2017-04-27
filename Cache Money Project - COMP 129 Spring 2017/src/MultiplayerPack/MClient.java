@@ -76,7 +76,8 @@ public class MClient {
 		variableCodeString.add(new String("REQUESTING_STATUS_WAITING"));
 		
 		variableCodeString.add(new String("BOX_MINI_GAME_SURPRISE_BOXES"));
-		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
+		variableCodeString.add(new String("LOADING_GAME"));
+		
 		variableCodeString.add(new String("GENERIC_SEND_INTEGER"));
 		variableCodeString.add(new String("MATH_MINI_GAME_RANDS"));
 		variableCodeString.add(new String("MATH_MINI_GAME_ANS"));
@@ -114,6 +115,9 @@ public class MClient {
 		variableCodeString.add(new String("CHAT_GAME"));
 		variableCodeString.add(new String("TRADE_REQUEST"));
 		variableCodeString.add(new String("COMMENCE TRADE"));
+		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
+		variableCodeString.add(new String("LOADING_GAME_INVALID_USER"));
+		variableCodeString.add(new String("ABLE_START_BTN"));
 	}
 	
 	
@@ -173,7 +177,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateJoinedPlayer(result);}});
 		doActions.put(UnicodeForServer.HOST_LEAVE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doDestroyRoom(result);}});
 		doActions.put(UnicodeForServer.END_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doRemoveProperty();}});
-		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom();}});
+		doActions.put(UnicodeForServer.CREATE_ROOM, new DoAction(){public void doAction(ArrayList<Object> result){doForCreatingRoom(result);}});
 		doActions.put(UnicodeForServer.WHEN_USER_ENTERS_GAME_AREA, new DoAction(){public void doAction(ArrayList<Object> result){doUserEntersMainArea(result);}});
 		doActions.put(UnicodeForServer.MORTGAGE_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doMortgageProperty(result);;}});
 		doActions.put(UnicodeForServer.UPDATE_ROOM_STAT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateRoomStat(result);;}});
@@ -182,6 +186,10 @@ public class MClient {
 		doActions.put(UnicodeForServer.CHAT_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 2);}});
 		doActions.put(UnicodeForServer.TRADE_REQUEST, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveTradeRequest(result);}});
 		doActions.put(UnicodeForServer.COMMENCE_TRADE, new DoAction(){public void doAction(ArrayList<Object> result){doCommenceTrade(result);}});
+		doActions.put(UnicodeForServer.LOADING_GAME_INVALID_USER, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingInvalidMsg();}});
+		doActions.put(UnicodeForServer.LOADING_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingGame(result);}});
+		doActions.put(UnicodeForServer.ABLE_START_BTN, new DoAction(){public void doAction(ArrayList<Object> result){doAbleStartBtn(result);}});
+		
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
@@ -275,6 +283,7 @@ public class MClient {
 		diceP.actionForDiceEnd();
 	}
 	private void doStartGame(ArrayList<Object> result){
+		playingInfo.setGameStarted();
 		System.out.println("received start game");
 		setPlayer((Integer)result.get(2));
 		gameScreen.switchToGame();
@@ -441,8 +450,8 @@ public class MClient {
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
 		gameScreen.hostLeftWaitingArea();
 	}
-	private void doForCreatingRoom(){
-		gameScreen.EnableHostButton();
+	private void doForCreatingRoom(ArrayList<Object> result){
+		gameScreen.EnableHostButton((Boolean)result.get(2));
 		playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM_REST));
 	}
 	private void doUserEntersMainArea(ArrayList<Object> result){
@@ -481,11 +490,6 @@ public class MClient {
 		(new ForReceivingChatMsg(result,area)).start();
 		
 	}
-	
-	protected void doCommenceTrade(ArrayList<Object> result) {
-		gameScreen.actionForCommenceTrade((boolean) result.get(1));
-	}
-	
 	class ForReceivingChatMsg extends Thread{
 		private ArrayList<Object> result;
 		private int area;
@@ -497,6 +501,27 @@ public class MClient {
 			gameScreen.receiveMainChatMsg((Integer)result.get(0), (String)result.get(1),(String)result.get(2));
 		}
 	}
+	protected void doCommenceTrade(ArrayList<Object> result) {
+		gameScreen.actionForCommenceTrade((boolean) result.get(1));
+	}
+	private void doLoadingInvalidMsg(){
+		gameScreen.actionForLoadingInvalidUser();
+	}
+	private void doAbleStartBtn(ArrayList<Object> result){
+		gameScreen.ableHostButton((Boolean)result.get(1));
+	}
+	private void doLoadingGame(ArrayList<Object> result){
+		System.out.println("received Loading game");
+		int loadingNum = (Integer)result.get(1);
+		System.out.println("loading : "+ loadingNum);
+		playingInfo.setGameStarted();
+		playingInfo.setLoadingGame();
+		playingInfo.setLoadingGameNum(loadingNum);
+		gameScreen.loadForMulti(loadingNum);
+		gameScreen.switchToGame();
+		diceP.actionForStart();
+	}
+
 	private void setPlayer(int i){
 		playingInfo.setMyPlayerNum(i);
 	}

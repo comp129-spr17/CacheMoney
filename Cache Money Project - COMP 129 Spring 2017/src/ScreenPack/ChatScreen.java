@@ -1,19 +1,16 @@
 package ScreenPack;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Panel;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.PrintWriter;
-import java.net.SocketException;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -22,7 +19,6 @@ import GamePack.SizeRelated;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
-import MultiplayerPack.UnicodeForServer;
 	public class ChatScreen extends JPanel{
 		private final static int SCREEN_WIDTH = 350;
 		private final static int SCREEN_HEIGHT = 400;
@@ -41,6 +37,7 @@ import MultiplayerPack.UnicodeForServer;
 		private JScrollPane displayPane;
 		private JScrollPane typePane;
 		private JButton titleBar;
+		private LayoutManager gbl;
 		public ChatScreen(int msgType){
 			setting();
 			MSG_TYPE = msgType;
@@ -51,7 +48,8 @@ import MultiplayerPack.UnicodeForServer;
 //			playingInfo.sendMessageToServer(msg);
 		}
 		private void init(){
-			setLayout(null);
+//			setLayout(null);
+			setLayout(new GridBagLayout());
 			sizeRelated = SizeRelated.getInstance();
 			playingInfo = PlayingInfo.getInstance();
 			mPack = MBytePack.getInstance();
@@ -69,13 +67,44 @@ import MultiplayerPack.UnicodeForServer;
 			typePane = new JScrollPane(msgTypeArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			typePane.setBounds(0,SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, SCREEN_WIDTH-BTN_WIDTH, MSGTYPEAREA_HEIGHT);
 			btnSend.setBounds(SCREEN_WIDTH-BTN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, BTN_WIDTH,MSGTYPEAREA_HEIGHT);
-			add(displayPane);
-			add(typePane);
-			add(btnSend);
-			add(titleBar);
+			
+			GridBagConstraints gbc = new GridBagConstraints();
+			Insets i = new Insets(5,0,5,0);
+			
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.insets = i;
+			
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.gridwidth = 4;
+			gbc.gridheight = 2;
+			add(titleBar,gbc);
+			
+			gbc.gridy = 3;
+			gbc.gridheight = 3;
+			gbc.gridwidth = 4;
+			gbc.weightx = 2;
+			gbc.weighty = 2;
+			add(displayPane,gbc);
+			
+			gbc.gridy = 6;
+			gbc.gridheight = 2;
+			gbc.gridwidth = 2;
+			gbc.weightx = 1;
+			gbc.weighty = 1;
+			add(typePane,gbc);
+			
+			gbc.gridx = 2;
+			gbc.gridheight = 2;
+			gbc.gridwidth = 2;
+			add(btnSend,gbc);
+			
+			gbl = this.getLayout();
+			
 			addListeners();
 			msgDisplayArea.setLineWrap(true);
 			msgTypeArea.setLineWrap(true);
+			
 		}
 		private void addListeners(){
 			btnSend.addMouseListener(new MouseListener() {
@@ -145,10 +174,21 @@ import MultiplayerPack.UnicodeForServer;
 			msgDisplayArea.setText("Welcome to Cache Chat!\n\n------------------------------------------------\n\n");
 		}
 		private void minimizeAndMaximize(){
-			titleBar.setLocation(0,isHide?0 : SCREEN_HEIGHT-TITLE_HEIGHT);
 			displayPane.setVisible(isHide);
 			typePane.setVisible(isHide);
 			btnSend.setVisible(isHide);
+			if(isHide){
+				this.setLayout(gbl);
+				this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT+200);
+				titleBar.setLocation(0,0);
+			}else{
+				this.setLayout(null);
+				//this.setSize(titleBar.getSize());
+				titleBar.setLocation(0,0);
+				this.setSize(titleBar.getSize());
+				
+			}
+			
 			isHide = !isHide;
 		}
 		private void sendMsg(){

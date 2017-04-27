@@ -23,7 +23,7 @@ public final class UnicodeForServer {
 	public static final int REQUESTING_STATUS_MAIN = 17;
 	public static final int REQUESTING_STATUS_WAITING = 18;
 	public static final int BOX_MINI_GAME_SURPRISE_BOXES = 19;
-	public static final int RSP_MINI_GAME_DECISION = 20;
+	public static final int LOADING_GAME = 20;
 	public static final int GENERIC_SEND_INTEGER = 21;
 	public static final int MATH_MINI_GAME_RANDS = 22;
 	public static final int MATH_MINI_GAME_ANS = 23;
@@ -57,6 +57,9 @@ public final class UnicodeForServer {
 	public static final int CHAT_GAME = 51;
 	public static final int TRADE_REQUEST = 52;
 	public static final int COMMENCE_TRADE = 53;
+	public static final int RSP_MINI_GAME_DECISION = 54;
+	public static final int LOADING_GAME_INVALID_USER = 55;
+	public static final int ABLE_START_BTN = 56;
 	private UnicodeForServer(){
 		
 	}

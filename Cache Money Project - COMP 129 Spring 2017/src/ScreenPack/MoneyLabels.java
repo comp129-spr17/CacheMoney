@@ -347,7 +347,7 @@ public final class MoneyLabels {
 				cash1[i].setText(Integer.toString(players[i].getOnes()));
 				cash10[i].setText(Integer.toString(players[i].getTens()));
 				//cash10[i].setText(Integer.toString(players[i].getTens()));
-				players[i].checkIfAlive();
+				//players[i].checkIfAlive();
 				if (players[i].getIsAlive() == false && players[i].getAlreadyDead() == false)
 				{
 					totalmonnies[i].setText("LOSER");

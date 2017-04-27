@@ -8,8 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.PathRelated;
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
 
 public class MiniGameModePanel extends JPanel{
@@ -22,6 +24,8 @@ public class MiniGameModePanel extends JPanel{
 	private int miniGameToPlay;
 	private int keyListenerIterator;
 	private Random rand;
+	private BackgroundImage bgi;
+	private SizeRelated sizeRelated;
 	
 	public MiniGameModePanel(){
 		init();
@@ -29,7 +33,7 @@ public class MiniGameModePanel extends JPanel{
 	
 	private void init(){
 		// single player for now
-		
+		sizeRelated = SizeRelated.getInstance();
 		miniGamePanel = new MiniGamePanel(this);
 		ownerPlaceholder = Player.getInstance(0);
 		guestPlaceholder = Player.getInstance(1);
@@ -41,21 +45,16 @@ public class MiniGameModePanel extends JPanel{
 		this.add(miniGamePanel);
 		
 		
-		JLabel titleLabel = new JLabel("Choose a minigame you'd like to play:");
-		titleLabel.setBounds(MiniGamePractice.WIDTH / 6 - 20, 5, 500, 20);
+		JLabel titleLabel = new JLabel("<html><font color = '" + "white" + "'><b>Select a minigame:</b></font></html>");
+		titleLabel.setBounds(50, 5, 500, 20);
 		this.add(titleLabel);
 		
 		initGameButtons();
-		Music.music6.stopMusic();
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		Music.music1.playMusic();
-	
 	}
 	
+	public void addBackgroundImage(BackgroundImage b){
+		this.add(b);
+	}
 	
 	public void addBackButton(BackButton b){
 		backButton = b;
@@ -64,16 +63,16 @@ public class MiniGameModePanel extends JPanel{
 	}
 
 	private void initGameButtons() {
-		gameButton[0] = new JButton("Box Selecting Game");
-		gameButton[1] = new JButton("Rock Scissors Paper");
-		gameButton[2] = new JButton("Spamming Game");
-		gameButton[3] = new JButton("Reaction Game");
-		gameButton[4] = new JButton("Tic-Tac-Toe Game");
-		gameButton[5] = new JButton("Elimination Game");
-		gameButton[6] = new JButton("Math Game");
-		gameButton[7] = new JButton("Memorization Game");
-		gameButton[8] = new JButton("Utility Game");
-		gameButton[9] = new JButton("Random");
+		gameButton[0] = new JButton("Select Box");
+		gameButton[1] = new JButton("RSP");
+		gameButton[2] = new JButton("Spamming");
+		gameButton[3] = new JButton("Reaction");
+		gameButton[4] = new JButton("Tic-Tac-Toe");
+		gameButton[5] = new JButton("Elimination");
+		gameButton[6] = new JButton("Math");
+		gameButton[7] = new JButton("Memorization");
+		gameButton[8] = new JButton("Utility");
+		gameButton[9] = new JButton("???");
 		
 		addButtonListeners();
 		setButtonBounds();
@@ -128,7 +127,9 @@ public class MiniGameModePanel extends JPanel{
 	
 	private void setButtonBounds(){
 		for (int i = 0; i < MiniGamePanel.NUM_OF_MINIGAMES_AVAILABLE + 1; i++){
-			gameButton[i].setBounds(MiniGamePractice.WIDTH / 6, 10 + (i + 1)*28, 200, 25);
+			gameButton[i].setBounds(i % 2 == 0 ? MiniGamePractice.WIDTH / 20 : MiniGamePractice.WIDTH / 2,
+					28 + (i/2)*35,
+					120, 30);
 		}
 	}
 	
@@ -161,7 +162,6 @@ public class MiniGameModePanel extends JPanel{
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

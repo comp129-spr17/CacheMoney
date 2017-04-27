@@ -1,5 +1,6 @@
 package ScreenPack;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,8 @@ public class LoadingScreenPanel extends JPanel{
 	private ImageIcon loadingGif;
 	private ImageRelated imageRelated;
 	private Random rand;
+	private boolean displaySQL;
+	private JLabel loadingText;
 	
 	
 	public LoadingScreenPanel(int width, int height)
@@ -32,6 +35,7 @@ public class LoadingScreenPanel extends JPanel{
 	
 	private void init()
 	{
+		displaySQL = Property.isSQLEnabled;
 		imageRelated = ImageRelated.getInstance();
 		GridLayout layoutMgr = new GridLayout(4, 1);
 	    setLayout(layoutMgr);
@@ -42,14 +46,19 @@ public class LoadingScreenPanel extends JPanel{
 		JLabel iconLabel = new JLabel();
 		iconLabel.setIcon(loadingGif);
 		loadingGif.setImageObserver(iconLabel);
-		JLabel loadingText = new JLabel();
-		loadingText.setText(Property.isSQLEnabled ? "<html>&nbsp;&nbsp;&nbsp;&nbsp;Loading the game from SQL <br/>&nbsp;databases. This may take a while...</html>" : "    Loading the game. Please wait...");
+		loadingText = new JLabel();
+		setLoadingText();
 		
 		loadingText.setVisible(true);
 
 		add(loadingText);
 		add(iconLabel);
 		addRandomLoadingMessage();
+		this.setBackground(Color.white);
+	}
+
+	private void setLoadingText() {
+		loadingText.setText(displaySQL ? "<html>&nbsp;&nbsp;&nbsp;&nbsp;Loading the game from SQL <br/>&nbsp;databases. This may take a while...</html>" : "    Loading the game. Please wait...");
 	}
 	
 	private void addRandomLoadingMessage(){
@@ -148,6 +157,11 @@ public class LoadingScreenPanel extends JPanel{
 		randomLoadingMessageLabel.setText("  " + text);
 		
 		
+	}
+
+	public void displaySQLLoadingMessage(boolean b) {
+		displaySQL = b;
+		setLoadingText();
 	}
 	
 }

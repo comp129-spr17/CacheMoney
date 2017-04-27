@@ -167,6 +167,18 @@ public final class MBytePack {
 		}
 		return null;
 	}
+	public byte[] packLongBool(int requestCode, Long pos, boolean bool){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeLong(pos);
+			dOutputStream.writeBoolean(bool);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public byte[] packPropertyPurchase(int requestCode, String propertyName, int propertyPrice, int playerNum){
 		try{
 			dOutputStream.writeInt(requestCode);

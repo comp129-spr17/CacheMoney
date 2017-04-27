@@ -11,7 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import javax.swing.SwingConstants;
 
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
+import GamePack.Property;
 import GamePack.SizeRelated;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
@@ -56,6 +59,9 @@ public class MainMenuScreen {
 	private CreditsScreen creditsScreen;
 	private SizeRelated sizeRelated;
 	private JLabel[] screenLabels;
+	private JCheckBox muteMusic;
+	private JCheckBox muteSounds;
+	private JCheckBox muteSQL;
 
 	public MainMenuScreen(){
 		
@@ -63,8 +69,14 @@ public class MainMenuScreen {
 		createMenuWindow();
 		Music.music1.stopMusic();
 		Sounds.register.playSound();
-		addMouseListen(this);
 		Music.music6.playMusic();
+		addMouseListen(this);
+		mainmenuframe.setVisible(true);
+		mainPanel.repaint();
+		mainPanel.revalidate();
+		mainmenuframe.repaint();
+		mainmenuframe.revalidate();
+
 
 	}
 
@@ -118,6 +130,9 @@ public class MainMenuScreen {
 		screenLabels = new JLabel[8];
 		initScreenLabels();
 		
+		addMuteMusic();
+		addMuteSounds();
+		addMuteSQL();
 	}
 	private void initScreenLabels() {
 		for (int i = 0; i < 8; i++){
@@ -142,8 +157,8 @@ public class MainMenuScreen {
 		screenLabels[5].setText("<html><span style='font-size:11px'>Online</span></html>");
 		screenLabels[5].setBounds(250, 373, 300, 30);
 		
-		screenLabels[5].setLocation(222, 373);		// DEBUG
-		screenLabels[5].setText("<html><span style='font-size:11px'>Coming Soon!</span></html>");	// DEBUG
+		screenLabels[5].setLocation(216, 373);		
+		screenLabels[5].setText("<html><span style='font-size:11px'>From Database</span></html>");	// DEBUG
 		
 		screenLabels[6].setText("<html><span style='font-size:9px'>Minigames</span></html>");
 		screenLabels[6].setBounds(4, 444, 300, 30);
@@ -241,6 +256,7 @@ public class MainMenuScreen {
 				public void run(){
 //					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
 //					displayHostOrClientDialogBox(mwr);
+					loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
 					setupClient();
 				}
 			}
@@ -264,10 +280,20 @@ public class MainMenuScreen {
 				@Override
 				public void run(){
 					hideAndDisposeMainMenuScreen();
+					loadingScreen.displaySQLLoadingMessage(false);
+					loadingScreen.setResizable(false);
 					loadingScreen.setVisible(true);
 					new MiniGamePractice();
 					hideAndDisposeLoadingScreen();
 					Sounds.waitingRoomJoin.playSound();
+					Music.music6.stopMusic();
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					Music.music1.playMusic();
+					loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
 				}
 			}
 		});
@@ -282,9 +308,25 @@ public class MainMenuScreen {
 			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// FUNCTIONALITY GOES HERE
-				// FUNCTIONALITY GOES HERE
-				// FUNCTIONALITY GOES HERE
+				if(LoadMultiplayer.isEnabled()){ // TEMPORARY
+					
+					Sounds.buttonConfirm.playSound();
+					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
+					loginDialog.setVisible(true);
+					System.out.println("Hello devin");
+					if (playingInfo.isLoggedIn()){
+						(new beginMultiplayer()).start();
+					}
+				}
+			}
+			class beginMultiplayer extends Thread{
+				@Override
+				public void run(){
+//					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
+//					displayHostOrClientDialogBox(mwr);
+					loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
+					setupClient();
+				}
 			}
 		});
 		loginBtn.addMouseListener(new MouseListener() {
@@ -388,7 +430,7 @@ public class MainMenuScreen {
 		LoadMultiplayer.setBorder(null);
 		mainPanel.add(LoadMultiplayer);
 		
-		LoadMultiplayer.setEnabled(false); // DEBUG
+		//LoadMultiplayer.setEnabled(false); // DEBUG
 		
 		
 		
@@ -416,11 +458,7 @@ public class MainMenuScreen {
 		
 		mainmenuframe.setLocation(sizeRelated.getScreenW() / 2 - WIDTH / 2, sizeRelated.getScreenH() / 2 - HEIGHT / 2);
 		
-		mainmenuframe.setVisible(true);
-		mainPanel.repaint();
-		mainPanel.revalidate();
-		mainmenuframe.repaint();
-		mainmenuframe.revalidate();
+		
 	}
 	
 //	private void setLoadGameButtonEnabled(){
@@ -470,12 +508,13 @@ public class MainMenuScreen {
 		}
 		gNumP = isLoadGame ? getNumPlayersFromFile(filenameToLoad) : (Integer)cmbNumP.getSelectedItem();
 		hideAndDisposeMainMenuScreen();
-		loadingScreen.setResizable(false);
+		loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
 		loadingScreen.setVisible(true);
 		gameScreen = new GameScreen(true, gNumP, filenameToLoad);
 		gameScreen.setNumPlayer(gNumP);
 		hideAndDisposeLoadingScreen();
 		Sounds.waitingRoomJoin.playSound();
+		
 	}
 	
 	private int getNumPlayersFromFile(String filenameToLoad){
@@ -552,5 +591,104 @@ public class MainMenuScreen {
 			loadingScreen.setVisible(false);
 		}
 	}
+	
+	private void addMuteMusic() {
+		ImageIcon imgOn, imgOff;
+		imgOn = new ImageIcon("src/Images/music_on1.png");
+		imgOff = new ImageIcon("src/Images/music_off1.png");
+ 		muteMusic = new JCheckBox(imgOn); 	
+		muteMusic.setBorder(null);
+		muteMusic.setBounds(185, 440, 40, 40);
+		mainPanel.add(muteMusic);
+		muteMusic.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == 1){ // left click
+					Music.music1.toggleMuteMusic();
+					if (Music.music1.getIsMuted()){
+						muteMusic.setIcon(imgOff);
+					}
+					else{
+						Music.music6.playMusic();
+						muteMusic.setIcon(imgOn);
+					}
+					muteMusic.setBorder(null);
+				}
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+	}
+	
+	private void addMuteSounds(){
+		ImageIcon imgOn, imgOff;
+		imgOn = new ImageIcon("src/Images/sound_on1.png");
+		imgOff = new ImageIcon("src/Images/sound_off1.png");
+		muteSounds = new JCheckBox(imgOn);	// DEBUG
+		muteSounds.setBounds(145, 440, 40, 40);
+		mainPanel.add(muteSounds);
+		muteSounds.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == 1){
+					Sounds.buildingHouse.toggleMuteSounds();
+					if (Sounds.buildingHouse.getIsMuted()){
+						muteSounds.setIcon(imgOff);
+					}
+					else{
+						Sounds.register.playSound();
+						muteSounds.setIcon(imgOn);
+					}
+				}
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+	}
+	
+	private void addMuteSQL(){
+		ImageIcon imgOn, imgOff;
+		imgOn = new ImageIcon("src/Images/SQLon.png");
+		imgOff = new ImageIcon("src/Images/SQLoff.png");
+		muteSQL = new JCheckBox(imgOn);	// DEBUG
+		muteSQL.setBounds(220, 440, 40, 40);
+		mainPanel.add(muteSQL);
+		muteSQL.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == 1){
+					if (Property.isSQLEnabled){
+						Property.isSQLEnabled = false;
+						muteSQL.setIcon(imgOff);
+					}
+					else{
+						Property.isSQLEnabled = true;
+						muteSQL.setIcon(imgOn);
+					}
+				}
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+	}
+	
 }
 

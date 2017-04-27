@@ -18,6 +18,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.UnknownHostException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -234,13 +236,8 @@ public class GameScreen extends JFrame{
 	public void exitForServer(){
 		System.out.println("Received request to disconnect.");
 		if(!pInfo.isSingle()){
-//			while(pInfo.getOutputStream() == null){
-//	    		try {
-//					Thread.sleep(1);
-//				} catch (InterruptedException e1) {
-//					e1.printStackTrace();
-//				}
-//	    	}
+			if(!pInfo.getIsDisconnectedByOther() && pInfo.getHasGameStarted())
+				multiSaveGame();
 			System.out.println("Disconnecting...");
 			pInfo.sendMessageToServer(mPack.packString(UnicodeForServer.DISCONNECTED,pInfo.getLoggedInId()));
 		}
@@ -263,7 +260,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				exitForServer();
+//				exitForServer();
 
 		        System.exit(0);
 			}
@@ -357,6 +354,60 @@ public class GameScreen extends JFrame{
 			System.out.println("THE FILE IS CORRUPTED; UNABLE TO LOAD DATA.");
 			System.exit(1);
 		}
+		
+	}
+	public void loadForMulti(int savedNum){
+		int[] beginningInfo = sqlRelated.getLoadingBeginning(savedNum);
+		int playerNum;
+		String trade;
+		Property p;
+		ResultSet rsForUser, rsForProp;
+		dicePanel.setCurrentPlayerNum(beginningInfo[0]);
+		pInfo.setNumberOfPlayer(beginningInfo[1]);
+		rsForUser = sqlRelated.importUserInfo(savedNum);
+		String userId;
+		try{
+			for(int i=0; i<pInfo.getNumberOfPlayer(); i++){
+				rsForUser.next();
+				playerNum = rsForUser.getInt(1);
+				userId = rsForUser.getString(2);
+				if(pInfo.isLoggedInId(userId))
+					pInfo.setMyPlayerNum(playerNum);
+				players[playerNum].setUserId(userId);
+				players[playerNum].setIsAlive(rsForUser.getBoolean(3));
+				players[playerNum].setJailFreeCard(rsForUser.getInt(4));
+				players[playerNum].setPositionNumber(rsForUser.getInt(5));
+				players[playerNum].setTotalMonies(rsForUser.getInt(6));
+				players[playerNum].setInJail(rsForUser.getBoolean(7));
+				trade = rsForUser.getString(8);
+				players[playerNum].setTradeRequest(trade.equals("null")?null:trade);
+				players[playerNum].setIsOn(true);
+				
+				SqlRelated.generateUserInfo(userId);
+				players[playerNum].setUserName(SqlRelated.getUserName());
+				players[playerNum].setNumWin(SqlRelated.getWin());
+				players[playerNum].setNumLose(SqlRelated.getLose());
+				
+				rsForProp = sqlRelated.importPropInfo(savedNum, playerNum);
+				
+				while(rsForProp.next()){
+					p = boardPanel.getMappings().get(rsForProp.getString(1)).getPropertyInfo();
+					p.setOwner(rsForProp.getInt(2));
+					p.setNumHouse(rsForProp.getInt(3));
+					p.setNumHotel(rsForProp.getInt(4));
+					p.setMultiplier(rsForProp.getInt(5));
+					p.setMortgagedTo(rsForProp.getBoolean(6));
+					p.setIsOwned();
+					players[playerNum].addProperty(p);
+				}
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		loadGame = true;
+		setNumPlayer(pInfo.getNumberOfPlayer());
+		mLabels.setNumPlayer(pInfo.getNumberOfPlayer());
+		mLabels.removeNonPlayers();
 	}
 	private void initButtonListeners()
 	{
@@ -367,6 +418,9 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Show End Game Screen");
+
+				//TODO clients do not know the totalPlayers int. It is set to 0 on clients
+				System.out.println("Total Num of Players: " + Integer.toString(totalPlayers));
 				if(!endGameScreen.isVisible()) {
 					endGameScreen.updateInformation(true, dicePanel.getCurrentPlayerNumber());
 					boardPanel.setVisible(false);
@@ -446,14 +500,16 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
-				updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
-				if (selectMortgage.getItemCount() == 0)
-				{
-					mortgagePrice.setText("");
+				if (showMortgage.isEnabled()){
+					Sounds.buttonConfirm.playSound();
+					updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
+					if (selectMortgage.getItemCount() == 0)
+					{
+						mortgagePrice.setText("");
+					}
+					mortgageUpdateTextField();
+					mortgageWindow.setVisible(true);
 				}
-				mortgageUpdateTextField();
-				mortgageWindow.setVisible(true);
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -670,7 +726,7 @@ public class GameScreen extends JFrame{
 		dicePanel = new DicePanel(players, mLabels, tradeP, this);
 		boardPanel = new BoardPanel(players,dicePanel);
 		dicePanel.setPlayerPiecesUp(mainPanel, boardPanel.getX() + boardPanel.getWidth()+20);
-		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize());
+		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize(), boardPanel);
 		endGameScreen.setLayout(null);
 		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
 		endGameScreen.setBackground(new Color(70, 220, 75));
@@ -697,10 +753,13 @@ public class GameScreen extends JFrame{
 		addMuteMusic();
 		addMuteSounds();
 		initButtonListeners();
+		initButtonLabels();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setUndecorated(true);
-		
-		
+		if(!pInfo.isSingle()){
+			chatScreen.setVisible(false);
+			mainPanel.add(chatScreen);
+		}
 //		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 //		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
 		
@@ -738,11 +797,11 @@ public class GameScreen extends JFrame{
 		exportButton.setContentAreaFilled(false);
 		exportButton.setBorder(null);
 	}
+	
 	public void switchToGame(){
 		getContentPane().removeAll();
 		getContentPane().add(mainPanel);
-		if(!pInfo.isSingle())
-			mainPanel.add(chatScreen);
+		chatScreen.setVisible(true);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
@@ -773,9 +832,12 @@ public class GameScreen extends JFrame{
 		JOptionPane.showMessageDialog(this, "The host of the waiting room has left.");
 		waitingArea.switchToMainGameArea();		
 	}
-	public void EnableHostButton(){
+	public void EnableHostButton(boolean isLoading){
 //		mainGameArea.switchToWaiting();
-		waitingArea.actionToHost();
+		waitingArea.actionToHost(isLoading);
+	}
+	public void ableHostButton(boolean yesOrNo){
+		waitingArea.ableStartBtn(yesOrNo);
 	}
 	public void updateWaitingArea(ArrayList<Object> userId){
 		waitingArea.updateUserInfos(userId);
@@ -791,7 +853,7 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/music_on.png");
 		imgOff = new ImageIcon("src/Images/music_off.png");
 		//muteMusic = new JCheckBox(imgOff); 	// DEBUG
-		muteMusic = new JCheckBox(imgOn); 	
+		muteMusic = new JCheckBox(Music.music1.getIsMuted() ? imgOff : imgOn); 	
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(40, 0, 40, 40);
 		//mainPanel.add(muteMusic);
@@ -847,7 +909,7 @@ public class GameScreen extends JFrame{
 		imgOn = new ImageIcon("src/Images/sound_on.png");
 		imgOff = new ImageIcon("src/Images/sound_off.png");
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
-		muteSounds = new JCheckBox(imgOn);	// DEBUG
+		muteSounds = new JCheckBox(Sounds.bomb.getIsMuted() ? imgOff : imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);
 		//mainPanel.add(muteSounds);
 		muteSounds.addMouseListener(new MouseListener(){
@@ -861,6 +923,7 @@ public class GameScreen extends JFrame{
 					}
 					else{
 						muteSounds.setIcon(imgOn);
+						Sounds.register.playSound();
 					}
 				}
 				else if (e.getButton() == 3){
@@ -927,7 +990,7 @@ public class GameScreen extends JFrame{
 		{
 			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
-				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
+				if (tempComboBox.getSelectedItem().equals(players[playerNum].getOwnedProperties().get(j).getName()))
 				{
 					if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 					{
@@ -936,7 +999,7 @@ public class GameScreen extends JFrame{
 					}
 					else
 					{
-						mortgagePrice.setText(" $" + Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
+						mortgagePrice.setText(" $" + Integer.toString(players[playerNum].getOwnedProperties().get(j).getMortgageValue()));
 					}
 				}
 			}
@@ -979,7 +1042,7 @@ public class GameScreen extends JFrame{
 		{
 			for (int j = 0; j < players[playerNum].getOwnedProperties().size(); j++)
 			{
-				if (tempComboBox.getSelectedItem().equals(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getName()))
+				if (tempComboBox.getSelectedItem().equals(players[playerNum].getOwnedProperties().get(j).getName()))
 				{
 					if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 					{
@@ -988,7 +1051,7 @@ public class GameScreen extends JFrame{
 					}
 					else
 					{
-						mortgagePrice.setText(" $" + Integer.toString(players[dicePanel.getCurrentPlayerNumber()].getOwnedProperties().get(j).getMortgageValue()));
+						mortgagePrice.setText(" $" + Integer.toString(players[playerNum].getOwnedProperties().get(j).getMortgageValue()));
 					}
 				}
 			}
@@ -1042,6 +1105,7 @@ public class GameScreen extends JFrame{
 		showMortgage.setContentAreaFilled(false);
 		showMortgage.setBorder(null);
 		showMortgage.setVisible(true);
+		//showMortgage.setEnabled(false); // DEBUG
 	}
 	public void addTestingButton()
 	{
@@ -1103,13 +1167,13 @@ public class GameScreen extends JFrame{
 			{
 				if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
 				{
-					System.out.print("Un-Mortgaging");
-					double temp = players[num].getOwnedProperties().get(h).getMortgageValue() * 1.1;	
+					double temp = players[num].getOwnedProperties().get(h).getMortgageValue() * 1.1;		
 					players[num].pay((int)temp);
 					players[num].getOwnedProperties().get(h).setMortgagedTo(false);
 				}
 				else
 				{
+					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
 					System.out.print("Mortgaging");
 					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
 					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
@@ -1123,12 +1187,19 @@ public class GameScreen extends JFrame{
 		updateMortgage(playerNum);
 		mortgageWindow.setVisible(false);
 	}
+	public void actionForLoadingInvalidUser(){
+		waitingArea.switchToMainGameArea();
+		JOptionPane.showMessageDialog(this,
+                "Cannot join a saved game that you have not participated in.",
+                "Error Joining Game",
+                JOptionPane.ERROR_MESSAGE);
+	}
 	public void actionForDiscconectingGame(int playerNo){
 		pInfo.setIsDisconnectedByOther();
 		JOptionPane.showMessageDialog(this,
-                "Player "+playerNo +" has left.\n Exiting Game....",
-                "Warning.",
-                JOptionPane.WARNING_MESSAGE);
+                players[playerNo].getUserId() + " has left.\nThe game has been saved online.\nClick to exit.",
+                "Disconnected from Game",
+                JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
 	}
 	public void saveGame(boolean autoSave) {
@@ -1187,14 +1258,31 @@ public class GameScreen extends JFrame{
 		}
 		
 	}
-	private void insertPlayerInformation(int savedNum) {
+	private void multiSaveGame(){
+		System.out.println("multiSave called");
+		int savedNum = pInfo.isLoadingGame() ? pInfo.getLoadingGameNum() : sqlRelated.saveGameBeginning(pInfo.getGamePart(), dicePanel.getCurrentPlayerNumber(), pInfo.getNumberOfPlayer());
+		
+		insertPlayerInformation(savedNum, pInfo.isLoadingGame());
+		
+	}
+	private void insertPlayerInformation(int savedNum, boolean isLoading) {
+		if(isLoading){
+			sqlRelated.updateGameSaved(savedNum, dicePanel.getCurrentPlayerNumber());
+			sqlRelated.deleteAllProp(savedNum);
+		}
 		for(int i=0;i<pInfo.getNumberOfPlayer(); i++){
-			sqlRelated.saveGameUser(savedNum,players[i].getUserId(), players[i].getIsAlive(), players[i].getPlayerNum(), players[i].isInJail(), players[i].getPositionNumber(), players[i].getTotalMonies(), players[i].getJailFreeCard(), players[i].getTradeRequest());
+			System.out.println("Player " + i + "called");
+			if(isLoading){
+				sqlRelated.updateGameUser(savedNum,players[i].getUserId(), players[i].getIsAlive(), players[i].isInJail(), players[i].getPositionNumber(), players[i].getTotalMonies(), players[i].getJailFreeCard(), players[i].getTradeRequest());
+			}else{
+				sqlRelated.saveGameUser(savedNum,players[i].getUserId(), players[i].getIsAlive(), players[i].getPlayerNum(), players[i].isInJail(), players[i].getPositionNumber(), players[i].getTotalMonies(), players[i].getJailFreeCard(), players[i].getTradeRequest());
+			}
 			insertPlayerProperties(savedNum,i);
 		}
 	}
 	private void insertPlayerProperties(int savedNum, int i) {
 		for (Property p : players[i].getOwnedProperties()){
+			System.out.println("Prop: "+ p.getName());
 			sqlRelated.saveProperty(savedNum,p.getName(), p.getMultiplier(), p.isMortgaged(), p.getNumHouse(), p.getNumHotel(), i);
 		}
 	}

@@ -1,5 +1,7 @@
 package ScreenPack;
 
+import java.awt.Color;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -25,6 +27,11 @@ public class LoadingScreen extends JFrame {
 		getContentPane().add(mainPanel);
 		loadingScreenPanel = new LoadingScreenPanel(WIDTH, HEIGHT);
 		mainPanel.add(loadingScreenPanel);
+		
+	}
+	
+	public void displaySQLLoadingMessage(boolean b){
+		loadingScreenPanel.displaySQLLoadingMessage(b);
 	}
 	
 }

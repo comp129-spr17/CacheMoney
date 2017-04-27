@@ -295,12 +295,12 @@ public final class SqlRelated {
 		}
 		return -1;
 	}
-	public int saveGameBeginning(int current_state, int current_turn){
+	public int saveGameBeginning(int current_state, int current_turn, int numPlayer){
 		try {
 			System.out.println(saving_statement);
 			statement = connection.createStatement();
-			statement.execute("INSERT INTO saved_game (current_state,current_turn) " +
-					"VALUES ("+current_state +","+current_turn+"); ");
+			statement.execute("INSERT INTO saved_game (current_state,current_turn, num_Player) " +
+					"VALUES ("+current_state +","+current_turn+","+numPlayer+"); ");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -320,7 +320,7 @@ public final class SqlRelated {
 			System.out.println(saving_statement);
 			statement = connection.createStatement();
 			statement.execute("INSERT INTO saved_game_user " +
-					"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"'); ");
+					"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"', "+(player_num == 0)+"); ");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -339,6 +339,39 @@ public final class SqlRelated {
 //				saving_statement += "INSERT INTO saved_game_property " +
 //				"VALUES ("+gameNum+",'"+propName+"', "+multiplier+", "+isMortgaged+", "+numHouse+", "+numHotel+", "+ownedBy+"); ";
 	}
+	public void updateGameSaved(int gameNum, int turn){
+		try {
+			statement = connection.createStatement();
+			statement.execute("UPDATE saved_game " 
+					+ "SET current_turn = "+turn+" "
+					+ "WHERE saved_num = "+gameNum+";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public void updateGameUser(int gameNum, String user_id, boolean isAlive, boolean inJail, int posNum ,int totMoney, int jailFree, String tradeRequest){
+		try {
+			statement = connection.createStatement();
+			statement.execute("UPDATE saved_game_user " 
+					+ "SET is_alive = "+isAlive+", in_jail="+inJail+", pos_num = "+posNum+", tot_money = "+totMoney+", jail_free = "+jailFree+", trade_request = '"+tradeRequest+"' "
+					+ "WHERE saved_num = "+gameNum+" AND user_id='"+user_id+"';");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		saving_statement += "INSERT INTO saved_game_user " +
+//				"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"'); ";
+	}
+	public void deleteAllProp(int gameNum){
+		try {
+			statement = connection.createStatement();
+			statement.execute("DELETE FROM saved_game_property " 
+					+ "WHERE saved_num = "+gameNum+";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+//		saving_statement += "INSERT INTO saved_game_user " +
+//				"VALUES ("+gameNum+",'"+user_id+"', "+isAlive+", "+player_num+", "+inJail+", "+posNum+", "+totMoney+", "+jailFree+", '"+tradeRequest+"'); ";
+	}
 	public void insertSavingGame(){
 		try {
 			System.out.println(saving_statement);
@@ -347,5 +380,73 @@ public final class SqlRelated {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	public int[] getLoadingBeginning(int savedNum){
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT current_turn,num_player "
+						+ "FROM saved_game "
+						+ "WHERE saved_num = "+ savedNum+";");
+			rSet.next();
+			return new int[] {rSet.getInt(1), rSet.getInt(2)};
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new int[]{0,0};
+	}
+	public ResultSet importUserInfo(int savedNum){
+		try {
+			statement = connection.createStatement();
+			return statement.executeQuery("SELECT player_num, user_id,is_alive, jail_free, pos_num, tot_money, in_jail, trade_request  "
+						+ "FROM saved_game_user "
+						+ "WHERE saved_num = "+ savedNum+";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ResultSet importPropInfo(int savedNum, int playerNo){
+		try {
+			statement = connection.createStatement();
+			return statement.executeQuery("SELECT property_name, owned_by, num_house, num_hotel, multiplier, is_mortgaged "
+						+ "FROM saved_game_property "
+						+ "WHERE saved_num="+ savedNum+" AND owned_by="+playerNo+";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<String> getLoadingUserList(int savedNum){
+		ArrayList<String> list = new ArrayList<>();
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT user_id "
+						+ "FROM saved_game_user "
+						+ "WHERE saved_num="+ savedNum+";");
+			while(rSet.next()){
+				list.add(rSet.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	public ArrayList<ArrayList<Integer>> getLoadingGameList(String userId){
+		ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+		list.add(new ArrayList<>());
+		list.add(new ArrayList<>());
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT u.saved_num, g.num_Player "
+						+ "FROM saved_game g, saved_game_user u "
+						+ "WHERE u.user_id='"+userId+"' AND u.is_host AND g.saved_num=u.saved_num;");
+			while(rSet.next()){
+				list.get(0).add(rSet.getInt(1));
+				list.get(1).add(rSet.getInt(2));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

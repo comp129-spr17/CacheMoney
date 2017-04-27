@@ -21,50 +21,77 @@ import javax.swing.JPanel;
 import GamePack.SizeRelated;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.SqlRelated;
 import MultiplayerPack.UnicodeForServer;
 
 public class MainGameArea extends JPanel{
-	private JComboBox<String> listOfOnlineUsers;
 	private HashMap<Long,JButton> rooms;
 	private JButton createNewRoom;
-	private JPanel controlPanel;
+	private JButton loadGame;
 	private GridLayout gLayout;
 	private Container container;
+	private int oldContainerRow;
+	private int oldContainerCol;
 	private JLabel jLabel;
 	private WaitingArea waitingArea;
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
+	private infoThatScrolls friendList;
 	private infoThatScrolls onlineUsers;
 	private ChatScreen chatScreen;
+	private JComboBox<Integer> loadingList;
+	private JPanel chatAndFriends;
+	private JPanel controlPanel;
+	private JPanel mainPanel;
+	private SqlRelated sqlRelated;
+	private ArrayList<ArrayList<Integer>> loadingListInt;
 	public MainGameArea(final Container container) {
 		this.container = container;
 		init();
 		addListener();
 	}
 	private void init(){
-		listOfOnlineUsers = new JComboBox<>();
-		onlineUsers = new infoThatScrolls(false);
-		onlineUsers.setScrollingPaneVisible(true);
+		createChatAndFriendsPanel();
+		createOnlineUserAndCreateRoomPanel();
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
+		sqlRelated = SqlRelated.getInstance();
 		rooms = new HashMap<>();
-		createNewRoom = new JButton("Create Room");
-		gLayout = new GridLayout(12, 4);
-		jLabel = new JLabel("Online users:");
-		controlPanel = new JPanel();
 		waitingArea = new WaitingArea(container, this);
-		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
-		setLayout(gLayout);
-		setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));
-
-		controlPanel.setLayout(new GridBagLayout());
-
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(1,1,30,1);
-			
-		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/2));	
-		setBackground(Color.black);
 		
+		gLayout = new GridLayout(12, 4);
+		setLayout(gLayout);
+		//setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));	
+		setBackground(Color.black);		
+	}
+	
+	private void createChatAndFriendsPanel(){
+		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
+		friendList = new infoThatScrolls(false);
+		friendList.setScrollingPaneVisible(true);
+		
+		chatAndFriends = new JPanel();
+		GridLayout gl = new GridLayout(2,1);
+		gl.setVgap(10);
+		chatAndFriends.setLayout(gl);
+		chatAndFriends.add(chatScreen);
+		chatAndFriends.add(friendList.getScrollingPanel());
+	}
+	
+	private void createOnlineUserAndCreateRoomPanel(){
+		controlPanel = new JPanel();
+		controlPanel.setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/3, SizeRelated.getInstance().getScreenH()));
+		controlPanel.setLayout(new GridBagLayout());
+		loadGame = new JButton("Load the game");
+		onlineUsers = new infoThatScrolls(false);
+		onlineUsers.setScrollingPaneVisible(true);
+		createNewRoom = new JButton("Create Room");
+		jLabel = new JLabel("Online users:");
+		loadingList = new JComboBox<>();
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5,1,30,5);
+			
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 4;
@@ -75,10 +102,34 @@ public class MainGameArea extends JPanel{
 		gbc.weightx = 1;
 		controlPanel.add(createNewRoom, gbc);
 		
-		gbc.insets = new Insets(1,1,0,1);
+		gbc.insets = new Insets(5,1,30,5);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 2;
+		gbc.gridwidth = 4;
+		gbc.gridheight = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weighty = 0.;
+		gbc.weightx = 1;
+		controlPanel.add(loadingList, gbc);
+		
+		gbc.insets = new Insets(5,1,30,5);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.gridwidth = 4;
+		gbc.gridheight = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weighty = 0.;
+		gbc.weightx = 1;
+		controlPanel.add(loadGame, gbc);
+		
+		gbc.insets = new Insets(1,1,0,5);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 4;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -87,17 +138,21 @@ public class MainGameArea extends JPanel{
 		gbc.weightx = 1;
 		controlPanel.add(jLabel, gbc);
 		
-		gbc.insets = new Insets(10,1,500,1);
+		gbc.insets = new Insets(10,1,500,5);
 		
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 7;
 		gbc.gridheight = 2;
 		gbc.gridwidth = 4;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.weighty = 0.1;
 		controlPanel.add(onlineUsers.getScrollingPanel(), gbc);
+		
+		
+		
 	}
+	
 	public WaitingArea getWaiting(){
 		return waitingArea;
 	}
@@ -109,18 +164,29 @@ public class MainGameArea extends JPanel{
 		container.revalidate();
 	}
 	public void setComponents(){
-		container.add(this,BorderLayout.WEST);
-		container.add(chatScreen,BorderLayout.CENTER);
-		container.add(controlPanel, BorderLayout.EAST);
+		mainPanel = new JPanel();
+		GridLayout gl = new GridLayout(1,3);
+		gl.setHgap(20);
+		mainPanel.setLayout(gl);
+		mainPanel.add(this,BorderLayout.WEST);
+		mainPanel.add(chatAndFriends,BorderLayout.CENTER);
+		mainPanel.add(controlPanel,BorderLayout.EAST);
+		
+		container.add(mainPanel);
+		getLoadingGames();
+		/*container.add(this,BorderLayout.WEST);
+		container.add(chatAndFriends,BorderLayout.CENTER);
+		container.add(controlPanel, BorderLayout.EAST);*/
 	}
-
+	private void getLoadingGames(){
+		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());
+		loadGame.setEnabled(loadingListInt.size()!=0);
+		loadingList.removeAllItems();
+		for(int gameNum : loadingListInt.get(0)){
+			loadingList.addItem(gameNum);
+		}
+	}
 	public void updatelist(ArrayList<Object> userList){
-		//		listOfOnlineUsers.removeAllItems();
-		//		System.out.println("Update user lists : . size:" + userList.get(0));
-		//		for(int i=1; i<userList.size(); i++){
-		//			System.out.println((String)userList.get(i));
-		//			listOfOnlineUsers.addItem((String)userList.get(i));
-		//		}
 		onlineUsers.clearList();
 		System.out.println("Update user lists : . size:" + userList.get(0));
 		for(int i=1; i<userList.size(); i++){
@@ -160,6 +226,32 @@ public class MainGameArea extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				switchToWaiting();
 				playingInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.CREATE_ROOM));
+
+			}
+		});
+		loadGame.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				switchToWaiting();
+				System.out.println("Sending load # " +(Integer)loadingList.getSelectedItem() + "numPpl:" + loadingListInt.get(1).get(loadingList.getSelectedIndex()));
+				playingInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[]{(Integer)loadingList.getSelectedItem(), loadingListInt.get(1).get(loadingList.getSelectedIndex())}));
 
 			}
 		});
