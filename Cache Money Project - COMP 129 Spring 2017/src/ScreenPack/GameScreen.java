@@ -110,6 +110,7 @@ public class GameScreen extends JFrame{
 	private String filenameToLoad;
 //	private BackgroundImage bgi;
 	private JLabel[] buttonLabels;
+	private boolean requestTimeOut;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
@@ -136,15 +137,36 @@ public class GameScreen extends JFrame{
 		if(pInfo.isSingle())
 			switchToGame();
 		else{
+			requestTimeOut = false;
+			(new TimeOut()).start();
 			while (!client.isReadyToUse() || !isServerReady){
-				System.out.print("");
+				if (requestTimeOut){
+					System.out.println("***** The request timed out... *****");
+					System.exit(1);
+				}
 			}
 			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
+			Sounds.waitingRoomJoin.playSound();
 		}
 		
 		setWindowVisible();
 		exitSetting(false);
 	}
+	
+	class TimeOut extends Thread{
+		int millisUntilTimeOut = 10000;
+		@Override
+		public void run(){
+			try {
+				sleep(millisUntilTimeOut);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			requestTimeOut = true;
+		}
+	}
+	
+	
 	public void setNumPlayer(int numPlayer){
 		if (loadGame){
 			for (int i = 0; i < 4; i++){
