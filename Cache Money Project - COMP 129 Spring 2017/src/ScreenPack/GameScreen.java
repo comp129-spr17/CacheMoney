@@ -782,13 +782,13 @@ public class GameScreen extends JFrame{
 		buttonLabels[0].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 145, 300, 30);
 		
 		buttonLabels[1].setText("<html><font color = '" + "white" + "'>Trade</font></html>");
-		buttonLabels[1].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 295, 300, 30);
+		buttonLabels[1].setBounds(boardPanel.getX() + boardPanel.getWidth() + 40, 295, 300, 30);
 		
 		buttonLabels[2].setText("<html><font color = '" + "white" + "'>Mortgage</font></html>");
-		buttonLabels[2].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 445, 300, 30);
+		buttonLabels[2].setBounds(boardPanel.getX() + boardPanel.getWidth() + 29, 445, 300, 30);
 		
 		buttonLabels[3].setText("<html><font color = '" + "white" + "'>Export Game</font></html>");
-		buttonLabels[3].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 595, 300, 30);
+		buttonLabels[3].setBounds(boardPanel.getX() + boardPanel.getWidth() + 18, 595, 300, 30);
 	}
 	private void addExportGameButton() {
 		exportButton = new JButton();

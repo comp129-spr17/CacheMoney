@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.Property;
 import GamePack.SizeRelated;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
@@ -55,7 +56,9 @@ public class MainGameArea extends JPanel{
 		createOnlineUserAndCreateRoomPanel();
 		playingInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
-		sqlRelated = SqlRelated.getInstance();
+		if (Property.isSQLEnabled){
+			sqlRelated = SqlRelated.getInstance();
+		}
 		rooms = new HashMap<>();
 		waitingArea = new WaitingArea(container, this);
 		
