@@ -38,6 +38,8 @@ import MultiplayerPack.PlayingInfo;
 		private JScrollPane typePane;
 		private JButton titleBar;
 		private LayoutManager gbl;
+		private boolean isChatAbled;
+		private String msg;
 		public ChatScreen(int msgType){
 			setting();
 			MSG_TYPE = msgType;
@@ -52,6 +54,7 @@ import MultiplayerPack.PlayingInfo;
 			setLayout(new GridBagLayout());
 			sizeRelated = SizeRelated.getInstance();
 			playingInfo = PlayingInfo.getInstance();
+			isChatAbled = true;
 			mPack = MBytePack.getInstance();
 			titleBar = new JButton("Chatting");
 			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT - 200,SCREEN_WIDTH, SCREEN_HEIGHT+200);
@@ -110,7 +113,8 @@ import MultiplayerPack.PlayingInfo;
 			btnSend.addMouseListener(new MouseListener() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					sendMsg();
+					if(isChatAbled)
+						sendMsg();
 				}
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
@@ -155,18 +159,28 @@ import MultiplayerPack.PlayingInfo;
 			msgTypeArea.addKeyListener(new KeyListener() {
 				@Override
 				public void keyPressed(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER)
-						sendMsg();
+					if(isChatAbled && e.getKeyCode() == KeyEvent.VK_ENTER){
+						msg = msgTypeArea.getText();
+						if(msg.length() > 0 && msg.charAt(0) != '\n'){
+							sendMsg();
+						}
+						msgTypeArea.setText("");
+						
+					}
 				}
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER)
+					if(isChatAbled && e.getKeyCode() == KeyEvent.VK_ENTER){
 						msgTypeArea.setText("");
+					}
 				}
 				@Override
 				public void keyTyped(KeyEvent e) {
-					if(e.getKeyCode() == KeyEvent.VK_ENTER)
-						msgTypeArea.setText("");
+//					if(isChatAbled && e.getKeyCode() == KeyEvent.VK_ENTER){
+//						sendMsg();
+//						msgTypeArea.setText("");
+//					}
+						
 				}
 			});
 		}
@@ -192,10 +206,9 @@ import MultiplayerPack.PlayingInfo;
 			isHide = !isHide;
 		}
 		private void sendMsg(){
-			if(!msgTypeArea.getText().equals("")){
-				playingInfo.sendMessageToServer(mPack.packStrStr(MSG_TYPE,playingInfo.getLoggedInId(), msgTypeArea.getText()));
-				msgTypeArea.setText("");
-			}
+			
+			playingInfo.sendMessageToServer(mPack.packStrStr(MSG_TYPE,playingInfo.getLoggedInId(), msg));
+		
 		}
 		public void receiveMsg(String id, String msg){
 			msgDisplayArea.append(id+":\n    " + msg+"\n");
@@ -204,6 +217,10 @@ import MultiplayerPack.PlayingInfo;
 		public void clearArea(){
 			msgDisplayArea.setText("");
 			msgTypeArea.setText("");
+		}
+		public void ableChatSys(boolean isAble){
+			isChatAbled = isAble;
+			btnSend.setEnabled(false);
 		}
 //		public void serverDisconnected() throws SocketException{
 //			Sounds.buttonCancel.playSound();

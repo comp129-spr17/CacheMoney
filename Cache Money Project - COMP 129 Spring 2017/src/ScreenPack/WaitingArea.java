@@ -106,6 +106,7 @@ public class WaitingArea extends JPanel{
 		add(controlPanel, BorderLayout.SOUTH);
 		container.add(chatScreen,BorderLayout.CENTER);
 		container.add(new JPanel(),BorderLayout.EAST);
+		chatScreen.ableChatSys(true);
 	}
 	private void initButtonStat(){
 		lblCount.setVisible(false);
@@ -115,6 +116,7 @@ public class WaitingArea extends JPanel{
 	public void actionForStarting(){
 		btnGoBack.setEnabled(false);
 		lblCount.setVisible(true);
+		chatScreen.ableChatSys(false);
 	}
 	public void actionToHost(boolean isLoading){
 		resetPlayerDisplay();
