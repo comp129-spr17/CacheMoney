@@ -652,10 +652,10 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (pInfo.isSingle()){
-					actionForMortgageProperty((String) selectMortgage.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
+					actionForMortgageProperty(firstTempComboBox.getSelectedItem().equals("Mortgage"),(String) selectMortgage.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
 				}
 				else{
-					pInfo.sendMessageToServer(mPack.packStringAndInt((UnicodeForServer.MORTGAGE_PROPERTY), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
+					pInfo.sendMessageToServer(mPack.packBoolStrAndInt((UnicodeForServer.MORTGAGE_PROPERTY), firstTempComboBox.getSelectedItem().equals("Mortgage"), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
 				}
 				
 			}
@@ -1284,7 +1284,7 @@ public class GameScreen extends JFrame{
 	public int getLoadingProgress() {
 		return loadingProgress;
 	}
-	public void actionForMortgageProperty(String propertyName, int playerNum){
+	public void actionForMortgageProperty(boolean isMortgaging, String propertyName, int playerNum){
 		if (propertyName == ""){
 			return;
 		}
@@ -1293,18 +1293,17 @@ public class GameScreen extends JFrame{
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
 			{
-				if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
+				if (isMortgaging)
+				{
+					System.out.print("Mortgaging");
+					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
+					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
+				}
+				else
 				{
 					double temp = players[num].getOwnedProperties().get(h).getMortgageValue() * 1.1;		
 					players[num].pay((int)temp);
 					players[num].getOwnedProperties().get(h).setMortgagedTo(false);
-				}
-				else
-				{
-					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
-					System.out.print("Mortgaging");
-					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
-					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
 				}
 				repaint();
 				mLabels.reinitializeMoneyLabels();

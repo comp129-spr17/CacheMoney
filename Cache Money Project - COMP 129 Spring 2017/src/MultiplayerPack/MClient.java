@@ -468,7 +468,7 @@ public class MClient {
 		}
 	}
 	private void doMortgageProperty(ArrayList<Object> result){
-		gameScreen.actionForMortgageProperty((String)result.get(1), (Integer)result.get(2));
+		gameScreen.actionForMortgageProperty((Boolean)result.get(1), (String)result.get(2), (Integer)result.get(3));
 	}
 	private void doUpdateRoomStat(ArrayList<Object> result){
 		(new ForUpdatingAllRooms(result)).start();
