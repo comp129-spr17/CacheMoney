@@ -111,6 +111,7 @@ public class GameScreen extends JFrame{
 //	private BackgroundImage bgi;
 	private JLabel[] buttonLabels;
 	private boolean requestTimeOut;
+	private boolean timeOutSQL;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
@@ -211,8 +212,9 @@ public class GameScreen extends JFrame{
 		chatScreen = new ChatScreen(UnicodeForServer.CHAT_GAME);
 		
 		if (Property.isSQLEnabled){
+			(new SQLTimeOut()).start();
 			sqlRelated = SqlRelated.getInstance();
-
+			timeOutSQL = false;
 		}
 		mPack = MBytePack.getInstance();
 		pInfo = PlayingInfo.getInstance();
@@ -228,6 +230,28 @@ public class GameScreen extends JFrame{
 		
 		
 		
+	}
+	
+	class SQLTimeOut extends Thread{
+		@Override
+		public void run(){
+			timeOutSQL = true;
+			for (int i = 0; i < 20; i++){
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (!timeOutSQL){
+					System.out.println("Time out cancelled!");
+					return;
+				}
+			}
+			if (timeOutSQL){
+				JOptionPane.showMessageDialog(null, "SQL has timed out...");
+				System.exit(1);
+			}
+		}
 	}
 	
 

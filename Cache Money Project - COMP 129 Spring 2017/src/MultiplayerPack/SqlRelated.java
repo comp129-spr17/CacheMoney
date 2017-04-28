@@ -28,7 +28,6 @@ public final class SqlRelated {
 	private static ArrayList<ResultSet> resultSets;
 	private static ResultSet rSet;
 	private static String saving_statement;
-	private boolean timeOut;
 	public static SqlRelated getInstance(){
 		return new SqlRelated();
 	}
@@ -37,38 +36,20 @@ public final class SqlRelated {
 		statement = null;
 		resultSets = new ArrayList<>();
 		try {
-			(new SQLTimeOut()).start();
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection("jdbc:mysql://"+IP_ADDRESS
 					+ ":" + PORT_NUM 
 					+ "/" + DATABASE 
 					+ "?useSSL=false", USER_ID , USER_PW);
 			
-			timeOut = false;
 			initResultSets();	
-			timeOut = false;
 		} catch (Exception e) {
 			System.out.println("***********************\nCONNECTION TO SQL FAILED.\nCheck to see if you are connected to the VPN or PacificNet, and then try again.\nDisable SQL in Property.java to load the game from text files.\n***********************");
 			System.exit(1);
 		}
 	}
 	
-	class SQLTimeOut extends Thread{
-		int timeOutMillis = 20000;
-		@Override
-		public void run(){
-			timeOut = true;
-			try {
-				sleep(timeOutMillis);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (timeOut){
-				JOptionPane.showMessageDialog(null, "SQL has timed out...");
-				System.exit(1);
-			}
-		}
-	}
+	
 	
 	
 	
