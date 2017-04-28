@@ -142,10 +142,10 @@ public class GameScreen extends JFrame{
 			(new TimeOut()).start();
 			while (!client.isReadyToUse() || !isServerReady){
 				System.out.println("");
-				if (requestTimeOut){
-					System.out.println("***** The request timed out... *****");
-					System.exit(1);
-				}
+//				if (requestTimeOut){
+//					System.out.println("***** The request timed out... *****");
+//					System.exit(1);
+//				}
 			}
 			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
 			Sounds.waitingRoomJoin.playSound();
@@ -156,7 +156,7 @@ public class GameScreen extends JFrame{
 	}
 	
 	class TimeOut extends Thread{
-		int millisUntilTimeOut = 10000;
+		int millisUntilTimeOut = 5;
 		@Override
 		public void run(){
 			try {
