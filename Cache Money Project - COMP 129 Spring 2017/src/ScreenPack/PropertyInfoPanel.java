@@ -698,7 +698,7 @@ public class PropertyInfoPanel extends JPanel{
 	public void purchaseProperty(String propertyName, int buyingPrice, int playerNum){
 		
 		Sounds.money.playSound();
-		currentPlayer.purchaseProperty(property);
+		currentPlayer.purchaseProperty(property, false, 0);
 		property.setOwner(playerNum);
 		property.setOwned(true);
 	}

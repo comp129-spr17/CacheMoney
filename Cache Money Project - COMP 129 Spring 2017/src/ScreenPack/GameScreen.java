@@ -180,7 +180,7 @@ public class GameScreen extends JFrame{
 		else{
 			boardPanel.PlacePiecesToBaord(numPlayer);
 		}
-		
+		pInfo.setNumberOfPlayer(numPlayer);
 		
 		//System.out.print(numPlayer);
 		totalPlayers = numPlayer;
