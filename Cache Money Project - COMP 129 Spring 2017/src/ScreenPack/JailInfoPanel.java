@@ -111,7 +111,7 @@ public class JailInfoPanel extends JPanel {
 					e.printStackTrace();
 				}
 			}
-			payButton.setEnabled(true);
+			payButton.setEnabled(pInfo.isSingle() || players[current].getPlayerNum() == pInfo.getMyPlayerNum());
 		}
 	}
 	
