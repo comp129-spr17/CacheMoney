@@ -86,7 +86,7 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.BUILD_HOUSE, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.GOT_OUT_OF_JAIL, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.GOT_OUT_OF_JAIL, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackBoolean(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.SEND_USER_ID, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringInt(result);
 		return cleanUpAndReturn();}});

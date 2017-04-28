@@ -10,6 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import GamePack.PathRelated;
 import GamePack.Player;
@@ -88,14 +89,32 @@ public class JailInfoPanel extends JPanel {
 		else{
 			disableButtons();
 		}
-		if (players[current].getJailFreeCard() >= 1)
-		{
-			getOutOfJailFreeCardUse.setEnabled(true);
-		}
+		getOutOfJailFreeCardUse.setEnabled(players[current].getJailFreeCard() >= 1 && (pInfo.isSingle() || isCurrent));
+
 		this.currentPlayer = currentPlayer;
 		this.add(bi);
+		
+		if (players[current].getTotalMonies() < 50){
+			payButton.setEnabled(false);
+			(new waitUntilUserHasEnoughMoneyToPayJailFine()).start();
+		}
+		
 	}
 
+	class waitUntilUserHasEnoughMoneyToPayJailFine extends Thread{
+		@Override
+		public void run(){
+			while (players[current].getTotalMonies() < 50 && players[current].isInJail()){
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			payButton.setEnabled(true);
+		}
+	}
+	
 	private void hidePreviousPanel()
 	{
 		panelToSwitchFrom.setVisible(false);
@@ -174,14 +193,13 @@ public class JailInfoPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//TODO
-				// Switch panels to dice screen and get result but don't move any piece, just check if they are doubles 
-				// Remain in Jail if not third turn in jail or else pay fine
 				if (getOutOfJailFreeCardUse.isEnabled()){
-					players[current].setInJail(false);
-					players[current].setJailFreeCard(players[current].getJailFreeCard() - 1);
-					actionForGetOutOfJail(true);
-					repaint();
+					if (pInfo.isSingle()){
+						actionForGetOutOfJail(true);
+					}
+					else{
+						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.GOT_OUT_OF_JAIL, true));
+					}
 				}
 			}
 		});
@@ -226,27 +244,27 @@ public class JailInfoPanel extends JPanel {
 	private void addRollButton()
 	{
 		getOutOfJailFreeCardUse.setText("Use Jail Free Card"); 
-		getOutOfJailFreeCardUse.setSize(100, 30);
+		getOutOfJailFreeCardUse.setSize(140, 30);
 		getOutOfJailFreeCardUse.setBackground(Color.GREEN); 
-		getOutOfJailFreeCardUse.setLocation(this.getWidth()/4-getOutOfJailFreeCardUse.getWidth()/2, this.getHeight()/10*9-getOutOfJailFreeCardUse.getHeight()/2);
+		getOutOfJailFreeCardUse.setLocation(this.getWidth()/2-getOutOfJailFreeCardUse.getWidth()/2, this.getHeight()/4*3-getOutOfJailFreeCardUse.getHeight()/2 + 50);
 		add(getOutOfJailFreeCardUse); 
 		getOutOfJailFreeCardUse.setVisible(true);
 	}
 
 	private void addPayButton()
 	{
-		payButton.setText("PAY FINE"); 
-		payButton.setSize(80, 80);
+		payButton.setText("<html>PAY FINE<br />$50</html>"); 
+		payButton.setHorizontalAlignment(SwingConstants.CENTER);
+		payButton.setSize(100, 60);
 		payButton.setLocation(this.getWidth()/2-payButton.getWidth()/2, this.getHeight()/4*3-payButton.getHeight()/2);
 		payButton.setBackground(Color.RED);
 		add(payButton);
 	}
 	public void disableButtons(){
-		if(hideButton!=null){
-			hideButton.setEnabled(false);
-			getOutOfJailFreeCardUse.setEnabled(false);
-			payButton.setEnabled(false);
-		}
+		hideButton.setEnabled(false);
+		getOutOfJailFreeCardUse.setEnabled(false);
+		payButton.setEnabled(false);
+		getOutOfJailFreeCardUse.setEnabled(false);
 
 	}
 	private void dismissJailInfoPanel() {
@@ -269,7 +287,10 @@ public class JailInfoPanel extends JPanel {
 	public void actionForGetOutOfJail(boolean isGetOutOfJailFree){
 		if (isGetOutOfJailFree)
 		{
+			players[current].setInJail(false);
+			players[current].setJailFreeCard(players[current].getJailFreeCard() - 1);
 			dicePanel.actionForPlayers();
+			Sounds.buildingHouse.playSound();
 		}
 		else{
 			currentPlayer.pay(50);
@@ -281,9 +302,9 @@ public class JailInfoPanel extends JPanel {
 		turnsInJail[current] = 0;
 	}
 	public void enableButtons(){
-		hideButton.setEnabled(true); 
-		getOutOfJailFreeCardUse.setEnabled(false); // TODO: DEBUG, ROLL DOESN'T WORK WITH MULTIPLAYER YET 
+		hideButton.setEnabled(true);  
 		payButton.setEnabled(true);
+		getOutOfJailFreeCardUse.setEnabled(true);
 	}
 	public void setOutputStream(OutputStream outputStream){
 		this.outputStream = outputStream;

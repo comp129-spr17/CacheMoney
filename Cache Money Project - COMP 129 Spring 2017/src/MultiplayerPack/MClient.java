@@ -349,7 +349,7 @@ public class MClient {
 		diceP.actionForReceiveInteger((Integer)result.get(1));
 	}
 	private void doGotOutOfJail(ArrayList<Object> result) {
-		diceP.actionForGotOutOfJail();
+		diceP.actionForGotOutOfJail((Boolean)result.get(1));
 	};
 	private void doReceiveIntArraySingle(ArrayList<Object> result){
 		int[] arr = new int[result.size()-2];
