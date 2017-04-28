@@ -141,6 +141,7 @@ public class GameScreen extends JFrame{
 			requestTimeOut = false;
 			(new TimeOut()).start();
 			while (!client.isReadyToUse() || !isServerReady){
+				System.out.println("");
 				if (requestTimeOut){
 					System.out.println("***** The request timed out... *****");
 					System.exit(1);
