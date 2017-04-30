@@ -69,7 +69,7 @@ public class EndGamePanel extends JPanel {
 			name.setFont(font);
 			name.setSize(name.getPreferredSize());
 			playerNames.add(name);
-			playerPieces.add(new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + i + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight())));
+			playerPieces.add(new JLabel(imageRelated.resizeImage(pathRelated.getPieceImgPath() + i + i + ".png", sizeRelated.getMoneyPieceWidth(), sizeRelated.getMoneyPieceHeight())));
 			int playerMoni = players[i].getTotalMonies();
 			JLabel money;
 			if(playerMoni <= 0) {

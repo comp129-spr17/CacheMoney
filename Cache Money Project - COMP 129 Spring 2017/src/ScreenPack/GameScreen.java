@@ -51,7 +51,7 @@ import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
 	
-	private final boolean DEBUG_BUTTONS_ENABLED = false; // Set this enabled to get TestingWindow and EndGameStats buttons
+	private final boolean DEBUG_BUTTONS_ENABLED = true; // Set this enabled to get TestingWindow and EndGameStats buttons
 	
 	
 	private static final String AUTO_SAVE_FILENAME = "recentSave.txt";
@@ -1470,6 +1470,9 @@ public class GameScreen extends JFrame{
 		bgImage.setVisible(true);
 		tradeButton.setEnabled(false);
 		showMortgage.setEnabled(false);
+		exportButton.setEnabled(false);
+		showInfo.setEnabled(false);
+		
 		(new playWinSounds()).start();
 		
 		
@@ -1482,6 +1485,11 @@ public class GameScreen extends JFrame{
 				Sounds.winGame.playSound();
 				Sounds.doublesCelebrateSound.playSound();
 				Sounds.waitingRoomJoin.playSound();
+				try {
+					sleep(600);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
