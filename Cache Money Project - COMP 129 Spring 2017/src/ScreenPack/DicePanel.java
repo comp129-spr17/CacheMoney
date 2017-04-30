@@ -34,7 +34,7 @@ import MultiplayerPack.UnicodeForServer;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 7; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private GameScreen gamescreen;
@@ -779,7 +779,8 @@ public class DicePanel extends JPanel{
 	// ToDo: need to track the missing player.
 	private void checkPlayerAvailabilty(){
 
-		while(!players[(++current)%4].isOn());
+		while(!players[(++current)%4].isOn() || !players[(current)%4].getIsAlive());
+		//while(!players[(++current)%4].isOn());
 		current = (current)%4;
 	}
 	public int[] getResult(){

@@ -40,6 +40,7 @@ public class PropertyInfoPanel extends JPanel{
 	private JButton payButton;
 	private JButton buyHouseButton;
 	private JButton returnButton;
+	private JButton bankruptcyButton;
 	private Property property;
 	private AuctionPanel AP;
 	private HashMap<String,PropertySpace> propertyInfo;
@@ -130,6 +131,7 @@ public class PropertyInfoPanel extends JPanel{
 		payButton = new JButton();
 		buyHouseButton = new JButton();
 		returnButton = new JButton();
+		bankruptcyButton = new JButton();
 	}
 	// ADD LOCATIONS/SIZE TO THEM
 	private void loadPropertyInfo(Property info, int utilitiesModifier)
@@ -290,10 +292,15 @@ public class PropertyInfoPanel extends JPanel{
 				addReturnButton();
 			}
 			else{
-				addPayButton();
-				addPayLabel();
 				checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent);
-				(new waitForPayEnabled()).start();
+				if (currentPlayer.enoughMonies(getCost())) {
+					addPayButton();
+					addPayLabel();
+
+					(new waitForPayEnabled()).start();
+				} else {
+					addBankruptcyButton();
+				}
 			}
 		}else{
 			addBuyButton();
@@ -360,7 +367,14 @@ public class PropertyInfoPanel extends JPanel{
 	}
 	
 
-	private void checkIfPlayerHasEnoughMoneyForRent(Player currentPlayer, boolean isCurrent) {
+	private boolean checkIfPlayerHasEnoughMoneyForRent(Player currentPlayer, boolean isCurrent) {
+		int cost = getCost();
+		boolean temp = currentPlayer.getTotalMonies() >= cost && (pInfo.isSingle() || isCurrent);
+		payButton.setEnabled(temp);
+		return temp;
+	}
+	
+	private int getCost() {
 		int cost;
 		if(property instanceof UtilityProperty)
 		{				
@@ -368,7 +382,7 @@ public class PropertyInfoPanel extends JPanel{
 		}else{
 			cost = property.getRent();
 		}
-		payButton.setEnabled(currentPlayer.getTotalMonies() >= cost && (pInfo.isSingle() || isCurrent));
+		return cost;
 	}
 
 	private boolean checkIfUserCanBuyHouses() {
@@ -600,6 +614,27 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseExited(MouseEvent e) {}
 			
 		});
+		bankruptcyButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				currentPlayer.setIsAlive(false);
+				dismissPropertyPanel();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+		});
 	}
 	
 	public void actionForBuildHouse() {
@@ -652,6 +687,19 @@ public class PropertyInfoPanel extends JPanel{
 		payButton.setBackground(Color.RED);
 		add(payButton);
 	}
+	
+	private void addBankruptcyButton()
+	{
+		bankruptcyButton.setSize(120, 60);
+		bankruptcyButton.setText("Bankrupt");
+		//bankruptcyButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "PayButton.png", payButton.getWidth(), payButton.getHeight()));
+		bankruptcyButton.setContentAreaFilled(false);
+		bankruptcyButton.setBorder(null);
+		bankruptcyButton.setLocation(this.getWidth()/2 - bankruptcyButton.getWidth()/2, this.getHeight()/4*3 - bankruptcyButton.getHeight()/3);
+		bankruptcyButton.setBackground(Color.RED);
+		add(bankruptcyButton);
+	}
+	
 	public void setButtonsEnabled(boolean visible){
 		hideButton.setEnabled(visible);
 		buyButton.setEnabled(visible);

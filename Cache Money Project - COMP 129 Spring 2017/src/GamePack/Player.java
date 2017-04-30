@@ -481,7 +481,7 @@ public final class Player {
 		return totalcost;
 	}
 	
-	private boolean enoughMonies(int cost)
+	public boolean enoughMonies(int cost)
 	{
 		if (totalmonies + mortgageTotalMonnies() >= cost)
 		{
