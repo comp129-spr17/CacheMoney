@@ -10,6 +10,7 @@ import java.util.TimerTask;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import GamePack.ImageRelated;
@@ -86,14 +87,14 @@ public class PropertyInfoPanel extends JPanel{
 		minigameInfo = new JLabel();
 		
 		
-		buttonLabels = new JLabel[3];
+		buttonLabels = new JLabel[4];
 		initButtonLabels();
 		
 		bi = new BackgroundImage(PathRelated.getInstance().getImagePath() + "propertyBackground.png", this.getWidth(), this.getHeight());
 	}
 
 	private void initButtonLabels() {
-		for (int i = 0; i < 3; i++){
+		for (int i = 0; i < 4; i++){
 			buttonLabels[i] = new JLabel();
 			buttonLabels[i].setSize(300, 30);
 		}
@@ -104,7 +105,10 @@ public class PropertyInfoPanel extends JPanel{
 		buttonLabels[1].setLocation(this.getWidth()/4*3-auctionButton.getWidth()/2 - 24, this.getHeight()/10*8-auctionButton.getHeight()/2 + 24);
 		
 		buttonLabels[2].setText("<html><b>Pay<b></html>");
-		buttonLabels[2].setLocation(this.getWidth()/2 - 10, this.getHeight()/4*3 + 34);
+		buttonLabels[2].setLocation(this.getWidth()/2 - 10, this.getHeight()/8*5 + 34);
+		
+		buttonLabels[3].setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
+		buttonLabels[3].setLocation(this.getWidth()/2 - 60, this.getHeight()/8*7 + 20);
 		
 	}
 	
@@ -115,6 +119,10 @@ public class PropertyInfoPanel extends JPanel{
 	
 	private void addPayLabel(){
 		this.add(buttonLabels[2]);
+	}
+	
+	private void addBankruptcyLabel(){
+		this.add(buttonLabels[3]);
 	}
 
 	private void configureInfoPanel() {
@@ -292,14 +300,15 @@ public class PropertyInfoPanel extends JPanel{
 				addReturnButton();
 			}
 			else{
-				checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent);
-				if (currentPlayer.enoughMonies(getCost())) {
-					addPayButton();
-					addPayLabel();
-
+				
+				addPayButton();
+				addPayLabel();
+				if (!checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent)) {
 					(new waitForPayEnabled()).start();
-				} else {
-					addBankruptcyButton();
+					if (isCurrent){
+						addBankruptcyButton();
+						addBankruptcyLabel();
+					}
 				}
 			}
 		}else{
@@ -618,8 +627,19 @@ public class PropertyInfoPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				currentPlayer.setIsAlive(false);
-				dismissPropertyPanel();
+				Sounds.buttonPress.playSound();
+				int i = JOptionPane.showConfirmDialog(null, "<html>Are you sure you want to declare bankruptcy?<br /><b><font color = '" + "red" + "'>You will lose the game!</font></b></html>", "Bankruptcy Confirm", JOptionPane.YES_NO_OPTION);
+				if (i == JOptionPane.YES_OPTION){
+					if (pInfo.isSingle()){
+						actionForBankrupt();
+					}
+					else{
+						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.DECLARED_BANKRUPT));
+					}
+				}
+				else{
+					Sounds.buttonCancel.playSound();
+				}
 			}
 
 			@Override
@@ -637,6 +657,15 @@ public class PropertyInfoPanel extends JPanel{
 		});
 	}
 	
+	protected void actionForBankrupt() {
+		currentPlayer.setTotalMonies(-1);
+		Sounds.buttonConfirm.playSound();
+		Sounds.landedOnJail.playSound();
+		currentPlayer.setIsAlive(false);
+		dismissPropertyPanel();
+		dicePanel.playerDeclaredBankrupt();
+	}
+
 	public void actionForBuildHouse() {
 		Sounds.money.playSound();
 		Sounds.buildingHouse.playSound();
@@ -683,19 +712,18 @@ public class PropertyInfoPanel extends JPanel{
 		payButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "PayButton.png", payButton.getWidth(), payButton.getHeight()));
 		payButton.setContentAreaFilled(false);
 		payButton.setBorder(null);
-		payButton.setLocation(this.getWidth()/2 - payButton.getWidth()/2, this.getHeight()/4*3 - payButton.getHeight()/3);
+		payButton.setLocation(this.getWidth()/2 - payButton.getWidth()/2, this.getHeight()/8*5 - payButton.getHeight()/3);
 		payButton.setBackground(Color.RED);
 		add(payButton);
 	}
 	
 	private void addBankruptcyButton()
 	{
-		bankruptcyButton.setSize(120, 60);
-		bankruptcyButton.setText("Bankrupt");
-		//bankruptcyButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "PayButton.png", payButton.getWidth(), payButton.getHeight()));
+		bankruptcyButton.setSize(60, 40);
+		bankruptcyButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "BankruptcyButton.png", bankruptcyButton.getWidth(), bankruptcyButton.getHeight()));
 		bankruptcyButton.setContentAreaFilled(false);
 		bankruptcyButton.setBorder(null);
-		bankruptcyButton.setLocation(this.getWidth()/2 - bankruptcyButton.getWidth()/2, this.getHeight()/4*3 - bankruptcyButton.getHeight()/3);
+		bankruptcyButton.setLocation(this.getWidth()/2 - bankruptcyButton.getWidth()/2, this.getHeight()/8*7 - bankruptcyButton.getHeight()/3);
 		bankruptcyButton.setBackground(Color.RED);
 		add(bankruptcyButton);
 	}

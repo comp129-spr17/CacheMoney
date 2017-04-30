@@ -46,7 +46,7 @@ public class EndGamePanel extends JPanel {
 		playerPieces = new ArrayList<JLabel>();
 		playerMoney = new ArrayList<JLabel>();
 		
-		getPlayerNamesAndPieces();
+		
 	}
 
 
@@ -133,7 +133,7 @@ public class EndGamePanel extends JPanel {
 		int width = 150;
 		backButton.setSize(backButton.getPreferredSize());
 		backButton.setLocation(this.getWidth()/5 * 4,this.getHeight()-backButton.getHeight()-15);
-		add(backButton);
+		//add(backButton);
 		initButtonListeners(this);
 	}
 
@@ -176,7 +176,9 @@ public class EndGamePanel extends JPanel {
 	}
 
 
-	public void updateInformation(boolean winStatus, int currentPlayerNum) {
+	public void updateInformation(boolean winStatus, int currentPlayerNum, int numPlayers) {
+		this.totalNumPlayers = numPlayers;
+		getPlayerNamesAndPieces();
 		// TODO Auto-generated method stub
 		this.playerWon = winStatus;
 		this.currentPlayerNum = currentPlayerNum;

@@ -34,8 +34,8 @@ import MultiplayerPack.UnicodeForServer;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
-	private final int DEBUG_MOVEMENT_VALUE = 7; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private GameScreen gamescreen;
 	
@@ -343,14 +343,7 @@ public class DicePanel extends JPanel{
 					endTurnButtonPressed();
 				}
 			}
-			private void endTurnButtonPressed() {
-				endTurnButton.setVisible(false);
-				if(pInfo.isSingle())
-					actionForDiceEnd();
-				else
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_TURN));
-				
-			}
+			
 			@Override
 			public void mousePressed(MouseEvent e) {}
 			@Override
@@ -360,6 +353,15 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseExited(MouseEvent e) {}
 		});
+	}
+	
+	private void endTurnButtonPressed() {
+		endTurnButton.setVisible(false);
+		if(pInfo.isSingle())
+			actionForDiceEnd();
+		else
+			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_TURN));
+		
 	}
 	
 	class alwaysUpdateMoneyLabels extends Thread{
@@ -826,6 +828,20 @@ public class DicePanel extends JPanel{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	public void playerDeclaredBankrupt() {
+		pInfo.setGamePart(Part.END_TURN);
+		numOfDoublesInRow = 0;
+		if (gamescreen.canShowEndGameScreen()){
+			checkPlayerAvailabilty();
+			gamescreen.showEndGameScreen();
+		}
+		else{
+			endTurnButtonPressed();
+		}
+	}
+	public void actionForBankrupt() {
+		propertyPanel.actionForBankrupt(); 
 	}
 
 }

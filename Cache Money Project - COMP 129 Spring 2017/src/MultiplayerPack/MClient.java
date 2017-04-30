@@ -118,6 +118,7 @@ public class MClient {
 		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
 		variableCodeString.add(new String("LOADING_GAME_INVALID_USER"));
 		variableCodeString.add(new String("ABLE_START_BTN"));
+		variableCodeString.add(new String("DECLARE BANKRUPT"));
 	}
 	
 	
@@ -189,6 +190,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.LOADING_GAME_INVALID_USER, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingInvalidMsg();}});
 		doActions.put(UnicodeForServer.LOADING_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingGame(result);}});
 		doActions.put(UnicodeForServer.ABLE_START_BTN, new DoAction(){public void doAction(ArrayList<Object> result){doAbleStartBtn(result);}});
+		doActions.put(UnicodeForServer.DECLARED_BANKRUPT, new DoAction(){public void doAction(ArrayList<Object> result){doDeclaredBankrupt(result);}});
 		
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
@@ -207,6 +209,7 @@ public class MClient {
 
 
 
+	
 	
 	
 	private void connectToServer(boolean isHostClient)
@@ -333,6 +336,10 @@ public class MClient {
 		System.out.println("Got Reaction");
 		diceP.actionForReactionEnd(isOwner, (Double)result.get(1));
 	}
+	protected void doDeclaredBankrupt(ArrayList<Object> result) {
+		diceP.actionForBankrupt();
+	}
+	
 	private void doReceiveIntArray(ArrayList<Object> result){
 		int[] arr = new int[result.size() - 2];
 		int keyNum = (Integer)result.get(1);

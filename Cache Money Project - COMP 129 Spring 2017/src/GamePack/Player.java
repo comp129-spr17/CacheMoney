@@ -483,14 +483,7 @@ public final class Player {
 	
 	public boolean enoughMonies(int cost)
 	{
-		if (totalmonies + mortgageTotalMonnies() >= cost)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return totalmonies + mortgageTotalMonnies() >= cost;
 	}
 	
 	public void setUserId(String user_id){

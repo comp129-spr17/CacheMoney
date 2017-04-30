@@ -51,7 +51,7 @@ import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
 	
-	private final boolean DEBUG_BUTTONS_ENABLED = true; // Set this enabled to get TestingWindow and EndGameStats buttons
+	private final boolean DEBUG_BUTTONS_ENABLED = false; // Set this enabled to get TestingWindow and EndGameStats buttons
 	
 	
 	private static final String AUTO_SAVE_FILENAME = "recentSave.txt";
@@ -531,21 +531,7 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
-				System.out.println("Show End Game Screen");
-				
-				//TODO clients do not know the totalPlayers int. It is set to 0 on clients
-				System.out.println("Total Num of Players: " + Integer.toString(totalPlayers));
-				if(!endGameScreen.isVisible()) {
-					endGameScreen.updateInformation(true, dicePanel.getCurrentPlayerNumber());
-					boardPanel.setVisible(false);
-					bgImage.setVisible(false);
-					endGameScreen.setVisible(true);
-					bgImage.setVisible(true);
-				} else {
-					endGameScreen.setVisible(false);
-					boardPanel.setVisible(true);
-				}
+				showEndGameScreen();
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
@@ -1458,6 +1444,46 @@ public class GameScreen extends JFrame{
 	
 	public void setExportButtonEnabled(boolean b){
 		exportButton.setEnabled(b);
+	}
+	
+	public boolean canShowEndGameScreen(){
+		int numPlayersAlive = 0;
+		for (Player p : players){
+			if (p.getIsAlive() && p.isOn()){
+				numPlayersAlive += 1;
+			}
+		}
+		return numPlayersAlive <= 1;
+	}
+	
+	public void showEndGameScreen() {
+		
+		pInfoDisplay.setVisible(false);
+		System.out.println("Show End Game Screen");
+		
+		//TODO clients do not know the totalPlayers int. It is set to 0 on clients
+		System.out.println("Total Num of Players: " + Integer.toString(totalPlayers));
+		endGameScreen.updateInformation(true, dicePanel.getCurrentPlayerNumber(), pInfo.getNumberOfPlayer());
+		boardPanel.setVisible(false);
+		bgImage.setVisible(false);
+		endGameScreen.setVisible(true);
+		bgImage.setVisible(true);
+		tradeButton.setEnabled(false);
+		showMortgage.setEnabled(false);
+		(new playWinSounds()).start();
+		
+		
+	}
+	
+	class playWinSounds extends Thread{
+		@Override
+		public void run(){
+			while (true){
+				Sounds.winGame.playSound();
+				Sounds.doublesCelebrateSound.playSound();
+				Sounds.waitingRoomJoin.playSound();
+			}
+		}
 	}
 	
 }
