@@ -72,7 +72,7 @@ import MultiplayerPack.PlayingInfo;
 			btnSend.setBounds(SCREEN_WIDTH-BTN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, BTN_WIDTH,MSGTYPEAREA_HEIGHT);
 			
 			GridBagConstraints gbc = new GridBagConstraints();
-			Insets i = new Insets(5,0,5,0);
+			Insets i = new Insets(5,5,5,5);
 			
 			gbc.fill = GridBagConstraints.BOTH;
 			gbc.insets = i;

@@ -171,20 +171,20 @@ public class FriendPanel extends JPanel{
 		isFriends = SqlRelated.isFriend(myUsername, friendUsername);
 
 		if(isFriends){
-			temp.setText("Remove Friend");
+			temp.setText("Unfriend");
 			temp.setBackground(Color.RED);
 		}else{
-			temp.setText("Add Friend");
+			temp.setText("Befriend");
 			temp.setBackground(Color.GREEN);
 		}
 	}
 	class CheckFriend extends Thread{
 		public void run(){
-			System.out.println("start Checkign");
+			System.out.println("Start Checking");
 			while(isOn){
-				checkFriendship(button.get(2));
+				checkFriendship(button.get(ADD_REMOVE));
 			}
-			System.out.println("end Checkign");
+			System.out.println("End Checking");
 		}
 	}
 	private void addFriend(){
@@ -224,7 +224,6 @@ public class FriendPanel extends JPanel{
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FriendPanel fp = new FriendPanel("Jack Lonergan");
 		f.add(fp);
-		//		f.pack();
 		f.repaint();
 		f.revalidate();
 	}
