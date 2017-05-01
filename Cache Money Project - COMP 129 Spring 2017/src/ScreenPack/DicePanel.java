@@ -687,6 +687,18 @@ public class DicePanel extends JPanel{
 		}
 	}
 	
+	public void cardChargedPlayer(int amount){
+		if (players[current].getTotalMonies() < amount){
+			bankruptcyPanel.executeSwitch(this, amount, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
+			(new waitForPersonToPay(amount)).start();
+		}
+		else{
+			players[current].pay(amount);
+			Sounds.money.playSound();
+		}
+	}
+	
+	
 	private void waitForDiceMoving(){
 		while(!board.isDoneAnimating() || isCelebrating){
 			delayThread(1);

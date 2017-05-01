@@ -150,7 +150,7 @@ public class WildSpace extends Space {
 			else if(command == "Pay$15"){
 				System.out.println("Pay a poor tax of $15");
 				chanceStack.displayImage(11);
-				piece.getPlayerClass().pay(15);
+				dp.cardChargedPlayer(15);
 				
 			}
 			else if(command == "Move5"){
@@ -212,7 +212,7 @@ public class WildSpace extends Space {
 			else if(command == "Pay$50"){
 				System.out.println("Pay $50");
 				communityStack.displayImage(2);
-				piece.getPlayerClass().pay(50);
+				dp.cardChargedPlayer(50);
 			}
 			else if(command == "Get$50"){
 				System.out.println("Get $50");
@@ -263,12 +263,13 @@ public class WildSpace extends Space {
 			else if(command == "Pay$100"){
 				System.out.println("Pay $100");
 				communityStack.displayImage(11);
-				piece.getPlayerClass().pay(100);
+				dp.cardChargedPlayer(100);
 			}
 			else if(command == "Pay$150"){
 				System.out.println("Pay $150");
 				communityStack.displayImage(12);
-				piece.getPlayerClass().pay(150);
+				dp.cardChargedPlayer(150);
+				
 			}
 			else if(command == "Get$25"){
 				System.out.println("Get $25");
