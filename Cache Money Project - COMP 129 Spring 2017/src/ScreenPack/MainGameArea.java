@@ -82,12 +82,16 @@ public class MainGameArea extends JPanel{
 		friendList.setScrollingPaneVisible(true);
 		
 		chatAndFriends = new JPanel();
-		GridLayout gl = new GridLayout(3,1);
+		GridLayout gl = new GridLayout(2,1);
 		gl.setVgap(10);
 		chatAndFriends.setLayout(gl);
 		chatAndFriends.add(chatScreen);
 
+		JPanel temp = new JPanel();
+		temp.setLayout(new GridBagLayout());
 		lblFriend = new JLabel("Friend list:");
+		
+		
 		chatAndFriends.add(lblFriend);
 		chatAndFriends.add(friendList.getScrollingPanel());
 	}

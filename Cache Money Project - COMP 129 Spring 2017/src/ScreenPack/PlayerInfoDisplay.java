@@ -25,6 +25,7 @@ public final class PlayerInfoDisplay extends JPanel{
 	private Font font;
 	private String firstId;
 	private String secondId;
+	
 	private PlayerInfoDisplay(){
 		init();
 	}
