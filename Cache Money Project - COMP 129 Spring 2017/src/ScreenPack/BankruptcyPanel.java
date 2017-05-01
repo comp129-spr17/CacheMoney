@@ -123,19 +123,22 @@ public class BankruptcyPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonPress.playSound();
-				int i = JOptionPane.showConfirmDialog(null, "<html>Are you sure you want to declare bankruptcy?<br /><b><font color = '" + "red" + "'>You will lose the game!</font></b></html>", "Bankruptcy Confirm", JOptionPane.YES_NO_OPTION);
-				if (i == JOptionPane.YES_OPTION){
-					if (pInfo.isSingle()){
-						actionForBankrupt();
+				if(bankruptcyButton.isEnabled()){
+					Sounds.buttonPress.playSound();
+					int i = JOptionPane.showConfirmDialog(null, "<html>Are you sure you want to declare bankruptcy?<br /><b><font color = '" + "red" + "'>You will lose the game!</font></b></html>", "Bankruptcy Confirm", JOptionPane.YES_NO_OPTION);
+					if (i == JOptionPane.YES_OPTION){
+						if (pInfo.isSingle()){
+							actionForBankrupt();
+						}
+						else{
+							pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.DECLARED_BANKRUPT));
+						}
 					}
 					else{
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.DECLARED_BANKRUPT));
+						Sounds.buttonCancel.playSound();
 					}
 				}
-				else{
-					Sounds.buttonCancel.playSound();
-				}
+				
 			}
 
 			@Override
