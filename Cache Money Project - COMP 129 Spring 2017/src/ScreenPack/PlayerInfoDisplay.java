@@ -41,7 +41,7 @@ public final class PlayerInfoDisplay extends JPanel{
 	
 	private void initLabels(){
 		labels = new ArrayList<>();
-		
+		labels.add(new JLabel(""));
 		labels.add(new JLabel("Name:"));
 		labels.add(new JLabel("Win:"));
 		labels.add(new JLabel(""));
@@ -49,9 +49,8 @@ public final class PlayerInfoDisplay extends JPanel{
 		labels.add(new JLabel(""));
 		
 		for(int i = 0; i < labels.size(); i++){
-			if(i == 1){
+			if(i == 2){
 				add(friend);
-				continue;
 			}
 			
 			add(labels.get(i));
@@ -67,6 +66,7 @@ public final class PlayerInfoDisplay extends JPanel{
 	}
 	
 	public void setPlayerInfo(String user_id, String user_name, int user_win, int user_lose){
+		labels.get(0).setText(user_id);
 		labels.get(2).setText(user_win+"");
 		labels.get(4).setText(user_lose+"");
 		this.repaint();
