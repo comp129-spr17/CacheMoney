@@ -157,8 +157,7 @@ public class BankruptcyPanel extends JPanel{
 		currentPlayer.cleanupProperties();
 		dismissBackruptPanel();
 		currentPlayer.setIsAlive(false);
-		dicePanel.playerDeclaredBankrupt();
-		
+		dicePanel.playerDeclaredBankrupt(currentPlayer);
 	}
 	private void dismissBackruptPanel() {
 		

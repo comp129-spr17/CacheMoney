@@ -667,7 +667,7 @@ public class PropertyInfoPanel extends JPanel{
 		Sounds.landedOnJail.playSound();
 		currentPlayer.setIsAlive(false);
 		dismissPropertyPanel();
-		dicePanel.playerDeclaredBankrupt();
+//		dicePanel.playerDeclaredBankrupt();
 	}
 
 	public void actionForBuildHouse() {

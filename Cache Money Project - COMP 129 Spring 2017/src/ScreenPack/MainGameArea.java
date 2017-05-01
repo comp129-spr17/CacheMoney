@@ -2,6 +2,7 @@ package ScreenPack;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -71,13 +73,9 @@ public class MainGameArea extends JPanel{
 		waitingArea = new WaitingArea(container, this);
 		
 		gLayout = new GridLayout(12, 4);
-		setLayout(gLayout);
-		//setPreferredSize(new Dimension(SizeRelated.getInstance().getScreenW()/4, SizeRelated.getInstance().getScreenH()/10));	
+		setLayout(gLayout);	
 		setBackground(Color.black);		
 	}
-	
-	
-	
 	
 	private void createChatAndFriendsPanel(){
 		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
@@ -91,12 +89,13 @@ public class MainGameArea extends JPanel{
 		chatAndFriends.add(chatScreen);
 
 		JPanel temp = new JPanel();
-		temp.setLayout(new GridBagLayout());
-		lblFriend = new JLabel("Friend list:");
+		temp.setLayout(new BoxLayout(temp,BoxLayout.Y_AXIS));
 		
-		
-		chatAndFriends.add(lblFriend);
-		chatAndFriends.add(friendList.getScrollingPanel());
+		lblFriend = new JLabel("Friend List");
+		lblFriend.setAlignmentX(Component.CENTER_ALIGNMENT);
+		temp.add(lblFriend);
+		temp.add(friendList.getScrollingPanel());
+		chatAndFriends.add(temp);
 	}
 	
 	private void createOnlineUserAndCreateRoomPanel(){
@@ -113,7 +112,7 @@ public class MainGameArea extends JPanel{
 		loadingList = new JComboBox<>();
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5,1,30,5);
+		gbc.insets = new Insets(5,1,15,5);
 			
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -125,11 +124,7 @@ public class MainGameArea extends JPanel{
 		gbc.weightx = 1;
 		controlPanel.add(createNewRoom, gbc);
 		
-		
-		
-		
-		
-		gbc.insets = new Insets(5,1,30,5);
+		gbc.insets = new Insets(5,1,15,5);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -141,7 +136,7 @@ public class MainGameArea extends JPanel{
 		gbc.weightx = 1;
 		controlPanel.add(loadingList, gbc);
 		
-		gbc.insets = new Insets(5,1,30,5);
+		gbc.insets = new Insets(5,1,15,5);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 4;
@@ -165,7 +160,7 @@ public class MainGameArea extends JPanel{
 		gbc.weightx = 1;
 		controlPanel.add(jLabel, gbc);
 		
-		gbc.insets = new Insets(10,1,500,5);
+		gbc.insets = new Insets(10,1,250,5);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 7;
@@ -173,7 +168,7 @@ public class MainGameArea extends JPanel{
 		gbc.gridwidth = 4;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
-		gbc.weighty = 0.1;
+		gbc.weighty = 2;
 		controlPanel.add(onlineUsers.getScrollingPanel(), gbc);
 		
 		
