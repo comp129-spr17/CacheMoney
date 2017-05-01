@@ -24,7 +24,6 @@ import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class BankruptcyPanel extends JPanel{
-	private JPanel panelToSwitchFrom;
 	private JLabel lblTitle;
 	private JLabel lblBankrupt;
 	private JButton bankruptcyButton;
@@ -155,10 +154,11 @@ public class BankruptcyPanel extends JPanel{
 		currentPlayer.setTotalMonies(-1);
 		Sounds.buttonConfirm.playSound();
 		Sounds.landedOnJail.playSound();
-		currentPlayer.setIsAlive(false);
 		currentPlayer.cleanupProperties();
 		dismissBackruptPanel();
+		currentPlayer.setIsAlive(false);
 		dicePanel.playerDeclaredBankrupt();
+		
 	}
 	private void dismissBackruptPanel() {
 		

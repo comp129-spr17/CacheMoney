@@ -254,7 +254,7 @@ public class PropertyInfoPanel extends JPanel{
 		bPanel.add(mPanel);
 		loadPropertyInfo(property, utilityLightsOn);
 		infoPanel.removeAll();
-		setButtonsEnabled(isCurrent); 
+		setButtonsEnabled(isCurrent || pInfo.isSingle()); 
 		renderPropertyInfo(currentPlayer, isCurrent);
 		if(!isBankrupt)
 			hidePreviousPanel();
@@ -307,8 +307,7 @@ public class PropertyInfoPanel extends JPanel{
 				addPayButton();
 				addPayLabel();
 				if (!checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent)) {
-					(new waitForPayEnabled()).start();
-
+					(new waitForPlayerDeath()).start();
 					if (isCurrent || pInfo.isSingle()){
 						isBankrupt = true;
 						bankruptcyPanel.executeSwitch(this, getCost(), currentPlayer, isCurrent);
@@ -342,21 +341,21 @@ public class PropertyInfoPanel extends JPanel{
 		addBackground();
 	}
 	
-	class waitForPayEnabled extends Thread{
+	class waitForPlayerDeath extends Thread{
 		@Override
 		public void run(){
 			if (pInfo.isSingle() || currentPlayer.getPlayerNum() == pInfo.getMyPlayerNum()){
-				while (
-						(property instanceof UtilityProperty) && property.getUtilityRentPrice() > currentPlayer.getTotalMonies() ||
-						!(property instanceof UtilityProperty) && property.getRent() > currentPlayer.getTotalMonies()
-						){
+				while (currentPlayer.getIsAlive()){
 					try {
 						sleep(1);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-				payButton.setEnabled(true);
+				if (!currentPlayer.getIsAlive()){
+					isBankrupt = false;
+					dismissPropertyPanel();
+				}
 			}
 		}
 	}
@@ -384,7 +383,7 @@ public class PropertyInfoPanel extends JPanel{
 	private boolean checkIfPlayerHasEnoughMoneyForRent(Player currentPlayer, boolean isCurrent) {
 		int cost = getCost();
 		boolean temp = currentPlayer.getTotalMonies() >= cost && (pInfo.isSingle() || isCurrent);
-		payButton.setEnabled(temp);
+		payButton.setEnabled(true);
 		return temp;
 	}
 	
@@ -785,6 +784,7 @@ public class PropertyInfoPanel extends JPanel{
 	}
 	public void payForRent(int amount, int owner){
 		Sounds.money.playSound();
+		isBankrupt = false;
 		currentPlayer.pay(amount);
 		players[owner].earnMonies(amount);
 	}

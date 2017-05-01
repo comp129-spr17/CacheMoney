@@ -97,17 +97,37 @@ public class JailInfoPanel extends JPanel {
 		
 		if (players[current].getTotalMonies() < 50){
 			payButton.setEnabled(false);
-			if(players[current].getJailFreeCard() == 0)
+			if(players[current].getJailFreeCard() == 0){
 				bankruptcyPanel.executeSwitch(this, 50, currentPlayer, isCurrent);
+			}
 			(new waitUntilUserHasEnoughMoneyToPayJailFine()).start();
+			(new waitForPlayerDeath()).start();
 		}
 		
 	}
-
+	
+	class waitForPlayerDeath extends Thread{
+		@Override
+		public void run(){
+			if (pInfo.isSingle() || currentPlayer.getPlayerNum() == pInfo.getMyPlayerNum()){
+				while (currentPlayer.getIsAlive() && currentPlayer.isInJail()){
+					try {
+						sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				if (!currentPlayer.getIsAlive()){
+					endJailPanel();
+				}
+			}
+		}
+	}
+	
 	class waitUntilUserHasEnoughMoneyToPayJailFine extends Thread{
 		@Override
 		public void run(){
-			while (players[current].getTotalMonies() < 50 && players[current].isInJail()){
+			while (players[current].getTotalMonies() < 50 && players[current].isInJail() && currentPlayer.getIsAlive()){
 				try {
 					sleep(1);
 				} catch (InterruptedException e) {
