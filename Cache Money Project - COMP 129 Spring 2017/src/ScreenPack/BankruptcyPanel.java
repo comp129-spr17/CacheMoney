@@ -169,21 +169,20 @@ public class BankruptcyPanel extends JPanel{
 	private void dismissBackruptPanel() {
 		
 		if(pInfo.isSingle())
-			endPropertyPanel();
+			endBankruptPanel();
 		else{
 			java.util.Timer newTimer = new java.util.Timer();
 			newTimer.schedule(new TimerTask() {
 
 				@Override
 				public void run() {
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_PROPERTY));
+					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_BANKRUPT_PANEL));
 				}
 			}, 0);
 		}
 	}
-	public void endPropertyPanel()
+	public void endBankruptPanel()
 	{
-		bankruptcyButton.setVisible(false);
 		this.setVisible(false);
 		panelToSwitchTo.setVisible(true);
 	}
@@ -192,7 +191,7 @@ public class BankruptcyPanel extends JPanel{
 		public void run(){
 			while(!isBankrupt){
 				if(needMoney < currentPlayer.getTotalMonies()){
-					endPropertyPanel();
+					endBankruptPanel();
 					break;
 				}
 				try {

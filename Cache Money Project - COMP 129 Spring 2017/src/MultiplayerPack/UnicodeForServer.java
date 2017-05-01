@@ -61,6 +61,7 @@ public final class UnicodeForServer {
 	public static final int LOADING_GAME_INVALID_USER = 55;
 	public static final int ABLE_START_BTN = 56;
 	public static final int DECLARED_BANKRUPT = 57;
+	public static final int END_BANKRUPT_PANEL = 58;
 	private UnicodeForServer(){
 		
 	}
