@@ -664,6 +664,29 @@ public class DicePanel extends JPanel{
 		chanceMovedPlayer = c;
 	}
 	
+	
+	class waitForPersonToPay extends Thread{
+		int amount;
+		public waitForPersonToPay(int amount){
+			this.amount = amount;
+		}
+		
+		@Override
+		public void run(){
+			while (players[current].getTotalMonies() < amount && players[current].getIsAlive()){
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (players[current].getIsAlive()){
+				players[current].setTotalMonies(players[current].getTotalMonies() - amount);
+				Sounds.money.playSound();
+			}
+		}
+	}
+	
 	private void waitForDiceMoving(){
 		while(!board.isDoneAnimating() || isCelebrating){
 			delayThread(1);
@@ -680,9 +703,17 @@ public class DicePanel extends JPanel{
 			if (board.isPlayerInPropertySpace(previous)){
 				handlePropertySpaceAction(spaceLandedOn);
 			}
-			else if (spaceLandedOn == "Go to Jail"){
-				isSame = false;
-				numOfDoublesInRow = 0;
+			else if (spaceLandedOn.equals("Jewelry Tax")){
+				if (players[current].getTotalMonies() < 75){
+					bankruptcyPanel.executeSwitch(this, 75, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
+					(new waitForPersonToPay(75)).start();
+				}
+			}
+			else if (spaceLandedOn.equals("Income Tax")){
+				if (players[current].getTotalMonies() < 200){
+					bankruptcyPanel.executeSwitch(this, 200, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
+					(new waitForPersonToPay(200)).start();
+				}
 			}
 		}
 		mLabel.reinitializeMoneyLabels();
