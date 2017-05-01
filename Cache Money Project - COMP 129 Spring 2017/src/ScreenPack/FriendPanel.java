@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 
 public class FriendPanel extends JPanel{
 	private final static int NAME = 0;
-	private final static int ADD_REMOVE = 0;
-	private final static int MESSAGE = 0;
+	private final static int ADD_REMOVE = 1;
+	private final static int MESSAGE = 2;
 	
 	ArrayList<JButton> button;
 	boolean isFriends;
@@ -34,7 +34,10 @@ public class FriendPanel extends JPanel{
 	}
 	
 	private void initPanels(){
+		setBounds(0, 0, 400, 400);
+//		setBackground(Color.BLACK);
 		normalLayout = new JPanel();
+		normalLayout.setBackground(Color.PINK);
 		normalLayout.setPreferredSize(this.getPreferredSize());
 		normalLayout.setLayout(new GridLayout());
 		normalLayout.add(button.get(NAME));
@@ -55,7 +58,7 @@ public class FriendPanel extends JPanel{
 		sectionedLayout.add(forName);
 		sectionedLayout.add(forSections);
 		sectionedLayout.setVisible(false);
-
+		sectionedLayout.setBackground(Color.CYAN);
 		this.add(normalLayout);
 		this.add(sectionedLayout);
 	}
@@ -129,10 +132,11 @@ public class FriendPanel extends JPanel{
 		f.setSize(500,500);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		FriendPanel fp = new FriendPanel("Jack Lonergan");
 		fp.setVisible(true);
 		f.add(fp);
-		f.pack();
+//		f.pack();
+		f.repaint();
+		f.revalidate();
 	}
 }

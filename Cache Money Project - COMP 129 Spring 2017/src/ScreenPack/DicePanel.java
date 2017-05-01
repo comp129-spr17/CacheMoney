@@ -34,7 +34,7 @@ import MultiplayerPack.UnicodeForServer;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private GameScreen gamescreen;
@@ -81,6 +81,7 @@ public class DicePanel extends JPanel{
 	private PlayingInfo pInfo;
 	private Icon spinningDiceIcon;
 	private Icon stationaryDiceIcon;
+	private BankruptcyPanel bankruptcyPanel;
 	private TradingPanel tradeP;
 	
 	public DicePanel(Player[] player, MoneyLabels MLabels, TradingPanel tradeP, GameScreen gamescreen){
@@ -158,10 +159,13 @@ public class DicePanel extends JPanel{
 	
 	public void setBoard(BoardPanel boardP, Board board){
 		this.bPanel = boardP;
-		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), players, this, bPanel);
+		bankruptcyPanel = new BankruptcyPanel(players, this, bPanel);
+		propertyPanel = new PropertyInfoPanel(this,bPanel.getMappings(), players, this, bPanel, bankruptcyPanel);
+		
 		bPanel.add(propertyPanel);
+		bPanel.add(bankruptcyPanel);
 		mGamePanel = new MiniGamePanel(this, bPanel,propertyPanel);
-		jailInfoScreen = new JailInfoPanel(this, players, this, bPanel);
+		jailInfoScreen = new JailInfoPanel(this, players, this, bPanel, bankruptcyPanel);
 		bPanel.add(jailInfoScreen);
 		this.board = board;
 	}

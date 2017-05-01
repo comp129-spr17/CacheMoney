@@ -524,4 +524,12 @@ public final class Player {
 	public void setTradeRequest(String tradeRequest) {
 		this.tradeRequest = tradeRequest;
 	}
+	public void cleanupProperties(){
+		for(Property property : ownedProperties){
+			property.setOwned(false);
+			property.setMortgagedTo(false);
+			property.setNumHotel(0);
+			property.setNumHouse(0);
+		}
+	}
 }
