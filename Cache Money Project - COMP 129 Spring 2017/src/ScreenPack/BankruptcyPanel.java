@@ -29,6 +29,7 @@ public class BankruptcyPanel extends JPanel{
 	private JLabel lblBankrupt;
 	private JButton bankruptcyButton;
 	private MBytePack mPack;
+	private JLabel description;
 	private Player[] players;
 	private DicePanel dicePanel;
 	private BoardPanel bPanel;
@@ -66,20 +67,29 @@ public class BankruptcyPanel extends JPanel{
 	private void initButtonLabels(){
 		lblBankrupt = new JLabel();
 		lblTitle = new JLabel();
-		lblTitle.setText("BANKRUPTED");
-		lblTitle.setBounds(0, 0, this.getWidth(), this.getHeight()/10);
-		add(lblTitle);
-		add(lblBankrupt);
+		description = new JLabel();
+		
+		description.setBounds(this.getWidth() / 3 + 5, 50, this.getWidth(), this.getHeight()/10);
+		
+		lblTitle.setText("<html><b><font color = '" + "white" + "'>You do not have enough money to pay!<br />Mortgage properties to earn some more money!</font><b></html>");
+		lblTitle.setBounds(this.getWidth() / 8, 0, this.getWidth(), this.getHeight()/10);
+		
 		lblBankrupt.setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
 		lblBankrupt.setLocation(this.getWidth()/2 - 60, this.getHeight()/8*7 + 20);
+		
+		add(lblTitle);
+		add(lblBankrupt);
+		add(description);
+
 	}
 	public void executeSwitch(JPanel panelToSwitchFrom, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
-		this.setBackground(Color.white);
+		this.setBackground(Color.black);
 		this.needMoney = needMoney;
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.currentPlayer = currentPlayer;
-		setButtonsEnabled(isCurrent); 
+		updateMoneyNeededToPay();
+		setButtonsEnabled(isCurrent || pInfo.isSingle()); 
 		hidePreviousPanel();
 		(new CheckForMoney()).start();
 	}
@@ -103,7 +113,6 @@ public class BankruptcyPanel extends JPanel{
 		this.setVisible(true);
 	}
 	public void setButtonsEnabled(boolean visible){
-		
 		bankruptcyButton.setEnabled(visible);
 	}
 	private void addListeners(){
@@ -191,5 +200,9 @@ public class BankruptcyPanel extends JPanel{
 					
 			}
 		}
+	}
+	
+	private void updateMoneyNeededToPay(){
+		description.setText("<html><font color = '" + "white" + "'>You owe: $" + needMoney + ".</font></html>");
 	}
 }
