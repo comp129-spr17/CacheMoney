@@ -882,20 +882,20 @@ public class GameScreen extends JFrame{
 			mainPanel.add(buttonLabels[i]);
 		}
 		buttonLabels[0].setText("<html><font color = '" + "white" + "'><b>Player Balances</b></font></html>");
-		buttonLabels[0].setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 145, 300, 30);
+		buttonLabels[0].setBounds(boardPanel.getX() - 110, 145, 300, 30);
 		
 		buttonLabels[1].setText("<html><font color = '" + "white" + "'><b>Trade</b></font></html>");
-		buttonLabels[1].setBounds(boardPanel.getX() + boardPanel.getWidth() + 40, 295, 300, 30);
+		buttonLabels[1].setBounds(boardPanel.getX() - 80, 295, 300, 30);
 		
 		buttonLabels[2].setText("<html><font color = '" + "white" + "'><b>Mortgage</b></font></html>");
-		buttonLabels[2].setBounds(boardPanel.getX() + boardPanel.getWidth() + 29, 445, 300, 30);
+		buttonLabels[2].setBounds(boardPanel.getX() - 91, 445, 300, 30);
 		
 		buttonLabels[3].setText("<html><font color = '" + "white" + "'><b>Export Game</b></font></html>");
-		buttonLabels[3].setBounds(boardPanel.getX() + boardPanel.getWidth() + 18, 595, 300, 30);
+		buttonLabels[3].setBounds(boardPanel.getX() - 102, 595, 300, 30);
 	}
 	private void addExportGameButton() {
 		exportButton = new JButton();
-		exportButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 500, 100, 100);
+		exportButton.setBounds(boardPanel.getX() - 110, 500, 100, 100);
 		exportButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ExportButton.png", exportButton.getWidth(), exportButton.getHeight()));
 		exportButton.setContentAreaFilled(false);
 		exportButton.setBorder(null);
@@ -1199,13 +1199,13 @@ public class GameScreen extends JFrame{
 //		JLabel buttonLabel2 = new JLabel("THE $$$");
 		showInfo = new JButton();
 		showInfo.setLayout(new BorderLayout());
-		showInfo.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 50, 100, 100);
+		showInfo.setBounds(boardPanel.getX() - 110, 50, 100, 100);
 		showInfo.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ShowMeTheMoneyButton.png", showInfo.getWidth(), showInfo.getHeight()));
 		showInfo.setContentAreaFilled(false);
 		showInfo.setBorder(null);
 		showInfo.setVisible(true);
 		tradeButton = new JButton();
-		tradeButton.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 200, 100, 100);
+		tradeButton.setBounds(boardPanel.getX() - 110, 200, 100, 100);
 		tradeButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "TradeButton.png", tradeButton.getWidth(), tradeButton.getHeight()));
 		tradeButton.setContentAreaFilled(false);
 		tradeButton.setBorder(null);
@@ -1214,7 +1214,7 @@ public class GameScreen extends JFrame{
 	{
 		showMortgage = new JButton();
 		showMortgage.setLayout(new BorderLayout());
-		showMortgage.setBounds(boardPanel.getX() + boardPanel.getWidth() + 10, 350, 100, 100);
+		showMortgage.setBounds(boardPanel.getX() - 110, 350, 100, 100);
 		showMortgage.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "MortgageButton.png", showInfo.getWidth(), showInfo.getHeight()));
 		showMortgage.setContentAreaFilled(false);
 		showMortgage.setBorder(null);
