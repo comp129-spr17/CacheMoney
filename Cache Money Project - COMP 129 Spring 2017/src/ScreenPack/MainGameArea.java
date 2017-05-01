@@ -2,6 +2,7 @@ package ScreenPack;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -75,9 +77,6 @@ public class MainGameArea extends JPanel{
 		setBackground(Color.black);		
 	}
 	
-	
-	
-	
 	private void createChatAndFriendsPanel(){
 		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
 		friendList = new infoThatScrolls(false);
@@ -90,8 +89,10 @@ public class MainGameArea extends JPanel{
 		chatAndFriends.add(chatScreen);
 
 		JPanel temp = new JPanel();
-		temp.setLayout(new GridBagLayout());
-		lblFriend = new JLabel("Friend list:");
+		temp.setLayout(new BoxLayout(temp,BoxLayout.Y_AXIS));
+		
+		lblFriend = new JLabel("Friend List");
+		lblFriend.setAlignmentX(Component.CENTER_ALIGNMENT);
 		temp.add(lblFriend);
 		temp.add(friendList.getScrollingPanel());
 		chatAndFriends.add(temp);
