@@ -383,7 +383,7 @@ public class PropertyInfoPanel extends JPanel{
 	private boolean checkIfPlayerHasEnoughMoneyForRent(Player currentPlayer, boolean isCurrent) {
 		int cost = getCost();
 		boolean temp = currentPlayer.getTotalMonies() >= cost && (pInfo.isSingle() || isCurrent);
-		payButton.setEnabled(true);
+		payButton.setEnabled(pInfo.isSingle() || isCurrent);
 		return temp;
 	}
 	

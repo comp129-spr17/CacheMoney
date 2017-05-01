@@ -84,6 +84,7 @@ public class BankruptcyPanel extends JPanel{
 	}
 	public void executeSwitch(JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
+		bankruptcyButton.setVisible(true);
 		isBankrupt = false;
 		this.setBackground(Color.black);
 		this.needMoney = needMoney;
@@ -182,6 +183,7 @@ public class BankruptcyPanel extends JPanel{
 	}
 	public void endPropertyPanel()
 	{
+		bankruptcyButton.setVisible(false);
 		this.setVisible(false);
 		panelToSwitchTo.setVisible(true);
 	}
