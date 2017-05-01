@@ -74,9 +74,9 @@ public class Piece extends JLabel{
 				if(SwingUtilities.isRightMouseButton(e)){
 					requestFocus();
 					System.out.println("pressed");
-					pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose);
 					pInfoDisplay.setVisible(true);
 					pInfoDisplay.setFriend(pInfo.getLoggedInId(), user_id);
+					pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose);
 					
 					setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
 					

@@ -3,8 +3,6 @@ package ScreenPack;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -12,6 +10,10 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.SqlRelated;
+import TestPack.PlayingInfoTest;
 
 public class FriendPanel extends JPanel{
 	private final static int NAME = 0;
@@ -26,14 +28,14 @@ public class FriendPanel extends JPanel{
 	private JPanel normalLayout;
 	private JPanel sectionedLayout;
 	private CardLayout cl;
+	private PlayingInfo pInfo;
 
 
 	public FriendPanel(String friendUsername){
 		this.setLayout(new CardLayout());
-		//this.myUsername = SqlRelated.getUserName();
+		pInfo = PlayingInfo.getInstance();
+		this.myUsername = pInfo.getLoggedInId();
 		this.friendUsername = friendUsername;
-		//isFriends = SqlRelated.isFriend(myUsername, friendUsername);
-		isFriends = false;
 		button = new ArrayList<JButton>(3);
 		initButtons();
 		initPanels();
@@ -57,7 +59,7 @@ public class FriendPanel extends JPanel{
 		sectionedLayout.add(forName);
 		sectionedLayout.add(forSections);
 		sectionedLayout.setVisible(false);
-		
+
 		this.add(normalLayout, "normalLayout");
 		this.add(sectionedLayout, "sectionedLayout");
 		cl = (CardLayout)FriendPanel.this.getLayout();
@@ -66,6 +68,19 @@ public class FriendPanel extends JPanel{
 	private void refresh(){
 		this.revalidate();
 		this.repaint();
+	}
+
+	public void setFriend(String friend_uname){
+		friendUsername = friend_uname;
+		button.get(NAME).setText(friendUsername);
+		button.get(NAME_COPY).setText(friendUsername);
+		
+		if(!friendUsername.equals(myUsername)){
+			button.get(NAME).setEnabled(true);
+			isFriends = SqlRelated.isFriend(myUsername, friendUsername);
+		}
+		else
+			button.get(NAME).setEnabled(false);
 	}
 
 	private void initButtons(){
@@ -77,7 +92,7 @@ public class FriendPanel extends JPanel{
 
 	private JButton initUsernameButton(){
 		JButton temp = new JButton(friendUsername);
-		
+
 		temp.addMouseListener(new MouseListener() {
 
 			@Override
@@ -90,16 +105,14 @@ public class FriendPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(normalLayout.isVisible()){
+				if(normalLayout.isVisible() && button.get(NAME).isEnabled()){
 					cl.show(FriendPanel.this, "sectionedLayout");
 					normalLayout.setVisible(false);
 					sectionedLayout.setVisible(true);
-//					refresh();
 				}else{
 					normalLayout.setVisible(true);
 					sectionedLayout.setVisible(false);
 					cl.show(FriendPanel.this, "normalLayout");
-//					refresh();
 				}
 			}
 		});
@@ -122,7 +135,13 @@ public class FriendPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if(isFriends)
+					removeFriend();
+				else
+					addFriend();
+				
 				checkFriendship(temp);
+				refresh();
 			}
 		});
 
@@ -130,17 +149,23 @@ public class FriendPanel extends JPanel{
 	}
 
 	private void checkFriendship(JButton temp){
+		isFriends = SqlRelated.isFriend(myUsername, friendUsername);
+
 		if(isFriends){
 			temp.setText("Remove Friend");
 			temp.setBackground(Color.RED);
-			isFriends = false;
-			//SqlRelated.removeFriend(myUsername, friendUsername);
 		}else{
 			temp.setText("Add Friend");
 			temp.setBackground(Color.GREEN);
-			isFriends = true;
-			//SqlRelated.addFriend(myUsername, friendUsername);
 		}
+	}
+
+	private void addFriend(){
+		SqlRelated.addFriend(myUsername, friendUsername);
+	}
+
+	private void removeFriend(){
+		SqlRelated.removeFriend(myUsername, friendUsername);
 	}
 
 	private JButton initMessageButton(){
