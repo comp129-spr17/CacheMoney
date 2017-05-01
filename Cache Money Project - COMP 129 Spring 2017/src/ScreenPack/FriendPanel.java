@@ -29,7 +29,7 @@ public class FriendPanel extends JPanel{
 	private JPanel sectionedLayout;
 	private CardLayout cl;
 	private PlayingInfo pInfo;
-
+	private boolean isOn;
 
 	public FriendPanel(String friendUsername){
 		this.setLayout(new CardLayout());
@@ -71,6 +71,8 @@ public class FriendPanel extends JPanel{
 	}
 
 	public void setFriend(String friend_uname){
+		isOn = true;
+		(new CheckFriend()).start();
 		friendUsername = friend_uname;
 		button.get(NAME).setText(friendUsername);
 		button.get(NAME_COPY).setText(friendUsername);
@@ -81,8 +83,11 @@ public class FriendPanel extends JPanel{
 		}
 		else
 			button.get(NAME).setEnabled(false);
+		
 	}
-
+	public void setOff(){
+		isOn = false;
+	}
 	private void initButtons(){
 		button.add(initUsernameButton());
 		button.add(initUsernameButton());
@@ -159,7 +164,15 @@ public class FriendPanel extends JPanel{
 			temp.setBackground(Color.GREEN);
 		}
 	}
-
+	class CheckFriend extends Thread{
+		public void run(){
+			System.out.println("start Checkign");
+			while(isOn){
+				checkFriendship(button.get(2));
+			}
+			System.out.println("end Checkign");
+		}
+	}
 	private void addFriend(){
 		SqlRelated.addFriend(myUsername, friendUsername);
 	}
@@ -167,7 +180,7 @@ public class FriendPanel extends JPanel{
 	private void removeFriend(){
 		SqlRelated.removeFriend(myUsername, friendUsername);
 	}
-
+	
 	private JButton initMessageButton(){
 		JButton temp = new JButton("Message");
 		temp.setBackground(Color.CYAN);

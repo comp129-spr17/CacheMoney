@@ -464,7 +464,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
+				pInfoDisplay.panelOff();
 			}
 			
 			@Override
@@ -487,7 +487,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
+				pInfoDisplay.panelOff();
 			}
 			
 			@Override
@@ -510,7 +510,7 @@ public class GameScreen extends JFrame{
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
+				pInfoDisplay.panelOff();
 			}
 			
 			@Override
@@ -550,7 +550,7 @@ public class GameScreen extends JFrame{
 					//playerInfo.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 			}
 			@Override
-			public void mousePressed(MouseEvent e) {pInfoDisplay.setVisible(false);}
+			public void mousePressed(MouseEvent e) {pInfoDisplay.panelOff();}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 			@Override
@@ -580,8 +580,7 @@ public class GameScreen extends JFrame{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
-				
+				pInfoDisplay.panelOff();
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -615,7 +614,7 @@ public class GameScreen extends JFrame{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
+				pInfoDisplay.panelOff();
 				
 			}
 			@Override
@@ -703,7 +702,7 @@ public class GameScreen extends JFrame{
 			}
 			
 			@Override
-			public void mousePressed(MouseEvent e) {pInfoDisplay.setVisible(false);}
+			public void mousePressed(MouseEvent e) {pInfoDisplay.panelOff();}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {}
@@ -724,7 +723,7 @@ public class GameScreen extends JFrame{
 				
 			}
 			@Override
-			public void mousePressed(MouseEvent e) {pInfoDisplay.setVisible(false);}
+			public void mousePressed(MouseEvent e) {pInfoDisplay.panelOff();}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 			@Override
@@ -992,7 +991,7 @@ public class GameScreen extends JFrame{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
+				pInfoDisplay.panelOff();
 			}
 
 			@Override
@@ -1048,7 +1047,7 @@ public class GameScreen extends JFrame{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
+				pInfoDisplay.panelOff();
 			}
 
 			@Override
@@ -1458,7 +1457,7 @@ public class GameScreen extends JFrame{
 	
 	public void showEndGameScreen() {
 		
-		pInfoDisplay.setVisible(false);
+		pInfoDisplay.panelOff();
 		System.out.println("Show End Game Screen");
 		
 		//TODO clients do not know the totalPlayers int. It is set to 0 on clients
