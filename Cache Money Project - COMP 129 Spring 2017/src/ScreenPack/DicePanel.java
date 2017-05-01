@@ -708,11 +708,17 @@ public class DicePanel extends JPanel{
 					bankruptcyPanel.executeSwitch(this, 75, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
 					(new waitForPersonToPay(75)).start();
 				}
+				else{
+					players[current].pay(75);
+				}
 			}
 			else if (spaceLandedOn.equals("Income Tax")){
 				if (players[current].getTotalMonies() < 200){
 					bankruptcyPanel.executeSwitch(this, 200, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
 					(new waitForPersonToPay(200)).start();
+				}
+				else{
+					players[current].pay(200);
 				}
 			}
 		}

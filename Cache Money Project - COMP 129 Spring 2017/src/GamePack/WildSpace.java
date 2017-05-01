@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 import InterfacePack.Sounds;
 import MultiplayerPack.PlayingInfo;
+import ScreenPack.BankruptcyPanel;
+import ScreenPack.BoardPanel;
 import ScreenPack.ChanceStack;
 import ScreenPack.CommunityStack;
 import ScreenPack.DicePanel;
@@ -21,6 +23,7 @@ public class WildSpace extends Space {
 	private PlayingInfo pInfo;
 	private DicePanel dp;
 	private Player[] players;
+	private BankruptcyPanel bankruptPanel;
 
 	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel, DicePanel dicePanel, Player[] p) {
 		super(img, name);
@@ -32,6 +35,7 @@ public class WildSpace extends Space {
 		communityStack = new CommunityStack(boardPanel, dicePanel);
 		go  = (GoSpace) gospace;
 		spaces = s;
+		bankruptPanel = new BankruptcyPanel(players, dicePanel, (BoardPanel) boardPanel);
 	}
 	public void actionForMultiplaying(int nextNum){
 		if(name.equals("Chance"))
@@ -147,6 +151,7 @@ public class WildSpace extends Space {
 				System.out.println("Pay a poor tax of $15");
 				chanceStack.displayImage(11);
 				piece.getPlayerClass().pay(15);
+				
 			}
 			else if(command == "Move5"){
 				System.out.println("Advance to Reading Railroad");
