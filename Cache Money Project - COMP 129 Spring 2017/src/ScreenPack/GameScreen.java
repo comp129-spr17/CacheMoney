@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -830,7 +831,7 @@ public class GameScreen extends JFrame{
 		endGameScreen = new EndGamePanel(players, totalPlayers, boardPanel.getSize(), boardPanel);
 		endGameScreen.setLayout(null);
 		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
-		endGameScreen.setBackground(new Color(70, 220, 75));
+//		endGameScreen.setBackground(new Color(70, 220, 75));
 		endGameScreen.setVisible(false);
 		buttonLabels = new JLabel[4];
 		initButtonLabels();
@@ -1472,6 +1473,15 @@ public class GameScreen extends JFrame{
 		exportButton.setEnabled(false);
 		showInfo.setEnabled(false);
 		
+		
+		ImageRelated imageRelated = ImageRelated.getInstance();
+		ImageIcon icon=null;
+		icon = imageRelated.getGIFImage(dicePanel,"Images/winBackground.gif");
+		
+		endGameScreen.add(new BackgroundImage(icon, this.getWidth(), this.getHeight()));
+		endGameScreen.setBackground(new Color(180, 240, 255));
+		
+		
 		(new playWinSounds()).start();
 		
 		
@@ -1480,7 +1490,7 @@ public class GameScreen extends JFrame{
 	class playWinSounds extends Thread{
 		@Override
 		public void run(){
-			while (true){
+			for (int i = 0; i < 34; i++){
 				Sounds.winGame.playSound();
 				Sounds.doublesCelebrateSound.playSound();
 				Sounds.waitingRoomJoin.playSound();

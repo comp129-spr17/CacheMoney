@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import GamePack.Player;
 import GamePack.SizeRelated;
+import InterfacePack.BackgroundImage;
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
 
@@ -179,7 +180,6 @@ public class EndGamePanel extends JPanel {
 	public void updateInformation(boolean winStatus, int currentPlayerNum, int numPlayers) {
 		this.totalNumPlayers = numPlayers;
 		getPlayerNamesAndPieces();
-		// TODO Auto-generated method stub
 		this.playerWon = winStatus;
 		this.currentPlayerNum = currentPlayerNum;
 		removeAll();
@@ -188,6 +188,8 @@ public class EndGamePanel extends JPanel {
 		showCurrentPlayer();
 		showOtherPlayers();
 		createButtons();
+		
+		
 	}
 
 
