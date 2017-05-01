@@ -118,7 +118,7 @@ public class MClient {
 		variableCodeString.add(new String("RSP_MINI_GAME_DECISION"));
 		variableCodeString.add(new String("LOADING_GAME_INVALID_USER"));
 		variableCodeString.add(new String("ABLE_START_BTN"));
-		variableCodeString.add(new String("DECLARE BANKRUPT"));
+		variableCodeString.add(new String("DECLARE_BANKRUPT"));
 	}
 	
 	
