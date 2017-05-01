@@ -308,12 +308,11 @@ public class PropertyInfoPanel extends JPanel{
 				addPayLabel();
 				if (!checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent)) {
 					(new waitForPayEnabled()).start();
-					if (isCurrent){
+
+					if (isCurrent || pInfo.isSingle()){
 						isBankrupt = true;
 						bankruptcyPanel.executeSwitch(this, getCost(), currentPlayer, isCurrent);
 						
-//						addBankruptcyButton();
-//						addBankruptcyLabel();
 					}
 				}
 			}
