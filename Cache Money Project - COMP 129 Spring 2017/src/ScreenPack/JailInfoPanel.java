@@ -98,7 +98,7 @@ public class JailInfoPanel extends JPanel {
 		if (players[current].getTotalMonies() < 50){
 			payButton.setEnabled(false);
 			if(players[current].getJailFreeCard() == 0)
-				bankruptcyPanel.executeSwitch(this, 50, currentPlayer, isCurrent);
+				bankruptcyPanel.executeSwitch(this,panelToSwitchFrom, 50, currentPlayer, isCurrent);
 			(new waitUntilUserHasEnoughMoneyToPayJailFine()).start();
 		}
 		

@@ -38,6 +38,7 @@ public class BankruptcyPanel extends JPanel{
 	private JLabel[] buttonLabels;
 	private JButton declareLossButton;
 	private int needMoney;
+	private JPanel panelToSwitchTo;
 	public BankruptcyPanel(Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		pInfo = PlayingInfo.getInstance();
@@ -73,13 +74,15 @@ public class BankruptcyPanel extends JPanel{
 		lblBankrupt.setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
 		lblBankrupt.setLocation(this.getWidth()/2 - 60, this.getHeight()/8*7 + 20);
 	}
-	public void executeSwitch(JPanel panelToSwitchFrom, int needMoney, Player currentPlayer, boolean isCurrent)
+	public void executeSwitch(JPanel panelToSwitchFrom, JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
 		this.setBackground(Color.white);
 		this.needMoney = needMoney;
 		this.panelToSwitchFrom = panelToSwitchFrom;
+		this.panelToSwitchTo = panelToSwitchTo;
 		this.currentPlayer = currentPlayer;
-		setButtonsEnabled(isCurrent); 
+		if(!pInfo.isSingle())
+			setButtonsEnabled(isCurrent); 
 		hidePreviousPanel();
 		(new CheckForMoney()).start();
 	}
@@ -168,7 +171,9 @@ public class BankruptcyPanel extends JPanel{
 	{
 //		this.removeAll();
 		this.setVisible(false);
-		panelToSwitchFrom.setVisible(true);
+		panelToSwitchFrom.removeAll();
+		panelToSwitchFrom.setVisible(false);
+		panelToSwitchTo.setVisible(true);
 	}
 	class CheckForMoney extends Thread{
 		public CheckForMoney(){
