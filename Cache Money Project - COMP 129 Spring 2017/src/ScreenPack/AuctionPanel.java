@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JButton;
@@ -36,6 +37,7 @@ public class AuctionPanel extends JPanel{
 	private Point[] playerLocation;
 	private PlayingInfo pInfo;
 	private boolean isDone;
+	private ArrayList<Boolean> isDelay;
 	private ArrayList<Color> colList;
 	public AuctionPanel(Property property, Player player[], PropertyInfoPanel propertyInfoPanel)
 	{
@@ -63,7 +65,9 @@ public class AuctionPanel extends JPanel{
 		this.setSize(propertyPanel.getSize());
 		this.setLocation(propertyPanel.getLocation());
 		this.setLayout(null);
-		
+		isDelay = new ArrayList<>();
+		for(int i=0; i<pInfo.getNumberOfPlayer(); i++)
+			isDelay.add(false);
 		pricePanel = new JPanel();
 		pricePanel.setSize(this.getWidth()/2, this.getHeight()/2);
 		pricePanel.setLocation(this.getWidth()/2 - pricePanel.getWidth()/2, this.getHeight()/2-pricePanel.getHeight()/2);
@@ -103,13 +107,23 @@ public class AuctionPanel extends JPanel{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(temp.isEnabled() && SwingUtilities.isLeftMouseButton(e)){
+				if(temp.isEnabled() && SwingUtilities.isLeftMouseButton(e) && !isDelay.get(p)){
 					int bid = Integer.parseInt((String)bidList.getSelectedItem());
 					if(pInfo.isSingle())
 						actionToAuction(bid, p);
 					else
 						pInfo.sendMessageToServer(mPack.packIntArray(unicode.PROPERTY_BIDDING, new int[]{bid,pInfo.getMyPlayerNum()}));
-
+					
+					isDelay.set(p, true);
+					Timer aT = new Timer();
+					aT.schedule(new TimerTask() {
+						
+						@Override
+						public void run() {
+							isDelay.set(p, false);
+							
+						}
+					}, 2000);
 				}
 				
 

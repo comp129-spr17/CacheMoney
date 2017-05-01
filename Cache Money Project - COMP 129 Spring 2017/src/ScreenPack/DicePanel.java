@@ -896,7 +896,7 @@ public class DicePanel extends JPanel{
 		}
 	}
 	public void actionForBankrupt() {
-		propertyPanel.actionForBankrupt(); 
+		bankruptcyPanel.actionForBankrupt(); 
 	}
 
 }
