@@ -833,9 +833,11 @@ public class DicePanel extends JPanel{
 			e.printStackTrace();
 		}
 	}
-	public void playerDeclaredBankrupt() {
-		pInfo.setGamePart(Part.END_TURN);
+	public void playerDeclaredBankrupt(Player curPlayer) {
+		isSame = false;
 		numOfDoublesInRow = 0;
+		pInfo.setGamePart(Part.END_TURN);
+		curPlayer.getPiece().setVisible(false);
 		if (gamescreen.canShowEndGameScreen()){
 			checkPlayerAvailabilty();
 			gamescreen.showEndGameScreen();

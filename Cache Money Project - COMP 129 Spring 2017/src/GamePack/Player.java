@@ -526,6 +526,7 @@ public final class Player {
 	}
 	public void cleanupProperties(){
 		for(Property property : ownedProperties){
+			System.out.println("Clean up :" + property.getName());
 			property.setOwned(false);
 			property.setMortgagedTo(false);
 			property.setNumHotel(0);
