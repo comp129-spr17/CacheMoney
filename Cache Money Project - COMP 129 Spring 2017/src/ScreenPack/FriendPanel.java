@@ -74,15 +74,31 @@ public class FriendPanel extends JPanel{
 		friendUsername = friend_uname;
 		button.get(NAME).setText(friendUsername);
 		button.get(NAME_COPY).setText(friendUsername);
+		displayNormalPanel();		
 		
 		if(!friendUsername.equals(myUsername)){
 			button.get(NAME).setEnabled(true);
 			isFriends = SqlRelated.isFriend(myUsername, friendUsername);
+			checkFriendship(button.get(ADD_REMOVE));	
 		}
 		else
 			button.get(NAME).setEnabled(false);
 	}
 
+	private void displayNormalPanel(){
+		normalLayout.setVisible(true);
+		sectionedLayout.setVisible(false);
+		normalLayout.repaint();
+		cl.show(FriendPanel.this, "normalLayout");
+	}
+	
+	private void displaySectionedPanel(){
+		normalLayout.setVisible(false);
+		sectionedLayout.setVisible(true);
+		sectionedLayout.repaint();
+		cl.show(FriendPanel.this, "sectionedLayout");
+	}
+	
 	private void initButtons(){
 		button.add(initUsernameButton());
 		button.add(initUsernameButton());
@@ -106,13 +122,9 @@ public class FriendPanel extends JPanel{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if(normalLayout.isVisible() && button.get(NAME).isEnabled()){
-					cl.show(FriendPanel.this, "sectionedLayout");
-					normalLayout.setVisible(false);
-					sectionedLayout.setVisible(true);
+					displaySectionedPanel();
 				}else{
-					normalLayout.setVisible(true);
-					sectionedLayout.setVisible(false);
-					cl.show(FriendPanel.this, "normalLayout");
+					displayNormalPanel();
 				}
 			}
 		});
