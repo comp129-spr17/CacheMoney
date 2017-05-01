@@ -53,7 +53,10 @@ public final class PlayerInfoDisplay extends JPanel{
 			add(labels.get(i));
 		}
 	}
-	
+	public void panelOff(){
+		setVisible(false);
+		friend.setOff();
+	}
 	public int getStartX(int x){
 		return x < sizeRelated.getScreenW()/2 ? x : x-width;
 	}
