@@ -51,7 +51,7 @@ import MultiplayerPack.UnicodeForServer;
 
 public class GameScreen extends JFrame{
 	
-	private final boolean DEBUG_BUTTONS_ENABLED = false; // Set this enabled to get TestingWindow and EndGameStats buttons
+	private final boolean DEBUG_BUTTONS_ENABLED = true; // Set this enabled to get TestingWindow and EndGameStats buttons
 	
 	
 	private static final String AUTO_SAVE_FILENAME = "recentSave.txt";
@@ -111,6 +111,7 @@ public class GameScreen extends JFrame{
 //	private BackgroundImage bgi;
 	private JLabel[] buttonLabels;
 	private boolean requestTimeOut;
+	private boolean timeOutSQL;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
@@ -140,10 +141,11 @@ public class GameScreen extends JFrame{
 			requestTimeOut = false;
 			(new TimeOut()).start();
 			while (!client.isReadyToUse() || !isServerReady){
-				if (requestTimeOut){
-					System.out.println("***** The request timed out... *****");
-					System.exit(1);
-				}
+				System.out.println("");
+//				if (requestTimeOut){
+//					System.out.println("***** The request timed out... *****");
+//					System.exit(1);
+//				}
 			}
 			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
 			Sounds.waitingRoomJoin.playSound();
@@ -154,7 +156,7 @@ public class GameScreen extends JFrame{
 	}
 	
 	class TimeOut extends Thread{
-		int millisUntilTimeOut = 10000;
+		int millisUntilTimeOut = 5;
 		@Override
 		public void run(){
 			try {
@@ -178,7 +180,7 @@ public class GameScreen extends JFrame{
 		else{
 			boardPanel.PlacePiecesToBaord(numPlayer);
 		}
-		
+		pInfo.setNumberOfPlayer(numPlayer);
 		
 		//System.out.print(numPlayer);
 		totalPlayers = numPlayer;
@@ -211,8 +213,9 @@ public class GameScreen extends JFrame{
 		chatScreen = new ChatScreen(UnicodeForServer.CHAT_GAME);
 		
 		if (Property.isSQLEnabled){
+			(new SQLTimeOut()).start();
 			sqlRelated = SqlRelated.getInstance();
-
+			timeOutSQL = false;
 		}
 		mPack = MBytePack.getInstance();
 		pInfo = PlayingInfo.getInstance();
@@ -228,6 +231,28 @@ public class GameScreen extends JFrame{
 		
 		
 		
+	}
+	
+	class SQLTimeOut extends Thread{
+		@Override
+		public void run(){
+			timeOutSQL = true;
+			for (int i = 0; i < 20; i++){
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (!timeOutSQL){
+					System.out.println("Time out cancelled!");
+					return;
+				}
+			}
+			if (timeOutSQL){
+				JOptionPane.showMessageDialog(null, "SQL has timed out...");
+				System.exit(1);
+			}
+		}
 	}
 	
 
@@ -506,21 +531,7 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pInfoDisplay.setVisible(false);
-				System.out.println("Show End Game Screen");
-				
-				//TODO clients do not know the totalPlayers int. It is set to 0 on clients
-				System.out.println("Total Num of Players: " + Integer.toString(totalPlayers));
-				if(!endGameScreen.isVisible()) {
-					endGameScreen.updateInformation(true, dicePanel.getCurrentPlayerNumber());
-					boardPanel.setVisible(false);
-					bgImage.setVisible(false);
-					endGameScreen.setVisible(true);
-					bgImage.setVisible(true);
-				} else {
-					endGameScreen.setVisible(false);
-					boardPanel.setVisible(true);
-				}
+				showEndGameScreen();
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
@@ -627,10 +638,10 @@ public class GameScreen extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (pInfo.isSingle()){
-					actionForMortgageProperty((String) selectMortgage.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
+					actionForMortgageProperty(firstTempComboBox.getSelectedItem().equals("Mortgage"),(String) selectMortgage.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
 				}
 				else{
-					pInfo.sendMessageToServer(mPack.packStringAndInt((UnicodeForServer.MORTGAGE_PROPERTY), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
+					pInfo.sendMessageToServer(mPack.packBoolStrAndInt((UnicodeForServer.MORTGAGE_PROPERTY), firstTempComboBox.getSelectedItem().equals("Mortgage"), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
 				}
 				
 			}
@@ -1259,7 +1270,7 @@ public class GameScreen extends JFrame{
 	public int getLoadingProgress() {
 		return loadingProgress;
 	}
-	public void actionForMortgageProperty(String propertyName, int playerNum){
+	public void actionForMortgageProperty(boolean isMortgaging, String propertyName, int playerNum){
 		if (propertyName == ""){
 			return;
 		}
@@ -1268,18 +1279,17 @@ public class GameScreen extends JFrame{
 		{
 			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
 			{
-				if (firstTempComboBox.getSelectedItem().equals("Un-Mortgage"))
+				if (isMortgaging)
+				{
+					System.out.print("Mortgaging");
+					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
+					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
+				}
+				else
 				{
 					double temp = players[num].getOwnedProperties().get(h).getMortgageValue() * 1.1;		
 					players[num].pay((int)temp);
 					players[num].getOwnedProperties().get(h).setMortgagedTo(false);
-				}
-				else
-				{
-					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
-					System.out.print("Mortgaging");
-					players[num].earnMonies(players[num].getOwnedProperties().get(h).getMortgageValue());
-					players[num].getOwnedProperties().get(h).setMortgagedTo(true);
 				}
 				repaint();
 				mLabels.reinitializeMoneyLabels();
@@ -1434,6 +1444,54 @@ public class GameScreen extends JFrame{
 	
 	public void setExportButtonEnabled(boolean b){
 		exportButton.setEnabled(b);
+	}
+	
+	public boolean canShowEndGameScreen(){
+		int numPlayersAlive = 0;
+		for (Player p : players){
+			if (p.getIsAlive() && p.isOn()){
+				numPlayersAlive += 1;
+			}
+		}
+		return numPlayersAlive <= 1;
+	}
+	
+	public void showEndGameScreen() {
+		
+		pInfoDisplay.setVisible(false);
+		System.out.println("Show End Game Screen");
+		
+		//TODO clients do not know the totalPlayers int. It is set to 0 on clients
+		System.out.println("Total Num of Players: " + Integer.toString(totalPlayers));
+		endGameScreen.updateInformation(true, dicePanel.getCurrentPlayerNumber(), pInfo.getNumberOfPlayer());
+		boardPanel.setVisible(false);
+		bgImage.setVisible(false);
+		endGameScreen.setVisible(true);
+		bgImage.setVisible(true);
+		tradeButton.setEnabled(false);
+		showMortgage.setEnabled(false);
+		exportButton.setEnabled(false);
+		showInfo.setEnabled(false);
+		
+		(new playWinSounds()).start();
+		
+		
+	}
+	
+	class playWinSounds extends Thread{
+		@Override
+		public void run(){
+			while (true){
+				Sounds.winGame.playSound();
+				Sounds.doublesCelebrateSound.playSound();
+				Sounds.waitingRoomJoin.playSound();
+				try {
+					sleep(600);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 }

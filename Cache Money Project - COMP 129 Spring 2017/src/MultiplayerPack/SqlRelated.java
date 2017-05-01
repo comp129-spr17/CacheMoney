@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.mysql.cj.api.xdevapi.Result;
 
 public final class SqlRelated {
@@ -39,13 +41,18 @@ public final class SqlRelated {
 					+ ":" + PORT_NUM 
 					+ "/" + DATABASE 
 					+ "?useSSL=false", USER_ID , USER_PW);
+			
 			initResultSets();	
 		} catch (Exception e) {
 			System.out.println("***********************\nCONNECTION TO SQL FAILED.\nCheck to see if you are connected to the VPN or PacificNet, and then try again.\nDisable SQL in Property.java to load the game from text files.\n***********************");
 			System.exit(1);
 		}
-			
 	}
+	
+	
+	
+	
+	
 	private void initResultSets() throws SQLException{
 		statement = connection.createStatement();
 		resultSets.add(statement.executeQuery("SELECT b.Name, b.Family_id, b.Buying_Price, b.Mortgage_value, p.rent_base, p.rent_house_1, p.rent_house_2, p.rent_house_3, p.rent_house_4, p.rent_hotel, p.build_house_price " +

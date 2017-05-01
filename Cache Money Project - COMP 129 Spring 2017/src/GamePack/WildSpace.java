@@ -117,6 +117,8 @@ public class WildSpace extends Space {
 			else if(command == "Free"){//to add later
 				System.out.println("Free get out of jail card (functionality to come later)");
 				chanceStack.displayImage(7);
+				players[dp.getCurrentPlayerNumber()].setJailFreeCard(players[dp.getCurrentPlayerNumber()].getJailFreeCard() + 1);
+				Sounds.gainMoney.playSound();
 			}
 			else if(command == "Back3"){
 				System.out.println("Move back 3 spaces");
@@ -130,8 +132,10 @@ public class WildSpace extends Space {
 				System.out.println("Go to jail, directly to jail");
 				chanceStack.displayImage(9);
 				super.removePiece(piece.getPlayer());
-				spaces[30].receivePiece(piece, piece.getPlayer());
-				playerPosition = 30;
+				spaces[10].receivePiece(piece, piece.getPlayer());
+				playerPosition = 10;
+				players[dp.getCurrentPlayerNumber()].setInJail(true);
+				Sounds.landedOnJail.playSound();
 				movePlayerByCard(playerPosition);
 				
 			}
@@ -218,14 +222,18 @@ public class WildSpace extends Space {
 				System.out.println("Go to jail, directly to jail");
 				communityStack.displayImage(5);
 				super.removePiece(piece.getPlayer());
-				spaces[30].receivePiece(piece, piece.getPlayer());
-				playerPosition = 30;
+				spaces[10].receivePiece(piece, piece.getPlayer());
+				playerPosition = 10;
+				players[dp.getCurrentPlayerNumber()].setInJail(true);
+				Sounds.landedOnJail.playSound();
 				movePlayerByCard(playerPosition);
 				
 			}
 			else if(command == "GetFromEPlayer"){//to add later
 				System.out.println("Free get out of jail card (functionality to come later)");
 				communityStack.displayImage(6);
+				players[dp.getCurrentPlayerNumber()].setJailFreeCard(players[dp.getCurrentPlayerNumber()].getJailFreeCard() + 1);
+				Sounds.gainMoney.playSound();
 			}
 			else if(command == "Get$100"){
 				System.out.println("Get $100");

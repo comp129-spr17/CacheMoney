@@ -60,6 +60,7 @@ public final class UnicodeForServer {
 	public static final int RSP_MINI_GAME_DECISION = 54;
 	public static final int LOADING_GAME_INVALID_USER = 55;
 	public static final int ABLE_START_BTN = 56;
+	public static final int DECLARED_BANKRUPT = 57;
 	private UnicodeForServer(){
 		
 	}

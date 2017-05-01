@@ -10,6 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import GamePack.PathRelated;
 import GamePack.Player;
@@ -18,11 +19,12 @@ import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
+import sun.net.www.content.image.gif;
 
 public class JailInfoPanel extends JPanel {
 	private JPanel panelToSwitchFrom;
 	private JButton payButton;
-	private JButton rollButton;
+	private JButton getOutOfJailFreeCardUse;
 	private JButton hideButton;
 	private OutputStream outputStream;
 	private boolean isSingle;
@@ -70,7 +72,7 @@ public class JailInfoPanel extends JPanel {
 		jailPanel.setOpaque(false);
 		hideButton = new JButton("Back");
 		payButton = new JButton();
-		rollButton = new JButton();
+		getOutOfJailFreeCardUse = new JButton();
 		bi = new BackgroundImage(PathRelated.getInstance().getImagePath() + "jailBackground.jpg", this.getWidth(), this.getHeight());
 		
 		addListeners();
@@ -87,10 +89,32 @@ public class JailInfoPanel extends JPanel {
 		else{
 			disableButtons();
 		}
+		getOutOfJailFreeCardUse.setEnabled(players[current].getJailFreeCard() >= 1 && (pInfo.isSingle() || isCurrent));
+
 		this.currentPlayer = currentPlayer;
 		this.add(bi);
+		
+		if (players[current].getTotalMonies() < 50){
+			payButton.setEnabled(false);
+			(new waitUntilUserHasEnoughMoneyToPayJailFine()).start();
+		}
+		
 	}
 
+	class waitUntilUserHasEnoughMoneyToPayJailFine extends Thread{
+		@Override
+		public void run(){
+			while (players[current].getTotalMonies() < 50 && players[current].isInJail()){
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			payButton.setEnabled(pInfo.isSingle() || players[current].getPlayerNum() == pInfo.getMyPlayerNum());
+		}
+	}
+	
 	private void hidePreviousPanel()
 	{
 		panelToSwitchFrom.setVisible(false);
@@ -148,7 +172,7 @@ public class JailInfoPanel extends JPanel {
 
 			}
 		});
-		rollButton.addMouseListener(new MouseListener() {
+		getOutOfJailFreeCardUse.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {				
@@ -169,32 +193,12 @@ public class JailInfoPanel extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//TODO
-				// Switch panels to dice screen and get result but don't move any piece, just check if they are doubles 
-				// Remain in Jail if not third turn in jail or else pay fine
-				if (rollButton.isEnabled()){
-					hideThisPanelShowDice();
-					dicePanel.setMovementAllowed(false);
-					int[] diceResults = new int[2];
-					diceResults = dicePanel.getDiceRoll();
-					dicePanel.rollDice(diceResults[0], diceResults[1]);
-					boolean doubles = dicePanel.isDoublesRolled();
-					if (doubles) {
-						currentPlayer.setInJail(false);
-						turnsInJail[current] = 0;
-					} else {
-						turnsInJail[current] += 1;
+				if (getOutOfJailFreeCardUse.isEnabled()){
+					if (pInfo.isSingle()){
+						actionForGetOutOfJail(true);
 					}
-					if (turnsInJail[current] >= 3) {
-						if (pInfo.isSingle()){
-							actionForGetOutOfJail();
-						}
-						else{
-							pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
-						}
-						
-					} else {
-						dismissJailInfoPanel();
+					else{
+						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.GOT_OUT_OF_JAIL, true));
 					}
 				}
 			}
@@ -222,7 +226,7 @@ public class JailInfoPanel extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				if (payButton.isEnabled()){
 					if (pInfo.isSingle()){
-						actionForGetOutOfJail();
+						actionForGetOutOfJail(false);
 					}
 					else{
 						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.GOT_OUT_OF_JAIL));
@@ -239,28 +243,28 @@ public class JailInfoPanel extends JPanel {
 
 	private void addRollButton()
 	{
-		rollButton.setText("ROLL"); 
-		rollButton.setSize(100, 30);
-		rollButton.setBackground(Color.GREEN); 
-		rollButton.setLocation(this.getWidth()/4-rollButton.getWidth()/2, this.getHeight()/10*9-rollButton.getHeight()/2);
-		add(rollButton); 
-		rollButton.setVisible(true);
+		getOutOfJailFreeCardUse.setText("Use Jail Free Card"); 
+		getOutOfJailFreeCardUse.setSize(140, 30);
+		getOutOfJailFreeCardUse.setBackground(Color.GREEN); 
+		getOutOfJailFreeCardUse.setLocation(this.getWidth()/2-getOutOfJailFreeCardUse.getWidth()/2, this.getHeight()/4*3-getOutOfJailFreeCardUse.getHeight()/2 + 50);
+		add(getOutOfJailFreeCardUse); 
+		getOutOfJailFreeCardUse.setVisible(true);
 	}
 
 	private void addPayButton()
 	{
-		payButton.setText("PAY FINE"); 
-		payButton.setSize(80, 80);
+		payButton.setText("<html>PAY FINE<br />$50</html>"); 
+		payButton.setHorizontalAlignment(SwingConstants.CENTER);
+		payButton.setSize(100, 60);
 		payButton.setLocation(this.getWidth()/2-payButton.getWidth()/2, this.getHeight()/4*3-payButton.getHeight()/2);
 		payButton.setBackground(Color.RED);
 		add(payButton);
 	}
 	public void disableButtons(){
-		if(hideButton!=null){
-			hideButton.setEnabled(false);
-			rollButton.setEnabled(false);
-			payButton.setEnabled(false);
-		}
+		hideButton.setEnabled(false);
+		getOutOfJailFreeCardUse.setEnabled(false);
+		payButton.setEnabled(false);
+		getOutOfJailFreeCardUse.setEnabled(false);
 
 	}
 	private void dismissJailInfoPanel() {
@@ -280,18 +284,27 @@ public class JailInfoPanel extends JPanel {
 			
 	}
 	
-	public void actionForGetOutOfJail(){
-		currentPlayer.pay(50);
-		Sounds.money.playSound();
+	public void actionForGetOutOfJail(boolean isGetOutOfJailFree){
+		if (isGetOutOfJailFree)
+		{
+			players[current].setInJail(false);
+			players[current].setJailFreeCard(players[current].getJailFreeCard() - 1);
+			dicePanel.actionForPlayers();
+			Sounds.buildingHouse.playSound();
+		}
+		else{
+			currentPlayer.pay(50);
+			Sounds.money.playSound();
+			dicePanel.displayEndTurnButton();
+		}
 		currentPlayer.setInJail(false);
 		endJailPanel();
-		dicePanel.displayEndTurnButton();
 		turnsInJail[current] = 0;
 	}
 	public void enableButtons(){
-		hideButton.setEnabled(true); 
-		rollButton.setEnabled(false); // TODO: DEBUG, ROLL DOESN'T WORK WITH MULTIPLAYER YET 
+		hideButton.setEnabled(true);  
 		payButton.setEnabled(true);
+		getOutOfJailFreeCardUse.setEnabled(true);
 	}
 	public void setOutputStream(OutputStream outputStream){
 		this.outputStream = outputStream;

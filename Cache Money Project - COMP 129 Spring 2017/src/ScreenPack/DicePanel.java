@@ -343,14 +343,7 @@ public class DicePanel extends JPanel{
 					endTurnButtonPressed();
 				}
 			}
-			private void endTurnButtonPressed() {
-				endTurnButton.setVisible(false);
-				if(pInfo.isSingle())
-					actionForDiceEnd();
-				else
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_TURN));
-				
-			}
+			
 			@Override
 			public void mousePressed(MouseEvent e) {}
 			@Override
@@ -360,6 +353,15 @@ public class DicePanel extends JPanel{
 			@Override
 			public void mouseExited(MouseEvent e) {}
 		});
+	}
+	
+	private void endTurnButtonPressed() {
+		endTurnButton.setVisible(false);
+		if(pInfo.isSingle())
+			actionForDiceEnd();
+		else
+			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_TURN));
+		
 	}
 	
 	class alwaysUpdateMoneyLabels extends Thread{
@@ -488,8 +490,8 @@ public class DicePanel extends JPanel{
 	public void actionForReceiveInteger(int num){
 		mGamePanel.actionForGame(num);
 	}
-	public void actionForGotOutOfJail(){
-		jailInfoScreen.actionForGetOutOfJail();
+	public void actionForGotOutOfJail(boolean b){
+		jailInfoScreen.actionForGetOutOfJail(b);
 	}
 	public void actionForReceiveAnswer(int ith, int playerN, boolean isOwner, int enteredAns){
 		mGamePanel.actionForGame(ith, playerN, isOwner, enteredAns);
@@ -779,7 +781,8 @@ public class DicePanel extends JPanel{
 	// ToDo: need to track the missing player.
 	private void checkPlayerAvailabilty(){
 
-		while(!players[(++current)%4].isOn());
+		while(!players[(++current)%4].isOn() || !players[(current)%4].getIsAlive());
+		//while(!players[(++current)%4].isOn());
 		current = (current)%4;
 	}
 	public int[] getResult(){
@@ -825,6 +828,20 @@ public class DicePanel extends JPanel{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	public void playerDeclaredBankrupt() {
+		pInfo.setGamePart(Part.END_TURN);
+		numOfDoublesInRow = 0;
+		if (gamescreen.canShowEndGameScreen()){
+			checkPlayerAvailabilty();
+			gamescreen.showEndGameScreen();
+		}
+		else{
+			endTurnButtonPressed();
+		}
+	}
+	public void actionForBankrupt() {
+		propertyPanel.actionForBankrupt(); 
 	}
 
 }

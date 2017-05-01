@@ -76,6 +76,9 @@ public class MainGameArea extends JPanel{
 		setBackground(Color.black);		
 	}
 	
+	
+	
+	
 	private void createChatAndFriendsPanel(){
 		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
 		friendList = new infoThatScrolls(false);

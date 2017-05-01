@@ -52,7 +52,7 @@ public class PlayerTest {
 		sizeRelated.setScreen_Width_Height(500, 500);
 		player0 = Player.getInstance(0);
 		assertTrue(player0.getNumPropertiesOwned() == 0);
-		player0.purchaseProperty(new StandardProperty(500, "test", 500, 9));
+		player0.purchaseProperty(new StandardProperty(500, "test", 500, 9), false, 0);
 		assertTrue(player0.getNumPropertiesOwned() == 1);
 	}
 

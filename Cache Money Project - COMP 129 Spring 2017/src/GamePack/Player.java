@@ -133,7 +133,7 @@ public final class Player {
 	}
 	public void setJailFreeCard(int x)
 	{
-		jailFreeCard = 1;
+		jailFreeCard = x;
 	}
 	void setFiveHunneds(int newFiveHunneds) {
 		fivehunneds = newFiveHunneds;
@@ -205,11 +205,12 @@ public final class Player {
 		}
 		pastPositionNumber = playerPositionNumber;
 	}
-	public void purchaseProperty(Property p)
+	public void purchaseProperty(Property p, boolean isAuction, int auctionPrice)
 	{
 		
 		ownedProperties.add(p);
-		pay(p.getBuyingPrice());
+		
+		pay(isAuction ? auctionPrice : p.getBuyingPrice());
 		
 		if (p.getPropertyFamilyIdentifier() == 9){ // if the property belongs to the railroad family
 			railroadPurchaseCase();
@@ -480,16 +481,9 @@ public final class Player {
 		return totalcost;
 	}
 	
-	private boolean enoughMonies(int cost)
+	public boolean enoughMonies(int cost)
 	{
-		if (totalmonies + mortgageTotalMonnies() >= cost)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return totalmonies + mortgageTotalMonnies() >= cost;
 	}
 	
 	public void setUserId(String user_id){

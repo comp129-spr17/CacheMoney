@@ -250,12 +250,16 @@ public class TradingPanel extends JDialog{
 				}
 				Sounds.buttonCancel.playSound();
 				if (isReceiving){
-					if (!pInfo.isSingle()){
+					if (pInfo.isSingle()){
+						commenceTrade(false);
+					}
+					else { 
 						pInfo.sendMessageToServer(mPack.packBoolean(UnicodeForServer.COMMENCE_TRADE, false));
 					}
 					closeTradingWindow();
 				}
 				else{
+					
 					setTradeConfirmDisplayVisible(false);
 					setTradeInterfaceVisible(true);
 					setConfirmButtonsVisible(false);

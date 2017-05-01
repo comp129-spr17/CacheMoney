@@ -356,6 +356,31 @@ public final class MBytePack {
 		
 		return null;
 	}
+	public byte[] packStringAndInt(int requestCode, String propertyName, int playerNum){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeUTF(propertyName);
+			dOutputStream.writeInt(playerNum);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public byte[] packBoolStrAndInt(int requestCode, boolean isMortgaging, String propertyName, int playerNum){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeBoolean(isMortgaging);
+			dOutputStream.writeUTF(propertyName);
+			dOutputStream.writeInt(playerNum);
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	public byte[] packSimpleRequest(int requestCode){
 		try{
@@ -369,18 +394,7 @@ public final class MBytePack {
 	}
 	
 	
-	public byte[] packStringAndInt(int requestCode, String propertyName, int playerNum){
-		try{
-			dOutputStream.writeInt(requestCode);
-			dOutputStream.writeUTF(propertyName);
-			dOutputStream.writeInt(playerNum);
-			return packResult();
-		}
-		catch (IOException e){
-			e.printStackTrace();
-		}
-		return null;
-	}
+	
 	
 	
 //	public static void main(String[] args){
