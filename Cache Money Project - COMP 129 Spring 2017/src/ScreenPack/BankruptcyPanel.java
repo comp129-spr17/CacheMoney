@@ -61,7 +61,6 @@ public class BankruptcyPanel extends JPanel{
 		this.setVisible(false);	
 		initializeButtons();
 		addListeners();
-		
 		initButtonLabels();
 		
 	}
@@ -73,21 +72,20 @@ public class BankruptcyPanel extends JPanel{
 		description.setBounds(this.getWidth() / 3 + 5, 75, this.getWidth(), this.getHeight()/10);
 		
 		lblTitle.setText("<html><b><font color = '" + "white" + "'>You do not have enough money to pay!<br />Mortgage properties to earn some money!<br />This will disappear once you earn enough money.</font><b></html>");
-		lblTitle.setBounds(this.getWidth() / 8, 5, this.getWidth(), this.getHeight()/5);
+		lblTitle.setBounds(this.getWidth() / 20, 5, this.getWidth(), this.getHeight()/5);
 		
 		lblBankrupt.setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
-		lblBankrupt.setLocation(this.getWidth()/2 - 60, this.getHeight()/8*7 + 20);
+		lblBankrupt.setBounds(this.getWidth()/2 - 60, this.getHeight()/8*6 + 20, 300, 30);
 		
 		add(lblTitle);
 		add(lblBankrupt);
 		add(description);
 
 	}
-	public void executeSwitch(JPanel panelToSwitchFrom, JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
+	public void executeSwitch(JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
 		this.setBackground(Color.black);
 		this.needMoney = needMoney;
-		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.panelToSwitchTo = panelToSwitchTo;
 		this.currentPlayer = currentPlayer;
 		updateMoneyNeededToPay();
@@ -103,7 +101,7 @@ public class BankruptcyPanel extends JPanel{
 		bankruptcyButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "BankruptcyButton.png", bankruptcyButton.getWidth(), bankruptcyButton.getHeight()));
 		bankruptcyButton.setContentAreaFilled(false);
 		bankruptcyButton.setBorder(null);
-		bankruptcyButton.setLocation(this.getWidth()/2 - bankruptcyButton.getWidth()/2, this.getHeight()/8*7 - bankruptcyButton.getHeight()/3);
+		bankruptcyButton.setLocation(this.getWidth()/2 - bankruptcyButton.getWidth()/2, this.getHeight()/8*6 - bankruptcyButton.getHeight()/3);
 		bankruptcyButton.setBackground(Color.RED);
 		add(bankruptcyButton);
 	}
@@ -113,7 +111,7 @@ public class BankruptcyPanel extends JPanel{
 	}
 	private void hidePreviousPanel()
 	{
-		panelToSwitchFrom.setVisible(false);
+		panelToSwitchTo.setVisible(false);
 		this.setVisible(true);
 	}
 	public void setButtonsEnabled(boolean visible){
@@ -179,28 +177,20 @@ public class BankruptcyPanel extends JPanel{
 	}
 	public void endPropertyPanel()
 	{
-//		this.removeAll();
 		this.setVisible(false);
-		panelToSwitchFrom.removeAll();
-		panelToSwitchFrom.setVisible(false);
 		panelToSwitchTo.setVisible(true);
 	}
 	class CheckForMoney extends Thread{
-		public CheckForMoney(){
-			
-		}
+		@Override
 		public void run(){
 			while(true){
-			
 				if(needMoney < currentPlayer.getTotalMonies()){
-					
 					endPropertyPanel();
 					break;
 				}
 				try {
 					sleep(1);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 					

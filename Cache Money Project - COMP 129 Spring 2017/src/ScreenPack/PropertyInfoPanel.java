@@ -311,7 +311,7 @@ public class PropertyInfoPanel extends JPanel{
 
 					if (isCurrent || pInfo.isSingle()){
 						isBankrupt = true;
-						bankruptcyPanel.executeSwitch(this,panelToSwitchFrom, getCost(), currentPlayer, isCurrent);
+						bankruptcyPanel.executeSwitch(this, getCost(), currentPlayer, isCurrent);
 						
 					}
 				}
@@ -742,7 +742,7 @@ public class PropertyInfoPanel extends JPanel{
 		returnButton.setEnabled(visible);
 	}
 
-	public void dismissPropertyPanel() {
+	private void dismissPropertyPanel() {
 		removeBackground();
 		if(pInfo.isSingle())
 			endPropertyPanel();
