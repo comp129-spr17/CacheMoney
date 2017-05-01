@@ -56,13 +56,15 @@ public class PropertyInfoPanel extends JPanel{
 	private BackgroundImage bi;
 	private JLabel[] buttonLabels;
 	private JButton declareLossButton;
-
-	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b)
+	private BankruptcyPanel bankruptcyPanel;
+	private boolean isBankrupt;
+	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b, BankruptcyPanel bankruptcyPanel)
 	{
 		infoPanel = new JPanel();	
 		pInfo = PlayingInfo.getInstance();
 		mPack = MBytePack.getInstance();
 		this.panelToSwitchFrom = panelToSwitchFrom;
+		this.bankruptcyPanel = bankruptcyPanel;
 		this.propertyInfo = propertyInfo;
 		this.bPanel = b;
 		this.dicePanel = diceP;
@@ -254,7 +256,8 @@ public class PropertyInfoPanel extends JPanel{
 		infoPanel.removeAll();
 		setButtonsEnabled(isCurrent); 
 		renderPropertyInfo(currentPlayer, isCurrent);
-		hidePreviousPanel();
+		if(!isBankrupt)
+			hidePreviousPanel();
 		
 	}
 	
@@ -305,9 +308,11 @@ public class PropertyInfoPanel extends JPanel{
 				addPayLabel();
 				if (!checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent)) {
 					(new waitForPayEnabled()).start();
-					if (isCurrent){
-						addBankruptcyButton();
-						addBankruptcyLabel();
+
+					if (isCurrent || pInfo.isSingle()){
+						isBankrupt = true;
+						bankruptcyPanel.executeSwitch(this, getCost(), currentPlayer, isCurrent);
+						
 					}
 				}
 			}

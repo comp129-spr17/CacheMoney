@@ -40,13 +40,14 @@ public class JailInfoPanel extends JPanel {
 	private int current;
 	private PlayingInfo pInfo;
 	private BackgroundImage bi;
-	
-	public JailInfoPanel(JPanel panelToSwitchFrom, Player[] player, DicePanel diceP, BoardPanel b)
+	private BankruptcyPanel bankruptcyPanel;
+	public JailInfoPanel(JPanel panelToSwitchFrom, Player[] player, DicePanel diceP, BoardPanel b, BankruptcyPanel bankruptcyPanel)
 	{
 		pInfo = PlayingInfo.getInstance();
 		jailPanel = new JPanel();
 		players = player;
 		this.isSingle = isSingle;
+		this.bankruptcyPanel = bankruptcyPanel;
 		this.panelToSwitchFrom = panelToSwitchFrom;
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
@@ -96,6 +97,8 @@ public class JailInfoPanel extends JPanel {
 		
 		if (players[current].getTotalMonies() < 50){
 			payButton.setEnabled(false);
+			if(players[current].getJailFreeCard() == 0)
+				bankruptcyPanel.executeSwitch(this, 50, currentPlayer, isCurrent);
 			(new waitUntilUserHasEnoughMoneyToPayJailFine()).start();
 		}
 		

@@ -38,6 +38,8 @@ public class FriendPanel extends JPanel{
 	}
 	
 	private void initPanels(){
+		setBounds(0, 0, 400, 400);
+//		setBackground(Color.BLACK);
 		normalLayout = new JPanel();
 		normalLayout.setLayout(new GridLayout());
 		normalLayout.add(button.get(NAME));
@@ -54,7 +56,6 @@ public class FriendPanel extends JPanel{
 		
 		sectionedLayout.add(forName);
 		sectionedLayout.add(forSections);
-
 		this.add(normalLayout, "normalLayout");
 		this.add(sectionedLayout, "sectionedLayout");
 		cl = (CardLayout)FriendPanel.this.getLayout();
@@ -144,9 +145,10 @@ public class FriendPanel extends JPanel{
 		f.setSize(500,500);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		FriendPanel fp = new FriendPanel("Jack Lonergan");
 		f.add(fp);
-		f.pack();
+//		f.pack();
+		f.repaint();
+		f.revalidate();
 	}
 }
