@@ -308,11 +308,11 @@ public class PropertyInfoPanel extends JPanel{
 				addPayLabel();
 				if (!checkIfPlayerHasEnoughMoneyForRent(currentPlayer, isCurrent)) {
 					(new waitForPlayerDeath()).start();
-					if (isCurrent || pInfo.isSingle()){
-						isBankrupt = true;
-						bankruptcyPanel.executeSwitch(this, getCost(), currentPlayer, isCurrent);
+//					if (isCurrent || pInfo.isSingle()){
+					isBankrupt = true;
+					bankruptcyPanel.executeSwitch(this, getCost(), currentPlayer, isCurrent);
 						
-					}
+//					}
 				}
 			}
 		}else{

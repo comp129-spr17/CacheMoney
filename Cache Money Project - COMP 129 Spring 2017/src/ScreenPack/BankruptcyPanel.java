@@ -39,6 +39,7 @@ public class BankruptcyPanel extends JPanel{
 	private JButton declareLossButton;
 	private int needMoney;
 	private JPanel panelToSwitchTo;
+	private boolean isBankrupt;
 	public BankruptcyPanel(Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		pInfo = PlayingInfo.getInstance();
@@ -83,6 +84,7 @@ public class BankruptcyPanel extends JPanel{
 	}
 	public void executeSwitch(JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
+		isBankrupt = false;
 		this.setBackground(Color.black);
 		this.needMoney = needMoney;
 		this.panelToSwitchTo = panelToSwitchTo;
@@ -151,6 +153,7 @@ public class BankruptcyPanel extends JPanel{
 		});
 	}
 	protected void actionForBankrupt() {
+		isBankrupt = true;
 		currentPlayer.setTotalMonies(-1);
 		Sounds.buttonConfirm.playSound();
 		Sounds.landedOnJail.playSound();
@@ -182,7 +185,7 @@ public class BankruptcyPanel extends JPanel{
 	class CheckForMoney extends Thread{
 		@Override
 		public void run(){
-			while(true){
+			while(!isBankrupt){
 				if(needMoney < currentPlayer.getTotalMonies()){
 					endPropertyPanel();
 					break;
