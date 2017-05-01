@@ -733,6 +733,10 @@ public class DicePanel extends JPanel{
 					players[current].pay(200);
 				}
 			}
+			else if (spaceLandedOn.equals("Go To Jail")){
+				numOfDoublesInRow = 0;
+				isSame = false;
+			}
 		}
 		mLabel.reinitializeMoneyLabels();
 		if (!isSame || numOfDoublesInRow >= 3 || !movementAllowed || players[current].isInJail()){
