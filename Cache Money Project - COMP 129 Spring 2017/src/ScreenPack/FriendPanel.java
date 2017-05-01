@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -16,7 +18,7 @@ public class FriendPanel extends JPanel{
 	private final static int NAME_COPY = 1;
 	private final static int ADD_REMOVE = 2;
 	private final static int MESSAGE = 3;
-	
+
 	private ArrayList<JButton> button;
 	private boolean isFriends;
 	private String myUsername;
@@ -24,8 +26,8 @@ public class FriendPanel extends JPanel{
 	private JPanel normalLayout;
 	private JPanel sectionedLayout;
 	private CardLayout cl;
-	
-	
+
+
 	public FriendPanel(String friendUsername){
 		this.setLayout(new CardLayout());
 		//this.myUsername = SqlRelated.getUserName();
@@ -36,81 +38,97 @@ public class FriendPanel extends JPanel{
 		initButtons();
 		initPanels();
 	}
-	
+
 	private void initPanels(){
-		setBounds(0, 0, 400, 400);
-//		setBackground(Color.BLACK);
 		normalLayout = new JPanel();
 		normalLayout.setLayout(new GridLayout());
 		normalLayout.add(button.get(NAME));
-		
+
 		sectionedLayout = new JPanel(new GridLayout(1,2));
 		JPanel forName = new JPanel();
 		forName.setLayout(new GridLayout());
 		forName.add(button.get(NAME_COPY));
-		
+
 		JPanel forSections = new JPanel();
 		forSections.setLayout(new GridLayout(2,1));
 		forSections.add(button.get(ADD_REMOVE));
 		forSections.add(button.get(MESSAGE));
-		
+
 		sectionedLayout.add(forName);
 		sectionedLayout.add(forSections);
+		sectionedLayout.setVisible(false);
+		
 		this.add(normalLayout, "normalLayout");
 		this.add(sectionedLayout, "sectionedLayout");
 		cl = (CardLayout)FriendPanel.this.getLayout();
 	}
-	
+
 	private void refresh(){
 		this.revalidate();
 		this.repaint();
 	}
-	
+
 	private void initButtons(){
 		button.add(initUsernameButton());
 		button.add(initUsernameButton());
 		button.add(initAddRemoveButton());
 		button.add(initMessageButton());
 	}
-	
+
 	private JButton initUsernameButton(){
 		JButton temp = new JButton(friendUsername);
-		temp.addActionListener(new ActionListener() {
-			
+		
+		temp.addMouseListener(new MouseListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {
 				if(normalLayout.isVisible()){
 					cl.show(FriendPanel.this, "sectionedLayout");
 					normalLayout.setVisible(false);
-					refresh();
+					sectionedLayout.setVisible(true);
+//					refresh();
 				}else{
 					normalLayout.setVisible(true);
+					sectionedLayout.setVisible(false);
 					cl.show(FriendPanel.this, "normalLayout");
-					refresh();
+//					refresh();
 				}
 			}
 		});
-		
 		return temp;
 	}
-	
+
 	private JButton initAddRemoveButton(){
 		JButton temp = new JButton("");
 		checkFriendship(temp);
-		
-		temp.addActionListener(new ActionListener() {
-			
+
+		temp.addMouseListener(new MouseListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {
 				checkFriendship(temp);
 			}
 		});
-		
+
 		return temp;
 	}
-	
+
 	private void checkFriendship(JButton temp){
 		if(isFriends){
 			temp.setText("Remove Friend");
@@ -124,30 +142,37 @@ public class FriendPanel extends JPanel{
 			//SqlRelated.addFriend(myUsername, friendUsername);
 		}
 	}
-	
+
 	private JButton initMessageButton(){
 		JButton temp = new JButton("Message");
-		temp.setBackground(Color.MAGENTA);
-		temp.addActionListener(new ActionListener() {
-			
+		temp.setBackground(Color.CYAN);
+		temp.addMouseListener(new MouseListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add message friend capability
-				
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				//TODO Implement chatting system here
+
 			}
 		});
-		
 		return temp;
 	}
-	
+
 	public static void main(String[] args){
 		JFrame f = new JFrame("TEST");
-		f.setSize(500,500);
+		f.setSize(200,200);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FriendPanel fp = new FriendPanel("Jack Lonergan");
 		f.add(fp);
-//		f.pack();
+		//		f.pack();
 		f.repaint();
 		f.revalidate();
 	}
