@@ -39,6 +39,7 @@ public class BankruptcyPanel extends JPanel{
 	private JLabel[] buttonLabels;
 	private JButton declareLossButton;
 	private int needMoney;
+	private JPanel panelToSwitchTo;
 	public BankruptcyPanel(Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		pInfo = PlayingInfo.getInstance();
@@ -69,10 +70,10 @@ public class BankruptcyPanel extends JPanel{
 		lblTitle = new JLabel();
 		description = new JLabel();
 		
-		description.setBounds(this.getWidth() / 3 + 5, 50, this.getWidth(), this.getHeight()/10);
+		description.setBounds(this.getWidth() / 3 + 5, 75, this.getWidth(), this.getHeight()/10);
 		
-		lblTitle.setText("<html><b><font color = '" + "white" + "'>You do not have enough money to pay!<br />Mortgage properties to earn some more money!</font><b></html>");
-		lblTitle.setBounds(this.getWidth() / 8, 0, this.getWidth(), this.getHeight()/10);
+		lblTitle.setText("<html><b><font color = '" + "white" + "'>You do not have enough money to pay!<br />Mortgage properties to earn some money!<br />This will disappear once you earn enough money.</font><b></html>");
+		lblTitle.setBounds(this.getWidth() / 8, 5, this.getWidth(), this.getHeight()/5);
 		
 		lblBankrupt.setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
 		lblBankrupt.setLocation(this.getWidth()/2 - 60, this.getHeight()/8*7 + 20);
@@ -82,14 +83,17 @@ public class BankruptcyPanel extends JPanel{
 		add(description);
 
 	}
-	public void executeSwitch(JPanel panelToSwitchFrom, int needMoney, Player currentPlayer, boolean isCurrent)
+	public void executeSwitch(JPanel panelToSwitchFrom, JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
 		this.setBackground(Color.black);
 		this.needMoney = needMoney;
 		this.panelToSwitchFrom = panelToSwitchFrom;
+		this.panelToSwitchTo = panelToSwitchTo;
 		this.currentPlayer = currentPlayer;
 		updateMoneyNeededToPay();
-		setButtonsEnabled(isCurrent || pInfo.isSingle()); 
+		if (!pInfo.isSingle()){
+			setButtonsEnabled(isCurrent); 
+		}
 		hidePreviousPanel();
 		(new CheckForMoney()).start();
 	}
@@ -177,7 +181,9 @@ public class BankruptcyPanel extends JPanel{
 	{
 //		this.removeAll();
 		this.setVisible(false);
-		panelToSwitchFrom.setVisible(true);
+		panelToSwitchFrom.removeAll();
+		panelToSwitchFrom.setVisible(false);
+		panelToSwitchTo.setVisible(true);
 	}
 	class CheckForMoney extends Thread{
 		public CheckForMoney(){
@@ -203,6 +209,6 @@ public class BankruptcyPanel extends JPanel{
 	}
 	
 	private void updateMoneyNeededToPay(){
-		description.setText("<html><font color = '" + "white" + "'>You owe: $" + needMoney + ".</font></html>");
+		description.setText("<html><b><font color = '" + "white" + "'>You owe: $" + needMoney + ".</font></b></html>");
 	}
 }
