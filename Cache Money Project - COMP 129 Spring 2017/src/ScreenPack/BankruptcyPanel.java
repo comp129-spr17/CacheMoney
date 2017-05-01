@@ -24,11 +24,11 @@ import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
 
 public class BankruptcyPanel extends JPanel{
-	private JPanel panelToSwitchFrom;
 	private JLabel lblTitle;
 	private JLabel lblBankrupt;
 	private JButton bankruptcyButton;
 	private MBytePack mPack;
+	private JLabel description;
 	private Player[] players;
 	private DicePanel dicePanel;
 	private BoardPanel bPanel;
@@ -39,6 +39,7 @@ public class BankruptcyPanel extends JPanel{
 	private JButton declareLossButton;
 	private int needMoney;
 	private JPanel panelToSwitchTo;
+	private boolean isBankrupt;
 	public BankruptcyPanel(Player[] player, DicePanel diceP, BoardPanel b)
 	{
 		pInfo = PlayingInfo.getInstance();
@@ -60,29 +61,38 @@ public class BankruptcyPanel extends JPanel{
 		this.setVisible(false);	
 		initializeButtons();
 		addListeners();
-		
 		initButtonLabels();
 		
 	}
 	private void initButtonLabels(){
 		lblBankrupt = new JLabel();
 		lblTitle = new JLabel();
-		lblTitle.setText("BANKRUPTED");
-		lblTitle.setBounds(0, 0, this.getWidth(), this.getHeight()/10);
+		description = new JLabel();
+		
+		description.setBounds(this.getWidth() / 3 + 5, 75, this.getWidth(), this.getHeight()/10);
+		
+		lblTitle.setText("<html><b><font color = '" + "white" + "'>You do not have enough money to pay!<br />Mortgage properties to earn some money!<br />This will disappear once you earn enough money.</font><b></html>");
+		lblTitle.setBounds(this.getWidth() / 20, 5, this.getWidth(), this.getHeight()/5);
+		
+		lblBankrupt.setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
+		lblBankrupt.setBounds(this.getWidth()/2 - 60, this.getHeight()/8*6 + 20, 300, 30);
+		
 		add(lblTitle);
 		add(lblBankrupt);
-		lblBankrupt.setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
-		lblBankrupt.setLocation(this.getWidth()/2 - 60, this.getHeight()/8*7 + 20);
+		add(description);
+
 	}
-	public void executeSwitch(JPanel panelToSwitchFrom, JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
+	public void executeSwitch(JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
-		this.setBackground(Color.white);
+		isBankrupt = false;
+		this.setBackground(Color.black);
 		this.needMoney = needMoney;
-		this.panelToSwitchFrom = panelToSwitchFrom;
 		this.panelToSwitchTo = panelToSwitchTo;
 		this.currentPlayer = currentPlayer;
-		if(!pInfo.isSingle())
+		updateMoneyNeededToPay();
+		if (!pInfo.isSingle()){
 			setButtonsEnabled(isCurrent); 
+		}
 		hidePreviousPanel();
 		(new CheckForMoney()).start();
 	}
@@ -92,7 +102,7 @@ public class BankruptcyPanel extends JPanel{
 		bankruptcyButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "BankruptcyButton.png", bankruptcyButton.getWidth(), bankruptcyButton.getHeight()));
 		bankruptcyButton.setContentAreaFilled(false);
 		bankruptcyButton.setBorder(null);
-		bankruptcyButton.setLocation(this.getWidth()/2 - bankruptcyButton.getWidth()/2, this.getHeight()/8*7 - bankruptcyButton.getHeight()/3);
+		bankruptcyButton.setLocation(this.getWidth()/2 - bankruptcyButton.getWidth()/2, this.getHeight()/8*6 - bankruptcyButton.getHeight()/3);
 		bankruptcyButton.setBackground(Color.RED);
 		add(bankruptcyButton);
 	}
@@ -102,11 +112,10 @@ public class BankruptcyPanel extends JPanel{
 	}
 	private void hidePreviousPanel()
 	{
-		panelToSwitchFrom.setVisible(false);
+		panelToSwitchTo.setVisible(false);
 		this.setVisible(true);
 	}
 	public void setButtonsEnabled(boolean visible){
-		
 		bankruptcyButton.setEnabled(visible);
 	}
 	private void addListeners(){
@@ -114,19 +123,22 @@ public class BankruptcyPanel extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonPress.playSound();
-				int i = JOptionPane.showConfirmDialog(null, "<html>Are you sure you want to declare bankruptcy?<br /><b><font color = '" + "red" + "'>You will lose the game!</font></b></html>", "Bankruptcy Confirm", JOptionPane.YES_NO_OPTION);
-				if (i == JOptionPane.YES_OPTION){
-					if (pInfo.isSingle()){
-						actionForBankrupt();
+				if(bankruptcyButton.isEnabled()){
+					Sounds.buttonPress.playSound();
+					int i = JOptionPane.showConfirmDialog(null, "<html>Are you sure you want to declare bankruptcy?<br /><b><font color = '" + "red" + "'>You will lose the game!</font></b></html>", "Bankruptcy Confirm", JOptionPane.YES_NO_OPTION);
+					if (i == JOptionPane.YES_OPTION){
+						if (pInfo.isSingle()){
+							actionForBankrupt();
+						}
+						else{
+							pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.DECLARED_BANKRUPT));
+						}
 					}
 					else{
-						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.DECLARED_BANKRUPT));
+						Sounds.buttonCancel.playSound();
 					}
 				}
-				else{
-					Sounds.buttonCancel.playSound();
-				}
+				
 			}
 
 			@Override
@@ -144,13 +156,14 @@ public class BankruptcyPanel extends JPanel{
 		});
 	}
 	protected void actionForBankrupt() {
+		isBankrupt = true;
 		currentPlayer.setTotalMonies(-1);
 		Sounds.buttonConfirm.playSound();
 		Sounds.landedOnJail.playSound();
-		currentPlayer.setIsAlive(false);
 		currentPlayer.cleanupProperties();
 		dismissBackruptPanel();
-		dicePanel.playerDeclaredBankrupt();
+		currentPlayer.setIsAlive(false);
+		dicePanel.playerDeclaredBankrupt(currentPlayer);
 	}
 	private void dismissBackruptPanel() {
 		
@@ -169,32 +182,28 @@ public class BankruptcyPanel extends JPanel{
 	}
 	public void endPropertyPanel()
 	{
-//		this.removeAll();
 		this.setVisible(false);
-		panelToSwitchFrom.removeAll();
-		panelToSwitchFrom.setVisible(false);
 		panelToSwitchTo.setVisible(true);
 	}
 	class CheckForMoney extends Thread{
-		public CheckForMoney(){
-			
-		}
+		@Override
 		public void run(){
-			while(true){
-			
+			while(!isBankrupt){
 				if(needMoney < currentPlayer.getTotalMonies()){
-					
 					endPropertyPanel();
 					break;
 				}
 				try {
 					sleep(1);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 					
 			}
 		}
+	}
+	
+	private void updateMoneyNeededToPay(){
+		description.setText("<html><b><font color = '" + "white" + "'>You owe: $" + needMoney + ".</font></b></html>");
 	}
 }

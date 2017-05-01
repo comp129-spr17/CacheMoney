@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import GamePack.Player;
 import GamePack.Property;
@@ -102,7 +103,7 @@ public class AuctionPanel extends JPanel{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(temp.isEnabled()){
+				if(temp.isEnabled() && SwingUtilities.isLeftMouseButton(e)){
 					int bid = Integer.parseInt((String)bidList.getSelectedItem());
 					if(pInfo.isSingle())
 						actionToAuction(bid, p);

@@ -47,20 +47,6 @@ public class Piece extends JLabel{
 			setClickListener();
 	}
 	private void setClickListener(){
-		addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				System.out.println("Lost Focus");
-				pInfoDisplay.setVisible(false);
-			}
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-
-				System.out.println("Gain Focus");
-			}
-		});
 		addMouseListener(new MouseListener() {
 			
 			@Override

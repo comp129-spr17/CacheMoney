@@ -664,6 +664,41 @@ public class DicePanel extends JPanel{
 		chanceMovedPlayer = c;
 	}
 	
+	
+	class waitForPersonToPay extends Thread{
+		int amount;
+		public waitForPersonToPay(int amount){
+			this.amount = amount;
+		}
+		
+		@Override
+		public void run(){
+			while (players[current].getTotalMonies() < amount && players[current].getIsAlive()){
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (players[current].getIsAlive()){
+				players[current].setTotalMonies(players[current].getTotalMonies() - amount);
+				Sounds.money.playSound();
+			}
+		}
+	}
+	
+	public void cardChargedPlayer(int amount){
+		if (players[current].getTotalMonies() < amount){
+			bankruptcyPanel.executeSwitch(this, amount, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
+			(new waitForPersonToPay(amount)).start();
+		}
+		else{
+			players[current].pay(amount);
+			Sounds.money.playSound();
+		}
+	}
+	
+	
 	private void waitForDiceMoving(){
 		while(!board.isDoneAnimating() || isCelebrating){
 			delayThread(1);
@@ -680,9 +715,23 @@ public class DicePanel extends JPanel{
 			if (board.isPlayerInPropertySpace(previous)){
 				handlePropertySpaceAction(spaceLandedOn);
 			}
-			else if (spaceLandedOn == "Go to Jail"){
-				isSame = false;
-				numOfDoublesInRow = 0;
+			else if (spaceLandedOn.equals("Jewelry Tax")){
+				if (players[current].getTotalMonies() < 75){
+					bankruptcyPanel.executeSwitch(this, 75, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
+					(new waitForPersonToPay(75)).start();
+				}
+				else{
+					players[current].pay(75);
+				}
+			}
+			else if (spaceLandedOn.equals("Income Tax")){
+				if (players[current].getTotalMonies() < 200){
+					bankruptcyPanel.executeSwitch(this, 200, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
+					(new waitForPersonToPay(200)).start();
+				}
+				else{
+					players[current].pay(200);
+				}
 			}
 		}
 		mLabel.reinitializeMoneyLabels();
@@ -833,9 +882,11 @@ public class DicePanel extends JPanel{
 			e.printStackTrace();
 		}
 	}
-	public void playerDeclaredBankrupt() {
-		pInfo.setGamePart(Part.END_TURN);
+	public void playerDeclaredBankrupt(Player curPlayer) {
+		isSame = false;
 		numOfDoublesInRow = 0;
+		pInfo.setGamePart(Part.END_TURN);
+		curPlayer.getPiece().setVisible(false);
 		if (gamescreen.canShowEndGameScreen()){
 			checkPlayerAvailabilty();
 			gamescreen.showEndGameScreen();

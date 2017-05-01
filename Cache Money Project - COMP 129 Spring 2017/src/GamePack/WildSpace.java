@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 import InterfacePack.Sounds;
 import MultiplayerPack.PlayingInfo;
+import ScreenPack.BankruptcyPanel;
+import ScreenPack.BoardPanel;
 import ScreenPack.ChanceStack;
 import ScreenPack.CommunityStack;
 import ScreenPack.DicePanel;
@@ -21,6 +23,7 @@ public class WildSpace extends Space {
 	private PlayingInfo pInfo;
 	private DicePanel dp;
 	private Player[] players;
+	private BankruptcyPanel bankruptPanel;
 
 	public WildSpace(ImageIcon img, String name, GoSpace gospace, Space[] s, JPanel boardPanel, DicePanel dicePanel, Player[] p) {
 		super(img, name);
@@ -32,6 +35,7 @@ public class WildSpace extends Space {
 		communityStack = new CommunityStack(boardPanel, dicePanel);
 		go  = (GoSpace) gospace;
 		spaces = s;
+		bankruptPanel = new BankruptcyPanel(players, dicePanel, (BoardPanel) boardPanel);
 	}
 	public void actionForMultiplaying(int nextNum){
 		if(name.equals("Chance"))
@@ -146,7 +150,8 @@ public class WildSpace extends Space {
 			else if(command == "Pay$15"){
 				System.out.println("Pay a poor tax of $15");
 				chanceStack.displayImage(11);
-				piece.getPlayerClass().pay(15);
+				dp.cardChargedPlayer(15);
+				
 			}
 			else if(command == "Move5"){
 				System.out.println("Advance to Reading Railroad");
@@ -207,7 +212,7 @@ public class WildSpace extends Space {
 			else if(command == "Pay$50"){
 				System.out.println("Pay $50");
 				communityStack.displayImage(2);
-				piece.getPlayerClass().pay(50);
+				dp.cardChargedPlayer(50);
 			}
 			else if(command == "Get$50"){
 				System.out.println("Get $50");
@@ -258,12 +263,13 @@ public class WildSpace extends Space {
 			else if(command == "Pay$100"){
 				System.out.println("Pay $100");
 				communityStack.displayImage(11);
-				piece.getPlayerClass().pay(100);
+				dp.cardChargedPlayer(100);
 			}
 			else if(command == "Pay$150"){
 				System.out.println("Pay $150");
 				communityStack.displayImage(12);
-				piece.getPlayerClass().pay(150);
+				dp.cardChargedPlayer(150);
+				
 			}
 			else if(command == "Get$25"){
 				System.out.println("Get $25");
