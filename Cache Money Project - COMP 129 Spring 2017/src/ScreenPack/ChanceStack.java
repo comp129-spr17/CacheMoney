@@ -136,6 +136,9 @@ public class ChanceStack extends JPanel{
 			break;
 		case 13:
 			result = 6;
+			break;
+		default:
+			break;
 		}
 		return result;
 	}

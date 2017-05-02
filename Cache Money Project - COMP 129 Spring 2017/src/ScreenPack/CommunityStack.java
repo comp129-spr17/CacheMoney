@@ -134,6 +134,9 @@ public class CommunityStack extends JPanel{
 			break;
 		case 14:
 			result = 4;
+			break;
+		default:
+			break;
 		}
 		return result;
 	}
