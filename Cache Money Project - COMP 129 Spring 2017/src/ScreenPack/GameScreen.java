@@ -36,6 +36,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import GamePack.ImageRelated;
 import GamePack.PathRelated;
@@ -184,6 +186,15 @@ public class GameScreen extends JFrame{
 		onlineFriends = new PanelForFriends(chatScreen);
 		onlineFriends.loadFriendList();
 		chatAndFriends.addTab("Online Friends", onlineFriends.getScrollingPanel());
+		
+		chatAndFriends.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(chatAndFriends.getSelectedIndex() == 1)
+					onlineFriends.loadFriendList();
+			}
+		});
 	}
 	
 	public void setNumPlayer(int numPlayer){
