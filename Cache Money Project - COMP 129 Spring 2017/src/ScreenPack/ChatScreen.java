@@ -122,8 +122,7 @@ import MultiplayerPack.PlayingInfo;
 		private void initChatSelector(){
 			chatSelector = new JComboBox<String>();
 			chatSelector.addItem("All Users");
-			chatSelector.addItem("Meow");
-			chatSelector.addItem("Woof");
+			chatSelector.addItem("b");
 		}
 		
 		private void addListeners(){
