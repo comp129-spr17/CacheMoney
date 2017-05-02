@@ -33,7 +33,7 @@ public class FriendPanel extends JPanel{
 	private CardLayout cl;
 	private PlayingInfo pInfo;
 	private boolean isOn;
-
+	private int expiration;
 	private ArrayList<String> stat;
 	public FriendPanel(String friendUsername){
 		this.setLayout(new CardLayout());
@@ -53,7 +53,7 @@ public class FriendPanel extends JPanel{
 		status.setOpaque(true);
 		initButtons();
 		initPanels();
-
+		expiration = 0;
 		if(myUsername.equals(friendUsername))
 			button.get(NAME).setEnabled(false);
 		refresh();
@@ -213,12 +213,23 @@ public class FriendPanel extends JPanel{
 	
 	class CheckFriend extends Thread{
 		public void run(){
+			expiration=0;
 			System.out.println("Start Checking");
-			while(isOn){
+			while(isOn && expiration < 800){
 				checkFriendship(button.get(ADD_REMOVE));
 				status.setText(stat.get(SqlRelated.getPlayerStatus(friendUsername)));
+				expiration++;
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			if(expiration == 800)
+				setOff();
 			System.out.println("End Checking");
+			
 		}
 	}
 	
