@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,7 +25,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,12 +34,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import GamePack.*;
+import GamePack.ImageRelated;
+import GamePack.PathRelated;
+import GamePack.Player;
+import GamePack.Property;
+import GamePack.SizeRelated;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
-import InterfacePack.SoundAndMusicPlayer;
 import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.MClient;
@@ -107,7 +109,9 @@ public class GameScreen extends JFrame{
 	private JTextField mortgagePrice;
 	private JLabel priceDisplay;
 	private TradingPanel tradeP;
+	private JTabbedPane chatAndFriends;
 	private ChatScreen chatScreen;
+	private PanelForFriends onlineFriends;
 	private String filenameToLoad;
 //	private BackgroundImage bgi;
 	private JLabel[] buttonLabels;
@@ -170,6 +174,17 @@ public class GameScreen extends JFrame{
 	}
 	
 	
+	private void initChatAndFriendsPanel(){
+		chatScreen = new ChatScreen(UnicodeForServer.CHAT_GAME);
+		
+		chatAndFriends = new JTabbedPane();
+		chatAndFriends.setBounds(chatScreen.getBounds());
+		chatAndFriends.addTab("Chat Screen", chatScreen);
+		
+		onlineFriends = new PanelForFriends();
+		chatAndFriends.addTab("Online Friends", onlineFriends.getScrollingPanel());
+	}
+	
 	public void setNumPlayer(int numPlayer){
 		if (loadGame){
 			for (int i = 0; i < 4; i++){
@@ -211,7 +226,7 @@ public class GameScreen extends JFrame{
 		
 		
 		if(!isSingle)
-			chatScreen = new ChatScreen(UnicodeForServer.CHAT_GAME);
+			initChatAndFriendsPanel();
 		
 		if (Property.isSQLEnabled){
 			(new SQLTimeOut()).start();
@@ -868,8 +883,8 @@ public class GameScreen extends JFrame{
 		if(!pInfo.isSingle()){
 			mainPanel.remove(exportButton);
 			mainPanel.remove(buttonLabels[3]);
-			chatScreen.setVisible(false);
-			mainPanel.add(chatScreen);
+			chatAndFriends.setVisible(false);
+			mainPanel.add(chatAndFriends);
 		}
 //		//Sounds.buildingHouse.toggleMuteSounds(); // DEBUG
 //		mainPanel.add(new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png", this.getWidth(), this.getHeight()));
@@ -913,7 +928,7 @@ public class GameScreen extends JFrame{
 		getContentPane().removeAll();
 		getContentPane().add(mainPanel);
 		if(!pInfo.isSingle())
-			chatScreen.setVisible(true);
+			chatAndFriends.setVisible(true);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
