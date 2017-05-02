@@ -151,8 +151,8 @@ public class BoardPanel extends JPanel{
 		BufferedReader railroad = null;
 		
 		try{   
-			File fileSP = new File("src/TextFiles/PropertyNames.txt");
-			File fileRR = new File("src/TextFiles/RailroadNames.txt");
+			File fileSP = new File("/TextFiles/PropertyNames.txt");
+			File fileRR = new File("/TextFiles/RailroadNames.txt");
 
 			standard = new BufferedReader(new FileReader(fileSP));
 			railroad = new BufferedReader(new FileReader(fileRR));
@@ -164,8 +164,8 @@ public class BoardPanel extends JPanel{
 		chanceImg = new ImageRelated();
 		communityImg = new ImageRelated();
 
-		chance = new Wildcard(chanceImg.resizeImage("src/Images/chanceImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), CHANCE_X, CHANCE_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 0, this);
-		communityChest = new Wildcard(communityImg.resizeImage("src/Images/communityImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), COMMUNITY_X, COMMUNITY_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 1, this);
+		chance = new Wildcard(chanceImg.resizeImage("/Images/chanceImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), CHANCE_X, CHANCE_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 0, this);
+		communityChest = new Wildcard(communityImg.resizeImage("/Images/communityImage.png", WILDCARD_SIZE_X, WILDCARD_SIZE_Y), COMMUNITY_X, COMMUNITY_Y, WILDCARD_SIZE_X, WILDCARD_SIZE_Y, 1, this);
 
 		for(int i=0; i<40; i++){
 			if(i % 10 == 0)

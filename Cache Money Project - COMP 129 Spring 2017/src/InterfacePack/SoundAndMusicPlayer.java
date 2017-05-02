@@ -1,7 +1,10 @@
 package InterfacePack;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -185,7 +188,9 @@ public class SoundAndMusicPlayer {
 			private AudioInputStream initializeInputStream(String folder, String filename,
 					AudioInputStream inputStream) {
 				try {
-					inputStream = AudioSystem.getAudioInputStream(new File("src/" + folder + "/" + filename + "_loop.wav"));
+					URL url = File.class.getResource("/" + folder + "/" + filename + "_loop.wav");
+					InputStream is = url.openStream();
+					inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
 				} catch (UnsupportedAudioFileException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
