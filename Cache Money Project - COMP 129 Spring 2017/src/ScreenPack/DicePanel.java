@@ -674,11 +674,7 @@ public class DicePanel extends JPanel{
 		@Override
 		public void run(){
 			while (players[current].getTotalMonies() < amount && players[current].getIsAlive()){
-				try {
-					sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				delayThread(100);
 			}
 			if (players[current].getIsAlive()){
 				players[current].setTotalMonies(players[current].getTotalMonies() - amount);
