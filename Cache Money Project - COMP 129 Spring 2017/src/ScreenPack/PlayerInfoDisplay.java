@@ -75,7 +75,7 @@ public final class PlayerInfoDisplay extends JPanel{
 		labels.get(1).setText(user_name);
 		labels.get(3).setText(user_win+"");
 		labels.get(5).setText(user_lose+"");
-		labels.get(5).setText(statusEval(status));
+		labels.get(7).setText(statusEval(status));
 		this.repaint();
 	}
 	private String statusEval(int status){
