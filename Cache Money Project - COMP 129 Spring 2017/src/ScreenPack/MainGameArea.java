@@ -94,9 +94,25 @@ public class MainGameArea extends JPanel{
 		JPanel temp = new JPanel();
 		temp.setLayout(new BoxLayout(temp,BoxLayout.Y_AXIS));
 		
-		lblFriend = new JLabel("Friend List");
-		lblFriend.setAlignmentX(Component.CENTER_ALIGNMENT);
-		temp.add(lblFriend);
+		JButton refresh = new JButton("Refresh Friend List");
+		refresh.addMouseListener(new MouseListener() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				friendList.loadFriendList();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+		});
+//		lblFriend = new JLabel("Friend List");
+//		lblFriend.setAlignmentX(Component.CENTER_ALIGNMENT);
+		refresh.setAlignmentX(Component.CENTER_ALIGNMENT);
+		temp.add(refresh);
 		temp.add(friendList.getScrollingPanel());
 		chatAndFriends.add(temp);
 	}
