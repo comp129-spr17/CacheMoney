@@ -14,7 +14,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -150,15 +152,10 @@ public class BoardPanel extends JPanel{
 		BufferedReader standard = null;
 		BufferedReader railroad = null;
 		
-		try{   
-			File fileSP = new File("/TextFiles/PropertyNames.txt");
-			File fileRR = new File("/TextFiles/RailroadNames.txt");
-
-			standard = new BufferedReader(new FileReader(fileSP));
-			railroad = new BufferedReader(new FileReader(fileRR));
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+			standard = new BufferedReader(new InputStreamReader(File.class.getResourceAsStream("/TextFiles/PropertyNames.txt")));
+			railroad = new BufferedReader(new InputStreamReader(File.class.getResourceAsStream("/TextFiles/RailroadNames.txt")));
+		
 
 
 		chanceImg = new ImageRelated();
