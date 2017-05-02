@@ -167,6 +167,7 @@ public class MWaitingRoom extends Thread{
 		isGameStartedOrDisconnected = true;
 		exitCode = true;
 		decNumPlayerLoading();
+		SqlRelated.setPlayerStatus(0, userId);
 		if(isHost){
 			forLoadingUserLeave();
 			actionToRemoveRoom(false);
@@ -190,6 +191,7 @@ public class MWaitingRoom extends Thread{
 		}
 		else{
 			actionToLeaveUser();
+			SqlRelated.setPlayerStatus(1, userId);
 			notifyUserLeave(userId);
 		}
 		
@@ -227,7 +229,11 @@ public class MWaitingRoom extends Thread{
 		// send individual a code about close the room and go back to the main area.
 		mManagingMaps.removeWaitingRoom(roomNum);
 		if(!isGameStarted){
+			for(String id : userForThisRoom){
+				SqlRelated.setPlayerStatus(1, id);
+			}
 			MServerMethod.showMsgToUsersWithoutHost(outputForThisRoom, mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
+			
 		}
 //		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongArray(UnicodeForServer.REQUESTING_STATUS_MAIN_ROOM, mManagingMaps.getWaitingRooms()));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packLongIntBoolean(UnicodeForServer.JOIN_ROOM_TO_MAIN_GAME_AREA, roomNum,0,true));
@@ -260,7 +266,8 @@ public class MWaitingRoom extends Thread{
 		userForThisRoom = uList;
 	}
 	public void notifyUserEnter(String uId){
-		
+
+		SqlRelated.setPlayerStatus(2, uId);
 		System.out.println(uId + " joined");
 		outputForThisRoom.add(usersOutput.get(uId));
 		userForThisRoom.add(uId);

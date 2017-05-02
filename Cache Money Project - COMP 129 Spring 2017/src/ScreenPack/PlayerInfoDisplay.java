@@ -21,7 +21,7 @@ public final class PlayerInfoDisplay extends JPanel{
 	private Font font;
 	private String myUname;
 	private String friendUname;
-	
+	private ArrayList<String> stat;
 	private PlayerInfoDisplay(){
 		init();
 	}
@@ -41,13 +41,19 @@ public final class PlayerInfoDisplay extends JPanel{
 	
 	private void initLabels(){
 		labels = new ArrayList<>();
+		stat = new ArrayList<>();
+		stat.add("OffLine");
+		stat.add("Lobby");
+		stat.add("Waiting Room");
+		stat.add("Playing Game");
 		labels.add(new JLabel("Name:"));
 		labels.add(new JLabel(""));
 		labels.add(new JLabel("Win:"));
 		labels.add(new JLabel(""));
 		labels.add(new JLabel("Lose:"));
 		labels.add(new JLabel(""));
-		
+		labels.add(new JLabel("Status:"));
+		labels.add(new JLabel(""));
 		add(friend);
 		for(int i = 0; i < labels.size(); i++){
 			add(labels.get(i));
@@ -65,13 +71,16 @@ public final class PlayerInfoDisplay extends JPanel{
 		return y < sizeRelated.getScreenH()/2 ? y : y-width;
 	}
 	
-	public void setPlayerInfo(String user_id, String user_name, int user_win, int user_lose){
+	public void setPlayerInfo(String user_id, String user_name, int user_win, int user_lose, int status){
 		labels.get(1).setText(user_name);
 		labels.get(3).setText(user_win+"");
 		labels.get(5).setText(user_lose+"");
+		labels.get(5).setText(statusEval(status));
 		this.repaint();
 	}
-	
+	private String statusEval(int status){
+		return stat.get(status);
+	}
 	public void setFriend(String my_id, String user_id){
 		myUname = my_id;
 		friendUname = user_id;

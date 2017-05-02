@@ -60,6 +60,7 @@ public class MThread extends Thread{
 	public void run(){
 		try{
 			usersOutput.get(myPlayerNum).flush();
+			SqlRelated.setPlayerStatus(3, usersId.get(myPlayerNum));
 			if(isLoading){
 				System.out.println("loading num : "+loadingNum);
 				sendPlayerNum(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[] {loadingNum,0}));
@@ -94,6 +95,7 @@ public class MThread extends Thread{
 	}
 	private void forDisconnected(){
 		name = (String)mUnpack.getResult(msg).get(1);
+		SqlRelated.setPlayerStatus(0, name);
 		disconnectPlayer = usersId.indexOf(name);
 		mMaps.removeFromList(name);
 		System.out.println("Player " + name + " is disconnected");

@@ -59,6 +59,7 @@ public class MMainArea extends Thread{
 		
 		System.out.println("now start");
 		MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packSimpleRequest(UnicodeForServer.SERVER_READY));
+		SqlRelated.setPlayerStatus(1, userId);
 		mWaitingRoom=null;
 		while(!exitCode){
 			try{
@@ -126,6 +127,7 @@ public class MMainArea extends Thread{
 	}
 	private void forDisconnected(){
 		System.out.println("1.");
+		SqlRelated.setPlayerStatus(0, userId);
 		mMaps.removeFromList((String)mUnpack.getResult(msg).get(1));
 		MServerMethod.showMsgToAllUsers(usersOutput, mPack.packStringArray(UnicodeForServer.REQUESTING_STATUS_MAIN_IDS, userIds));
 		exitCode = true;
