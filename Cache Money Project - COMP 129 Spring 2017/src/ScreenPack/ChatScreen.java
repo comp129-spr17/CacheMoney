@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.io.PrintWriter;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -36,6 +37,7 @@ import MultiplayerPack.PlayingInfo;
 		private SizeRelated sizeRelated;
 		private JScrollPane displayPane;
 		private JScrollPane typePane;
+		private JComboBox<String> chatSelector;
 		private JButton titleBar;
 		private LayoutManager gbl;
 		private boolean isChatAbled;
@@ -50,26 +52,31 @@ import MultiplayerPack.PlayingInfo;
 //			playingInfo.sendMessageToServer(msg);
 		}
 		private void init(){
-//			setLayout(null);
+
 			setLayout(new GridBagLayout());
+			
 			sizeRelated = SizeRelated.getInstance();
 			playingInfo = PlayingInfo.getInstance();
 			isChatAbled = true;
 			mPack = MBytePack.getInstance();
 			titleBar = new JButton("Chatting");
-			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT - 200,SCREEN_WIDTH, SCREEN_HEIGHT+200);
 			btnSend = new JButton("Send");
 			msgDisplayArea = new JTextArea(10,20);
 			msgDisplayArea.setEditable(false);
 			msgTypeArea = new JTextArea(2,20);
-			titleBar.setBounds(0,0,SCREEN_WIDTH,TITLE_HEIGHT);
 			msgDisplayArea.setFont(new Font("Serif",Font.BOLD,15));
 			msgTypeArea.setFont(new Font("Serif",Font.BOLD,15));
 			displayPane = new JScrollPane(msgDisplayArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			displayPane.setBounds(0, TITLE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT);
 			typePane = new JScrollPane(msgTypeArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			typePane.setBounds(0,SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, SCREEN_WIDTH-BTN_WIDTH, MSGTYPEAREA_HEIGHT);
-			btnSend.setBounds(SCREEN_WIDTH-BTN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, BTN_WIDTH,MSGTYPEAREA_HEIGHT);
+			initChatSelector();
+			
+			
+//			setLayout(null);
+//			setBounds(sizeRelated.getScreenW()-SCREEN_WIDTH, sizeRelated.getScreenH()-SCREEN_HEIGHT - 200,SCREEN_WIDTH, SCREEN_HEIGHT+200);
+//			typePane.setBounds(0,SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, SCREEN_WIDTH-BTN_WIDTH, MSGTYPEAREA_HEIGHT);
+//			btnSend.setBounds(SCREEN_WIDTH-BTN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT + TITLE_HEIGHT, BTN_WIDTH,MSGTYPEAREA_HEIGHT);
+//			displayPane.setBounds(0, TITLE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - MSGTYPEAREA_HEIGHT);
+//			titleBar.setBounds(0,0,SCREEN_WIDTH,TITLE_HEIGHT);
 			
 			GridBagConstraints gbc = new GridBagConstraints();
 			Insets i = new Insets(5,5,5,5);
@@ -91,14 +98,18 @@ import MultiplayerPack.PlayingInfo;
 			add(displayPane,gbc);
 			
 			gbc.gridy = 6;
-			gbc.gridheight = 2;
-			gbc.gridwidth = 2;
+			gbc.gridheight = 1;
+			gbc.gridwidth = 4;
 			gbc.weightx = 1;
 			gbc.weighty = 1;
+			add(chatSelector,gbc);
+			
+			gbc.gridy = 7;
+			gbc.gridheight = 1;
+			gbc.gridwidth = 2;
 			add(typePane,gbc);
 			
 			gbc.gridx = 2;
-			gbc.gridheight = 2;
 			gbc.gridwidth = 2;
 			add(btnSend,gbc);
 			
@@ -109,6 +120,14 @@ import MultiplayerPack.PlayingInfo;
 			msgTypeArea.setLineWrap(true);
 			
 		}
+		
+		private void initChatSelector(){
+			chatSelector = new JComboBox<String>();
+			chatSelector.addItem("All Users");
+			chatSelector.addItem("Meow");
+			chatSelector.addItem("Woof");
+		}
+		
 		private void addListeners(){
 			btnSend.addMouseListener(new MouseListener() {
 				@Override
@@ -194,14 +213,14 @@ import MultiplayerPack.PlayingInfo;
 			displayPane.setVisible(isHide);
 			typePane.setVisible(isHide);
 			btnSend.setVisible(isHide);
+			chatSelector.setVisible(isHide);
 			if(isHide){
 				this.setLayout(gbl);
 				this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT+200);
 				titleBar.setLocation(0,0);
 			}else{
 				this.setLayout(null);
-				//this.setSize(titleBar.getSize());
-				titleBar.setLocation(0,0);
+				titleBar.setLocation(5,5);
 				this.setSize(titleBar.getSize());
 				
 			}
