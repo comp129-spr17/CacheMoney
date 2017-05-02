@@ -27,8 +27,9 @@ public class Piece extends JLabel{
 	public Piece(int player, Player playerClass) {
 		this.player = player;
 		this.playerClass = playerClass;
-		pInfoDisplay = PlayerInfoDisplay.getInstance();
 		pInfo = PlayingInfo.getInstance();
+		if(!pInfo.isSingle())
+			pInfoDisplay = PlayerInfoDisplay.getInstance();
 		init();
 	}
 	public int getPlayer(){
@@ -48,41 +49,44 @@ public class Piece extends JLabel{
 			setClickListener();
 	}
 	private void setClickListener(){
-		addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-//				pInfoDisplay.setVisible(false);
-//				repaint();
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				if(SwingUtilities.isRightMouseButton(e)){
-					System.out.println("pressed");
-					pInfoDisplay.setVisible(true);
-					pInfoDisplay.setFriend(pInfo.getLoggedInId(), user_id);
-					pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose, SqlRelated.getPlayerStatus(user_id));
-					
-					setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
-					
-				}else{
-					pInfoDisplay.setVisible(false);
+		if(!pInfo.isSingle()){
+			addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+//					pInfoDisplay.setVisible(false);
+//					repaint();
 				}
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					if(SwingUtilities.isRightMouseButton(e)){
+						System.out.println("pressed");
+						pInfoDisplay.setVisible(true);
+						pInfoDisplay.setFriend(pInfo.getLoggedInId(), user_id);
+						pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose, SqlRelated.getPlayerStatus(user_id));
+						
+						setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
+						
+					}else{
+						pInfoDisplay.setVisible(false);
+					}
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
+		}
+		
 	}
 	public void setUserId(String user_id){
 		this.user_id = user_id;
