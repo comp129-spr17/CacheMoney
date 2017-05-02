@@ -2,17 +2,17 @@ package GamePack;
 
 public final class PathRelated {
 	private final static PathRelated PATH_RELATED = new PathRelated();
-	private final static String SPACE_IMG_PATH = "src/SpaceImages/";
+	private final static String SPACE_IMG_PATH = "/SpaceImages/";
 	private final static String SPACE_IMG_TOP = SPACE_IMG_PATH+"TopRow/";
 	private final static String SPACE_IMG_LEFT = SPACE_IMG_PATH+"LeftCol/";
 	private final static String SPACE_IMG_RIGHT = SPACE_IMG_PATH+"RightCol/";
 	private final static String SPACE_IMG_BOT = SPACE_IMG_PATH+"BotRow/";
 	private final static String SPACE_IMG_CORNER = SPACE_IMG_PATH+"Corners/";
-	private final static String DICE_PATH="src/DiceImages/";
-	private final static String PIECE_PATH="src/PieceImages/";
-	private final static String IMG_PATH="src/Images/";
-	private final static String BUTTON_IMG_PATH="src/ButtonImages/";
-	private final static String MINI_IMG_PATH = "src/MiniGameImages/";
+	private final static String DICE_PATH="/DiceImages/";
+	private final static String PIECE_PATH="/PieceImages/";
+	private final static String IMG_PATH="/Images/";
+	private final static String BUTTON_IMG_PATH="/ButtonImages/";
+	private final static String MINI_IMG_PATH = "/MiniGameImages/";
 	private final static String MINI_SPAM_IMG_PATH = MINI_IMG_PATH + "spam/";
 	private final static String MINI_RSP_IMG_PATH = MINI_IMG_PATH + "rsp/";
 	private final static String MINI_REACT_IMG_PATH = MINI_IMG_PATH + "react/";

@@ -39,6 +39,11 @@ public final class ImageRelated {
 	public static ImageRelated getInstance(){
 		return IMAGE_RELATED;
 	}
+	public URL getImageURL(String filePath) {
+		URL url = ImageRelated.class.getResource(filePath);
+		return url;
+	}
+	
 	public ImageIcon getGIFImage(JPanel panel, String fileLocation){
 		URL imageURL = panel.getClass().getClassLoader().getResource(fileLocation);
 		return new ImageIcon(imageURL);
@@ -46,7 +51,7 @@ public final class ImageRelated {
 	}
 	public ImageIcon resizeImage(String fileLocation, int width, int height){
 		try {
-			return new ImageIcon(ImageIO.read(new File(fileLocation)).getScaledInstance(width, height, Image.SCALE_DEFAULT));
+			return new ImageIcon(ImageIO.read(getImageURL(fileLocation)).getScaledInstance(width, height, Image.SCALE_DEFAULT));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
