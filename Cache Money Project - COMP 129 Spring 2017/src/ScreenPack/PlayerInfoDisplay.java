@@ -29,7 +29,7 @@ public final class PlayerInfoDisplay extends JPanel{
 	}
 	private void init(){
 		friend = new FriendPanel("");
-		setLayout(new GridLayout(7,1));
+		setLayout(new GridLayout(9,1));
 		font = new Font("Serif",Font.BOLD,10);
 		sizeRelated = SizeRelated.getInstance();
 		width = (int)Math.ceil(sizeRelated.getSpaceColHeight()*3.5);
