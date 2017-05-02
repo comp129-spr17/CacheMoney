@@ -233,6 +233,8 @@ import MultiplayerPack.PlayingInfo;
 		public void receiveMsg(String id, String msg , boolean isDirect, String toId){
 			msgDisplayArea.append("[" + id +"]" + (isDirect ? " -> [" + toId+"]" : "") + ":\n    " + msg+"\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
+			if(isDirect)
+				toUser(playingInfo.isLoggedInId(id) ? toId : id);
 		}
 		public void receiveErrMsg(String id, String toId){
 			msgDisplayArea.append("[" + id +"]" + " -> [" + toId+"]" + ":\n     That user is not online.\n");

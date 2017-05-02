@@ -40,7 +40,9 @@ class ChattingThread extends Thread{
 			if(MManagingMaps.getOutputForAll().containsKey(reqId)){
 				System.out.println("Request for Waiting Chatting To " + reqId);
 				MServerMethod.sendMsgToMyself(usersOutput, userId, msg);
-				MServerMethod.sendMsgToMyself(usersOutput, reqId, msg);
+
+				MServerMethod.sendMsgToMyself(usersOutput, reqId,mPack.packStrStrBoolStr(UnicodeForServer.CHAT_LOBBY+SqlRelated.getPlayerStatus(reqId)-1,userId,(String)lists.get(2), true,reqId));
+//				MServerMethod.sendMsgToMyself(usersOutput, reqId, msg);
 			}else{
 				System.out.println("Request for Waiting Chatting Error " + reqId);
 				MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packStrStr(fromWhich+10, userId, reqId));
