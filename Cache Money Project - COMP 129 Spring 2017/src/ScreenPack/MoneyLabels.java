@@ -3,6 +3,7 @@ package ScreenPack;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -263,7 +264,7 @@ public final class MoneyLabels {
 		for (int q = 0; q < 4; q++)
 		{
 			jailCards[q] = new JLabel();
-			jailCards[q] = new JLabel(new ImageIcon(pathRelated.getImagePath() + "jailcard.jpg"));
+			jailCards[q] = new JLabel(new ImageIcon(File.class.getResource(pathRelated.getImagePath() + "jailcard.jpg")));
 			jailCards[q].setBounds(playerPieceDisplay[q].getX() - 75,playerPieceDisplay[q].getY() + 75,200,100);
 		}
 	}
