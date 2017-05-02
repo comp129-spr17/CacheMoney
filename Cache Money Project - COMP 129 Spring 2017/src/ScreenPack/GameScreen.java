@@ -182,6 +182,7 @@ public class GameScreen extends JFrame{
 		chatAndFriends.addTab("Chat Screen", chatScreen);
 		
 		onlineFriends = new PanelForFriends();
+		onlineFriends.loadFriendList();
 		chatAndFriends.addTab("Online Friends", onlineFriends.getScrollingPanel());
 	}
 	
@@ -986,8 +987,8 @@ public class GameScreen extends JFrame{
 	}
 	private void addMuteMusic() {
 		ImageIcon imgOn, imgOff;
-		imgOn = new ImageIcon("src/Images/music_on.png");
-		imgOff = new ImageIcon("src/Images/music_off.png");
+		imgOn = new ImageIcon("/Images/music_on.png");
+		imgOff = new ImageIcon("/Images/music_off.png");
 		//muteMusic = new JCheckBox(imgOff); 	// DEBUG
 		muteMusic = new JCheckBox(Music.music1.getIsMuted() ? imgOff : imgOn); 	
 		muteMusic.setBorder(null);
@@ -1048,8 +1049,8 @@ public class GameScreen extends JFrame{
 	
 	private void addMuteSounds(){
 		ImageIcon imgOn, imgOff;
-		imgOn = new ImageIcon("src/Images/sound_on.png");
-		imgOff = new ImageIcon("src/Images/sound_off.png");
+		imgOn = new ImageIcon("/Images/sound_on.png");
+		imgOff = new ImageIcon("/Images/sound_off.png");
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
 		muteSounds = new JCheckBox(Sounds.bomb.getIsMuted() ? imgOff : imgOn);	// DEBUG
 		muteSounds.setBounds(0, 0, 40, 40);

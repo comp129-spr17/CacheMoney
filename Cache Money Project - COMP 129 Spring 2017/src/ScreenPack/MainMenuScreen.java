@@ -598,8 +598,8 @@ public class MainMenuScreen {
 	
 	private void addMuteMusic() {
 		ImageIcon imgOn, imgOff;
-		imgOn = new ImageIcon("src/Images/music_on1.png");
-		imgOff = new ImageIcon("src/Images/music_off1.png");
+		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/music_on1.png"));
+		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/music_off1.png"));
  		muteMusic = new JCheckBox(imgOn); 	
 		muteMusic.setBorder(null);
 		muteMusic.setBounds(185, 440, 40, 40);
@@ -632,8 +632,8 @@ public class MainMenuScreen {
 	
 	private void addMuteSounds(){
 		ImageIcon imgOn, imgOff;
-		imgOn = new ImageIcon("src/Images/sound_on1.png");
-		imgOff = new ImageIcon("src/Images/sound_off1.png");
+		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/sound_on1.png"));
+		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/sound_off1.png"));
 		muteSounds = new JCheckBox(imgOn);	// DEBUG
 		muteSounds.setBounds(145, 440, 40, 40);
 		mainPanel.add(muteSounds);
@@ -664,8 +664,8 @@ public class MainMenuScreen {
 	
 	private void addMuteSQL(){
 		ImageIcon imgOn, imgOff;
-		imgOn = new ImageIcon("src/Images/SQLon.png");
-		imgOff = new ImageIcon("src/Images/SQLoff.png");
+		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/SQLon.png"));
+		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/SQLoff.png"));
 		muteSQL = new JCheckBox(imgOn);	// DEBUG
 		muteSQL.setBounds(220, 440, 40, 40);
 		mainPanel.add(muteSQL);

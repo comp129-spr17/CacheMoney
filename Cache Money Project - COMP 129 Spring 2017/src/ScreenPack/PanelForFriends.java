@@ -4,21 +4,25 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.SqlRelated;
 
 public class PanelForFriends extends ScrollingPane{
 	private ArrayList<String> listOfFriends;
 	private HashMap<String, FriendPanel> friendMap;
 	private PlayingInfo pInfo;
 	private String current;
-	private boolean isOn;
+	private ResultSet friends;
+	private SqlRelated sqlRelated;
 	
 	public PanelForFriends(){
-		isOn = false;
 		pInfo = PlayingInfo.getInstance();
+		sqlRelated = SqlRelated.getInstance();
 		current = "";
 		listOfFriends = new ArrayList<String>();
 		friendMap = new HashMap<String,FriendPanel>();
@@ -55,6 +59,17 @@ public class PanelForFriends extends ScrollingPane{
 		listOfFriends.add(Name);
 		friendMap.put(Name, temp);
 		refresh();
+	}
+	
+	public void loadFriendList(){
+		clearList();
+		friends = sqlRelated.getFriend(pInfo.getLoggedInId());
+		try {
+			while(friends.next())
+				addPersonToPanel(friends.getString(1));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 //	public void setTimer(boolean b){
