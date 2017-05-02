@@ -773,7 +773,7 @@ public class GameScreen extends JFrame{
 		mainPanel.setLayout(null);
 		if(!pInfo.isSingle()){
 			pInfoDisplay = PlayerInfoDisplay.getInstance();
-			pInfoDisplay.setChat(chatScreen);
+			pInfoDisplay.setChat(chatScreen,onlineFriends);
 			mainPanel.add(pInfoDisplay);
 			pInfoDisplay.setVisible(false);
 		}

@@ -37,7 +37,8 @@ public class FriendPanel extends JPanel{
 	private int curStat;
 	private ArrayList<String> stat;
 	private ChatScreen chatScreen;
-	public FriendPanel(String friendUsername, ChatScreen chatScreen){
+	private PanelForFriends pForFriends;
+	public FriendPanel(String friendUsername, ChatScreen chatScreen, PanelForFriends pForFriends){
 		this.setLayout(new CardLayout());
 		pInfo = PlayingInfo.getInstance();
 
@@ -58,6 +59,7 @@ public class FriendPanel extends JPanel{
 		expiration = 0;
 		if(myUsername.equals(friendUsername))
 			button.get(NAME).setEnabled(false);
+		this.pForFriends = pForFriends;
 		this.chatScreen = chatScreen;
 		refresh();
 	}
@@ -195,7 +197,7 @@ public class FriendPanel extends JPanel{
 					removeFriend();
 				else
 					addFriend();
-				
+				pForFriends.loadFriendList();
 				checkFriendship(temp);
 				refresh();
 			}

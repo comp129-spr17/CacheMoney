@@ -36,8 +36,8 @@ public final class PlayerInfoDisplay extends JPanel{
 		setBackground(new Color(245,255,250));
 		initLabels();
 	}
-	public void setChat(ChatScreen chat){
-		friend = new FriendPanel("", chat);
+	public void setChat(ChatScreen chat, PanelForFriends pForFriends){
+		friend = new FriendPanel("", chat,pForFriends);
 		add(friend);
 	}
 	private void initLabels(){

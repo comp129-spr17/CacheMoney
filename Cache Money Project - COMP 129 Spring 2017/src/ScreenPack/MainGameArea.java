@@ -107,7 +107,7 @@ public class MainGameArea extends JPanel{
 		controlPanel.setLayout(new GridBagLayout());
 		loadGame = new JButton();
 		addLoadGameButton();
-		onlineUsers = new PanelForFriends(chatScreen);
+		onlineUsers = new PanelForFriends(chatScreen,friendList);
 		onlineUsers.setScrollingPaneVisible(true);
 		createNewRoom = new JButton();
 		addCreateNewRoomButton();
