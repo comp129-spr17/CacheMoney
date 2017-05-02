@@ -19,13 +19,14 @@ public class PanelForFriends extends ScrollingPane{
 	private String current;
 	private ResultSet friends;
 	private SqlRelated sqlRelated;
-	
-	public PanelForFriends(){
+	private ChatScreen chatScreen;
+	public PanelForFriends(ChatScreen chatScreen){
 		pInfo = PlayingInfo.getInstance();
 		sqlRelated = SqlRelated.getInstance();
 		current = "";
 		listOfFriends = new ArrayList<String>();
 		friendMap = new HashMap<String,FriendPanel>();
+		this.chatScreen = chatScreen;
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class PanelForFriends extends ScrollingPane{
 	}
 	
 	public void addPersonToPanel(String Name){
-		FriendPanel temp = new FriendPanel(Name);
+		FriendPanel temp = new FriendPanel(Name, chatScreen);
 		temp.getUserNameBtn().addMouseListener(new MouseAdapter(){
 	         public void mousePressed(MouseEvent e) {
 	        	 if(!current.isEmpty() && !Name.equals(current)){

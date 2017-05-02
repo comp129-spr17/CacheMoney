@@ -181,7 +181,7 @@ public class GameScreen extends JFrame{
 		chatAndFriends.setBounds(chatScreen.getBounds());
 		chatAndFriends.addTab("Chat Screen", chatScreen);
 		
-		onlineFriends = new PanelForFriends();
+		onlineFriends = new PanelForFriends(chatScreen);
 		onlineFriends.loadFriendList();
 		chatAndFriends.addTab("Online Friends", onlineFriends.getScrollingPanel());
 	}
@@ -764,23 +764,26 @@ public class GameScreen extends JFrame{
 		GraphicsDevice screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		bgImage = new BackgroundImage(PathRelated.getInstance().getImagePath() + "gamescreenBackgroundImage.png",screenSize.getDisplayMode().getWidth(), screenSize.getDisplayMode().getHeight());
 		
+	
 		
 		sizeRelated = SizeRelated.getInstance();
 		pDisplay = PropertyDisplay.getInstance();
-		if(!pInfo.isSingle())
-			pInfoDisplay = PlayerInfoDisplay.getInstance();
+
 		mainPanel = new JPanel(null);
 		mainPanel.setLayout(null);
+		if(!pInfo.isSingle()){
+			pInfoDisplay = PlayerInfoDisplay.getInstance();
+			pInfoDisplay.setChat(chatScreen);
+			mainPanel.add(pInfoDisplay);
+			pInfoDisplay.setVisible(false);
+		}
 		getContentPane().add(mainPanel);
 		mainPanel.add(pDisplay);
-		if(!pInfo.isSingle())
-			mainPanel.add(pInfoDisplay);
 		repaint();
 		createPlayers();
 		tradeP = new TradingPanel();
 		pDisplay.setVisible(false);
-		if(!pInfo.isSingle())
-			pInfoDisplay.setVisible(false);
+			
 		
 		mainGameArea = new MainGameArea(getContentPane());
 		waitingArea = mainGameArea.getWaiting();
@@ -958,9 +961,9 @@ public class GameScreen extends JFrame{
 			chatScreen.receiveMsg(id, msg, isDirect, toId);
 	}
 	public void receiveErrorChatMsg(int which, String id, String toId){
-		if(which == UnicodeForServer.CHAT_LOBBY)
+		if(which == UnicodeForServer.CHAT_LOBBY_INDIV_ERROR)
 			mainGameArea.receiveErrMsg(id, toId);
-		else if(which == UnicodeForServer.CHAT_WAITING)
+		else if(which == UnicodeForServer.CHAT_WAITING_INDIV_ERROR)
 			waitingArea.receiveErrMsg(id, toId);
 		else
 			chatScreen.receiveErrMsg(id, toId);

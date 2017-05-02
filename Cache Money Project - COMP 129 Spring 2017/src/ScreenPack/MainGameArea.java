@@ -82,7 +82,7 @@ public class MainGameArea extends JPanel{
 	private void createChatAndFriendsPanel(){
 		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
 //		friendList = new infoThatScrolls(false);
-		friendList = new PanelForFriends();
+		friendList = new PanelForFriends(chatScreen);
 		friendList.setScrollingPaneVisible(true);
 		
 		chatAndFriends = new JPanel();
@@ -107,7 +107,7 @@ public class MainGameArea extends JPanel{
 		controlPanel.setLayout(new GridBagLayout());
 		loadGame = new JButton();
 		addLoadGameButton();
-		onlineUsers = new PanelForFriends();
+		onlineUsers = new PanelForFriends(chatScreen);
 		onlineUsers.setScrollingPaneVisible(true);
 		createNewRoom = new JButton();
 		addCreateNewRoomButton();

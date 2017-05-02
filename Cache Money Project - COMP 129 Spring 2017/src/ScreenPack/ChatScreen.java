@@ -122,7 +122,6 @@ import MultiplayerPack.PlayingInfo;
 		private void initChatSelector(){
 			chatSelector = new JComboBox<String>();
 			chatSelector.addItem("All Users");
-			chatSelector.addItem("b");
 		}
 		
 		private void addListeners(){
@@ -238,7 +237,13 @@ import MultiplayerPack.PlayingInfo;
 		public void receiveErrMsg(String id, String toId){
 			msgDisplayArea.append("[" + id +"]" + " -> [" + toId+"]" + ":\n     That user is not online.\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
-			chatSelector.insertItemAt("", 1);
+			chatSelector.removeItemAt(1);
+		}
+		public void toUser(String userId){
+			if(chatSelector.getItemCount() > 1)
+				chatSelector.removeItemAt(1);
+			chatSelector.insertItemAt(userId, 1);
+			chatSelector.setSelectedIndex(1);
 		}
 		public void clearArea(){
 			msgDisplayArea.setText("");

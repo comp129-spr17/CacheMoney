@@ -28,7 +28,6 @@ public final class PlayerInfoDisplay extends JPanel{
 		return playerDisplay;
 	}
 	private void init(){
-		friend = new FriendPanel("");
 		setLayout(new GridLayout(7,1));
 		font = new Font("Serif",Font.BOLD,10);
 		sizeRelated = SizeRelated.getInstance();
@@ -37,7 +36,10 @@ public final class PlayerInfoDisplay extends JPanel{
 		setBackground(new Color(245,255,250));
 		initLabels();
 	}
-	
+	public void setChat(ChatScreen chat){
+		friend = new FriendPanel("", chat);
+		add(friend);
+	}
 	private void initLabels(){
 		labels = new ArrayList<>();
 		labels.add(new JLabel("Name:"));
@@ -46,7 +48,6 @@ public final class PlayerInfoDisplay extends JPanel{
 		labels.add(new JLabel(""));
 		labels.add(new JLabel("Lose:"));
 		labels.add(new JLabel(""));
-		add(friend);
 		for(int i = 0; i < labels.size(); i++){
 			add(labels.get(i));
 		}

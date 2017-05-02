@@ -34,8 +34,10 @@ public class FriendPanel extends JPanel{
 	private PlayingInfo pInfo;
 	private boolean isOn;
 	private int expiration;
+	private int curStat;
 	private ArrayList<String> stat;
-	public FriendPanel(String friendUsername){
+	private ChatScreen chatScreen;
+	public FriendPanel(String friendUsername, ChatScreen chatScreen){
 		this.setLayout(new CardLayout());
 		pInfo = PlayingInfo.getInstance();
 
@@ -56,6 +58,7 @@ public class FriendPanel extends JPanel{
 		expiration = 0;
 		if(myUsername.equals(friendUsername))
 			button.get(NAME).setEnabled(false);
+		this.chatScreen = chatScreen;
 		refresh();
 	}
 	
@@ -120,7 +123,9 @@ public class FriendPanel extends JPanel{
 		normalLayout.setVisible(false);
 		isOn=true;
 		(new CheckFriend()).start();
-		status.setText(stat.get(SqlRelated.getPlayerStatus(friendUsername)));
+		curStat = SqlRelated.getPlayerStatus(friendUsername);
+		status.setText(stat.get(curStat));
+		button.get(MESSAGE).setEnabled(curStat!=0);
 		sectionedLayout.setVisible(true);
 		sectionedLayout.repaint();
 		cl.show(FriendPanel.this, "sectionedLayout");
@@ -212,12 +217,15 @@ public class FriendPanel extends JPanel{
 	}
 	
 	class CheckFriend extends Thread{
+		private int Stat;
 		public void run(){
 			expiration=0;
 			System.out.println("Start Checking");
 			while(isOn && expiration < 800){
 				checkFriendship(button.get(ADD_REMOVE));
-				status.setText(stat.get(SqlRelated.getPlayerStatus(friendUsername)));
+				Stat = SqlRelated.getPlayerStatus(friendUsername);
+				status.setText(stat.get(Stat));
+				button.get(MESSAGE).setEnabled(Stat!=0);
 				expiration++;
 				try {
 					sleep(1);
@@ -225,6 +233,7 @@ public class FriendPanel extends JPanel{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 			}
 			if(expiration == 800)
 				setOff();
@@ -256,21 +265,13 @@ public class FriendPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				//TODO Implement chatting system here
+				if(temp.isEnabled()){
+					chatScreen.toUser(friendUsername);
+				}
 
 			}
 		});
 		return temp;
 	}
 
-	public static void main(String[] args){
-		JFrame f = new JFrame("TEST");
-		f.setSize(200,200);
-		f.setVisible(true);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		FriendPanel fp = new FriendPanel("Jack Lonergan");
-		f.add(fp);
-		f.repaint();
-		f.revalidate();
-	}
 }

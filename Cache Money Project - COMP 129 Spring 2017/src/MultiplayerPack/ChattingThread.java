@@ -19,6 +19,7 @@ class ChattingThread extends Thread{
 		this.msg = msg;
 		this.userId = userId;
 		mPack = MBytePack.getInstance();
+		mUnpack = MByteUnpack.getInstance();
 		this.usersOutput = usersOutput;
 		this.outputForThisRoom = outputForThisRoom;
 		this.fromWhich = fromWhich;
@@ -42,7 +43,7 @@ class ChattingThread extends Thread{
 				MServerMethod.sendMsgToMyself(usersOutput, reqId, msg);
 			}else{
 				System.out.println("Request for Waiting Chatting Error " + reqId);
-				MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packStrStr(fromWhich, userId, reqId));
+				MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packStrStr(fromWhich+10, userId, reqId));
 			}
 		}else{
 			if(fromWhich == UnicodeForServer.CHAT_LOBBY){
