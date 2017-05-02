@@ -114,6 +114,7 @@ import MultiplayerPack.PlayingInfo;
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					if(isChatAbled){
+						msg = msgTypeArea.getText();
 						sendMsg();
 						msgTypeArea.setText("");
 					}
