@@ -46,8 +46,10 @@ public class MainGameArea extends JPanel{
 	private WaitingArea waitingArea;
 	private PlayingInfo playingInfo;
 	private MBytePack mPack;
-	private InfoForUsers friendList;
-	private InfoForUsers onlineUsers;
+	//private infoThatScrolls friendList;
+	private PanelForFriends friendList;
+	//private infoThatScrolls onlineUsers;
+	private PanelForFriends onlineUsers;
 	private ChatScreen chatScreen;
 	private JComboBox<Integer> loadingList;
 	private JPanel chatAndFriends;
@@ -79,7 +81,8 @@ public class MainGameArea extends JPanel{
 	
 	private void createChatAndFriendsPanel(){
 		chatScreen = new ChatScreen(UnicodeForServer.CHAT_LOBBY);
-		friendList = new InfoForUsers();
+//		friendList = new infoThatScrolls(false);
+		friendList = new PanelForFriends();
 		friendList.setScrollingPaneVisible(true);
 		
 		chatAndFriends = new JPanel();
@@ -104,8 +107,9 @@ public class MainGameArea extends JPanel{
 		controlPanel.setLayout(new GridBagLayout());
 		loadGame = new JButton();
 		addLoadGameButton();
-		onlineUsers = new InfoForUsers();
+		onlineUsers = new PanelForFriends();
 		onlineUsers.setScrollingPaneVisible(true);
+		onlineUsers.setTimer(false);
 		createNewRoom = new JButton();
 		addCreateNewRoomButton();
 		jLabel = new JLabel("Online users:");
@@ -190,7 +194,9 @@ public class MainGameArea extends JPanel{
 	public WaitingArea getWaiting(){
 		return waitingArea;
 	}
+	
 	public void switchToWaiting(){
+		friendList.setTimer(false);
 		chatScreen.clearArea();
 		container.removeAll();
 		waitingArea.setComponents();
@@ -218,10 +224,11 @@ public class MainGameArea extends JPanel{
 		friends = sqlRelated.getFriend(playingInfo.getLoggedInId());
 		try {
 			while(friends.next())
-				friendList.addObject(friends.getString(1));
+				friendList.addPersonToPanel(friends.getString(1));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		friendList.setTimer(true);
 	}
 	private void getLoadingGames(){
 		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());
@@ -236,10 +243,10 @@ public class MainGameArea extends JPanel{
 		System.out.println("Update user lists : . size:" + userList.get(0));
 		for(int i=1; i<userList.size(); i++){
 			System.out.println((String)userList.get(i));
-			onlineUsers.addObject((String)userList.get(i));
+			onlineUsers.addPersonToPanel((String)userList.get(i));
 		}
-		//onlineUsers.refresh();
 	}
+	
 	private void addListener(){
 		createNewRoom.addMouseListener(new MouseListener() {
 
