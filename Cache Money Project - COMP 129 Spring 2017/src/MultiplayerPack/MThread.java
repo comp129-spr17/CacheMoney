@@ -37,6 +37,7 @@ public class MThread extends Thread{
 	private MManagingMaps mMaps;
 	private boolean isLoading;
 	private int loadingNum;
+	private String myId;
 	public MThread(ArrayList<OutputStream> usersOutput,ArrayList<String> usersId, int numPlayer, int myPlayerNum, InputStream inputStream, boolean isLoading, int loadingNum){
 		
 		this.usersOutput = usersOutput;
@@ -51,6 +52,7 @@ public class MThread extends Thread{
 		ufs = UnicodeForServer.getInstance();
 		readFromUser = inputStream;
 		msg=new byte[512];
+		myId = usersId.get(myPlayerNum);
 		System.out.println("playerNum : " + numPlayer + " , myNum" + myPlayerNum + ", outputNum" + usersOutput.size());
 
 	}
@@ -76,8 +78,10 @@ public class MThread extends Thread{
 				if(specialCode == 1){
 					forDisconnected();
 					break;
-				}
-				MServerMethod.showMsgToUsersInRoom(usersOutput, msg);
+				}else if(specialCode == 4){
+					(new ChattingThread(msg, myId,MManagingMaps.getOutputForAll(), usersOutput, UnicodeForServer.CHAT_GAME)).start();
+				}else
+					MServerMethod.showMsgToUsersInRoom(usersOutput, msg);
 			}
 		}catch(Exception e){
 			e.printStackTrace();

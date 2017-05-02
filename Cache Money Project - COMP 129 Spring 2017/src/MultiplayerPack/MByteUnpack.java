@@ -437,7 +437,8 @@ public final class MByteUnpack {
 				return 2;
 			else if(UnicodeForServer.START_GAME == result)
 				return 3;
-			
+			else if(UnicodeForServer.CHAT_GAME == result)
+				return 4;
 				
 			return 0;
 //		} catch (IOException e) {

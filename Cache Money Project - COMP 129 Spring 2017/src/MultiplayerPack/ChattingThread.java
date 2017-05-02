@@ -42,7 +42,7 @@ class ChattingThread extends Thread{
 				MServerMethod.sendMsgToMyself(usersOutput, reqId, msg);
 			}else{
 				System.out.println("Request for Waiting Chatting Error " + reqId);
-				MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packStrStr(UnicodeForServer.CHAT_WAITING_INDIV_ERROR, userId, reqId));
+				MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packStrStr(fromWhich, userId, reqId));
 			}
 		}else{
 			if(fromWhich == UnicodeForServer.CHAT_LOBBY){
