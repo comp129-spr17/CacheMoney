@@ -132,8 +132,10 @@ import MultiplayerPack.PlayingInfo;
 			btnSend.addMouseListener(new MouseListener() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					if(isChatAbled)
+					if(isChatAbled){
 						sendMsg();
+						msgTypeArea.setText("");
+					}
 				}
 				@Override
 				public void mouseEntered(MouseEvent arg0) {
@@ -239,7 +241,7 @@ import MultiplayerPack.PlayingInfo;
 		}
 		public void ableChatSys(boolean isAble){
 			isChatAbled = isAble;
-			btnSend.setEnabled(false);
+			btnSend.setEnabled(isChatAbled);
 		}
 //		public void serverDisconnected() throws SocketException{
 //			Sounds.buttonCancel.playSound();
