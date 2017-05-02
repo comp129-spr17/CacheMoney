@@ -24,7 +24,7 @@ import MultiplayerPack.UnicodeForServer;
 public class CommunityStack extends JPanel{
 	Random rand = new Random();
 	int cardDrawn;
-	String FILE_PATH = "src/WildcardImages/community_card_";
+	String FILE_PATH = "/WildcardImages/community_card_";
 	String fileExt;
 	
 	//BufferedImage img;
@@ -90,7 +90,7 @@ public class CommunityStack extends JPanel{
 		System.out.println(fileExt);
 		
 		try {
-		    img = ImageIO.read(new File(fileExt));
+		    img = ImageIO.read(File.class.getResource(fileExt));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}

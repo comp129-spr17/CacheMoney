@@ -189,8 +189,8 @@ public class DicePanel extends JPanel{
 	private void addHands() {
 		try {
 			handImage = new ImageIcon[2];
-			handImage[0] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"left_handed.png")));
-			handImage[1] = new ImageIcon(ImageIO.read(new File(paths.getDiceImgPath()+"right_handed.png")));
+			handImage[0] = new ImageIcon(ImageIO.read(File.class.getResource(paths.getDiceImgPath()+"left_handed.png")));
+			handImage[1] = new ImageIcon(ImageIO.read(File.class.getResource(paths.getDiceImgPath()+"right_handed.png")));
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -24,7 +24,7 @@ import MultiplayerPack.UnicodeForServer;
 public class ChanceStack extends JPanel{
 	Random rand = new Random();
 	int cardDrawn;
-	String FILE_PATH = "src/WildcardImages/chance_card_";
+	String FILE_PATH = "/WildcardImages/chance_card_";
 	String fileExt;
 	
 	//BufferedImage img;
@@ -88,7 +88,7 @@ public class ChanceStack extends JPanel{
 		System.out.println(fileExt);
 		
 		try {
-		    img = ImageIO.read(new File(fileExt));
+		    img = ImageIO.read(File.class.getResource(fileExt));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
