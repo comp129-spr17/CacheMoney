@@ -62,6 +62,9 @@ public final class UnicodeForServer {
 	public static final int ABLE_START_BTN = 56;
 	public static final int DECLARED_BANKRUPT = 57;
 	public static final int END_BANKRUPT_PANEL = 58;
+	public static final int CHAT_LOBBY_INDIV_ERROR = 59;
+	public static final int CHAT_WAITING_INDIV_ERROR = 60;
+	public static final int CHAT_GAME_INDIV_ERROR = 61;
 	private UnicodeForServer(){
 		
 	}

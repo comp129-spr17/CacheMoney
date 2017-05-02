@@ -226,13 +226,20 @@ import MultiplayerPack.PlayingInfo;
 			isHide = !isHide;
 		}
 		private void sendMsg(){
-			
-			playingInfo.sendMessageToServer(mPack.packStrStr(MSG_TYPE,playingInfo.getLoggedInId(), msg));
-		
+			if(chatSelector.getSelectedIndex() == 0)
+				playingInfo.sendMessageToServer(mPack.packStrStrBoolStr(MSG_TYPE,playingInfo.getLoggedInId(),msg, false, ""));
+			else if(!chatSelector.getSelectedItem().equals(""))
+				playingInfo.sendMessageToServer(mPack.packStrStrBoolStr(MSG_TYPE,playingInfo.getLoggedInId(),msg, true,(String)chatSelector.getSelectedItem()));
+				
 		}
-		public void receiveMsg(String id, String msg){
-			msgDisplayArea.append(id+":\n    " + msg+"\n");
+		public void receiveMsg(String id, String toId, boolean isDirect, String msg){
+			msgDisplayArea.append("[" + id +"]" + (isDirect ? " -> [" + toId+"]" : "") + ":\n    " + msg+"\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
+		}
+		public void receiveErrMsg(String id){
+			msgDisplayArea.append(id+":\n    That user is not logged in.\n");
+			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
+			chatSelector.insertItemAt("", 1);
 		}
 		public void clearArea(){
 			msgDisplayArea.setText("");

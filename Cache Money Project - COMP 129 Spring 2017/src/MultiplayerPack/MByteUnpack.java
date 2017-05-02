@@ -120,11 +120,11 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.UPDATE_ROOM_STAT, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackLongIntArray(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_LOBBY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
+		GetResults.put(UnicodeForServer.CHAT_LOBBY, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStrBoolStr(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_WAITING, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
+		GetResults.put(UnicodeForServer.CHAT_WAITING, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStrBoolStr(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
+		GetResults.put(UnicodeForServer.CHAT_GAME, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStrBoolStr(result);
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.TRADE_REQUEST, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStringAndInt(result);
 		return cleanUpAndReturn();}});
@@ -139,7 +139,13 @@ public final class MByteUnpack {
 		GetResults.put(UnicodeForServer.DECLARED_BANKRUPT, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.END_BANKRUPT_PANEL, new GetResult(){public ArrayList<Object> getResult(byte[] result){
-			return cleanUpAndReturn();}});
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_LOBBY_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_WAITING_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.CHAT_GAME_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		return cleanUpAndReturn();}});
 	}
 	
 	private ArrayList<Object> cleanUpAndReturn(){
@@ -294,6 +300,17 @@ public final class MByteUnpack {
 	public void unpackStrStr(byte[] result){
 		try{
 			resultList.add(dInputStream.readUTF());
+			resultList.add(dInputStream.readUTF());
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	public void unpackStrStrBoolStr(byte[] result){
+		try{
+			resultList.add(dInputStream.readUTF());
+			resultList.add(dInputStream.readUTF());
+			resultList.add(dInputStream.readBoolean());
 			resultList.add(dInputStream.readUTF());
 		}
 		catch(IOException e){

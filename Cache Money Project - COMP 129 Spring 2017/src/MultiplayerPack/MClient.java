@@ -120,6 +120,9 @@ public class MClient {
 		variableCodeString.add(new String("ABLE_START_BTN"));
 		variableCodeString.add(new String("DECLARE_BANKRUPT"));
 		variableCodeString.add(new String("END_BANKRUPT_PANEL"));
+		variableCodeString.add(new String("CHAT_LOBBY_INDIV_ERROR"));
+		variableCodeString.add(new String("CHAT_WAITING_INDIV_ERROR"));
+		variableCodeString.add(new String("CHAT_GAME_INDIV_ERROR"));
 	}
 	
 	
@@ -184,8 +187,8 @@ public class MClient {
 		doActions.put(UnicodeForServer.MORTGAGE_PROPERTY, new DoAction(){public void doAction(ArrayList<Object> result){doMortgageProperty(result);;}});
 		doActions.put(UnicodeForServer.UPDATE_ROOM_STAT, new DoAction(){public void doAction(ArrayList<Object> result){doUpdateRoomStat(result);;}});
 		doActions.put(UnicodeForServer.CHAT_LOBBY, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 0);}});
-		doActions.put(UnicodeForServer.CHAT_WAITING, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 1);}});
-		doActions.put(UnicodeForServer.CHAT_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 2);}});
+		doActions.put(UnicodeForServer.CHAT_WAITING, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 0);}});
+		doActions.put(UnicodeForServer.CHAT_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result, 0);}});
 		doActions.put(UnicodeForServer.TRADE_REQUEST, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveTradeRequest(result);}});
 		doActions.put(UnicodeForServer.COMMENCE_TRADE, new DoAction(){public void doAction(ArrayList<Object> result){doCommenceTrade(result);}});
 		doActions.put(UnicodeForServer.LOADING_GAME_INVALID_USER, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingInvalidMsg();}});
@@ -193,6 +196,9 @@ public class MClient {
 		doActions.put(UnicodeForServer.ABLE_START_BTN, new DoAction(){public void doAction(ArrayList<Object> result){doAbleStartBtn(result);}});
 		doActions.put(UnicodeForServer.DECLARED_BANKRUPT, new DoAction(){public void doAction(ArrayList<Object> result){doDeclaredBankrupt(result);}});
 		doActions.put(UnicodeForServer.END_BANKRUPT_PANEL, new DoAction(){public void doAction(ArrayList<Object> result){doEndBankrupt(result);}});
+		doActions.put(UnicodeForServer.CHAT_LOBBY_INDIV_ERROR, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result,1);}});
+		doActions.put(UnicodeForServer.CHAT_WAITING_INDIV_ERROR, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result,1);}});
+		doActions.put(UnicodeForServer.CHAT_GAME_INDIV_ERROR, new DoAction(){public void doAction(ArrayList<Object> result){doReceiveChatMsg(result,1);}});
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
@@ -510,7 +516,10 @@ public class MClient {
 			this.area = area;
 		}
 		public void run(){
-			gameScreen.receiveMainChatMsg((Integer)result.get(0), (String)result.get(1),(String)result.get(2));
+			if(area == 0)
+				gameScreen.receiveMainChatMsg((Integer)result.get(0), (String)result.get(1),(String)result.get(2), (Boolean)result.get(3), (String)result.get(4));
+			else
+				gameScreen.receiveErrorChatMsg((Integer)result.get(0), (String)result.get(1));
 		}
 	}
 	protected void doCommenceTrade(ArrayList<Object> result) {

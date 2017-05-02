@@ -122,8 +122,7 @@ public class MMainArea extends Thread{
 
 	}
 	private void forChatting(){
-		System.out.println("Request for Chatting");
-		MServerMethod.showMsgToAllUsers(usersOutput, msg);
+		(new ChattingThread(msg, userId, usersOutput)).start();
 	}
 	private void forDisconnected(){
 		System.out.println("1.");

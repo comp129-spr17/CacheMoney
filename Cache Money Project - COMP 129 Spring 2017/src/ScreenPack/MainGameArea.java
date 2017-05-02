@@ -379,7 +379,10 @@ public class MainGameArea extends JPanel{
 	private void setRoomText(JButton b, long roomNum, int numPpl){
 		b.setText("Room : " + roomNum + "  " + numPpl+ "/4");
 	}
-	public void receiveMsg(String id, String msg){
-		chatScreen.receiveMsg(id, msg);
+	public void receiveMsg(String id, String msg, boolean isDirect, String toId){
+		chatScreen.receiveMsg(id, msg, isDirect, toId);
+	}
+	public void receiveErrMsg(String id){
+		chatScreen.receiveErrMsg(id);
 	}
 }

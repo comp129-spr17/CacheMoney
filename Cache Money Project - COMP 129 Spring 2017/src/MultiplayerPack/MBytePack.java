@@ -98,6 +98,20 @@ public final class MBytePack {
 		}
 		return null;
 	}
+	public byte[] packStrStrBoolStr(int requestCode, String id, String msg, boolean isDirect, String toId){
+		try{
+			dOutputStream.writeInt(requestCode);
+			dOutputStream.writeUTF(id);
+			dOutputStream.writeUTF(msg);	
+			dOutputStream.writeBoolean(isDirect);
+			dOutputStream.writeUTF(toId);	
+			return packResult();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public byte[] packBoolean(int requestCode, boolean value){
 		try{
 			dOutputStream.writeInt(requestCode);

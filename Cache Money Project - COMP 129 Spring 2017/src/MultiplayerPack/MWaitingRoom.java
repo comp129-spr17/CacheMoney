@@ -35,6 +35,8 @@ public class MWaitingRoom extends Thread{
 	private int loadingNumPlayer;
 	private int curNumPlayer;
 	private boolean gameStarting;
+	private String reqId;
+	private boolean isIndiv;
 	public MWaitingRoom(HashMap<String,OutputStream> usersOutput, HashMap<String,InputStream> usersInput,  HashMap<String, String> userIds, InputStream inputStream, String userId, boolean isHost, long roomNum, boolean isLoadingGame){
 		this.usersOutput = usersOutput;
 		this.usersInput = usersInput;
@@ -87,23 +89,7 @@ public class MWaitingRoom extends Thread{
 		}
 			
 	}
-	private 
-	class LiveInThread extends Thread{
-		public LiveInThread() {
-		}
-		public void run(){
-			System.out.println("live is going on");;
-			while(!gameStarting){
-				System.out.println("Cur:" + curNumPlayer + " In:" + userForThisRoom.size());
-				if(curNumPlayer != userForThisRoom.size()){
-					curNumPlayer = userForThisRoom.size();
-					MServerMethod.sendMsgToMyself(usersOutput, userId, mPack.packBoolean(UnicodeForServer.ABLE_START_BTN,false));
-					System.out.println("notifying user leaves. Cur num = " + curNumPlayer + " User num = " + loadingNumPlayer);
-				}
-			}
-			System.out.println("live is ended");;
-		}
-	}
+	
 	class SendInThread extends Thread{
 		byte[] msg;
 		public SendInThread(byte[] msg) {
@@ -150,9 +136,9 @@ public class MWaitingRoom extends Thread{
 	}
 
 	private void forChatting(){
-		System.out.println("Request for Waiting Chatting");
-		MServerMethod.showMsgToUsersInRoom(outputForThisRoom, msg);
+		(new ChattingThread(msg, userId, usersOutput, outputForThisRoom, UnicodeForServer.CHAT_WAITING)).start();
 	}
+	
 	public void forLoadingUserLeave(){
 		if(isLoadingGame){
 			curNumPlayer--;
