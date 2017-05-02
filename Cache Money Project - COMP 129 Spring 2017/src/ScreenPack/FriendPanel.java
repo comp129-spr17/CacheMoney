@@ -2,6 +2,7 @@ package ScreenPack;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import MultiplayerPack.PlayingInfo;
@@ -26,6 +28,7 @@ public class FriendPanel extends JPanel{
 	private String myUsername;
 	private String friendUsername;
 	private JPanel normalLayout;
+	private JLabel status;
 	private JPanel sectionedLayout;
 	private CardLayout cl;
 	private PlayingInfo pInfo;
@@ -37,6 +40,7 @@ public class FriendPanel extends JPanel{
 		this.myUsername = pInfo.getLoggedInId();
 		this.friendUsername = friendUsername;
 		button = new ArrayList<JButton>(3);
+		status = new JLabel("In Lobby");
 		initButtons();
 		initPanels();
 
@@ -50,13 +54,15 @@ public class FriendPanel extends JPanel{
 		normalLayout.setLayout(new GridLayout());
 		normalLayout.add(button.get(NAME));
 
-		sectionedLayout = new JPanel(new GridLayout(1,2));
+		sectionedLayout = new JPanel(new GridLayout(2,1));
 		JPanel forName = new JPanel();
-		forName.setLayout(new GridLayout());
+		forName.setLayout(new GridLayout(2,1));
+		status.setHorizontalAlignment(JLabel.CENTER);
+		forName.add(status);
 		forName.add(button.get(NAME_COPY));
 
 		JPanel forSections = new JPanel();
-		forSections.setLayout(new GridLayout(2,1));
+		forSections.setLayout(new GridLayout(1,2));
 		forSections.add(button.get(ADD_REMOVE));
 		forSections.add(button.get(MESSAGE));
 
