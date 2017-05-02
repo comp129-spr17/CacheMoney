@@ -1,14 +1,13 @@
 package ScreenPack;
 
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.ListIterator;
 
 import MultiplayerPack.PlayingInfo;
-import MultiplayerPack.SqlRelated;
 
 public class PanelForFriends extends ScrollingPane{
 	private ArrayList<String> listOfFriends;
@@ -51,7 +50,7 @@ public class PanelForFriends extends ScrollingPane{
 	       });
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		
+		gbc.insets = new Insets(1,0,1,0);
 		panel.add(temp, gbc);
 		listOfFriends.add(Name);
 		friendMap.put(Name, temp);

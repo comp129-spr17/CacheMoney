@@ -40,7 +40,7 @@ public class FriendPanel extends JPanel{
 		pInfo = PlayingInfo.getInstance();
 
 		stat = new ArrayList<>();
-		stat.add("OffLine");
+		stat.add("Offline");
 		stat.add("Lobby");
 		stat.add("Waiting Room");
 		stat.add("Playing Game");
