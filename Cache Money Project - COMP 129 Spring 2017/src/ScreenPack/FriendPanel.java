@@ -48,7 +48,7 @@ public class FriendPanel extends JPanel{
 			button.get(NAME).setEnabled(false);
 		refresh();
 	}
-
+	
 	private void initPanels(){
 		normalLayout = new JPanel();
 		normalLayout.setLayout(new GridLayout());
@@ -82,7 +82,6 @@ public class FriendPanel extends JPanel{
 
 	public void setFriend(String friend_uname){
 		isOn = true;
-		(new CheckFriend()).start();
 		friendUsername = friend_uname;
 		button.get(NAME).setText(friendUsername);
 		button.get(NAME_COPY).setText(friendUsername);
@@ -99,6 +98,8 @@ public class FriendPanel extends JPanel{
 	}
 
 	private void displayNormalPanel(){
+
+		isOn=false;
 		normalLayout.setVisible(true);
 		sectionedLayout.setVisible(false);
 		normalLayout.repaint();
@@ -107,11 +108,16 @@ public class FriendPanel extends JPanel{
 	
 	private void displaySectionedPanel(){
 		normalLayout.setVisible(false);
+		isOn=true;
+		(new CheckFriend()).start();
 		sectionedLayout.setVisible(true);
 		sectionedLayout.repaint();
 		cl.show(FriendPanel.this, "sectionedLayout");
 	}
 	
+	public void setOff(){
+		displayNormalPanel();
+	}
 	public void runTimer(boolean b){
 		isOn = b;
 	}
@@ -122,7 +128,12 @@ public class FriendPanel extends JPanel{
 		button.add(initAddRemoveButton());
 		button.add(initMessageButton());
 	}
-
+	public JButton getUserNameBtn(){
+		return button.get(NAME);
+	}
+	public JButton getUserNameOtherBtn(){
+		return button.get(NAME_COPY);
+	}
 	private JButton initUsernameButton(){
 		JButton temp = new JButton(friendUsername);
 

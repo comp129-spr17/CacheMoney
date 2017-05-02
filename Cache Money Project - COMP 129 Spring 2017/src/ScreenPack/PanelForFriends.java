@@ -1,6 +1,8 @@
 package ScreenPack;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
@@ -9,20 +11,25 @@ import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.SqlRelated;
 
 public class PanelForFriends extends ScrollingPane{
-	ArrayList<String> listOfFriends;
-	HashMap<String, FriendPanel> friendMap;
-	PlayingInfo pInfo;
-	boolean isOn;
+	private ArrayList<String> listOfFriends;
+	private HashMap<String, FriendPanel> friendMap;
+	private PlayingInfo pInfo;
+	private String current;
+	private boolean isOn;
 	
 	public PanelForFriends(){
 		isOn = false;
 		pInfo = PlayingInfo.getInstance();
+		current = "";
 		listOfFriends = new ArrayList<String>();
 		friendMap = new HashMap<String,FriendPanel>();
 	}
 
 	@Override
 	protected void clearList() {
+		for(FriendPanel friend : friendMap.values()){
+			friend.setOff();
+		}
 		friendMap.clear();
 		listOfFriends.clear();
 		panel.removeAll();
@@ -30,7 +37,18 @@ public class PanelForFriends extends ScrollingPane{
 	
 	public void addPersonToPanel(String Name){
 		FriendPanel temp = new FriendPanel(Name);
-		
+		temp.getUserNameBtn().addMouseListener(new MouseAdapter(){
+	         public void mousePressed(MouseEvent e) {
+	        	 if(!current.isEmpty()){
+	        		 System.out.println("Current is" + current);
+	        		 friendMap.get(current).setOff();
+	        		 
+	        	 }
+	             current = Name;
+
+        		 System.out.println("Now Current is" + current);
+	          }                
+	       });
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		
