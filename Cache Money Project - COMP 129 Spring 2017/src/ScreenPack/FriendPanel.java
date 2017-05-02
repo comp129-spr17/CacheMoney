@@ -39,6 +39,10 @@ public class FriendPanel extends JPanel{
 		button = new ArrayList<JButton>(3);
 		initButtons();
 		initPanels();
+
+		if(myUsername.equals(friendUsername))
+			button.get(NAME).setEnabled(false);
+		refresh();
 	}
 
 	private void initPanels(){
@@ -102,8 +106,8 @@ public class FriendPanel extends JPanel{
 		cl.show(FriendPanel.this, "sectionedLayout");
 	}
 	
-	public void setOff(){
-		isOn = false;
+	public void runTimer(boolean b){
+		isOn = b;
 	}
 
 	private void initButtons(){
@@ -178,6 +182,7 @@ public class FriendPanel extends JPanel{
 			temp.setBackground(Color.GREEN);
 		}
 	}
+	
 	class CheckFriend extends Thread{
 		public void run(){
 			System.out.println("Start Checking");
@@ -187,6 +192,7 @@ public class FriendPanel extends JPanel{
 			System.out.println("End Checking");
 		}
 	}
+	
 	private void addFriend(){
 		SqlRelated.addFriend(myUsername, friendUsername);
 	}
