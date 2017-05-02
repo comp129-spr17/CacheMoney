@@ -140,11 +140,11 @@ public final class MByteUnpack {
 		return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.END_BANKRUPT_PANEL, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_LOBBY_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.CHAT_LOBBY_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_WAITING_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.CHAT_WAITING_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
-		GetResults.put(UnicodeForServer.CHAT_GAME_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+		GetResults.put(UnicodeForServer.CHAT_GAME_INDIV_ERROR, new GetResult(){public ArrayList<Object> getResult(byte[] result){unpackStrStr(result);
 		return cleanUpAndReturn();}});
 	}
 	

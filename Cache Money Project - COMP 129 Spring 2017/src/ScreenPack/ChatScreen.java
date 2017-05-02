@@ -231,12 +231,12 @@ import MultiplayerPack.PlayingInfo;
 				playingInfo.sendMessageToServer(mPack.packStrStrBoolStr(MSG_TYPE,playingInfo.getLoggedInId(),msg, true,(String)chatSelector.getSelectedItem()));
 				
 		}
-		public void receiveMsg(String id, String toId, boolean isDirect, String msg){
+		public void receiveMsg(String id, String msg , boolean isDirect, String toId){
 			msgDisplayArea.append("[" + id +"]" + (isDirect ? " -> [" + toId+"]" : "") + ":\n    " + msg+"\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
 		}
-		public void receiveErrMsg(String id){
-			msgDisplayArea.append(id+":\n    That user is not logged in.\n");
+		public void receiveErrMsg(String id, String toId){
+			msgDisplayArea.append("[" + id +"]" + " -> [" + toId+"]" + ":\n     That user is not online.\n");
 			msgDisplayArea.setCaretPosition(msgDisplayArea.getDocument().getLength());
 			chatSelector.insertItemAt("", 1);
 		}

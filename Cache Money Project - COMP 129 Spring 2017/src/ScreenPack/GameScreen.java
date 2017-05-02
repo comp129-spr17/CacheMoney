@@ -957,13 +957,13 @@ public class GameScreen extends JFrame{
 		else
 			chatScreen.receiveMsg(id, msg, isDirect, toId);
 	}
-	public void receiveErrorChatMsg(int which, String id){
+	public void receiveErrorChatMsg(int which, String id, String toId){
 		if(which == UnicodeForServer.CHAT_LOBBY)
-			mainGameArea.receiveErrMsg(id);
+			mainGameArea.receiveErrMsg(id, toId);
 		else if(which == UnicodeForServer.CHAT_WAITING)
-			waitingArea.receiveErrMsg(id);
+			waitingArea.receiveErrMsg(id, toId);
 		else
-			chatScreen.receiveErrMsg(id);
+			chatScreen.receiveErrMsg(id, toId);
 	}
 	public void hostLeftWaitingArea(){
 		JOptionPane.showMessageDialog(this, "The host of the waiting room has left.");

@@ -519,7 +519,7 @@ public class MClient {
 			if(area == 0)
 				gameScreen.receiveMainChatMsg((Integer)result.get(0), (String)result.get(1),(String)result.get(2), (Boolean)result.get(3), (String)result.get(4));
 			else
-				gameScreen.receiveErrorChatMsg((Integer)result.get(0), (String)result.get(1));
+				gameScreen.receiveErrorChatMsg((Integer)result.get(0), (String)result.get(1), (String)result.get(2));
 		}
 	}
 	protected void doCommenceTrade(ArrayList<Object> result) {

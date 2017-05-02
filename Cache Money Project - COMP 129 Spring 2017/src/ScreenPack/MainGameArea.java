@@ -373,7 +373,7 @@ public class MainGameArea extends JPanel{
 	public void receiveMsg(String id, String msg, boolean isDirect, String toId){
 		chatScreen.receiveMsg(id, msg, isDirect, toId);
 	}
-	public void receiveErrMsg(String id){
-		chatScreen.receiveErrMsg(id);
+	public void receiveErrMsg(String id, String toId){
+		chatScreen.receiveErrMsg(id, toId);
 	}
 }
