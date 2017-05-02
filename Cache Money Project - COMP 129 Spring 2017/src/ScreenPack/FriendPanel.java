@@ -34,13 +34,23 @@ public class FriendPanel extends JPanel{
 	private PlayingInfo pInfo;
 	private boolean isOn;
 
+	private ArrayList<String> stat;
 	public FriendPanel(String friendUsername){
 		this.setLayout(new CardLayout());
 		pInfo = PlayingInfo.getInstance();
+
+		stat = new ArrayList<>();
+		stat.add("OffLine");
+		stat.add("Lobby");
+		stat.add("Waiting Room");
+		stat.add("Playing Game");
 		this.myUsername = pInfo.getLoggedInId();
 		this.friendUsername = friendUsername;
 		button = new ArrayList<JButton>(3);
 		status = new JLabel("In Lobby");
+		status.setBackground(Color.BLACK);
+		status.setForeground(Color.WHITE);
+		status.setOpaque(true);
 		initButtons();
 		initPanels();
 
@@ -110,6 +120,7 @@ public class FriendPanel extends JPanel{
 		normalLayout.setVisible(false);
 		isOn=true;
 		(new CheckFriend()).start();
+		status.setText(stat.get(SqlRelated.getPlayerStatus(friendUsername)));
 		sectionedLayout.setVisible(true);
 		sectionedLayout.repaint();
 		cl.show(FriendPanel.this, "sectionedLayout");
@@ -205,6 +216,7 @@ public class FriendPanel extends JPanel{
 			System.out.println("Start Checking");
 			while(isOn){
 				checkFriendship(button.get(ADD_REMOVE));
+				status.setText(stat.get(SqlRelated.getPlayerStatus(friendUsername)));
 			}
 			System.out.println("End Checking");
 		}

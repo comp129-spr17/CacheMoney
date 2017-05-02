@@ -109,7 +109,6 @@ public class MainGameArea extends JPanel{
 		addLoadGameButton();
 		onlineUsers = new PanelForFriends();
 		onlineUsers.setScrollingPaneVisible(true);
-		onlineUsers.setTimer(false);
 		createNewRoom = new JButton();
 		addCreateNewRoomButton();
 		jLabel = new JLabel("Online users:");
@@ -196,7 +195,6 @@ public class MainGameArea extends JPanel{
 	}
 	
 	public void switchToWaiting(){
-		friendList.setTimer(false);
 		chatScreen.clearArea();
 		container.removeAll();
 		waitingArea.setComponents();
@@ -228,7 +226,6 @@ public class MainGameArea extends JPanel{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		friendList.setTimer(true);
 	}
 	private void getLoadingGames(){
 		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());

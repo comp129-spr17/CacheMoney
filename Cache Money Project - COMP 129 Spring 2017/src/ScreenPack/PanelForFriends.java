@@ -39,7 +39,7 @@ public class PanelForFriends extends ScrollingPane{
 		FriendPanel temp = new FriendPanel(Name);
 		temp.getUserNameBtn().addMouseListener(new MouseAdapter(){
 	         public void mousePressed(MouseEvent e) {
-	        	 if(!current.isEmpty()){
+	        	 if(!current.isEmpty() && !Name.equals(current)){
 	        		 System.out.println("Current is" + current);
 	        		 friendMap.get(current).setOff();
 	        		 
@@ -58,31 +58,31 @@ public class PanelForFriends extends ScrollingPane{
 		refresh();
 	}
 	
-	public void setTimer(boolean b){
-		isOn = b;
-		(new CheckFriend()).start();
-	}
+//	public void setTimer(boolean b){
+//		isOn = b;
+////		(new CheckFriend()).start();
+//	}
 	
-	private void checkRemovePersonFromPanel(){
-		ListIterator<String> l = listOfFriends.listIterator();
-		for(;l.hasNext();l.next()){
-			System.out.println(l.toString());
-			if(pInfo.getLoggedInId() != l.toString() && !SqlRelated.isFriend(pInfo.getLoggedInId(), l.toString())){
-				panel.remove(friendMap.get(l.toString()));
-				refresh();
-				friendMap.remove(l.toString());
-				l.remove();
-			}
-		}
-	}
-	
-	class CheckFriend extends Thread{
-		public void run(){
-			System.out.println("Start Checking");
-			while(isOn){
-				checkRemovePersonFromPanel();
-			}
-			System.out.println("End Checking");
-		}
-	}
+//	private void checkRemovePersonFromPanel(){
+//		ListIterator<String> l = listOfFriends.listIterator();
+//		for(;l.hasNext();l.next()){
+//			System.out.println(l.toString());
+//			if(pInfo.getLoggedInId() != l.toString() && !SqlRelated.isFriend(pInfo.getLoggedInId(), l.toString())){
+//				panel.remove(friendMap.get(l.toString()));
+//				refresh();
+//				friendMap.remove(l.toString());
+//				l.remove();
+//			}
+//		}
+//	}
+//	
+//	class CheckFriend extends Thread{
+//		public void run(){
+//			System.out.println("Start Checking");
+//			while(isOn){
+//				checkRemovePersonFromPanel();
+//			}
+//			System.out.println("End Checking");
+//		}
+//	}
 }
