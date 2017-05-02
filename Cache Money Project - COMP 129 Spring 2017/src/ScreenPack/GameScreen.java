@@ -210,8 +210,8 @@ public class GameScreen extends JFrame{
 	private void initEverything(boolean isHost, boolean isSingle){
 		
 		
-		
-		chatScreen = new ChatScreen(UnicodeForServer.CHAT_GAME);
+		if(!isSingle)
+			chatScreen = new ChatScreen(UnicodeForServer.CHAT_GAME);
 		
 		if (Property.isSQLEnabled){
 			(new SQLTimeOut()).start();
@@ -912,7 +912,8 @@ public class GameScreen extends JFrame{
 	public void switchToGame(){
 		getContentPane().removeAll();
 		getContentPane().add(mainPanel);
-		chatScreen.setVisible(true);
+		if(!pInfo.isSingle())
+			chatScreen.setVisible(true);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 		
