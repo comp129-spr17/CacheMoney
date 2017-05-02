@@ -119,6 +119,7 @@ public class MClient {
 		variableCodeString.add(new String("LOADING_GAME_INVALID_USER"));
 		variableCodeString.add(new String("ABLE_START_BTN"));
 		variableCodeString.add(new String("DECLARE_BANKRUPT"));
+		variableCodeString.add(new String("END_BANKRUPT_PANEL"));
 	}
 	
 	
@@ -191,7 +192,7 @@ public class MClient {
 		doActions.put(UnicodeForServer.LOADING_GAME, new DoAction(){public void doAction(ArrayList<Object> result){doLoadingGame(result);}});
 		doActions.put(UnicodeForServer.ABLE_START_BTN, new DoAction(){public void doAction(ArrayList<Object> result){doAbleStartBtn(result);}});
 		doActions.put(UnicodeForServer.DECLARED_BANKRUPT, new DoAction(){public void doAction(ArrayList<Object> result){doDeclaredBankrupt(result);}});
-		
+		doActions.put(UnicodeForServer.END_BANKRUPT_PANEL, new DoAction(){public void doAction(ArrayList<Object> result){doEndBankrupt(result);}});
 	}
 //	private void manuallyEnterIPandPort(BufferedReader br, boolean isHostClient) throws IOException, UnknownHostException {
 //		isConnected = false;
@@ -209,6 +210,7 @@ public class MClient {
 
 
 
+	
 	
 	
 	
@@ -338,6 +340,9 @@ public class MClient {
 	}
 	protected void doDeclaredBankrupt(ArrayList<Object> result) {
 		diceP.actionForBankrupt();
+	}
+	protected void doEndBankrupt(ArrayList<Object> result) {
+		diceP.endBankruptPanel();
 	}
 	
 	private void doReceiveIntArray(ArrayList<Object> result){

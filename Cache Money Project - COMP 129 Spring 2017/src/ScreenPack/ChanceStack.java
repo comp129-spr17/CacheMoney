@@ -129,7 +129,18 @@ public class ChanceStack extends JPanel{
 	private int getNextCard(){
 		//System.out.println(cardDrawn);
 		//cardDrawn = 0; //only puts go to go card in 
-		return  rand.nextInt(16);
+		int result = rand.nextInt(16);
+		switch (result){
+		case 9:
+			result = 6;
+			break;
+		case 13:
+			result = 6;
+			break;
+		default:
+			break;
+		}
+		return result;
 	}
 
 	public String getResultingCommand(boolean isCurrentPlayer, int playerPosition) {

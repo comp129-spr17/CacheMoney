@@ -127,9 +127,18 @@ public class CommunityStack extends JPanel{
 	
 	}
 	private int getNextCard(){
-		//System.out.println(cardDrawn);
-		//cardDrawn = 0; //only puts go to go card in play
-		return rand.nextInt(17);
+		int result = rand.nextInt(16);
+		switch (result){
+		case 6:
+			result = 4;
+			break;
+		case 14:
+			result = 4;
+			break;
+		default:
+			break;
+		}
+		return result;
 	}
 	
 	public String getResultingCommand(boolean isCurrentPlayer, int playerPosition) {

@@ -138,6 +138,8 @@ public final class MByteUnpack {
 			return cleanUpAndReturn();}});
 		GetResults.put(UnicodeForServer.DECLARED_BANKRUPT, new GetResult(){public ArrayList<Object> getResult(byte[] result){
 		return cleanUpAndReturn();}});
+		GetResults.put(UnicodeForServer.END_BANKRUPT_PANEL, new GetResult(){public ArrayList<Object> getResult(byte[] result){
+			return cleanUpAndReturn();}});
 	}
 	
 	private ArrayList<Object> cleanUpAndReturn(){

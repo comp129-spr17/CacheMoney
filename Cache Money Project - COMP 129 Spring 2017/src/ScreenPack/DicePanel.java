@@ -34,7 +34,7 @@ import MultiplayerPack.UnicodeForServer;
 
 @SuppressWarnings("serial")
 public class DicePanel extends JPanel{
-	private final boolean SERVER_DEBUG = true; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
+	private final boolean SERVER_DEBUG = false; // ENABLE THIS TO DISPLAY DEBUG INFO AND ENABLE DEBUG_MOVEMENT_VALUE
 	private final int DEBUG_MOVEMENT_VALUE = 1; // CHANGE THIS TO ALWAYS MOVE THIS NUMBER SPACES
 	
 	private GameScreen gamescreen;
@@ -674,11 +674,7 @@ public class DicePanel extends JPanel{
 		@Override
 		public void run(){
 			while (players[current].getTotalMonies() < amount && players[current].getIsAlive()){
-				try {
-					sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				delayThread(100);
 			}
 			if (players[current].getIsAlive()){
 				players[current].setTotalMonies(players[current].getTotalMonies() - amount);
@@ -732,6 +728,10 @@ public class DicePanel extends JPanel{
 				else{
 					players[current].pay(200);
 				}
+			}
+			else if (spaceLandedOn.equals("Go To Jail")){
+				numOfDoublesInRow = 0;
+				isSame = false;
 			}
 		}
 		mLabel.reinitializeMoneyLabels();
@@ -897,6 +897,9 @@ public class DicePanel extends JPanel{
 	}
 	public void actionForBankrupt() {
 		bankruptcyPanel.actionForBankrupt(); 
+	}
+	public void endBankruptPanel() {
+		bankruptcyPanel.endBankruptPanel();
 	}
 
 }

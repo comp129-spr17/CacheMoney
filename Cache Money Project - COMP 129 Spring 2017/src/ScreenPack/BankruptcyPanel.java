@@ -69,10 +69,11 @@ public class BankruptcyPanel extends JPanel{
 		lblTitle = new JLabel();
 		description = new JLabel();
 		
-		description.setBounds(this.getWidth() / 3 + 5, 75, this.getWidth(), this.getHeight()/10);
+		description.setBounds(this.getWidth() / 3 + 5, this.getHeight()/8*4, this.getWidth(), this.getHeight()/10);
 		
 		lblTitle.setText("<html><b><font color = '" + "white" + "'>You do not have enough money to pay!<br />Mortgage properties to earn some money!<br />This will disappear once you earn enough money.</font><b></html>");
-		lblTitle.setBounds(this.getWidth() / 20, 5, this.getWidth(), this.getHeight()/5);
+		lblTitle.setBounds(this.getWidth() / 20, 5, this.getWidth(), this.getHeight());
+		lblTitle.setVerticalAlignment(JLabel.NORTH);
 		
 		lblBankrupt.setText("<html><b><font color = '" + "red" + "'>Declare Bankrputcy</font><b></html>");
 		lblBankrupt.setBounds(this.getWidth()/2 - 60, this.getHeight()/8*6 + 20, 300, 30);
@@ -84,6 +85,7 @@ public class BankruptcyPanel extends JPanel{
 	}
 	public void executeSwitch(JPanel panelToSwitchTo, int needMoney, Player currentPlayer, boolean isCurrent)
 	{
+		bankruptcyButton.setVisible(true);
 		isBankrupt = false;
 		this.setBackground(Color.black);
 		this.needMoney = needMoney;
@@ -168,19 +170,19 @@ public class BankruptcyPanel extends JPanel{
 	private void dismissBackruptPanel() {
 		
 		if(pInfo.isSingle())
-			endPropertyPanel();
+			endBankruptPanel();
 		else{
 			java.util.Timer newTimer = new java.util.Timer();
 			newTimer.schedule(new TimerTask() {
 
 				@Override
 				public void run() {
-					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_PROPERTY));
+					pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.END_BANKRUPT_PANEL));
 				}
 			}, 0);
 		}
 	}
-	public void endPropertyPanel()
+	public void endBankruptPanel()
 	{
 		this.setVisible(false);
 		panelToSwitchTo.setVisible(true);
@@ -190,7 +192,7 @@ public class BankruptcyPanel extends JPanel{
 		public void run(){
 			while(!isBankrupt){
 				if(needMoney < currentPlayer.getTotalMonies()){
-					endPropertyPanel();
+					endBankruptPanel();
 					break;
 				}
 				try {

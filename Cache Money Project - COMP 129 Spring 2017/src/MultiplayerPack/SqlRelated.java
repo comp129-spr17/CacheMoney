@@ -494,4 +494,39 @@ public final class SqlRelated {
 		}
 		return false;
 	}
+	public static void setPlayerStatus(int status, String user_id){
+		(new UpdatePlayerStat(status, user_id)).start();
+	}
+	static class UpdatePlayerStat extends Thread{
+		int status;
+		String user_id;
+		public UpdatePlayerStat(int status, String user_id){
+			this.status = status;
+			this.user_id = user_id;
+		}
+		public void run(){
+			try {
+				statement = connection.createStatement();
+				statement.executeUpdate("UPDATE user_info "
+									+ "SET online_stat= " + status
+									+ " WHERE user_id = '"+user_id+"';");
+				
+			} catch (SQLException e) {
+//				e.printStackTrace();
+			}
+		}
+	}
+	public static int getPlayerStatus(String user_id){
+		try {
+			statement = connection.createStatement();
+			rSet = statement.executeQuery("SELECT online_stat "
+									+ "FROM user_info "
+									+ "WHERE user_id = '"+user_id+"';");
+			rSet.next();
+			return rSet.getInt(1);
+		} catch (SQLException e) {
+//			e.printStackTrace();
+		}
+		return 0;
+	}
 }

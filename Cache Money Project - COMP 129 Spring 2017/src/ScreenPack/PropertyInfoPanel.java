@@ -345,9 +345,9 @@ public class PropertyInfoPanel extends JPanel{
 		@Override
 		public void run(){
 			if (pInfo.isSingle() || currentPlayer.getPlayerNum() == pInfo.getMyPlayerNum()){
-				while (currentPlayer.getIsAlive()){
+				while (currentPlayer.getIsAlive() && isBankrupt){
 					try {
-						sleep(1);
+						sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -366,10 +366,10 @@ public class PropertyInfoPanel extends JPanel{
 			if (pInfo.isSingle() || currentPlayer.getPlayerNum() == pInfo.getMyPlayerNum()){
 				while (
 						property.getBuyingPrice() > currentPlayer.getTotalMonies() &&
-						!buyButton.isEnabled()
+						!buyButton.isEnabled() && currentPlayer.getIsAlive()
 						){
 					try {
-						sleep(1);
+						sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -383,7 +383,7 @@ public class PropertyInfoPanel extends JPanel{
 	private boolean checkIfPlayerHasEnoughMoneyForRent(Player currentPlayer, boolean isCurrent) {
 		int cost = getCost();
 		boolean temp = currentPlayer.getTotalMonies() >= cost && (pInfo.isSingle() || isCurrent);
-		payButton.setEnabled(true);
+		payButton.setEnabled(pInfo.isSingle() || isCurrent);
 		return temp;
 	}
 	

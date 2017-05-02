@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import MultiplayerPack.PlayingInfo;
+import MultiplayerPack.SqlRelated;
 import ScreenPack.PlayerInfoDisplay;
 
 public class Piece extends JLabel{
@@ -58,11 +59,10 @@ public class Piece extends JLabel{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if(SwingUtilities.isRightMouseButton(e)){
-					requestFocus();
 					System.out.println("pressed");
 					pInfoDisplay.setVisible(true);
 					pInfoDisplay.setFriend(pInfo.getLoggedInId(), user_id);
-					pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose);
+					pInfoDisplay.setPlayerInfo(user_id, user_name, user_win, user_lose, SqlRelated.getPlayerStatus(user_id));
 					
 					setDisplayLocation(e.getXOnScreen(), e.getYOnScreen());
 					
@@ -95,6 +95,9 @@ public class Piece extends JLabel{
 	}
 	public void setUserLose(int user_lose){
 		this.user_lose = user_lose;
+	}
+	public void setUserStatus(int status){
+		
 	}
 	private void setDisplayLocation(int x, int y){
 		pInfoDisplay.setLocation(pInfoDisplay.getStartX(x), pInfoDisplay.getStartY(y));

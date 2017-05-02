@@ -29,6 +29,7 @@ public final class Player {
 	private int win;
 	private int lose;
 	private String tradeRequest;	// saved
+	private int status;
 	private static final Player GlobalPlayer0 = new Player(0);
 	private static final Player GlobalPlayer1 = new Player(1);
 	private static final Player GlobalPlayer2 = new Player(2);
@@ -510,6 +511,13 @@ public final class Player {
 	public void setNumLose(int lose){
 		this.lose = lose;
 		playerpiece.setUserLose(lose);
+	}
+	public void setStatus(int status){
+		this.status = status;
+		playerpiece.setUserStatus(status);
+	}
+	public int getStatus(){
+		return status;
 	}
 	public int getNumLose(){
 		return lose;
