@@ -56,7 +56,7 @@ public class MainGameArea extends JPanel{
 	private JPanel controlPanel;
 	private JPanel mainPanel;
 	private SqlRelated sqlRelated;
-	private ResultSet friends;
+	
 	private ArrayList<ArrayList<Integer>> loadingListInt;
 	public MainGameArea(final Container container) {
 		this.container = container;
@@ -211,22 +211,13 @@ public class MainGameArea extends JPanel{
 		mainPanel.add(controlPanel,BorderLayout.EAST);
 		
 		container.add(mainPanel);
-		loadFriendList();
+		friendList.loadFriendList();
 		getLoadingGames();
 		/*container.add(this,BorderLayout.WEST);
 		container.add(chatAndFriends,BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.EAST);*/
 	}
-	private void loadFriendList(){
-		friendList.clearList();
-		friends = sqlRelated.getFriend(playingInfo.getLoggedInId());
-		try {
-			while(friends.next())
-				friendList.addPersonToPanel(friends.getString(1));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	
 	private void getLoadingGames(){
 		loadingListInt = sqlRelated.getLoadingGameList(playingInfo.getLoggedInId());
 		loadGame.setEnabled(loadingListInt.size()!=0);

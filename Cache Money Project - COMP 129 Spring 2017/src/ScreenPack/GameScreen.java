@@ -182,6 +182,7 @@ public class GameScreen extends JFrame{
 		chatAndFriends.addTab("Chat Screen", chatScreen);
 		
 		onlineFriends = new PanelForFriends();
+		onlineFriends.loadFriendList();
 		chatAndFriends.addTab("Online Friends", onlineFriends.getScrollingPanel());
 	}
 	
