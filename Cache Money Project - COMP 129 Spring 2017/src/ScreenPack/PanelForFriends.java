@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import GamePack.Property;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.SqlRelated;
 
@@ -23,7 +24,9 @@ public class PanelForFriends extends ScrollingPane{
 	private PanelForFriends originalPanel;
 	public PanelForFriends(ChatScreen chatScreen){
 		pInfo = PlayingInfo.getInstance();
-		sqlRelated = SqlRelated.getInstance();
+		if (Property.isSQLEnabled){
+			sqlRelated = SqlRelated.getInstance();
+		}
 		current = "";
 		listOfFriends = new ArrayList<String>();
 		friendMap = new HashMap<String,FriendPanel>();

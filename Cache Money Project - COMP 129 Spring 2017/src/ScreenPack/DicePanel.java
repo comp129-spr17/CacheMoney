@@ -729,7 +729,7 @@ public class DicePanel extends JPanel{
 					players[current].pay(200);
 				}
 			}
-			else if (spaceLandedOn.equals("Go To Jail")){
+			else if (spaceLandedOn.equals("Go to Jail")){
 				numOfDoublesInRow = 0;
 				isSame = false;
 			}

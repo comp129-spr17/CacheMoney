@@ -238,14 +238,19 @@ public class MainMenuScreen {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(MultiPButton.isEnabled()){
-					
 					Sounds.buttonConfirm.playSound();
-					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
-					loginDialog.setVisible(true);
-					System.out.println("Hello devin");
 					if (playingInfo.isLoggedIn()){
 						(new beginMultiplayer()).start();
 					}
+					else{
+						
+						LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
+						loginDialog.setVisible(true);
+						if (playingInfo.isLoggedIn()){
+							(new beginMultiplayer()).start();
+						}
+					}
+					
 				}
 			}
 			class beginMultiplayer extends Thread{
@@ -310,7 +315,6 @@ public class MainMenuScreen {
 					Sounds.buttonConfirm.playSound();
 					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
 					loginDialog.setVisible(true);
-					System.out.println("Hello devin");
 					if (playingInfo.isLoggedIn()){
 						(new beginMultiplayer()).start();
 					}
@@ -582,6 +586,7 @@ public class MainMenuScreen {
 	}
 
 	private void setupClient(){
+		Property.isSQLEnabled = true;
 		gameScreen = null;
 		mainmenuframe.setVisible(true);
 		try {
@@ -666,7 +671,7 @@ public class MainMenuScreen {
 		ImageIcon imgOn, imgOff;
 		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/SQLon.png"));
 		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/SQLoff.png"));
-		muteSQL = new JCheckBox(imgOn);	// DEBUG
+		muteSQL = new JCheckBox(imgOff);
 		muteSQL.setBounds(220, 440, 40, 40);
 		mainPanel.add(muteSQL);
 		muteSQL.addMouseListener(new MouseListener(){

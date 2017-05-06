@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import MultiplayerPack.SqlRelated;
 
 public abstract class Property {
-	public static boolean isSQLEnabled = true;
+	public static boolean isSQLEnabled = false;
 	ArrayList<Integer> rentValues;
 	protected int mortgageValue;
 	protected int buyingPrice;
