@@ -258,6 +258,7 @@ public class MainMenuScreen {
 				public void run(){
 //					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
 //					displayHostOrClientDialogBox(mwr);
+					Property.isSQLEnabled = true;
 					loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
 					setupClient();
 				}
