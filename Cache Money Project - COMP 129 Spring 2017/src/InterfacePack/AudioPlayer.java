@@ -136,8 +136,8 @@ public class AudioPlayer {
 			return;
 		}
 		isMusicPlaying = true;
-		if(delayUntilLoopBegins > 0){
-			musicOpeningPlayer = null;
+		if(delayUntilLoopBegins > 0){	// if there is an opening sequence to the music, it plays the opening as a sound
+			musicOpeningPlayer = null;	
 			musicOpeningPlayer = findSound(folder, filename + "_opening.mp3");
 			if(musicOpeningPlayer == null) {
 				musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.mp3");
@@ -147,84 +147,59 @@ public class AudioPlayer {
 			}
 			musicOpeningPlayer.play();
 		}
-		t.schedule(new TimerTask(){
-
-			@Override
-			public void run() {
-				int currentMusicCount = musicCount;
-				waitForOpeningToFinish(delayUntilLoopBegins);
-				if (currentMusicCount == musicCount){
-					playLoop(folder, filename);
-				}
+		(new LoopMusic(delayUntilLoopBegins, folder, filename)).start(); // begins the actual loop of the music
+	}
+	
+	class LoopMusic extends Thread{
+		int delayUntilLoopBegins;
+		String folder;
+		String filename;
+		
+		public LoopMusic(int delayUntilLoopBegins, String folder, String filename){ // constructor for LoopMusic class
+			this.delayUntilLoopBegins = delayUntilLoopBegins;
+			this.folder = folder;
+			this.filename = filename + "_loop.mp3";
+		}
+		
+		@Override
+		public void run(){ // entry point for looping music
+			int currentMusicCount = musicCount;				// for future checking if music is still playing
+			waitForOpeningToFinish(delayUntilLoopBegins); 	// waits for the opening of the song to finish
+			if (currentMusicCount == musicCount){ 			// if the music is still playing
+				beginLoop(); 								// begin looping
 			}
-
-			private void waitForOpeningToFinish(int delayUntilLoopBegins) {
-				try {
-					Thread.sleep(delayUntilLoopBegins);
-				} catch (InterruptedException e2) {
-					e2.printStackTrace();
-				}
+		}
+		
+		private void beginLoop() {
+			MediaPlayer mp = findSound(folder, filename);	// finds music
+			mp.setCycleCount(MediaPlayer.INDEFINITE);		// sets the cycle count to be infinite, meaning the music will loop
+			if(mp.getCycleDuration().lessThanOrEqualTo(mp.getCurrentTime())) {
+				mp.seek(Duration.ZERO);
 			}
+			mp.play();										// plays the music
+			stopMusicCue(mp);								// stops the music when the isMusicPlaying variable turns to false
+			mp = null;
+		}
 
-			private void playLoop(String folder, String filename) {
-				AudioInputStream inputStream = null;
-				inputStream = initializeInputStream(folder, filename, inputStream);
-				Clip clip = null;
-				clip = initializeClip(inputStream);
-				clip.loop(Clip.LOOP_CONTINUOUSLY);
-				//musicOpeningPlayer.stop();
-				stopWhenMusicStopsPlaying(clip);
-				clip.drain();
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+		private void stopMusicCue(MediaPlayer mp) {
+			try {
+				while (isMusicPlaying){
+					sleep(1);
 				}
-				t.cancel();
+				mp.stop();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+		}
 
-			private Clip initializeClip(AudioInputStream inputStream){
-				Clip clip;
-				try {
-					clip = AudioSystem.getClip();
-					clip.open(inputStream);
-					return clip;
-				} catch (LineUnavailableException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				return null;
+		private void waitForOpeningToFinish(int delayUntilLoopBegins) {
+			try {
+				sleep(delayUntilLoopBegins);
+			} catch (InterruptedException e2) {
+				e2.printStackTrace();
 			}
-
-			private void stopWhenMusicStopsPlaying(Clip clip){
-				try {
-					while (isMusicPlaying){
-						Thread.sleep(1);
-						clip.getFramePosition();
-					}
-					clip.stop();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-
-			private AudioInputStream initializeInputStream(String folder, String filename,
-					AudioInputStream inputStream) {
-				try {
-					URL url = File.class.getResource("/" + folder + "/" + filename + "_loop.wav");
-					InputStream is = url.openStream();
-					inputStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
-				} catch (UnsupportedAudioFileException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				return inputStream;
-			}
-
-		}, 0);
-
+		}
+		
 	}
 
 	public void stopMusic(){
