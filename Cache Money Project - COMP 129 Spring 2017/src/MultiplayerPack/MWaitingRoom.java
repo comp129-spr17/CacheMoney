@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import GamePack.Property;
+
 public class MWaitingRoom extends Thread{
 	private HashMap<String, OutputStream> usersOutput;
 	private HashMap<String,InputStream> usersInput;
@@ -62,11 +64,13 @@ public class MWaitingRoom extends Thread{
 		msg=new byte[512];
 	}
 	public void forLoadingGame(){
-		SqlRelated sqlRelated = SqlRelated.getInstance();
-		loadingUsers = sqlRelated.getLoadingUserList(loadingNum);
-		System.out.println("Original users:");
-		for(String user:loadingUsers)
-			System.out.println(user);
+		if (Property.isSQLEnabled){
+			SqlRelated sqlRelated = SqlRelated.getInstance();
+			loadingUsers = sqlRelated.getLoadingUserList(loadingNum);
+			System.out.println("Original users:");
+			for(String user:loadingUsers)
+				System.out.println(user);
+		}
 	}
 	public void setLoadNum(int loadNum){
 		loadingNum = loadNum;
@@ -153,7 +157,9 @@ public class MWaitingRoom extends Thread{
 		isGameStartedOrDisconnected = true;
 		exitCode = true;
 		decNumPlayerLoading();
-		SqlRelated.setPlayerStatus(0, userId);
+		if (Property.isSQLEnabled){
+			SqlRelated.setPlayerStatus(0, userId);
+		}
 		if(isHost){
 			forLoadingUserLeave();
 			actionToRemoveRoom(false);
@@ -177,7 +183,9 @@ public class MWaitingRoom extends Thread{
 		}
 		else{
 			actionToLeaveUser();
-			SqlRelated.setPlayerStatus(1, userId);
+			if (Property.isSQLEnabled){
+				SqlRelated.setPlayerStatus(1, userId);
+			}
 			notifyUserLeave(userId);
 		}
 		
@@ -216,7 +224,9 @@ public class MWaitingRoom extends Thread{
 		mManagingMaps.removeWaitingRoom(roomNum);
 		if(!isGameStarted){
 			for(String id : userForThisRoom){
-				SqlRelated.setPlayerStatus(1, id);
+				if (Property.isSQLEnabled){
+					SqlRelated.setPlayerStatus(1, id);
+				}
 			}
 			MServerMethod.showMsgToUsersWithoutHost(outputForThisRoom, mPack.packSimpleRequest(UnicodeForServer.HOST_LEAVE_ROOM));
 			
@@ -252,8 +262,9 @@ public class MWaitingRoom extends Thread{
 		userForThisRoom = uList;
 	}
 	public void notifyUserEnter(String uId){
-
-		SqlRelated.setPlayerStatus(2, uId);
+		if (Property.isSQLEnabled){
+			SqlRelated.setPlayerStatus(2, uId);
+		}
 		System.out.println(uId + " joined");
 		outputForThisRoom.add(usersOutput.get(uId));
 		userForThisRoom.add(uId);

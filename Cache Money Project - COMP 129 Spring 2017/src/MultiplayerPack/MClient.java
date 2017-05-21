@@ -14,6 +14,7 @@ import java.util.TimerTask;
 
 
 import GamePack.Player;
+import GamePack.Property;
 import InterfacePack.Sounds;
 import ScreenPack.*;
 
@@ -406,11 +407,13 @@ public class MClient {
 			for(int i=0; i<(Integer)result.get(1); i++){
 				id = (String)result.get(i+3);
 				System.out.println(id);
-				SqlRelated.generateUserInfo(id);
-				pList[i].setUserId(id);
-				pList[i].setUserName(SqlRelated.getUserName());
-				pList[i].setNumWin(SqlRelated.getWin());
-				pList[i].setNumLose(SqlRelated.getLose());
+				if (Property.isSQLEnabled){
+					SqlRelated.generateUserInfo(id);
+					pList[i].setUserId(id);
+					pList[i].setUserName(SqlRelated.getUserName());
+					pList[i].setNumWin(SqlRelated.getWin());
+					pList[i].setNumLose(SqlRelated.getLose());
+				}
 			}
 		}
 	}

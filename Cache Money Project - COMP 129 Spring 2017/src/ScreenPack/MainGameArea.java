@@ -227,8 +227,10 @@ public class MainGameArea extends JPanel{
 		mainPanel.add(controlPanel,BorderLayout.EAST);
 		
 		container.add(mainPanel);
-		friendList.loadFriendList();
-		getLoadingGames();
+		if (Property.isSQLEnabled){
+			friendList.loadFriendList();
+			getLoadingGames();
+		}
 		/*container.add(this,BorderLayout.WEST);
 		container.add(chatAndFriends,BorderLayout.CENTER);
 		container.add(controlPanel, BorderLayout.EAST);*/

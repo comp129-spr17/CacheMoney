@@ -28,6 +28,7 @@ import GamePack.SizeRelated;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Music;
 import InterfacePack.Sounds;
+import MultiplayerPack.ConnectToServerDialog;
 import MultiplayerPack.LoginDialog;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.SqlRelated;
@@ -244,8 +245,14 @@ public class MainMenuScreen {
 					}
 					else{
 						
-						LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
-						loginDialog.setVisible(true);
+						if (Property.isSQLEnabled){
+							LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
+							loginDialog.setVisible(true);
+						}
+						else{
+							ConnectToServerDialog ctsd = new ConnectToServerDialog(mainmenuframe, mainMenu);
+							ctsd.setVisible(true);
+						}
 						if (playingInfo.isLoggedIn()){
 							(new beginMultiplayer()).start();
 						}
@@ -258,7 +265,7 @@ public class MainMenuScreen {
 				public void run(){
 //					AskUserMultiplayerDialogBox mwr = new AskUserMultiplayerDialogBox();
 //					displayHostOrClientDialogBox(mwr);
-					Property.isSQLEnabled = true;
+					//Property.isSQLEnabled = true;
 					loadingScreen.displaySQLLoadingMessage(Property.isSQLEnabled);
 					setupClient();
 				}
@@ -311,11 +318,17 @@ public class MainMenuScreen {
 			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(LoadMultiplayer.isEnabled()){ // TEMPORARY
-					
+				if(LoadMultiplayer.isEnabled()){
 					Sounds.buttonConfirm.playSound();
-					LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
-					loginDialog.setVisible(true);
+					if (Property.isSQLEnabled){
+						LoginDialog loginDialog = new LoginDialog(mainmenuframe,mainMenu);
+						loginDialog.setVisible(true);
+					}
+					else{
+						ConnectToServerDialog ctsd = new ConnectToServerDialog(mainmenuframe, mainMenu);
+						ctsd.setVisible(true);
+					}
+					
 					if (playingInfo.isLoggedIn()){
 						(new beginMultiplayer()).start();
 					}
@@ -579,7 +592,7 @@ public class MainMenuScreen {
         } );
 	}
 	private void exitAction(){
-		if(playingInfo.isLoggedIn())
+		if(playingInfo.isLoggedIn() && Property.isSQLEnabled)
 			SqlRelated.loginAndOutAction(playingInfo.getLoggedInId(), false);
 		if(gameScreen != null){
 			gameScreen.exitForServer();
@@ -587,7 +600,7 @@ public class MainMenuScreen {
 	}
 
 	private void setupClient(){
-		Property.isSQLEnabled = true;
+		//Property.isSQLEnabled = true;
 		gameScreen = null;
 		mainmenuframe.setVisible(true);
 		try {
@@ -686,6 +699,7 @@ public class MainMenuScreen {
 					else{
 						Property.isSQLEnabled = true;
 						muteSQL.setIcon(imgOn);
+						JOptionPane.showMessageDialog(null, "You must be connected to PacificNet\ndirectly or through VPN in order to access databases.", "SQL Warning", JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			}

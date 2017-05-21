@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import GamePack.Property;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.SqlRelated;
 import TestPack.PlayingInfoTest;
@@ -54,14 +55,16 @@ public class FriendPanel extends JPanel{
 		status.setBackground(Color.BLACK);
 		status.setForeground(Color.WHITE);
 		status.setOpaque(true);
-		initButtons();
-		initPanels();
-		expiration = 0;
-		if(myUsername.equals(friendUsername))
-			button.get(NAME).setEnabled(false);
-		this.pForFriends = pForFriends;
-		this.chatScreen = chatScreen;
-		refresh();
+		if (Property.isSQLEnabled){
+			initButtons();
+			initPanels();
+			expiration = 0;
+			if(myUsername.equals(friendUsername))
+				button.get(NAME).setEnabled(false);
+			this.pForFriends = pForFriends;
+			this.chatScreen = chatScreen;
+			refresh();
+		}
 	}
 	
 	private void initPanels(){

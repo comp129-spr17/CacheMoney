@@ -24,6 +24,7 @@ import GamePack.ImageRelated;
 import GamePack.JailSpace;
 import GamePack.PathRelated;
 import GamePack.Player;
+import GamePack.Property;
 import GamePack.SizeRelated;
 import InterfacePack.BackgroundImage;
 import InterfacePack.Sounds;
@@ -519,7 +520,7 @@ public class DicePanel extends JPanel{
 		propertyPanel.actionForBuildHouse();
 	}
 	private void changeTurn(){
-		turnLabel.setText("<html> " + (pInfo.isSingle() ? ("Player " + (current + 1)) : (players[current].getUserName().split(" ")[0])) + "'s Turn! <br />Click to roll! <br />The game has been saved.</html>");
+		turnLabel.setText("<html> " + (pInfo.isSingle() || !Property.isSQLEnabled ? ("Player " + (current + 1)) : (players[current].getUserName().split(" ")[0])) + "'s Turn! <br />Click to roll! <br />The game has been saved.</html>");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){

@@ -14,10 +14,10 @@ public final class PlayingInfo {
 	private boolean hasGameStarted;
 	private boolean isLoadingGame;
 	private int loadingGameNum;
-	public final static int PORT_NUM = 7777;
+	public static int PORT_NUM = 7777;
 	//public final static String IP_ADDRESS = "10.15.157.201";
 	private boolean isDisconnectedByOther;
-	public final static String IP_ADDRESS = "10.15.17.88";
+	public static String IP_ADDRESS = "10.15.17.88";
 //	public final static String IP_ADDRESS = "10.0.0.3";
 	private static final PlayingInfo PLAYING_INFO = new PlayingInfo();
 	private PlayingInfo(){
@@ -113,5 +113,15 @@ public final class PlayingInfo {
 	public void setLoadingGameNum(int num){
 		loadingGameNum = num;
 	}
-	
+	public void setIPAddress(String ipAddress){
+		IP_ADDRESS = ipAddress;
+	}
+	public void setPortNum(String portNum){
+		try{
+			PORT_NUM = Integer.parseInt(portNum);
+		}
+		catch (Exception e){
+			PORT_NUM = 0;
+		}
+	}
 }

@@ -134,6 +134,7 @@ public class GameScreen extends JFrame{
 	// called if user is the client
 	public GameScreen(boolean isSingle) throws UnknownHostException, IOException{
 		initEverything(false,isSingle);
+		
 		try{
 			addClient();
 		}
@@ -147,12 +148,14 @@ public class GameScreen extends JFrame{
 		else{
 			requestTimeOut = false;
 			(new TimeOut()).start();
+			int i = 0;
 			while (!client.isReadyToUse() || !isServerReady){
-				System.out.println("");
+				System.out.println("Connecting... " + i);
 //				if (requestTimeOut){
 //					System.out.println("***** The request timed out... *****");
 //					System.exit(1);
 //				}
+				i += 1;
 			}
 			pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.REQUESTING_STATUS_MAIN));
 			Sounds.waitingRoomJoin.playSound();
@@ -183,18 +186,21 @@ public class GameScreen extends JFrame{
 		chatAndFriends.setBounds(chatScreen.getBounds());
 		chatAndFriends.addTab("Chat Screen", chatScreen);
 		
-		onlineFriends = new PanelForFriends(chatScreen);
-		onlineFriends.loadFriendList();
-		chatAndFriends.addTab("Online Friends", onlineFriends.getScrollingPanel());
-		
-		chatAndFriends.addChangeListener(new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				if(chatAndFriends.getSelectedIndex() == 1)
-					onlineFriends.loadFriendList();
+			onlineFriends = new PanelForFriends(chatScreen);
+			if (Property.isSQLEnabled){
+				onlineFriends.loadFriendList();
 			}
-		});
+			chatAndFriends.addTab("Online Friends", onlineFriends.getScrollingPanel());
+			
+			chatAndFriends.addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					if(chatAndFriends.getSelectedIndex() == 1)
+						onlineFriends.loadFriendList();
+				}
+			});
+		
 	}
 	
 	public void setNumPlayer(int numPlayer){
@@ -784,7 +790,9 @@ public class GameScreen extends JFrame{
 		mainPanel.setLayout(null);
 		if(!pInfo.isSingle()){
 			pInfoDisplay = PlayerInfoDisplay.getInstance();
-			pInfoDisplay.setChat(chatScreen,onlineFriends);
+			if (Property.isSQLEnabled){
+				pInfoDisplay.setChat(chatScreen,onlineFriends);
+			}
 			mainPanel.add(pInfoDisplay);
 			pInfoDisplay.setVisible(false);
 		}
@@ -799,12 +807,18 @@ public class GameScreen extends JFrame{
 		mainGameArea = new MainGameArea(getContentPane());
 		waitingArea = mainGameArea.getWaiting();
 		
+		
+		
+		
 		btnExit = new JButton();
 		btnExit.setBounds(sizeRelated.getScreenW()-39, 1, 40, 40);
 		btnExit.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "CloseButton.png", btnExit.getWidth(), btnExit.getHeight()));
 		mainPanel.add(btnExit);
 		addExitListener(isHost);
 		initUserInfoWindow();
+		
+		
+		
 		tempComboBox = new DefaultComboBoxModel<String>();
 		firstTempComboBox = new DefaultComboBoxModel<String>();
 		selectMortgage = new JComboBox<String>(tempComboBox);
@@ -855,6 +869,9 @@ public class GameScreen extends JFrame{
 		mortgageWindow.add(priceDisplay);
 		mortgageWindow.add(mortgagePrice);
 		//mortgageWindow
+		
+		
+		
 		mLabels = MoneyLabels.getInstance();
 		mLabels.initLabels(playerInfo, insets, players,totalPlayers);
 		if (pInfo.isSingle())
