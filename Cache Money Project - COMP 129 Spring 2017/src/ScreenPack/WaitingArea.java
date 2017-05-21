@@ -92,6 +92,7 @@ public class WaitingArea extends JPanel{
 			players.get(i-1).setText((String)userId.get(i));
 			System.out.println("Entered : " + (String)userId.get(i));
 		}
+		
 		repaint();
 		revalidate();
 	}

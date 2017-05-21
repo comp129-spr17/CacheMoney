@@ -423,7 +423,9 @@ public class MClient {
 			gameScreen.switchToMainGameArea();
 		}else if(type == 1){
 			System.out.println("Update Ids going");
-			gameScreen.updateMainGameAreaIds(result);
+			if (Property.isSQLEnabled){
+				gameScreen.updateMainGameAreaIds(result);
+			}
 		}
 		else{
 			System.out.println("update rooms going");

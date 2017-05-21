@@ -592,8 +592,9 @@ public class MainMenuScreen {
         } );
 	}
 	private void exitAction(){
-		if(playingInfo.isLoggedIn() && Property.isSQLEnabled)
+		if(playingInfo.isLoggedIn() && Property.isSQLEnabled){
 			SqlRelated.loginAndOutAction(playingInfo.getLoggedInId(), false);
+		}
 		if(gameScreen != null){
 			gameScreen.exitForServer();
 		}

@@ -196,7 +196,7 @@ public class GameScreen extends JFrame{
 				
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					if(chatAndFriends.getSelectedIndex() == 1)
+					if(chatAndFriends.getSelectedIndex() == 1 && Property.isSQLEnabled)
 						onlineFriends.loadFriendList();
 				}
 			});
@@ -315,7 +315,7 @@ public class GameScreen extends JFrame{
 	public void exitForServer(){
 		System.out.println("Received request to disconnect.");
 		if(!pInfo.isSingle()){
-			if(!pInfo.getIsDisconnectedByOther() && pInfo.getHasGameStarted())
+			if(!pInfo.getIsDisconnectedByOther() && pInfo.getHasGameStarted() && Property.isSQLEnabled)
 				multiSaveGame();
 			System.out.println("Disconnecting...");
 			pInfo.sendMessageToServer(mPack.packString(UnicodeForServer.DISCONNECTED,pInfo.getLoggedInId()));

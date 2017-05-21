@@ -95,10 +95,13 @@ public class MainGameArea extends JPanel{
 		temp.setLayout(new BoxLayout(temp,BoxLayout.Y_AXIS));
 		
 		JButton refresh = new JButton("Refresh Friend List");
+		refresh.setEnabled(Property.isSQLEnabled);
 		refresh.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				friendList.loadFriendList();
+				if (refresh.isEnabled()){
+					friendList.loadFriendList();
+				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
@@ -154,6 +157,7 @@ public class MainGameArea extends JPanel{
 		gbc.weighty = 0.;
 		gbc.weightx = 1;
 		controlPanel.add(loadingList, gbc);
+		loadingList.setEnabled(Property.isSQLEnabled);
 		
 		gbc.insets = new Insets(5,1,15,5);
 		
@@ -199,6 +203,7 @@ public class MainGameArea extends JPanel{
 		loadGame.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "LoadMultiplayer.png", loadGame.getWidth(), loadGame.getHeight()));
 		loadGame.setContentAreaFilled(false);
 		loadGame.setBorder(null);
+		loadGame.setEnabled(Property.isSQLEnabled);
 	}
 	private void addCreateNewRoomButton() {
 		createNewRoom.setSize(50, 50);
@@ -308,11 +313,12 @@ public class MainGameArea extends JPanel{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Sounds.buttonConfirm.playSound();
-				switchToWaiting();
-				System.out.println("Sending load # " +(Integer)loadingList.getSelectedItem() + "numPpl:" + loadingListInt.get(1).get(loadingList.getSelectedIndex()));
-				playingInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[]{(Integer)loadingList.getSelectedItem(), loadingListInt.get(1).get(loadingList.getSelectedIndex())}));
-
+				if (loadGame.isEnabled()){
+					Sounds.buttonConfirm.playSound();
+					switchToWaiting();
+					System.out.println("Sending load # " +(Integer)loadingList.getSelectedItem() + "numPpl:" + loadingListInt.get(1).get(loadingList.getSelectedIndex()));
+					playingInfo.sendMessageToServer(mPack.packIntArray(UnicodeForServer.LOADING_GAME, new int[]{(Integer)loadingList.getSelectedItem(), loadingListInt.get(1).get(loadingList.getSelectedIndex())}));
+				}
 			}
 		});
 	}
