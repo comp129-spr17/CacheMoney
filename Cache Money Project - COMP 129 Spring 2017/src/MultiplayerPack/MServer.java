@@ -1,4 +1,5 @@
 package MultiplayerPack;
+import java.awt.HeadlessException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +22,8 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
+
 import GamePack.Player;
 import InterfacePack.Sounds;
 import ScreenPack.*;
@@ -31,7 +34,7 @@ public class MServer {
 	private static ArrayList<MMainArea> runningClients;
 	private static HashMap<String,String> joinedPlayerIds;
 	private static HashMap<Long, MWaitingRoom> waitingRooms; 
-	private final static int PORT_NUM = 7777;
+	private static int PORT_NUM = 7777;
 	private static ServerSocket listener;
 	private byte[] firstMsg;
 	private MBytePack mPack;
@@ -43,8 +46,36 @@ public class MServer {
 		init();
         
         joinedPlayer();
-
         
+        
+	}
+	class ServerUI extends Thread{
+		@Override
+		public void run(){
+			try {
+				JOptionPane.showMessageDialog(null, "<html>Players may connect to this server via:<br /><br />IP Address: <b>" + getIPAddress() + "</b><br />Port Number: <b>" + PORT_NUM + "</b><br /><br />Click to exit.</html>", "Cache Money Server", JOptionPane.INFORMATION_MESSAGE);
+			} catch (HeadlessException | SocketException | UnknownHostException e) {
+				e.printStackTrace();
+			}
+			closeServer();
+			System.exit(0);
+		}
+	}
+	
+	private String getIPAddress() throws SocketException, UnknownHostException {
+		Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+		for (int i = 0; n.hasMoreElements(); i++){
+			NetworkInterface e = n.nextElement();
+			Enumeration <InetAddress> a = e.getInetAddresses();
+			for (; a.hasMoreElements();){
+				InetAddress addr = a.nextElement();
+				if(addr.getHostAddress().indexOf("10.")==0){
+					System.out.println(" " + addr.getHostAddress());
+					return addr.getHostAddress();
+				}
+			}
+		}
+		return InetAddress.getLocalHost().getHostAddress();
 	}
 	private void init(){
 		Random rand = new Random();
@@ -52,12 +83,18 @@ public class MServer {
 		mUnpack = MByteUnpack.getInstance();
 		firstMsg=new byte[512];
 		System.out.println("Creating the server...");
-		try{
-			listener = new ServerSocket(PORT_NUM);
+		while (true){
+			try{
+				listener = new ServerSocket(PORT_NUM);
+				break;
+			}
+			catch (BindException e){
+				PORT_NUM = rand.nextInt(8999 + 1000);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		catch (Exception e){
-			
-		}
+		(new ServerUI()).start();
 		managingMaps = MManagingMaps.getInstance();
 		joinedPlayerIds = new HashMap<>();
 		usersOutput = new HashMap<>();
@@ -95,6 +132,11 @@ public class MServer {
         	catch (IOException e){
         		break;
         	}
+        	catch (NullPointerException npe){
+        		System.out.println("SERVER ALREADY RUNNING!");
+        		JOptionPane.showMessageDialog(null, "Another server containing\nthe same IP address and port number is running.", "Server Already Running", JOptionPane.ERROR_MESSAGE);
+        		System.exit(1);
+        	}
         }
 	}
 	private void closeClientThreads(ArrayList<MMainArea> lists){
@@ -125,8 +167,5 @@ public class MServer {
 			e.printStackTrace();
 		}
     	System.out.println("Finished cleaning up.");
-	}
-	public static void main(String[] args){
-		new MServer();
 	}
 }
