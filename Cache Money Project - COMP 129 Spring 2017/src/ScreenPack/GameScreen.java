@@ -1376,8 +1376,10 @@ public class GameScreen extends JFrame{
 	}
 	public void actionForDiscconectingGame(int playerNo){
 		pInfo.setIsDisconnectedByOther();
+		
+		
 		JOptionPane.showMessageDialog(this,
-                players[playerNo].getUserId() + " has left.\nThe game has been saved online.\nClick to exit.",
+                (Property.isSQLEnabled ? players[playerNo].getUserId() + " has left.\nThe game has been saved online.\nClick to exit.": "You have been disconnected from the game.\nClick to exit."),
                 "Disconnected from Game",
                 JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
