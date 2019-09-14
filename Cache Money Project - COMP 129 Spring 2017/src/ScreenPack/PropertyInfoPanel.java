@@ -296,10 +296,10 @@ public class PropertyInfoPanel extends JPanel{
 				System.out.println("checkIfUserCanBuyHouses() " + checkIfUserCanBuyHouses());
 				System.out.println("isCurrent " + isCurrent);
 				
-				
-				if (checkIfUserCanBuyHouses() && property.getBuildHouseCost() > 0 && isCurrent){
-					addBuyHousesButton();
-				}
+				// DEPRECATED
+//				if (checkIfUserCanBuyHouses() && property.getBuildHouseCost() > 0 && isCurrent){
+//					addBuyHousesButton();
+//				}
 				addReturnButton();
 			}
 			else{

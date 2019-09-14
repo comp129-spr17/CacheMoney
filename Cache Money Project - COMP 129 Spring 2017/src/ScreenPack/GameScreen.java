@@ -78,6 +78,7 @@ public class GameScreen extends JFrame{
 	private JDialog playerInfo;
 	private JDialog testInfo;
 	private JButton showMortgage;
+	private JButton showBuildHouse;
 	private JButton showInfo;
 	private JButton showEndGameScreen;
 	private Insets insets;
@@ -93,10 +94,13 @@ public class GameScreen extends JFrame{
 	private JButton tradeButton;
 	private PlayingInfo pInfo;
 	private JDialog mortgageWindow;
+	private JDialog buildHouseWindow;
 	private SqlRelated sqlRelated;
 	private JComboBox<String> selectMortgage;
+	private JComboBox<String> selectBuildHouse;
 	private JButton sellConfirm;
 	private JButton sellCancel;
+	private JButton buildHouseConfirm;
 	private JButton exportButton;
 	private JLabel pleaseSelectMortgageChoice;
 	private JComboBox<String> selectMortgageOption;
@@ -671,6 +675,38 @@ public class GameScreen extends JFrame{
 				
 			}
 		});
+		showBuildHouse.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (showBuildHouse.isEnabled()){
+					Sounds.buttonConfirm.playSound();
+					updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
+					if (selectBuildHouse.getItemCount() == 0)
+					{
+						mortgagePrice.setText("");
+					}
+					mortgageUpdateTextField();
+					buildHouseWindow.setVisible(true);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
 		sellConfirm.addMouseListener(new MouseListener()
 		{
 			@Override
@@ -680,6 +716,39 @@ public class GameScreen extends JFrame{
 				}
 				else{
 					pInfo.sendMessageToServer(mPack.packBoolStrAndInt((UnicodeForServer.MORTGAGE_PROPERTY), firstTempComboBox.getSelectedItem().equals("Mortgage"), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
+				}
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {	
+				
+			}
+		});
+		buildHouseConfirm.addMouseListener(new MouseListener()
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (pInfo.isSingle()){
+					actionForBuildHouse((String) selectBuildHouse.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
+				}
+				else{
+//					pInfo.sendMessageToServer(mPack.packBoolStrAndInt((UnicodeForServer.MORTGAGE_PROPERTY), firstTempComboBox.getSelectedItem().equals("Mortgage"), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
+					// TODO: Need to support this for multiplayer
 				}
 				
 			}
@@ -822,6 +891,7 @@ public class GameScreen extends JFrame{
 		tempComboBox = new DefaultComboBoxModel<String>();
 		firstTempComboBox = new DefaultComboBoxModel<String>();
 		selectMortgage = new JComboBox<String>(tempComboBox);
+		selectBuildHouse = new JComboBox<String>(tempComboBox);
 		selectMortgageOption = new JComboBox<String>(firstTempComboBox);
 		selectMortgageOption.addItem("Mortgage");
 		selectMortgageOption.addItem("Un-Mortgage");
@@ -832,6 +902,15 @@ public class GameScreen extends JFrame{
 		        updateTextField();
 		    }
 		});
+		selectBuildHouse.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateTextField();
+			}
+			
+		});
+		
 		selectMortgageOption.addActionListener (new ActionListener ()
 		{
 		    public void actionPerformed(ActionEvent e) 
@@ -847,6 +926,7 @@ public class GameScreen extends JFrame{
 		mortgagePrice.setBounds(165, 150, 50, 50);
 		mortgagePrice.setFont(new Font("Serif",Font.BOLD,20));
 		sellConfirm = new JButton("Confirm");
+		buildHouseConfirm = new JButton("Build");
 		sellCancel = new JButton("Cancel");
 		pleaseSelectMortgage =  new JLabel("Please select a property to mortgage:");
 		pleaseSelectMortgageChoice = new JLabel("Please select what you would like to do:");
@@ -854,12 +934,17 @@ public class GameScreen extends JFrame{
 		pleaseSelectMortgage.setFont(new Font("Serif",Font.BOLD,16));
 		pleaseSelectMortgageChoice.setBounds(60,20,300,20);	//SUBJECT TO CHANGE/////////////////////////////////////
 		pleaseSelectMortgageChoice.setFont(new Font("Serif",Font.BOLD,16));
+		selectBuildHouse.setBounds(90, 93, 200, 20);
 		selectMortgage.setBounds(90, 93, 200, 20);  //SUBJECT TO CHANGE/////////////////////////////////////
 		selectMortgageOption.setBounds(90,43,200,20);
 		sellConfirm.setBounds(30,200,120,30); 	//SUBJECT TO CHANGE/////////////////////////////////////
+		buildHouseConfirm.setBounds(30,200,120,30); 
 		sellCancel.setBounds(230, 200, 120, 30); //SUBJECT TO CHANGE/////////////////////////////////////
 		sellConfirm.setFont(new Font("Serif",Font.BOLD,16));
+		buildHouseConfirm.setFont(new Font("Serif",Font.BOLD,16));
 		sellCancel.setFont(new Font("Serif",Font.BOLD,16));
+		buildHouseWindow.add(buildHouseConfirm);
+		buildHouseWindow.add(selectBuildHouse);
 		mortgageWindow.add(pleaseSelectMortgageChoice);
 		mortgageWindow.add(selectMortgageOption);
 		mortgageWindow.add(sellConfirm);
@@ -894,12 +979,15 @@ public class GameScreen extends JFrame{
 		addExportGameButton();
 		addShowMoneyButton();
 		addMortgageButton();
+		addBuildHouseButton();
 		addTestingButton();
 		addEndGameScreenButton();
 		setupMortgage();
+		setupBuildHouse();
 		mainPanel.add(exportButton);
 		mainPanel.add(showInfo);
 		mainPanel.add(showMortgage);
+		mainPanel.add(showBuildHouse);
 		mainPanel.add(endGameScreen);
 		mainPanel.add(boardPanel);
 		mainPanel.add(tradeButton);
@@ -1149,6 +1237,11 @@ public class GameScreen extends JFrame{
         mortgageWindow.setSize(400,300);
         mortgageWindow.setTitle("Mortgage Property!");
         
+        buildHouseWindow = new JDialog();
+        buildHouseWindow.setLayout(null);
+        buildHouseWindow.setSize(400, 300);
+        buildHouseWindow.setTitle("Build House!");
+        
         testInfo = new JDialog();
         testInfo.setLayout(null);
         testInfo.setSize(400,250);
@@ -1161,6 +1254,13 @@ public class GameScreen extends JFrame{
 		for (int g = 0; g < players[playerNum].getOwnedProperties().size(); g++)
 		{
 			selectMortgage.addItem(players[playerNum].getOwnedProperties().get(g).getName());
+		}
+	}
+	public void setupBuildHouse() {
+		int playerNum = pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum();
+		for (int g = 0; g < players[playerNum].getOwnedProperties().size(); g++)
+		{
+			selectBuildHouse.addItem(players[playerNum].getOwnedProperties().get(g).getName());
 		}
 	}
 
@@ -1288,6 +1388,16 @@ public class GameScreen extends JFrame{
 		showMortgage.setVisible(true);
 		//showMortgage.setEnabled(false); // DEBUG
 	}
+	public void addBuildHouseButton() 
+	{
+		showBuildHouse = new JButton();
+		showBuildHouse.setLayout(new BorderLayout());
+		showBuildHouse.setBounds(boardPanel.getX() - 110, 750, 100, 100);
+		showBuildHouse.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ShowMeTheMoneyButton.png", showInfo.getWidth(), showInfo.getHeight()));
+		showBuildHouse.setContentAreaFilled(false);
+		showBuildHouse.setBorder(null);
+		showBuildHouse.setVisible(true);
+	}
 	public void addTestingButton()
 	{
 		displayTestWindow = new JButton("Testing Window");
@@ -1366,6 +1476,91 @@ public class GameScreen extends JFrame{
 		}
 		updateMortgage(playerNum);
 		mortgageWindow.setVisible(false);
+	}
+	public void actionForBuildHouse( String propertyName, int playerNum ) {
+		if (propertyName == " ") {
+			return;
+		}
+		int num = playerNum;
+		for (int h = 0; h < players[num].getOwnedProperties().size(); h++) 
+		{
+			if(players[num].getOwnedProperties().get(h).getName().equals(propertyName))
+			{
+				if (players[num].getOwnedProperties().get(h).getMultiplier() > 4) {
+					Sounds.buttonCancel.playSound();
+					JOptionPane.showMessageDialog(this,
+			                "No more houses can be bought for " + propertyName + ".",
+			                "Error Buying House",
+			                JOptionPane.ERROR_MESSAGE);
+					repaint();
+					return;
+				}
+				if (players[num].getOwnedProperties().get(h).getPropertyFamilyIdentifier() > 8 || players[num].getOwnedProperties().get(h).getPropertyFamilyIdentifier() <= 0) {
+					Sounds.buttonCancel.playSound();
+					JOptionPane.showMessageDialog(this,
+			                "You can't buy houses on " + propertyName + ".",
+			                "Error Buying House",
+			                JOptionPane.ERROR_MESSAGE);
+					repaint();
+					return;
+				}
+				Property playerProperty = null;
+				int propertyFamilyMembers = 0;
+				for (int k = 0; k < players[num].getOwnedProperties().size(); k++) 
+				{
+					playerProperty = players[num].getOwnedProperties().get(k);
+					if (playerProperty.getPropertyFamilyIdentifier() == players[num].getOwnedProperties().get(h).getPropertyFamilyIdentifier() ) {
+						propertyFamilyMembers += 1;
+						if (playerProperty.getMultiplier() < players[num].getOwnedProperties().get(h).getMultiplier()) {
+							Sounds.buttonCancel.playSound();
+							JOptionPane.showMessageDialog(this,
+					                "Not enough houses bought in the other family properties for " + propertyName + ".",
+					                "Error Buying House",
+					                JOptionPane.ERROR_MESSAGE);
+							repaint();
+							return;
+						}
+					}	
+				}
+				if (players[num].getOwnedProperties().get(h).getPropertyFamilyIdentifier() == 1 || players[num].getOwnedProperties().get(h).getPropertyFamilyIdentifier() == 8) {
+					if (propertyFamilyMembers < 2) {
+						Sounds.buttonCancel.playSound();
+						JOptionPane.showMessageDialog(this,
+				                "All family properties must be owned to begin building houses on " + propertyName + ".",
+				                "Error Buying House",
+				                JOptionPane.ERROR_MESSAGE);
+						repaint();
+						return;
+					}
+				} else {
+					if (propertyFamilyMembers < 3) {
+						Sounds.buttonCancel.playSound();
+						JOptionPane.showMessageDialog(this,
+				                "All family properties must be owned to begin building houses on " + propertyName + ".",
+				                "Error Buying House",
+				                JOptionPane.ERROR_MESSAGE);
+						repaint();
+						return;
+					}
+				}
+				Sounds.money.playSound();
+				Sounds.buildingHouse.playSound();
+				double temp = players[num].getOwnedProperties().get(h).getBuildHouseCost();
+				if (players[num].enoughMonies((int)temp)){
+					players[num].pay((int)temp);
+					players[num].getOwnedProperties().get(h).incNumHouse();
+					repaint();
+					mLabels.reinitializeMoneyLabels();
+				} else {
+					JOptionPane.showMessageDialog(this,
+			                "Not enough money to build a house on " + propertyName + ".",
+			                "Error Buying House",
+			                JOptionPane.ERROR_MESSAGE);
+				}
+				
+				return;
+			}
+		}
 	}
 	public void actionForLoadingInvalidUser(){
 		waitingArea.switchToMainGameArea();
@@ -1539,6 +1734,7 @@ public class GameScreen extends JFrame{
 		bgImage.setVisible(true);
 		tradeButton.setEnabled(false);
 		showMortgage.setEnabled(false);
+		showBuildHouse.setEnabled(false);
 		exportButton.setEnabled(false);
 		showInfo.setEnabled(false);
 		
