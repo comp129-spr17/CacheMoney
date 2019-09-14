@@ -973,7 +973,7 @@ public class GameScreen extends JFrame{
 		endGameScreen.setBounds(boardPanel.getBoardPanelX(),boardPanel.getBoardPanelY(),boardPanel.getBoardPanelWidth(),boardPanel.getBoardPanelHeight());
 //		endGameScreen.setBackground(new Color(70, 220, 75));
 		endGameScreen.setVisible(false);
-		buttonLabels = new JLabel[4];
+		buttonLabels = new JLabel[5];
 		initButtonLabels();
 		
 		addExportGameButton();
@@ -1020,7 +1020,7 @@ public class GameScreen extends JFrame{
 		mainPanel.add(bgImage);
 	}
 	private void initButtonLabels() {
-		for (int i = 0; i < 4; i++){
+		for (int i = 0; i < 5; i++){
 			buttonLabels[i] = new JLabel();
 			mainPanel.add(buttonLabels[i]);
 		}
@@ -1033,12 +1033,15 @@ public class GameScreen extends JFrame{
 		buttonLabels[2].setText("<html><font color = '" + "white" + "'><b>Mortgage</b></font></html>");
 		buttonLabels[2].setBounds(boardPanel.getX() - 91, 445, 300, 30);
 		
-		buttonLabels[3].setText("<html><font color = '" + "white" + "'><b>Export Game</b></font></html>");
+		buttonLabels[3].setText("<html><font color = '" + "white" + "'><b>Build House</b></font></html>");
 		buttonLabels[3].setBounds(boardPanel.getX() - 102, 595, 300, 30);
+		
+		buttonLabels[4].setText("<html><font color = '" + "white" + "'><b>Export Game</b></font></html>");
+		buttonLabels[4].setBounds(boardPanel.getX() - 102, 745, 300, 30);
 	}
 	private void addExportGameButton() {
 		exportButton = new JButton();
-		exportButton.setBounds(boardPanel.getX() - 110, 500, 100, 100);
+		exportButton.setBounds(boardPanel.getX() - 110, 650, 100, 100);
 		exportButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ExportButton.png", exportButton.getWidth(), exportButton.getHeight()));
 		exportButton.setContentAreaFilled(false);
 		exportButton.setBorder(null);
@@ -1392,8 +1395,8 @@ public class GameScreen extends JFrame{
 	{
 		showBuildHouse = new JButton();
 		showBuildHouse.setLayout(new BorderLayout());
-		showBuildHouse.setBounds(boardPanel.getX() - 110, 750, 100, 100);
-		showBuildHouse.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ShowMeTheMoneyButton.png", showInfo.getWidth(), showInfo.getHeight()));
+		showBuildHouse.setBounds(boardPanel.getX() - 110, 500, 100, 100);
+		showBuildHouse.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "buildHouseButton.png", showInfo.getWidth(), showInfo.getHeight()));
 		showBuildHouse.setContentAreaFilled(false);
 		showBuildHouse.setBorder(null);
 		showBuildHouse.setVisible(true);
@@ -1489,7 +1492,7 @@ public class GameScreen extends JFrame{
 				if (players[num].getOwnedProperties().get(h).getMultiplier() > 4) {
 					Sounds.buttonCancel.playSound();
 					JOptionPane.showMessageDialog(this,
-			                "No more houses can be bought for " + propertyName + ".",
+			                "No more houses can be built on " + propertyName + ".",
 			                "Error Buying House",
 			                JOptionPane.ERROR_MESSAGE);
 					repaint();
@@ -1498,7 +1501,7 @@ public class GameScreen extends JFrame{
 				if (players[num].getOwnedProperties().get(h).getPropertyFamilyIdentifier() > 8 || players[num].getOwnedProperties().get(h).getPropertyFamilyIdentifier() <= 0) {
 					Sounds.buttonCancel.playSound();
 					JOptionPane.showMessageDialog(this,
-			                "You can't buy houses on " + propertyName + ".",
+			                "You can't build houses on " + propertyName + ".",
 			                "Error Buying House",
 			                JOptionPane.ERROR_MESSAGE);
 					repaint();
@@ -1543,15 +1546,17 @@ public class GameScreen extends JFrame{
 						return;
 					}
 				}
-				Sounds.money.playSound();
-				Sounds.buildingHouse.playSound();
+				
 				double temp = players[num].getOwnedProperties().get(h).getBuildHouseCost();
-				if (players[num].enoughMonies((int)temp)){
+				if (players[num].getTotalMonies() >= (int)temp){
+					Sounds.money.playSound();
+					Sounds.buildingHouse.playSound();
 					players[num].pay((int)temp);
 					players[num].getOwnedProperties().get(h).incNumHouse();
 					repaint();
 					mLabels.reinitializeMoneyLabels();
 				} else {
+					Sounds.buttonCancel.playSound();
 					JOptionPane.showMessageDialog(this,
 			                "Not enough money to build a house on " + propertyName + ".",
 			                "Error Buying House",
