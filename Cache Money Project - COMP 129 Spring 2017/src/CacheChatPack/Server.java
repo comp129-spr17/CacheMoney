@@ -80,10 +80,10 @@ public class Server {
 		createHostClient(ip, listener.getLocalPort());
 		
 		
-        users = new ArrayList<>();
-        usersWriter = new ArrayList<>();
+        users = new ArrayList<ChatElement>();
+        usersWriter = new ArrayList<PrintWriter>();
         server = new ChatElement("Server", "");
-        runningClients = new ArrayList<>();
+        runningClients = new ArrayList<ChatThread>();
         closingServerAsking();
         
 
@@ -126,7 +126,7 @@ public class Server {
 	}
 	private static void closingServerAsking(){
 		Timer aTimer = new Timer();
-		Scanner in = new Scanner(System.in);
+		final Scanner in = new Scanner(System.in);
 		aTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -151,7 +151,7 @@ public class Server {
     	System.out.println("Finished cleaning up.");
 	}
 	
-	private static void createHostClient(String ip, int port){
+	private static void createHostClient(final String ip, final int port){
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 

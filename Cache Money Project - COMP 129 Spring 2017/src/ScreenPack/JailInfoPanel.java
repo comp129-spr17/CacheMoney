@@ -19,7 +19,7 @@ import InterfacePack.Sounds;
 import MultiplayerPack.MBytePack;
 import MultiplayerPack.PlayingInfo;
 import MultiplayerPack.UnicodeForServer;
-import sun.net.www.content.image.gif;
+//import sun.net.www.content.image.gif;
 
 public class JailInfoPanel extends JPanel {
 	private JPanel panelToSwitchFrom;

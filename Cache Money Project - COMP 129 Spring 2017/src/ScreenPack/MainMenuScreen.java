@@ -617,7 +617,8 @@ public class MainMenuScreen {
 	}
 	
 	private void addMuteMusic() {
-		ImageIcon imgOn, imgOff;
+		final ImageIcon imgOn;
+		final ImageIcon imgOff;
 		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/music_on1.png"));
 		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/music_off1.png"));
  		muteMusic = new JCheckBox(imgOn); 	
@@ -630,6 +631,7 @@ public class MainMenuScreen {
 				if (e.getButton() == 1){ // left click
 					Music.music1.toggleMuteMusic();
 					if (Music.music1.getIsMuted()){
+						Music.music6.stopMusic();
 						muteMusic.setIcon(imgOff);
 					}
 					else{
@@ -651,7 +653,8 @@ public class MainMenuScreen {
 	}
 	
 	private void addMuteSounds(){
-		ImageIcon imgOn, imgOff;
+		final ImageIcon imgOn;
+		final ImageIcon imgOff;
 		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/sound_on1.png"));
 		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/sound_off1.png"));
 		muteSounds = new JCheckBox(imgOn);	// DEBUG
@@ -683,7 +686,8 @@ public class MainMenuScreen {
 	}
 	
 	private void addMuteSQL(){
-		ImageIcon imgOn, imgOff;
+		final ImageIcon imgOn;
+		final ImageIcon imgOff;
 		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/SQLon.png"));
 		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/SQLoff.png"));
 		muteSQL = new JCheckBox(imgOff);

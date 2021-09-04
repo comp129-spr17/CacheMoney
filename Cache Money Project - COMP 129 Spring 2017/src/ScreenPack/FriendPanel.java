@@ -181,7 +181,7 @@ public class FriendPanel extends JPanel{
 	}
 
 	private JButton initAddRemoveButton(){
-		JButton temp = new JButton("");
+		final JButton temp = new JButton("");
 		checkFriendship(temp);
 
 		temp.addMouseListener(new MouseListener() {
@@ -256,7 +256,7 @@ public class FriendPanel extends JPanel{
 	}
 	
 	private JButton initMessageButton(){
-		JButton temp = new JButton("Message");
+		final JButton temp = new JButton("Message");
 		temp.setBackground(Color.CYAN);
 		temp.addMouseListener(new MouseListener() {
 

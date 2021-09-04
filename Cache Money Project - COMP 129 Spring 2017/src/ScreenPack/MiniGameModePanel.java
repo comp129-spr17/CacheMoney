@@ -157,7 +157,7 @@ public class MiniGameModePanel extends JPanel{
 		public void run(){
 			setButtonVisibility(false);
 			backButton.setVisible(false);
-			miniGamePanel.startMiniGame("");
+			miniGamePanel.startMiniGame("", 0);
 			while (miniGamePanel.isPlayingMinigame()){
 				try {
 					Thread.sleep(1);

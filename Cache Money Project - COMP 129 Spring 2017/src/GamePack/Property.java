@@ -18,9 +18,10 @@ public abstract class Property {
 	protected int propertyFamilyIdentifier;
 	protected int owner = -1;
 	protected String name;					// saved
+	protected double scale;
 	public Property(int cost, String name, int propertyFamilyIdentifier) // NEED TO CREATE HOUSING PRICE THING HERE
 	{
-		
+		scale = 1.0;
 		buildHousePrice = 0;
 		constructorContents(cost, name, propertyFamilyIdentifier);
 	}
@@ -68,11 +69,13 @@ public abstract class Property {
 	}
 	
 	public int getRent() {
-		return rentValues.get(rentMultiplier);
+		System.out.println("scale: " + scale);
+		System.out.println("value: " + (rentValues.get(rentMultiplier)*scale));
+		return (int) (rentValues.get(rentMultiplier)*scale);
 	}
 	
 	public int getUtilityRentPrice(){
-		return rentValues.get(rentValues.size() - 1);
+		return (int) (rentValues.get(rentValues.size() - 1)*scale);
 	}
 
 	public int getBuyingPrice() {
@@ -175,6 +178,10 @@ public abstract class Property {
 	}
 	public int getPropertyFamilyIdentifier(){
 		return propertyFamilyIdentifier;
+	}
+	
+	public void setScale(double s) {
+		this.scale = s;
 	}
 
 	public void setIsOwned() {

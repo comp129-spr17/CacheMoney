@@ -83,16 +83,16 @@ public class AuctionPanel extends JPanel{
 		addElements();
 	}
 
-	private void addBidInterface(Color c, int p)
+	private void addBidInterface(Color c, final int p)
 	{		
 		
-		JButton temp = new JButton("ADD\nBID");
+		final JButton temp = new JButton("ADD\nBID");
 		temp.setBackground(c);
 		temp.setSize(60, 20);	
 		
 		
 		String bids[] = {"5", "10", "15", "25", "50", "100", "200"};
-		JComboBox bidList = new JComboBox(bids); 
+		final JComboBox bidList = new JComboBox(bids); 
 		bidList.setSize(80, 20);
 		if(!pInfo.isSingle() && !pInfo.isMyPlayerNum(p)){
 			temp.setEnabled(false);

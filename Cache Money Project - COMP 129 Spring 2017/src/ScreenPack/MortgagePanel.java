@@ -62,9 +62,9 @@ public class MortgagePanel extends JPanel {
 		
 		for(Property l:temp)
 		{
-			JButton jb = new JButton();
+			final JButton jb = new JButton();
 			
-			Property p = propertyInfo.get(l).getPropertyInfo();
+			final Property p = propertyInfo.get(l).getPropertyInfo();
 			jb.setText(l.getName() + '\n' + Integer.toString(p.getMortgageValue()));
 			jb.setSize(60, 70);
 			jb.setName(l.getName());

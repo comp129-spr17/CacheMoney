@@ -69,7 +69,7 @@ public class EliminationGame extends MiniGame{
 			return;
 		}
 		disqualifyTimer = MAXIMUM_TIME_REMAINING;
-		Timer t = new Timer();
+		final Timer t = new Timer();
 		t.schedule(new TimerTask(){
 			@Override
 			public void run() {

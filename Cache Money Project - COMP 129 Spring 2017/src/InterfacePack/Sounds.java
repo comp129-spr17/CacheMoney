@@ -1,6 +1,20 @@
 package InterfacePack;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public enum Sounds {
 	buttonConfirm, 
@@ -36,7 +50,6 @@ public enum Sounds {
 	shakeDice
 	;
 	
-	private static final AudioPlayer AUDIO_PLAYER = AudioPlayer.getInstance();
 	private Random rand = new Random();
 	private final int NUM_OF_DICE_ROLL_SOUNDS = 5;
 	private final int NUM_OF_MOVING_PIECE_SOUNDS = 4;
@@ -44,101 +57,135 @@ public enum Sounds {
 	private int movePiecePreviousSound = 0;
 	private int shakeSoundNum = 0;
 	
+	static{
+	    JFXPanel fxPanel = new JFXPanel();
+	}
+	
+//	private void playSound(String audio, String filename) {
+//		// cl is the ClassLoader for the current class, ie. CurrentClass.class.getClassLoader();
+//	    URL file = .class.getClassLoader().getResource(filename);
+//	    final Media media = new Media(file.toString());
+//	    final MediaPlayer mediaPlayer = new MediaPlayer(media);
+//	    mediaPlayer.play();
+//	}
+	
+	void playSound(String audio, String soundFile) {
+	    File f = new File("src/audio/" + soundFile);
+	    AudioInputStream audioIn;
+		try {
+			audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+			Clip clip = AudioSystem.getClip();
+		    clip.open(audioIn);
+		    clip.start();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public void playSound(){
 		switch (this){
 		case buttonConfirm:
-			AUDIO_PLAYER.playSound("audio", "buttonConfirm.mp3");
+			playSound("audio", "buttonConfirm.wav");
 			return;
 		case buttonPress:
-			AUDIO_PLAYER.playSound("audio", "buttonPress.mp3");
+			playSound("audio", "buttonPress.wav");
 			return;
 		case register:
-			AUDIO_PLAYER.playSound("audio", "register.mp3");
+			playSound("audio", "register.wav");
 			return;
 		case buttonCancel:
-			AUDIO_PLAYER.playSound("audio", "buttonCancel.mp3");
+			playSound("audio", "buttonCancel.wav");
 			return;
 		case diceRoll1:
-			AUDIO_PLAYER.playSound("audio", "diceRoll1.mp3");
+			playSound("audio", "diceRoll1.wav");
 			return;
 		case diceRoll2:
-			AUDIO_PLAYER.playSound("audio", "diceRoll2.mp3");
+			playSound("audio", "diceRoll2.wav");
 			return;
 		case diceRoll3:
-			AUDIO_PLAYER.playSound("audio", "diceRoll3.mp3");
+			playSound("audio", "diceRoll3.wav");
 			return;
 		case diceRoll4:
-			AUDIO_PLAYER.playSound("audio", "diceRoll4.mp3");
+			playSound("audio", "diceRoll4.wav");
 			return;
 		case diceRoll5:
-			AUDIO_PLAYER.playSound("audio", "diceRoll5.mp3");
+			playSound("audio", "diceRoll5.wav");
 			return;
 		case landedOnJail:
-			AUDIO_PLAYER.playSound("audio", "landedOnJail.mp3");
+			playSound("audio", "landedOnJail.wav");
 			return;
 		case turnBegin:
-			AUDIO_PLAYER.playSound("audio", "turnBegin.mp3");
+			playSound("audio", "turnBegin.wav");
 			return;
 		case randomDice:
-			AUDIO_PLAYER.playSound("audio", randomizeDiceFilename());
+			playSound("audio", randomizeDiceFilename());
 			return;
 		case landedOnFreeParking:
-			AUDIO_PLAYER.playSound("audio", "landedOnFreeParking.mp3");
+			playSound("audio", "landedOnFreeParking.wav");
 			return;
 		case landedOnRailroad:
-			AUDIO_PLAYER.playSound("audio", "landedOnRailroad.mp3");
+			playSound("audio", "landedOnRailroad.wav");
 			return;
 		case landedOnChanceOrCommunityChest:
-			AUDIO_PLAYER.playSound("audio", "landedOnChanceOrCommunityChest.mp3");
+			playSound("audio", "landedOnChanceOrCommunityChest.wav");
 			return;
 		case landedOnUnownedProperty:
-			AUDIO_PLAYER.playSound("audio", "landedOnUnownedProperty.mp3");
+			playSound("audio", "landedOnUnownedProperty.wav");
 			return;
 		case landedOnOwnedProperty:
-			AUDIO_PLAYER.playSound("audio", "landedOnOwnedProperty.mp3");
+			playSound("audio", "landedOnOwnedProperty.wav");
 			return;
 		case buildingHouse:
-			AUDIO_PLAYER.playSound("audio", "buildingHouse.mp3");
+			playSound("audio", "buildingHouse.wav");
 			return;
 		case diceRollConfirmed:
-			AUDIO_PLAYER.playSound("audio", "diceRollConfirmed.mp3");
+			playSound("audio", "diceRollConfirmed.wav");
 			return;
 		case money:
-			AUDIO_PLAYER.playSound("audio", "money.mp3");
+			playSound("audio", "money.wav");
 			return;
 		case doublesCelebrateSound:
-			AUDIO_PLAYER.playSound("audio", "doublesCelebrateSound.mp3");
+			playSound("audio", "doublesCelebrateSound.wav");
 			return;
 		case movePiece:
-			AUDIO_PLAYER.playSound("audio", movePieceFilename());
+			playSound("audio", movePieceFilename());
 			return;
 		case buyProperty:
-			AUDIO_PLAYER.playSound("audio", "buyProperty.mp3");
+			playSound("audio", "buyProperty.wav");
 			return;
 		case gainMoney:
-			AUDIO_PLAYER.playSound("audio", "gainMoney.mp3");
+			playSound("audio", "gainMoney.wav");
 			return;
 		case waitingRoomJoin:
-			AUDIO_PLAYER.playSound("audio", "waitingRoomJoin.mp3");
+			playSound("audio", "waitingRoomJoin.wav");
 			return;
 		case winGame:
-			AUDIO_PLAYER.playSound("audio", "winGame.mp3");
+			playSound("audio", "winGame.wav");
 			return;
 		case fuse:
-			AUDIO_PLAYER.playSound("audio", "fuse.mp3");
+			playSound("audio", "fuse.wav");
 			return;
 		case bomb:
-			AUDIO_PLAYER.playSound("audio", "bomb.mp3");
+			playSound("audio", "bomb.wav");
 			return;
 		case minigameBegin:
-			AUDIO_PLAYER.playSound("audio", "minigameBegin.mp3");
+			playSound("audio", "minigameBegin.wav");
 			return;
 		case quickDisplay:
-			AUDIO_PLAYER.playSound("audio", "quickDisplay.mp3");
+			playSound("audio", "quickDisplay.wav");
 			return;
 		case shakeDice:
-			AUDIO_PLAYER.playSound("audio", randomizeDiceShakeFilename());
+			playSound("audio", randomizeDiceShakeFilename());
 			return;
 		default:
 			System.out.println("Sound Error");
@@ -158,11 +205,11 @@ public enum Sounds {
 	
 	
 	public String randomizeDiceFilename(){
-		return "diceRoll" + Integer.toString(rand.nextInt(NUM_OF_DICE_ROLL_SOUNDS) + 1) + ".mp3";
+		return "diceRoll" + Integer.toString(rand.nextInt(NUM_OF_DICE_ROLL_SOUNDS) + 1) + ".wav";
 	}
 	
 	public String movePieceFilename(){
-		return "movePiece" + Integer.toString(generateIntNoRep(NUM_OF_MOVING_PIECE_SOUNDS, movePiecePreviousSound) + 1) + ".mp3";
+		return "movePiece" + Integer.toString(generateIntNoRep(NUM_OF_MOVING_PIECE_SOUNDS, movePiecePreviousSound) + 1) + ".wav";
 	}
 	
 	private int generateIntNoRep(int range, int blacklistedNum){
@@ -175,20 +222,21 @@ public enum Sounds {
 	}
 	
 	public void toggleMuteSounds(){
-		AUDIO_PLAYER.muteSounds();
+		//AUDIO_PLAYER.muteSounds();
 	}
 	
 	public boolean getIsMuted(){
-		return AUDIO_PLAYER.isSoundMuted();
+		//return AUDIO_PLAYER.isSoundMuted();
+		return false;
 	}
 	
 	private String randomizeDiceShakeFilename(){
 		shakeSoundNum = rand.nextInt(NUM_OF_DICE_SHAKE_SOUNDS);
-		return "diceShake" + Integer.toString(shakeSoundNum) + ".mp3";
+		return "diceShake" + Integer.toString(shakeSoundNum) + ".wav";
 	}
 	
 	private void stopDiceShake(){
-		AUDIO_PLAYER.stopSound("audio", "diceShake" + shakeSoundNum + ".mp3");
+		//AUDIO_PLAYER.stopSound("audio", "diceShake" + shakeSoundNum + ".wav");
 	}
 	
 }

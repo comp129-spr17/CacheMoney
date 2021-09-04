@@ -123,6 +123,7 @@ public class GameScreen extends JFrame{
 	private JLabel[] buttonLabels;
 	private boolean requestTimeOut;
 	private boolean timeOutSQL;
+	private JLabel[] balanceLabels;
 	// called if user is the host
 	public GameScreen(boolean isSingle, int totalplayers, String filenameToLoad){
 		//setAlwaysOnTop(true);
@@ -219,7 +220,7 @@ public class GameScreen extends JFrame{
 			boardPanel.PlacePiecesToBaord(numPlayer);
 		}
 		pInfo.setNumberOfPlayer(numPlayer);
-		
+
 		//System.out.print(numPlayer);
 		totalPlayers = numPlayer;
 	}
@@ -974,7 +975,9 @@ public class GameScreen extends JFrame{
 //		endGameScreen.setBackground(new Color(70, 220, 75));
 		endGameScreen.setVisible(false);
 		buttonLabels = new JLabel[5];
+		balanceLabels = new JLabel[4];
 		initButtonLabels();
+		addBalanceLabels();
 		
 		addExportGameButton();
 		addShowMoneyButton();
@@ -1024,8 +1027,8 @@ public class GameScreen extends JFrame{
 			buttonLabels[i] = new JLabel();
 			mainPanel.add(buttonLabels[i]);
 		}
-		buttonLabels[0].setText("<html><font color = '" + "white" + "'><b>Player Balances</b></font></html>");
-		buttonLabels[0].setBounds(boardPanel.getX() - 110, 145, 300, 30);
+//		buttonLabels[0].setText("<html><font color = '" + "white" + "'><b>Player Balances</b></font></html>");
+//		buttonLabels[0].setBounds(boardPanel.getX() - 110, 145, 300, 30);
 		
 		buttonLabels[1].setText("<html><font color = '" + "white" + "'><b>Trade</b></font></html>");
 		buttonLabels[1].setBounds(boardPanel.getX() - 80, 295, 300, 30);
@@ -1107,8 +1110,55 @@ public class GameScreen extends JFrame{
 	public void updateRoomStatus(Long roomNum, int numPpl, boolean isHost){
 		mainGameArea.updateRoom(roomNum, numPpl, isHost);
 	}
+	private void addBalanceLabels() {
+		for (int i = 0; i < 4; i++){
+			balanceLabels[i] = new JLabel();
+			mainPanel.add(balanceLabels[i]);
+		}
+		balanceLabels[0].setBounds(boardPanel.getX() - 110, 0, 300, 30);
+		balanceLabels[1].setBounds(boardPanel.getX() - 110, 50, 300, 30);
+		balanceLabels[2].setBounds(boardPanel.getX() - 110, 100, 300, 30);
+		balanceLabels[3].setBounds(boardPanel.getX() - 110, 150, 300, 30);
+		
+		Timer t = new Timer();
+		t.schedule(new TimerTask(){
+			@Override
+			public void run() {
+				while (true) {
+					if (players[1].getIsAlive()) {
+						balanceLabels[0].setText("<html><font color = '" + "white" + "'><b> P1 Balance<br />" + players[0].getTotalMonies() + "</b></font></html>");
+					} else {
+						balanceLabels[0].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
+					}
+					if (players[1].getIsAlive()) {
+						balanceLabels[1].setText("<html><font color = '" + "white" + "'><b> P2 Balance<br />" + players[1].getTotalMonies() + "</b></font></html>");
+					} else {
+						balanceLabels[1].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
+					}
+					if (players[2].getIsAlive() && pInfo.getNumberOfPlayer() >= 3 ) {
+					    balanceLabels[2].setText("<html><font color = '" + "white" + "'><b> P3 Balance<br />" + players[2].getTotalMonies() + "</b></font></html>");
+					} else {
+						 balanceLabels[2].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
+					}
+					if (players[3].getIsAlive() && pInfo.getNumberOfPlayer() >= 4) {
+					    balanceLabels[3].setText("<html><font color = '" + "white" + "'><b> P4 Balance<br />" + players[3].getTotalMonies() + "</b></font></html>");
+					} else {
+						 balanceLabels[3].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
+					}
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}, 0);
+		
+	}
 	private void addMuteMusic() {
-		ImageIcon imgOn, imgOff;
+		final ImageIcon imgOn;
+		final ImageIcon imgOff;
 		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/music_on.png"));
 		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/music_off.png"));
 		//muteMusic = new JCheckBox(imgOff); 	// DEBUG
@@ -1123,6 +1173,11 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 1){ // left click
 					Music.music1.toggleMuteMusic();
+					Music.music2.toggleMuteMusic();
+					Music.music3.toggleMuteMusic();
+					Music.music4.toggleMuteMusic();
+					Music.music5.toggleMuteMusic();
+					Music.music6.toggleMuteMusic();
 					if (Music.music1.getIsMuted()){
 						muteMusic.setIcon(imgOff);
 						muteMusic.setContentAreaFilled(false);
@@ -1170,7 +1225,8 @@ public class GameScreen extends JFrame{
 	}
 	
 	private void addMuteSounds(){
-		ImageIcon imgOn, imgOff;
+		final ImageIcon imgOn;
+		final ImageIcon imgOff;
 		imgOn = new ImageIcon(ImageRelated.class.getResource("/Images/sound_on.png"));
 		imgOff = new ImageIcon(ImageRelated.class.getResource("/Images/sound_off.png"));
 		//muteSounds = new JCheckBox(imgOff);	// DEBUG
@@ -1373,7 +1429,7 @@ public class GameScreen extends JFrame{
 		showInfo.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "ShowMeTheMoneyButton.png", showInfo.getWidth(), showInfo.getHeight()));
 		showInfo.setContentAreaFilled(false);
 		showInfo.setBorder(null);
-		showInfo.setVisible(true);
+		showInfo.setVisible(false);
 		tradeButton = new JButton();
 		tradeButton.setBounds(boardPanel.getX() - 110, 200, 100, 100);
 		tradeButton.setIcon(ImageRelated.getInstance().resizeImage(PathRelated.getButtonImgPath() + "TradeButton.png", tradeButton.getWidth(), tradeButton.getHeight()));
@@ -1413,18 +1469,23 @@ public class GameScreen extends JFrame{
 	private void playScheduledMusic(){
 		switch (scheduledMusic){
 		case 0:
+			Music.music5.stopMusic();
 			Music.music1.playMusic();
 			break;
 		case 1:
+			Music.music1.stopMusic();
 			Music.music2.playMusic();
 			break;
 		case 2:
+			Music.music2.stopMusic();
 			Music.music3.playMusic();
 			break;
 		case 3:
+			Music.music3.stopMusic();
 			Music.music4.playMusic();
 			break;
 		case 4:
+			Music.music4.stopMusic();
 			Music.music5.playMusic();
 			break;
 		}

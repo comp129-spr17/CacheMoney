@@ -84,6 +84,7 @@ public class DicePanel extends JPanel{
 	private Icon stationaryDiceIcon;
 	private BankruptcyPanel bankruptcyPanel;
 	private TradingPanel tradeP;
+	private int turn;
 	
 	public DicePanel(Player[] player, MoneyLabels MLabels, TradingPanel tradeP, GameScreen gamescreen){
 		this.gamescreen = gamescreen;
@@ -97,6 +98,8 @@ public class DicePanel extends JPanel{
 	}
 	private void init(){
 		setDebugVisible = SERVER_DEBUG;
+		
+		turn = 1;
 
 		mPack = MBytePack.getInstance();
 		paths = PathRelated.getInstance();
@@ -758,12 +761,12 @@ public class DicePanel extends JPanel{
 			checkForPlayerPropertyAction(curSpaceName);
 		}
 		else{
-			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1);
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1, turn);
 		}
 	}
 	private void checkForPlayerPropertyAction(String curSpaceName) {
 		if (propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
-			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1);
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1, turn);
 		}
 		else if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
 			browseMiniGame(curSpaceName);
@@ -772,7 +775,7 @@ public class DicePanel extends JPanel{
 	private void browseMiniGame(String curSpaceName){
 		pInfo.setGamePart(Part.MINI_GAME);
 		mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), isRailRoad(curSpaceName) ? 9 : determineMinigameToPlay(curSpaceName));
-		mGamePanel.startMiniGame(curSpaceName);
+		mGamePanel.startMiniGame(curSpaceName, turn);
 	}
 	private boolean isRailRoad(String curSpaceName){
 		return propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier() == 9;
@@ -838,6 +841,11 @@ public class DicePanel extends JPanel{
 		while(!players[(++current)%4].isOn() || !players[(current)%4].getIsAlive());
 		//while(!players[(++current)%4].isOn());
 		current = (current)%4;
+		
+		if (current == 0) {
+			turn++;
+			System.out.println("Turn " + turn);
+		}
 	}
 	public int[] getResult(){
 		rollButton.setEnabled(true);

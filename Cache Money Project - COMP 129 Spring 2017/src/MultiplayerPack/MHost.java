@@ -107,7 +107,7 @@ public class MHost {
 	}
 	private static void closingServerAsking(){
 		Timer aTimer = new Timer();
-		Scanner in = new Scanner(System.in);
+		final Scanner in = new Scanner(System.in);
 		aTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {

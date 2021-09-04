@@ -41,13 +41,11 @@ public class PropertySpace extends Space {
 	private void addMouseListen(){
 		addMouseListener(new MouseListener() {
 			
-			@Override
 			public void mouseReleased(MouseEvent e) {
 				pDisplay.setVisible(false);
 				repaint();
 			}
 			
-			@Override
 			public void mousePressed(MouseEvent e) {
 				PlayerInfoDisplay.getInstance().setVisible(false);
 				pDisplay.setProperty(info);
@@ -56,16 +54,13 @@ public class PropertySpace extends Space {
 				repaint();
 			}
 			
-			@Override
 			public void mouseExited(MouseEvent e) {
 				
 			}
 			
-			@Override
 			public void mouseEntered(MouseEvent e) {
 			}
 			
-			@Override
 			public void mouseClicked(MouseEvent e) {
 				
 			}

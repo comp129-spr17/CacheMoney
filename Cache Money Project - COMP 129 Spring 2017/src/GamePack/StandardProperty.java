@@ -30,10 +30,10 @@ public class StandardProperty extends Property{
 			rentMultiplier = 0;
 			rentValues.add(roundUp(buyingPrice,12));
 			rentValues.add(3*rentValues.get(0));
-			rentValues.add((int) (2.7*rentValues.get(1)));
-			rentValues.add((int) (2.3*rentValues.get(2)));
-			rentValues.add((int) (2*rentValues.get(3)));
-			rentValues.add((int) (1.7*rentValues.get(4)));
+			rentValues.add((int) (6*rentValues.get(0)));
+			rentValues.add((int) (10*rentValues.get(0)));
+			rentValues.add((int) (15*rentValues.get(0)));
+			rentValues.add((int) (20*rentValues.get(0)));
 		}
 		//buildHouseCost
 		

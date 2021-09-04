@@ -142,7 +142,7 @@ public class MathGame extends MiniGame{
 			initListen(i);
 		}
 	}
-	private void initListen(int i){
+	private void initListen(final int i){
 		mListener[i] = new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {

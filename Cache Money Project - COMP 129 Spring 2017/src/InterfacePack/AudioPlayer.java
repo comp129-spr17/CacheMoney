@@ -43,8 +43,8 @@ public class AudioPlayer {
 
 
 	private AudioPlayer() {
-				JFXPanel fxPanel = new JFXPanel();
-		//players = new ArrayList<MediaPlayer>();
+//				JFXPanel fxPanel = new JFXPanel();
+//		//players = new ArrayList<MediaPlayer>();
 		players = new HashMap<String, MediaPlayer>();
 		isMusicPlaying = false;
 		isMusicMuted = false;  
@@ -118,7 +118,7 @@ public class AudioPlayer {
 	}
 
 	public void stopSound(String folder, String filename) {
-		MediaPlayer mp = findSound(folder, filename);
+		final MediaPlayer mp = findSound(folder, filename);
 		if(mp != null) {
 			Platform.runLater(new Runnable() {
 				public void run() {
@@ -234,7 +234,7 @@ public class AudioPlayer {
 	}
 
 	public void pauseSound(String folder, String filename) {
-		MediaPlayer mp = findSound(folder, filename);
+		final MediaPlayer mp = findSound(folder, filename);
 		if(mp != null) {
 			Platform.runLater(new Runnable() {
 				public void run() {

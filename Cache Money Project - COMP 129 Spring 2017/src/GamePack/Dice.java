@@ -36,7 +36,7 @@ public class Dice {
 		paths = PathRelated.getInstance();
 		imageRelated = ImageRelated.getInstance();
 		sizeRelated = SizeRelated.getInstance();
-		diceImages = new ArrayList<>();
+		diceImages = new ArrayList<ImageIcon>();
 		dice = new JLabel();
 		dice.setBounds(sizeRelated.getDicePanelWidth()/5+whichDice*sizeRelated.getDicePanelWidth()*2/5, sizeRelated.getDicePanelHeight()*3/5, sizeRelated.getDiceWidth(), sizeRelated.getDiceWidth());
 		dicePanel.add(dice);

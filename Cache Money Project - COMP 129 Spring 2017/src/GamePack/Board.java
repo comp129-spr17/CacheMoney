@@ -105,7 +105,7 @@ public class Board {
 	}
 	
 	
-	private void showMovingAnim(int player, int diceResult){
+	private void showMovingAnim(final int player, final int diceResult){
 
 		isDone = false;
 		pieceMovingAnim.schedule(new TimerTask() {

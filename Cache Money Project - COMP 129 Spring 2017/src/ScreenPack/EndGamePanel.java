@@ -138,7 +138,7 @@ public class EndGamePanel extends JPanel {
 		initButtonListeners(this);
 	}
 
-	private void initButtonListeners(EndGamePanel thisPanel) {
+	private void initButtonListeners(final EndGamePanel thisPanel) {
 		backButton.addMouseListener(new MouseListener()
 		{
 			@Override

@@ -94,7 +94,7 @@ public class MainGameArea extends JPanel{
 		JPanel temp = new JPanel();
 		temp.setLayout(new BoxLayout(temp,BoxLayout.Y_AXIS));
 		
-		JButton refresh = new JButton("Refresh Friend List");
+		final JButton refresh = new JButton("Refresh Friend List");
 		refresh.setEnabled(Property.isSQLEnabled);
 		refresh.addMouseListener(new MouseListener() {
 			@Override
@@ -322,7 +322,7 @@ public class MainGameArea extends JPanel{
 			}
 		});
 	}
-	private void addListenerToRoom(JButton room, long roomNum){
+	private void addListenerToRoom(final JButton room, final long roomNum){
 		room.addMouseListener(new MouseListener() {
 
 			@Override

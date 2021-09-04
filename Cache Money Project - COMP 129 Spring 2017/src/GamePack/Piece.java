@@ -52,13 +52,11 @@ public class Piece extends JLabel{
 		if(!pInfo.isSingle()){
 			addMouseListener(new MouseListener() {
 				
-				@Override
 				public void mouseReleased(MouseEvent e) {
 //					pInfoDisplay.setVisible(false);
 //					repaint();
 				}
 				
-				@Override
 				public void mousePressed(MouseEvent e) {
 					if(SwingUtilities.isRightMouseButton(e)){
 						System.out.println("pressed");
@@ -73,15 +71,12 @@ public class Piece extends JLabel{
 					}
 				}
 				
-				@Override
 				public void mouseExited(MouseEvent e) {
 				}
 				
-				@Override
 				public void mouseEntered(MouseEvent e) {
 				}
 				
-				@Override
 				public void mouseClicked(MouseEvent e) {
 				}
 			});

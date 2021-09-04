@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
+//import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 import GamePack.ImageRelated;
 import GamePack.SizeRelated;

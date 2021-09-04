@@ -58,6 +58,7 @@ public class PropertyInfoPanel extends JPanel{
 	private JButton declareLossButton;
 	private BankruptcyPanel bankruptcyPanel;
 	private boolean isBankrupt;
+	private double scale;
 	public PropertyInfoPanel(JPanel panelToSwitchFrom, HashMap<String,PropertySpace> propertyInfo, Player[] player, DicePanel diceP, BoardPanel b, BankruptcyPanel bankruptcyPanel)
 	{
 		infoPanel = new JPanel();	
@@ -162,7 +163,7 @@ public class PropertyInfoPanel extends JPanel{
 		for(Integer a:info.getRentRange())
 		{
 			if (a > 0){
-				rentValues.add(new JLabel("<html>" + rentValueText(houseNum) + a.toString() + "</html>"));
+				rentValues.add(new JLabel("<html>" + rentValueText(houseNum) + (int)(a*scale) + "</html>"));
 			}
 			houseNum += 1;
 		}
@@ -245,10 +246,26 @@ public class PropertyInfoPanel extends JPanel{
 		}
 	}
 	
-	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent, int utilityLightsOn)
+	private double calculateScale(int turn){
+		int earlyGameThreshold = 20;
+		int midGameThreshold = 40;
+		
+		if (turn < earlyGameThreshold) {
+			return 1.0;
+		} else if (turn < midGameThreshold) {
+			return 1.0 + (0.025 * (turn - earlyGameThreshold));
+		} else {
+			return 1.0 + ((0.025 * (midGameThreshold - earlyGameThreshold)) + (0.5 * (turn - midGameThreshold)));
+		}
+	}
+	
+	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent, int utilityLightsOn, int turn)
 	{
 		this.currentPlayer = currentPlayer;
 		property = propertyInfo.get(name).getPropertyInfo();
+		scale = calculateScale(turn);
+		property.setScale(scale);
+		System.out.println("Property scale: " + scale);
 		AP = new AuctionPanel(property, players, this);
 		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo);
 		bPanel.add(mPanel);

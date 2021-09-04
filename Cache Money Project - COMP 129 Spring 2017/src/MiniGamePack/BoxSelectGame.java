@@ -89,7 +89,7 @@ public class BoxSelectGame extends MiniGame{
 			return;
 		}
 		disqualifyTimer = 10;
-		Timer t = new Timer();
+		final Timer t = new Timer();
 		t.schedule(new TimerTask(){
 			@Override
 			public void run() {

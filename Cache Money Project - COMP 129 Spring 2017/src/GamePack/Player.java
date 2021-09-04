@@ -4,7 +4,7 @@ import ScreenPack.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.swing.internal.plaf.basic.resources.basic;
+//import com.sun.swing.internal.plaf.basic.resources.basic;
 
 public final class Player {
 	private int totalmonies;		// saved

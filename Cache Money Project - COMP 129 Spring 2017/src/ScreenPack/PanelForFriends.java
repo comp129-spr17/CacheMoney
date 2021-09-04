@@ -47,7 +47,7 @@ public class PanelForFriends extends ScrollingPane{
 		panel.removeAll();
 	}
 	
-	public void addPersonToPanel(String Name){
+	public void addPersonToPanel(final String Name){
 		FriendPanel temp = new FriendPanel(Name, chatScreen, (originalPanel == null ? this : originalPanel));
 		temp.getUserNameBtn().addMouseListener(new MouseAdapter(){
 	         public void mousePressed(MouseEvent e) {

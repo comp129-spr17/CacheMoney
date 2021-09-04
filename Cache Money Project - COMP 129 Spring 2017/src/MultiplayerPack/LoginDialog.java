@@ -33,7 +33,7 @@ public class LoginDialog extends JDialog {
 	private PlayingInfo playingInfo;
 	private MainMenuScreen mainMenu;
 
-	public LoginDialog(Frame parent, MainMenuScreen mainMenu){
+	public LoginDialog(Frame parent, final MainMenuScreen mainMenu){
 		super(parent,"Login",true);
 		this.mainMenu = mainMenu;
 		JPanel panel = new JPanel(new GridBagLayout());

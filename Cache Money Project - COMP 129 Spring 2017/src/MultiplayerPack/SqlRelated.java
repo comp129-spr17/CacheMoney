@@ -433,8 +433,8 @@ public final class SqlRelated {
 	}
 	public ArrayList<ArrayList<Integer>> getLoadingGameList(String userId){
 		ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-		list.add(new ArrayList<>());
-		list.add(new ArrayList<>());
+		list.add(new ArrayList<Integer>());
+		list.add(new ArrayList<Integer>());
 		try {
 			statement = connection.createStatement();
 			rSet = statement.executeQuery("SELECT u.saved_num, g.num_Player "

@@ -43,7 +43,7 @@ public class infoThatScrolls extends ScrollingPane {
 
 		nameOfObject.add(nOfObject);
 
-		JButton temp = new JButton(nOfObject);
+		final JButton temp = new JButton(nOfObject);
 
 		if(nameOfObject.isEmpty())
 			temp.setBounds(0,0, BUTTON_WIDTH, BUTTON_HEIGHT);

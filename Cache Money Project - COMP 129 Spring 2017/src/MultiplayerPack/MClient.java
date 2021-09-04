@@ -238,7 +238,7 @@ public class MClient {
 	}
 	private void getMsg(Socket s, boolean isHostClient, String name) throws IOException{
 		
-        InputStream inputStream = s.getInputStream();
+        final InputStream inputStream = s.getInputStream();
         // TODO: THIS IS WHERE WE SETUP DICE PANEL
         
         playingInfo.setOutputStream(s.getOutputStream());
