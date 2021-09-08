@@ -20,17 +20,11 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
-
 @SuppressWarnings("restriction")
 
 public class AudioPlayer {
 	
-	private Map<String, MediaPlayer> players;
+//	private Map<String, MediaPlayer> players;
 	private static AudioPlayer somePlayer;
 	
 	//private ArrayList<MediaPlayer> players;
@@ -38,19 +32,19 @@ public class AudioPlayer {
 	private boolean isMusicPlaying;
 	private boolean isMusicMuted;
 	private boolean isSoundMuted;
-	private MediaPlayer musicOpeningPlayer;
+//	private MediaPlayer musicOpeningPlayer;
 	private int musicCount;
 
 
 	private AudioPlayer() {
 //				JFXPanel fxPanel = new JFXPanel();
 //		//players = new ArrayList<MediaPlayer>();
-		players = new HashMap<String, MediaPlayer>();
+//		players = new HashMap<String, MediaPlayer>();
 		isMusicPlaying = false;
 		isMusicMuted = false;  
 		isSoundMuted = false;	
 		musicCount = 0;
-		musicOpeningPlayer = findSound("music", "music1" + "_opening.mp3");
+//		musicOpeningPlayer = findSound("music", "music1" + "_opening.mp3");
 	}
 
 //	public static SoundAndMusicPlayer getInstance() {
@@ -69,28 +63,28 @@ public class AudioPlayer {
 		return somePlayer;
 	}
 
-	public void playSound(String folder, String filename) {
-		if (isSoundMuted){
-			return;
-		}
-		MediaPlayer mPlayer = findSound(folder, filename);
-		if(mPlayer == null) {
-			mPlayer = createMediaPlayer(folder, filename);
-		}
-		//mPlayer.setCycleCount(0);
-		if(mPlayer.getCycleDuration().lessThanOrEqualTo(mPlayer.getCurrentTime())) {
-			mPlayer.seek(Duration.ZERO);
-		}
-		mPlayer.play();
-	}
+//	public void playSound(String folder, String filename) {
+//		if (isSoundMuted){
+//			return;
+//		}
+//		MediaPlayer mPlayer = findSound(folder, filename);
+//		if(mPlayer == null) {
+//			mPlayer = createMediaPlayer(folder, filename);
+//		}
+//		//mPlayer.setCycleCount(0);
+//		if(mPlayer.getCycleDuration().lessThanOrEqualTo(mPlayer.getCurrentTime())) {
+//			mPlayer.seek(Duration.ZERO);
+//		}
+//		mPlayer.play();
+//	}
 
-	private MediaPlayer createMediaPlayer(String folder, String filename) {
-		String key = buildResourcePath(folder, filename);
-		Media sound = new Media(key);
-		MediaPlayer mPlayer = new MediaPlayer(sound);
-		players.put(folder+filename, mPlayer);
-		return mPlayer;
-	}
+//	private MediaPlayer createMediaPlayer(String folder, String filename) {
+//		String key = buildResourcePath(folder, filename);
+//		Media sound = new Media(key);
+//		MediaPlayer mPlayer = new MediaPlayer(sound);
+//		players.put(folder+filename, mPlayer);
+//		return mPlayer;
+//	}
 
 	private String buildResourcePath(String folder, String filename) {
 		if(folder != null && folder.length() > 0) {
@@ -109,46 +103,46 @@ public class AudioPlayer {
 		return resource.toString();
 	}
 
-	private MediaPlayer findSound(String folder, String filename) {
-		MediaPlayer mp = players.get(folder+filename);
-		if(mp == null) {
-			mp = createMediaPlayer(folder, filename);
-		}
-		return mp;
-	}
+//	private MediaPlayer findSound(String folder, String filename) {
+//		MediaPlayer mp = players.get(folder+filename);
+//		if(mp == null) {
+//			mp = createMediaPlayer(folder, filename);
+//		}
+//		return mp;
+//	}
 
-	public void stopSound(String folder, String filename) {
-		final MediaPlayer mp = findSound(folder, filename);
-		if(mp != null) {
-			Platform.runLater(new Runnable() {
-				public void run() {
-					mp.stop();
-				}
-			});
-		}
-	}
+//	public void stopSound(String folder, String filename) {
+//		final MediaPlayer mp = findSound(folder, filename);
+//		if(mp != null) {
+//			Platform.runLater(new Runnable() {
+//				public void run() {
+//					mp.stop();
+//				}
+//			});
+//		}
+//	}
 
 
-	public void loopMusic(String folder, String filename, int delayUntilLoopBegins){
-
-		Timer t = new Timer();
-		if (isMusicMuted){
-			return;
-		}
-		isMusicPlaying = true;
-		if(delayUntilLoopBegins > 0){	// if there is an opening sequence to the music, it plays the opening as a sound
-			musicOpeningPlayer = null;	
-			musicOpeningPlayer = findSound(folder, filename + "_opening.mp3");
-			if(musicOpeningPlayer == null) {
-				musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.mp3");
-			}
-			if(musicOpeningPlayer.getCycleDuration().lessThanOrEqualTo(musicOpeningPlayer.getCurrentTime())) {
-				musicOpeningPlayer.seek(Duration.ZERO);
-			}
-			musicOpeningPlayer.play();
-		}
-		(new LoopMusic(delayUntilLoopBegins, folder, filename)).start(); // begins the actual loop of the music
-	}
+//	public void loopMusic(String folder, String filename, int delayUntilLoopBegins){
+//
+//		Timer t = new Timer();
+//		if (isMusicMuted){
+//			return;
+//		}
+//		isMusicPlaying = true;
+//		if(delayUntilLoopBegins > 0){	// if there is an opening sequence to the music, it plays the opening as a sound
+//			musicOpeningPlayer = null;	
+//			musicOpeningPlayer = findSound(folder, filename + "_opening.mp3");
+//			if(musicOpeningPlayer == null) {
+//				musicOpeningPlayer = createMediaPlayer(folder, filename + "_opening.mp3");
+//			}
+//			if(musicOpeningPlayer.getCycleDuration().lessThanOrEqualTo(musicOpeningPlayer.getCurrentTime())) {
+//				musicOpeningPlayer.seek(Duration.ZERO);
+//			}
+//			musicOpeningPlayer.play();
+//		}
+//		(new LoopMusic(delayUntilLoopBegins, folder, filename)).start(); // begins the actual loop of the music
+//	}
 	
 	class LoopMusic extends Thread{
 		int delayUntilLoopBegins;
@@ -166,31 +160,31 @@ public class AudioPlayer {
 			int currentMusicCount = musicCount;				// for future checking if music is still playing
 			waitForOpeningToFinish(delayUntilLoopBegins); 	// waits for the opening of the song to finish
 			if (currentMusicCount == musicCount){ 			// if the music is still playing
-				beginLoop(); 								// begin looping
+//				beginLoop(); 								// begin looping
 			}
 		}
 		
-		private void beginLoop() {
-			MediaPlayer mp = findSound(folder, filename);	// finds music
-			mp.setCycleCount(MediaPlayer.INDEFINITE);		// sets the cycle count to be infinite, meaning the music will loop
-			if(mp.getCycleDuration().lessThanOrEqualTo(mp.getCurrentTime())) {
-				mp.seek(Duration.ZERO);
-			}
-			mp.play();										// plays the music
-			stopMusicCue(mp);								// stops the music when the isMusicPlaying variable turns to false
-			mp = null;
-		}
+//		private void beginLoop() {
+//			MediaPlayer mp = findSound(folder, filename);	// finds music
+//			mp.setCycleCount(MediaPlayer.INDEFINITE);		// sets the cycle count to be infinite, meaning the music will loop
+//			if(mp.getCycleDuration().lessThanOrEqualTo(mp.getCurrentTime())) {
+//				mp.seek(Duration.ZERO);
+//			}
+//			mp.play();										// plays the music
+//			stopMusicCue(mp);								// stops the music when the isMusicPlaying variable turns to false
+//			mp = null;
+//		}
 
-		private void stopMusicCue(MediaPlayer mp) {
-			try {
-				while (isMusicPlaying){
-					sleep(1);
-				}
-				mp.stop();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		private void stopMusicCue(MediaPlayer mp) {
+//			try {
+//				while (isMusicPlaying){
+//					sleep(1);
+//				}
+////				mp.stop();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 
 		private void waitForOpeningToFinish(int delayUntilLoopBegins) {
 			try {
@@ -202,20 +196,20 @@ public class AudioPlayer {
 		
 	}
 
-	public void stopMusic(){
-		isMusicPlaying = false;
-		musicCount += 1;
-		if (musicOpeningPlayer != null){
-			musicOpeningPlayer.stop();
-		}
-		
-
-	}
+//	public void stopMusic(){
+//		isMusicPlaying = false;
+//		musicCount += 1;
+//		if (musicOpeningPlayer != null){
+//			musicOpeningPlayer.stop();
+//		}
+//		
+//
+//	}
 
 	public void muteMusic(){
 		isMusicMuted = !isMusicMuted;
 		if (isMusicMuted){
-			stopMusic();
+//			stopMusic();
 		}
 
 	}
@@ -233,14 +227,14 @@ public class AudioPlayer {
 		return isSoundMuted;
 	}
 
-	public void pauseSound(String folder, String filename) {
-		final MediaPlayer mp = findSound(folder, filename);
-		if(mp != null) {
-			Platform.runLater(new Runnable() {
-				public void run() {
-					mp.pause();
-				}
-			});
-		}
-	}
+//	public void pauseSound(String folder, String filename) {
+//		final MediaPlayer mp = findSound(folder, filename);
+//		if(mp != null) {
+//			Platform.runLater(new Runnable() {
+//				public void run() {
+//					mp.pause();
+//				}
+//			});
+//		}
+//	}
 }

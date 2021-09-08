@@ -376,6 +376,10 @@ public class GameScreen extends JFrame{
 				switch (s){
 				case "*current":
 					s = reader.readLine(); dicePanel.setCurrentPlayerNum(Integer.parseInt(s));
+					break;
+				case "*turn":
+					s = reader.readLine();
+					dicePanel.setTurn(Integer.parseInt(s));
 					s = reader.readLine();
 					break;
 				case "*player":
@@ -682,6 +686,7 @@ public class GameScreen extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				if (showBuildHouse.isEnabled()){
 					Sounds.buttonConfirm.playSound();
+					
 					updateMortgage(pInfo.isSingle() ? dicePanel.getCurrentPlayerNumber() : pInfo.getMyPlayerNum());
 					if (selectBuildHouse.getItemCount() == 0)
 					{
@@ -744,13 +749,7 @@ public class GameScreen extends JFrame{
 		{
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (pInfo.isSingle()){
-					actionForBuildHouse((String) selectBuildHouse.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
-				}
-				else{
-//					pInfo.sendMessageToServer(mPack.packBoolStrAndInt((UnicodeForServer.MORTGAGE_PROPERTY), firstTempComboBox.getSelectedItem().equals("Mortgage"), (String) selectMortgage.getSelectedItem(), pInfo.getMyPlayerNum()));
-					// TODO: Need to support this for multiplayer
-				}
+				actionForBuildHouse((String) selectBuildHouse.getSelectedItem(), dicePanel.getCurrentPlayerNumber());
 				
 			}
 			@Override
@@ -1120,30 +1119,15 @@ public class GameScreen extends JFrame{
 		balanceLabels[2].setBounds(boardPanel.getX() - 110, 100, 300, 30);
 		balanceLabels[3].setBounds(boardPanel.getX() - 110, 150, 300, 30);
 		
+		
+		
 		Timer t = new Timer();
 		t.schedule(new TimerTask(){
 			@Override
 			public void run() {
 				while (true) {
-					if (players[1].getIsAlive()) {
-						balanceLabels[0].setText("<html><font color = '" + "white" + "'><b> P1 Balance<br />" + players[0].getTotalMonies() + "</b></font></html>");
-					} else {
-						balanceLabels[0].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
-					}
-					if (players[1].getIsAlive()) {
-						balanceLabels[1].setText("<html><font color = '" + "white" + "'><b> P2 Balance<br />" + players[1].getTotalMonies() + "</b></font></html>");
-					} else {
-						balanceLabels[1].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
-					}
-					if (players[2].getIsAlive() && pInfo.getNumberOfPlayer() >= 3 ) {
-					    balanceLabels[2].setText("<html><font color = '" + "white" + "'><b> P3 Balance<br />" + players[2].getTotalMonies() + "</b></font></html>");
-					} else {
-						 balanceLabels[2].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
-					}
-					if (players[3].getIsAlive() && pInfo.getNumberOfPlayer() >= 4) {
-					    balanceLabels[3].setText("<html><font color = '" + "white" + "'><b> P4 Balance<br />" + players[3].getTotalMonies() + "</b></font></html>");
-					} else {
-						 balanceLabels[3].setText("<html><font color = '" + "white" + "'><b>Dead</b></font></html>");
+					for (int i = 0; i < 4; i++) {
+						balanceLabels[i].setText("<html><font color = '" + "white" + "'><b> P" + (i+1) + (players[i].getJailFreeCard() > 0 ? "+" : "") + "<br />" + (players[i].getIsAlive() && i < pInfo.getNumberOfPlayer() ? players[i].getTotalMonies() : "Dead") + "</b></font></html>");
 					}
 					try {
 						Thread.sleep(500);
@@ -1610,10 +1594,12 @@ public class GameScreen extends JFrame{
 				
 				double temp = players[num].getOwnedProperties().get(h).getBuildHouseCost();
 				if (players[num].getTotalMonies() >= (int)temp){
-					Sounds.money.playSound();
-					Sounds.buildingHouse.playSound();
-					players[num].pay((int)temp);
-					players[num].getOwnedProperties().get(h).incNumHouse();
+					System.out.println("Building house on " + propertyName);
+					if (pInfo.isSingle()) {
+						buildHouse(propertyName, num);
+					} else {
+						pInfo.sendMessageToServer(mPack.packStringAndInt(UnicodeForServer.BUILD_HOUSE, propertyName, num));
+					}
 					repaint();
 					mLabels.reinitializeMoneyLabels();
 				} else {
@@ -1628,6 +1614,21 @@ public class GameScreen extends JFrame{
 			}
 		}
 	}
+	public void buildHouse(String propertyName, int playerNum) {
+		for (int h = 0; h < players[playerNum].getOwnedProperties().size(); h++) 
+		{
+			System.out.println("buildHouse: " + propertyName + ", " + playerNum);
+			if(players[playerNum].getOwnedProperties().get(h).getName().equals(propertyName)) {
+				Sounds.money.playSound();
+				Sounds.buildingHouse.playSound();
+				players[playerNum].pay((int)players[playerNum].getOwnedProperties().get(h).getBuildHouseCost());
+				players[playerNum].getOwnedProperties().get(h).incNumHouse();
+				return;
+			}
+		}
+		System.out.println("Failed to build house.");
+	}
+	
 	public void actionForLoadingInvalidUser(){
 		waitingArea.switchToMainGameArea();
 		JOptionPane.showMessageDialog(this,
@@ -1676,9 +1677,11 @@ public class GameScreen extends JFrame{
 		}
 		try{
 			PrintWriter writer = new PrintWriter(directory + filename, "UTF-8");
-			String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber() + "\n";
+			String currentPlayer = "*current\n" + dicePanel.getCurrentPlayerNumber();
+			String turn = "*turn\n" + dicePanel.getTurn() + "\n";
 			String[] packedPlayerInfo = packPlayerInformation();
 			writer.println(currentPlayer);				// currentPlayer
+			writer.println(turn);
 			for (int i = 0; i < 4; i++){
 				writer.println(packedPlayerInfo[i]);	// players and properties
 			}
@@ -1821,12 +1824,12 @@ public class GameScreen extends JFrame{
 	class playWinSounds extends Thread{
 		@Override
 		public void run(){
-			for (int i = 0; i < 34; i++){
+			for (int i = 0; true; i++){
 				Sounds.winGame.playSound();
 				Sounds.doublesCelebrateSound.playSound();
 				Sounds.waitingRoomJoin.playSound();
 				try {
-					sleep(600);
+					sleep(1500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

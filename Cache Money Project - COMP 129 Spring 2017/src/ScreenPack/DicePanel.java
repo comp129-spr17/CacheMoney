@@ -85,6 +85,7 @@ public class DicePanel extends JPanel{
 	private BankruptcyPanel bankruptcyPanel;
 	private TradingPanel tradeP;
 	private int turn;
+	private double scale;
 	
 	public DicePanel(Player[] player, MoneyLabels MLabels, TradingPanel tradeP, GameScreen gamescreen){
 		this.gamescreen = gamescreen;
@@ -114,7 +115,7 @@ public class DicePanel extends JPanel{
 		
 		dCel = new DoubleCelebrate();
 		dCel.setSize(this.getSize());
-		dCel.setLocation(this.getLocation().x, this.getLocation().y-5);
+		dCel.setLocation(this.getLocation().x, this.getLocation().y+100);
 
 		addTurnLabel();
 		setPlayerPieceStatus();
@@ -211,7 +212,7 @@ public class DicePanel extends JPanel{
 	}
 	private void addTurnLabel() {
 		turnLabel = new JLabel();
-		turnLabel.setBounds(sizeRelated.getDicePanelWidth()*0/16, sizeRelated.getDicePanelHeight()*4/5, 400, 50);
+		turnLabel.setBounds(sizeRelated.getDicePanelWidth()*0/16, sizeRelated.getDicePanelHeight()*0/5, 400, 100);
 		add(turnLabel);
 	}
 	private void addRollButton() {
@@ -399,7 +400,7 @@ public class DicePanel extends JPanel{
 		Sounds.turnBegin.playSound();
 		//showPlayer[2].setVisible(true);
 		//showPlayer[3].setIcon(imageRelated.getPieceImg(current));
-		turnLabel.setText("<html> " + ("Player " + (current + 1) + "'s Turn!") + "<br />Click to roll! <br /></html>");
+		turnLabel.setText("<html> Turn " + turn + "<br />" + (scale > 1.0 ? "<i>Property rent costs " + scale + "X their normal amount.</i><br />" : "") + ("<br />Player " + (current + 1) + "'s Turn!") + "<br />Click to roll! <br /></html>");
 		//showPlayer[3].setVisible(true);
 		actionForPlayers();
 		
@@ -519,11 +520,11 @@ public class DicePanel extends JPanel{
 	public void actionForDrawnStackCard(int cardNum, int position){
 		bPanel.actionForDrawnCards(cardNum, position);
 	}
-	public void actionForBuildHouse(){
-		propertyPanel.actionForBuildHouse();
+	public void actionForBuildHouse(String propertyName){
+		propertyPanel.actionForBuildHouse(propertyName);
 	}
 	private void changeTurn(){
-		turnLabel.setText("<html> " + (pInfo.isSingle() || !Property.isSQLEnabled ? ("Player " + (current + 1)) : (players[current].getUserName().split(" ")[0])) + "'s Turn! <br />Click to roll! <br />The game has been saved.</html>");
+		turnLabel.setText("<html> Turn " + turn + "<br />" + (scale > 1.0 ? "<i>Property rent costs " + scale + "X their normal amount.</i><br />" : "") + (pInfo.isSingle() || !Property.isSQLEnabled ? ("<br />Player " + (current + 1)) : (players[current].getUserName().split(" ")[0])) + "'s Turn! <br />Click to roll! <br />The game has been saved.</html>");
 		showPlayer[3].setIcon(imageRelated.getPieceImg(current));
 	}
 	private void setDiceResult(int diceRes1, int diceRes2){
@@ -580,6 +581,8 @@ public class DicePanel extends JPanel{
 
 	private void movePiece(){
 		sum = result[0] + result[1];
+		turnLabel.setText("Moves: " + sum);
+		turnLabel.setVisible(true);
 		if(result[0] == result[1]) {
 
 			numOfDoublesInRow++;
@@ -605,7 +608,7 @@ public class DicePanel extends JPanel{
 		}
 		
 		if (movementAllowed){
-			board.movePiece(isSame ? previous : current, sum);
+			board.movePiece(isSame ? previous : current, sum, turnLabel);
 		} else {
 			movementAllowed = true;
 		}
@@ -622,7 +625,7 @@ public class DicePanel extends JPanel{
 
 	}
 
-	private void sameNumberCelebration(){
+	public void sameNumberCelebration(){
 		Timer nTimer = new Timer();
 		isCelebrating = true;
 		Sounds.doublesCelebrateSound.playSound();
@@ -703,6 +706,7 @@ public class DicePanel extends JPanel{
 		while(!board.isDoneAnimating() || isCelebrating){
 			delayThread(1);
 		}
+		turnLabel.setVisible(false);
 		if(numOfDoublesInRow >= 3) {
 			threeDoublesPunishment();
 		} else {
@@ -725,12 +729,12 @@ public class DicePanel extends JPanel{
 				}
 			}
 			else if (spaceLandedOn.equals("Income Tax")){
-				if (players[current].getTotalMonies() < 200){
+				if (players[current].getTotalMonies() < 1){
 					bankruptcyPanel.executeSwitch(this, 200, players[current], pInfo.isSingle() || this.getCurrentPlayerNumber() == pInfo.getMyPlayerNum());
 					(new waitForPersonToPay(200)).start();
 				}
 				else{
-					players[current].pay(200);
+					players[current].pay((int) Math.ceil(players[current].getTotalMonies() * 0.1));
 				}
 			}
 			else if (spaceLandedOn.equals("Go to Jail")){
@@ -755,18 +759,42 @@ public class DicePanel extends JPanel{
 		}
 
 	}
+	private double calculateScale(int turn){
+		int earlyGameThreshold = 12 - (pInfo.getNumberOfPlayer());
+		int midGameThreshold = 24 - (pInfo.getNumberOfPlayer() * 2);
+		int lateGameThreshold = 36 - (pInfo.getNumberOfPlayer() * 3);
+		int endGameThreshold = 48 - (pInfo.getNumberOfPlayer() * 4);
+		
+		double earlyGameScale = 0.025;
+		double midGameScale = 0.1;
+		double lateGameScale = 0.5;
+		double endGameScale = 1.0;
+		
+		if (turn < earlyGameThreshold) {
+			return 1.0;
+		} else if (turn < midGameThreshold) {
+			return 1.0 + (earlyGameScale * (turn - earlyGameThreshold));
+		} else if (turn < lateGameThreshold) {
+			return 1.0 + ((earlyGameScale * (midGameThreshold - earlyGameThreshold)) + (midGameScale * (turn - midGameThreshold)));
+		} else if (turn < endGameThreshold) {
+			return 1.0 + ((earlyGameScale * (midGameThreshold - earlyGameThreshold)) + (midGameScale * (lateGameThreshold - midGameThreshold)) + (lateGameScale * (turn - lateGameThreshold)) );
+		} else {
+			return 1.0 + ((earlyGameScale * (midGameThreshold - earlyGameThreshold)) + (midGameScale * (lateGameThreshold - midGameThreshold)) + (lateGameScale * (endGameThreshold - lateGameThreshold)) + (endGameScale * (turn - endGameThreshold)) );
+		}
+	}
 	private void handlePropertySpaceAction(String curSpaceName) {
 		System.out.println(curSpaceName);
+		scale = calculateScale(turn);
 		if (propertyPanel.isPropertyOwned(curSpaceName)){
 			checkForPlayerPropertyAction(curSpaceName);
 		}
 		else{
-			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1, turn);
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1, scale);
 		}
 	}
 	private void checkForPlayerPropertyAction(String curSpaceName) {
 		if (propertyPanel.getOwner(curSpaceName).getPlayerNum() == current){
-			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1, turn);
+			propertyPanel.executeSwitch(curSpaceName, players[current], pInfo.isMyPlayerNum(current) || pInfo.isSingle(), -1, scale);
 		}
 		else if(!propertyPanel.isPropertyMortgaged(curSpaceName)){
 			browseMiniGame(curSpaceName);
@@ -775,7 +803,7 @@ public class DicePanel extends JPanel{
 	private void browseMiniGame(String curSpaceName){
 		pInfo.setGamePart(Part.MINI_GAME);
 		mGamePanel.openMiniGame(propertyPanel.getOwner(curSpaceName), players[current], pInfo.isMyPlayerNum(current), isRailRoad(curSpaceName) ? 9 : determineMinigameToPlay(curSpaceName));
-		mGamePanel.startMiniGame(curSpaceName, turn);
+		mGamePanel.startMiniGame(curSpaceName, scale);
 	}
 	private boolean isRailRoad(String curSpaceName){
 		return propertyPanel.getProperty(curSpaceName).getPropertyFamilyIdentifier() == 9;
@@ -844,6 +872,7 @@ public class DicePanel extends JPanel{
 		
 		if (current == 0) {
 			turn++;
+			scale = calculateScale(turn);
 			System.out.println("Turn " + turn);
 		}
 	}
@@ -909,6 +938,12 @@ public class DicePanel extends JPanel{
 	}
 	public void endBankruptPanel() {
 		bankruptcyPanel.endBankruptPanel();
+	}
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+	public int getTurn() {
+		return this.turn;
 	}
 
 }

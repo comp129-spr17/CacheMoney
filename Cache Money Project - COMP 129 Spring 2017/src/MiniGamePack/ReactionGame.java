@@ -107,6 +107,7 @@ public class ReactionGame extends MiniGame {
 		lblsForThis.get(0).setText("wait... wait... wait...");
 		lblsForThis.get(4).setText("");
 		lblsForThis.get(5).setText("");
+		lblsForThis.get(3).setVisible(false);
 	}
 	
 	private void gameResult(){
@@ -132,6 +133,7 @@ public class ReactionGame extends MiniGame {
 	}
 
 	private void waitForUsersToEnterChars() {
+		lblsForThis.get(3).setVisible(true);
 		lblsForThis.get(0).setText("GOOOOOOOOOOOO!!!");
 		Sounds.doublesCelebrateSound.playSound();
 		timeStarted = System.currentTimeMillis();

@@ -1,5 +1,6 @@
 package InterfacePack;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -11,10 +12,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 public enum Sounds {
 	buttonConfirm, 
@@ -56,10 +53,8 @@ public enum Sounds {
 	private final int NUM_OF_DICE_SHAKE_SOUNDS = 3;
 	private int movePiecePreviousSound = 0;
 	private int shakeSoundNum = 0;
+	boolean isMuted = false;
 	
-	static{
-	    JFXPanel fxPanel = new JFXPanel();
-	}
 	
 //	private void playSound(String audio, String filename) {
 //		// cl is the ClassLoader for the current class, ie. CurrentClass.class.getClassLoader();
@@ -70,10 +65,9 @@ public enum Sounds {
 //	}
 	
 	void playSound(String audio, String soundFile) {
-	    File f = new File("src/audio/" + soundFile);
 	    AudioInputStream audioIn;
 		try {
-			audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+			audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(File.class.getResourceAsStream("/audio/" + soundFile)));
 			Clip clip = AudioSystem.getClip();
 		    clip.open(audioIn);
 		    clip.start();
@@ -93,6 +87,9 @@ public enum Sounds {
 	}
 	
 	public void playSound(){
+		if (isMuted) {
+			return;
+		}
 		switch (this){
 		case buttonConfirm:
 			playSound("audio", "buttonConfirm.wav");
@@ -223,11 +220,12 @@ public enum Sounds {
 	
 	public void toggleMuteSounds(){
 		//AUDIO_PLAYER.muteSounds();
+		isMuted = !isMuted;
 	}
 	
 	public boolean getIsMuted(){
 		//return AUDIO_PLAYER.isSoundMuted();
-		return false;
+		return isMuted;
 	}
 	
 	private String randomizeDiceShakeFilename(){

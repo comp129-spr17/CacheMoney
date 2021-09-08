@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JLabel;
+
 import InterfacePack.Sounds;
 
 public class Board {
@@ -64,8 +66,8 @@ public class Board {
 			placePieceToFirst(i, 0);
 		}
 	}
-	public void movePiece(int player, int diceResult) {
-		showMovingAnim(player, diceResult);
+	public void movePiece(int player, int diceResult, final JLabel turnLabel) {
+		showMovingAnim(player, diceResult, turnLabel);
 	}
 	
 	private void setBoardTrack(Space[] board){
@@ -105,15 +107,18 @@ public class Board {
 	}
 	
 	
-	private void showMovingAnim(final int player, final int diceResult){
+	private void showMovingAnim(final int player, final int diceResult, final JLabel turnLabel){
 
 		isDone = false;
 		pieceMovingAnim.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				
+				int movesRemaining = diceResult;
 				for(int i=1; i<diceResult+1; i++){
 					Sounds.movePiece.playSound();
+					movesRemaining--;
+					turnLabel.setText("Moves: " + movesRemaining);
+					
 					players[player].movePosition();
 					int previousSpace = players[player].getPositionNumber()-1;
 					boardTracker[previousSpace].removePiece(player);

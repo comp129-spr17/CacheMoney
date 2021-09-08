@@ -394,7 +394,8 @@ public class MClient {
 		diceP.actionForDrawnStackCard((Integer)result.get(1), (Integer)result.get(2));
 	}
 	private void doBuildHouse(ArrayList<Object> result){
-		diceP.actionForBuildHouse();
+		
+		gameScreen.buildHouse((String) result.get(1),(int) result.get(2));
 	}
 	
 	class SetId extends Thread{

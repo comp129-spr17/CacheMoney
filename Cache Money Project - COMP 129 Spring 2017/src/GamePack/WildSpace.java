@@ -46,7 +46,6 @@ public class WildSpace extends Space {
 	@Override
 	public int landOnSpace(Piece piece, int playerPosition) {
 		
-		
 		if(name == "Chance"){
 			command = chanceStack.getResultingCommand(pInfo.isMyPlayerNum(piece.getPlayer()), playerPosition);
 			System.out.println(command);
@@ -222,6 +221,8 @@ public class WildSpace extends Space {
 			else if(command == "Free"){//to add later
 				System.out.println("Free get out of jail card (functionality to come later)");
 				communityStack.displayImage(4);
+				players[dp.getCurrentPlayerNumber()].setJailFreeCard(players[dp.getCurrentPlayerNumber()].getJailFreeCard() + 1);
+				Sounds.gainMoney.playSound();
 			}
 			else if(command == "Move10"){
 				System.out.println("Go to jail, directly to jail");

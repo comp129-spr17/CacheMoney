@@ -36,7 +36,7 @@ public class MiniGamePanel extends JPanel{
 	private boolean isPlayingMinigame;
 	private boolean isPracticingMode;
 	private PlayingInfo pInfo;
-	private int turn;
+	private double scale;
 	
 	public MiniGamePanel(JPanel diceP, BoardPanel b, PropertyInfoPanel pPanel)
 	{
@@ -136,9 +136,9 @@ public class MiniGamePanel extends JPanel{
 	}
 	
 	
-	public void startMiniGame(String curSpaceName, int turn){
+	public void startMiniGame(String curSpaceName, double scale){
 		this.curSpaceName = curSpaceName;
-		this.turn = turn;
+		this.scale = scale;
 		System.out.println("First this. curSpaceName : " + curSpaceName + " gameNum : " + gameNum);
 		mGames[gameNum].play();
 		(new GameEndCheck()).start();
@@ -197,7 +197,7 @@ public class MiniGamePanel extends JPanel{
 		cleanup();
 		if (!isPracticingMode){
 			Sounds.landedOnOwnedProperty.playSound();
-			pPanel.executeSwitch(curSpaceName,guest,isCurrent, mGames[gameNum].getNumLightsOn(), turn);
+			pPanel.executeSwitch(curSpaceName,guest,isCurrent, mGames[gameNum].getNumLightsOn(), scale);
 		}
 		else{
 			Sounds.gainMoney.playSound();
@@ -226,7 +226,7 @@ public class MiniGamePanel extends JPanel{
 				if(isGameOver())
 					break;
 				try {
-					sleep(1);
+					sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

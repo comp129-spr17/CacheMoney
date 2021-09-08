@@ -148,7 +148,7 @@ public class MiniGame{
 		}
 	}
 	protected boolean isUnavailableToPlay(){
-		return !pInfo.isMyPlayerNum(owner.getPlayerNum()) && !pInfo.isMyPlayerNum(guest.getPlayerNum());
+		return !pInfo.isMyPlayerNum(owner.getPlayerNum()) && !pInfo.isMyPlayerNum(guest.getPlayerNum()) && !pInfo.isSingle();
 	}
 	
 	public void addGame(){
@@ -171,7 +171,7 @@ public class MiniGame{
 	private void setAppropriateMinigameTitleAndDescription(int gameNum){
 		switch (gameNum) {
 		case 0:
-			setInstructions("Spam Minigame", "<html>Instructions: <br />Nudge the bomb to your opponent's side before time expires. <br /><br />Controls:<br />Owner: Press 'q' as fast as you can! <br />Guest: Press 'p' as fast as you can! <html>");
+			setInstructions("Spam Minigame", "<html>Instructions: <br />Nudge the bomb to your opponent's side before time expires. <br /><br />Controls:<br />Owner: Press 'z' as fast as you can! <br />Guest: Press '/' as fast as you can! <html>");
 			break;
 		case 1:
 			setInstructions("Reaction Game", "<html>Instructions: <br />React faster than your opponent when you see: GOOOOOO!!! <br /><br />Controls:<br />Owner: Press 'q' to react! <br />Guest: Press 'p' to react! <html>");

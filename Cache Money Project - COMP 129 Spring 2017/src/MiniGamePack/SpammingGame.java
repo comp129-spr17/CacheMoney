@@ -34,17 +34,17 @@ public class SpammingGame extends MiniGame{
 			public void keyTyped(KeyEvent e) {
 				pressed = e.getKeyChar();
 				if(pInfo.isSingle()){
-					if(pressed == 'q' || pressed == 'Q')
+					if(pressed == 'z' || pressed == 'Z')
 						addOwnerCount();
-					else if(pressed == 'p' || pressed == 'P')
+					else if(pressed == '/' || pressed == '?')
 						addGuestCount();
 				}else{
-					if(isOwner && (pressed == 'q' || pressed == 'Q')){
+					if(isOwner && (pressed == 'z' || pressed == 'Z')){
 						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.SPAM_MINI_GAME_OWNER));
 						ownerC++;
 						System.out.println(ownerC);
 					}
-					else if(!isOwner && (pressed == 'p' || pressed == 'P'))
+					else if(!isOwner && (pressed == '/' || pressed == '?'))
 						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.SPAM_MINI_GAME_GUEST));
 				}
 			}
@@ -87,7 +87,7 @@ public class SpammingGame extends MiniGame{
 	public void addGame(){
 		GAME_NUM = 0;
 		super.addGame();
-		setTitleAndDescription("SPAMMING GAME!", "Owner: 'q', Guest: 'p'");
+		setTitleAndDescription("SPAMMING GAME!", "Owner: 'z', Guest: '/'");
 		setVisibleForTitle(true);
 		ownerCount = 0;
 		guestCount = 0;

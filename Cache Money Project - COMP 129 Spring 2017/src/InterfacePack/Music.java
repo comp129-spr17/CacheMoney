@@ -1,5 +1,6 @@
 package InterfacePack;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,13 +24,15 @@ public enum Music {
 	
 	public void loopMusic(String audio, String soundFile, int length) {
 		stopMusic();
-	    File f = new File("src/music/" + soundFile);
+		//new File(getClass().getProtectionDomain().getCodeSource().getLocation()
+			  //  .toURI()).getPath();
+	    //File f = ;
 	    AudioInputStream audioIn;
 		try {
-			audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+			audioIn = AudioSystem.getAudioInputStream(new BufferedInputStream(File.class.getResourceAsStream("/music/" + soundFile)));
 			clip = AudioSystem.getClip();
 		    clip.open(audioIn);
-		    clip.loop(999);
+		    clip.loop(9999);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -196,7 +196,7 @@ public class BankruptcyPanel extends JPanel{
 					break;
 				}
 				try {
-					sleep(1);
+					sleep(500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -246,26 +246,12 @@ public class PropertyInfoPanel extends JPanel{
 		}
 	}
 	
-	private double calculateScale(int turn){
-		int earlyGameThreshold = 20;
-		int midGameThreshold = 40;
-		
-		if (turn < earlyGameThreshold) {
-			return 1.0;
-		} else if (turn < midGameThreshold) {
-			return 1.0 + (0.025 * (turn - earlyGameThreshold));
-		} else {
-			return 1.0 + ((0.025 * (midGameThreshold - earlyGameThreshold)) + (0.5 * (turn - midGameThreshold)));
-		}
-	}
-	
-	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent, int utilityLightsOn, int turn)
+	public void executeSwitch(String name, Player currentPlayer, boolean isCurrent, int utilityLightsOn, double scale)
 	{
 		this.currentPlayer = currentPlayer;
 		property = propertyInfo.get(name).getPropertyInfo();
-		scale = calculateScale(turn);
+		this.scale = scale;
 		property.setScale(scale);
-		System.out.println("Property scale: " + scale);
 		AP = new AuctionPanel(property, players, this);
 		mPanel = new MortgagePanel(players,this,bPanel,propertyInfo);
 		bPanel.add(mPanel);
@@ -364,7 +350,7 @@ public class PropertyInfoPanel extends JPanel{
 			if (pInfo.isSingle() || currentPlayer.getPlayerNum() == pInfo.getMyPlayerNum()){
 				while (currentPlayer.getIsAlive() && isBankrupt){
 					try {
-						sleep(100);
+						sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -386,7 +372,7 @@ public class PropertyInfoPanel extends JPanel{
 						!buyButton.isEnabled() && currentPlayer.getIsAlive()
 						){
 					try {
-						sleep(100);
+						sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -601,7 +587,7 @@ public class PropertyInfoPanel extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				if (buyHouseButton.isEnabled()){
 					if (pInfo.isSingle()){
-						actionForBuildHouse();
+						//actionForBuildHouse();
 					}
 					else{
 						pInfo.sendMessageToServer(mPack.packSimpleRequest(UnicodeForServer.BUILD_HOUSE));
@@ -687,13 +673,26 @@ public class PropertyInfoPanel extends JPanel{
 //		dicePanel.playerDeclaredBankrupt();
 	}
 
-	public void actionForBuildHouse() {
+	public void actionForBuildHouse(String propertyName) {
 		Sounds.money.playSound();
 		Sounds.buildingHouse.playSound();
-		currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - property.getBuildHouseCost());
-		rentValues.get(property.getMultiplier()).setText(rentValueText(property.getMultiplier()) + property.getRentRange().get(property.getMultiplier()));
-		property.incNumHouse();
-		rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
+		
+		Property propToBuildHouse = null;
+		for (int a = 0; a < currentPlayer.getOwnedProperties().size(); a++) {
+			if (currentPlayer.getOwnedProperties().get(a).getName().equals(propertyName)) {
+				propToBuildHouse = currentPlayer.getOwnedProperties().get(a);
+				break;
+			}
+		}
+		if (propToBuildHouse == null) {
+			return;
+		}
+		
+		propToBuildHouse.incNumHouse();
+		currentPlayer.setTotalMonies(currentPlayer.getTotalMonies() - propToBuildHouse.getBuildHouseCost());
+		rentValues.get(propToBuildHouse.getMultiplier()).setText(rentValueText(propToBuildHouse.getMultiplier()) + propToBuildHouse.getRentRange().get(propToBuildHouse.getMultiplier()));
+		propToBuildHouse.incNumHouse();
+		rentValues.get(propToBuildHouse.getMultiplier()).setText("<html><b>" + rentValues.get(propToBuildHouse.getMultiplier()).getText() + "</b></html>");
 		buyHouseButton.setVisible(checkIfUserCanBuyHouses());
 	}
 	

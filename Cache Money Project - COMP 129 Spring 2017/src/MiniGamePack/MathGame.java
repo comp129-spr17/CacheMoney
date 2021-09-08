@@ -237,7 +237,9 @@ public class MathGame extends MiniGame{
 	}
 	class PlayGame extends Thread{
 		public void run(){
-			if(!pInfo.isSingle()){
+			if(pInfo.isSingle()){
+				enableFunctions();
+			} else {
 				while(!didGetProblems){
 					try {
 						Thread.sleep(1);
@@ -278,9 +280,19 @@ public class MathGame extends MiniGame{
 	}
 	private void forSingleGuestTurn(){
 		isOwner = false;
+		lblsForThis.get(7).setText("Switch places!");
+		for(int i=5; i>=0; --i){
+			lblsForThis.get(6).setText(i +"");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		lblsForThis.get(7).setText("Guest's turn");
 		cleanProblems();
 		initMathProblems();
+		enableFunctions();
 		forEachTurn();
 	}
 }
