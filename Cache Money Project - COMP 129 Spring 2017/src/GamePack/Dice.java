@@ -87,7 +87,11 @@ public class Dice {
 					dice.setIcon(diceImages.get(getRand()));
 					Thread.sleep(80);
 				}
-				dice.setIcon(diceImages.get(result));
+				if (result < diceImages.size() && result >= 0) {
+					dice.setIcon(diceImages.get(result));
+				} else {
+					dice.setIcon(null);
+				}
 				isAnimating = false;
 			} catch (InterruptedException e) {
 				e.printStackTrace();

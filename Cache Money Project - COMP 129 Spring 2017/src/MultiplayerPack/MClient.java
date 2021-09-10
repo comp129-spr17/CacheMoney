@@ -395,7 +395,7 @@ public class MClient {
 	}
 	private void doBuildHouse(ArrayList<Object> result){
 		
-		gameScreen.buildHouse((String) result.get(1),(int) result.get(2));
+		gameScreen.buildHouse((String) result.get(1),(Integer) result.get(2));
 	}
 	
 	class SetId extends Thread{

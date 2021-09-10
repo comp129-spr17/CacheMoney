@@ -372,6 +372,8 @@ public final class MBytePack {
 	}
 	public byte[] packStringAndInt(int requestCode, String propertyName, int playerNum){
 		try{
+			System.out.println("propertyName: " + propertyName);
+			System.out.println("playerNum: " + playerNum);
 			dOutputStream.writeInt(requestCode);
 			dOutputStream.writeUTF(propertyName);
 			dOutputStream.writeInt(playerNum);

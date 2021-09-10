@@ -1004,7 +1004,7 @@ public class GameScreen extends JFrame{
 		setUndecorated(true);
 		if(!pInfo.isSingle()){
 			mainPanel.remove(exportButton);
-			mainPanel.remove(buttonLabels[3]);
+			mainPanel.remove(buttonLabels[4]);
 			chatAndFriends.setVisible(false);
 			mainPanel.add(chatAndFriends);
 		}
@@ -1598,6 +1598,7 @@ public class GameScreen extends JFrame{
 					if (pInfo.isSingle()) {
 						buildHouse(propertyName, num);
 					} else {
+						
 						pInfo.sendMessageToServer(mPack.packStringAndInt(UnicodeForServer.BUILD_HOUSE, propertyName, num));
 					}
 					repaint();

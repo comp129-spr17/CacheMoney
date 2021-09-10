@@ -183,7 +183,7 @@ public class DicePanel extends JPanel{
 	private void addToggleDoubles(){
 		toggleDoubles = new JCheckBox();
 		toggleDoubles.setBounds(sizeRelated.getDicePanelWidth()/4, sizeRelated.getDicePanelHeight()*2/5, 100, 50);
-		add(toggleDoubles);
+//		add(toggleDoubles);
 	}
 
 	private void addDice() {
@@ -231,10 +231,6 @@ public class DicePanel extends JPanel{
 	private void addOverrideDiceRoll() {
 		this.overrideDiceRoll = new JTextField();
 		overrideDiceRoll.setBounds(sizeRelated.getDicePanelWidth()/3, sizeRelated.getDicePanelHeight()*1/5, 100, 50);
-		if (!pInfo.isSingle()){
-			overrideDiceRoll.setEnabled(false);
-			overrideDiceRoll.setEditable(false);
-		}
 		add(overrideDiceRoll);
 	}
 
@@ -327,14 +323,23 @@ public class DicePanel extends JPanel{
 			}
 			private void beginDiceRoll() {
 				diceRes = getDiceRoll();
-				if (toggleDoubles.isSelected()){ // DEBUG ONLY
-					diceRes[0] = diceRes[1];
+				if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
+					try {
+						String[] splitStr = overrideDiceRoll.getText().split(",");
+						diceRes[0] = Integer.parseInt(splitStr[0]) - 1;
+						diceRes[1] = Integer.parseInt(splitStr[1]) - 1;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 				}
 				if(pInfo.isSingle()) {
-					if(numOfDoublesInRow >= 3)
+					if(numOfDoublesInRow >= 3) {
 						actionForDiceRoll(0, 0);
-					else
+					}
+					else {
 						actionForDiceRoll(diceRes[0], diceRes[1]);
+					}
 				}
 				else {
 					if(numOfDoublesInRow >= 3)
@@ -394,7 +399,7 @@ public class DicePanel extends JPanel{
 		turnLabel.setVisible(true);
 		if (setDebugVisible){
 			overrideDiceRoll.setVisible(true);
-			toggleDoubles.setVisible(true);
+//			toggleDoubles.setVisible(true);
 		}
 		Sounds.winGame.playSound();
 		Sounds.turnBegin.playSound();
@@ -556,9 +561,12 @@ public class DicePanel extends JPanel{
 		for(int i=0; i<2; i++){
 			dices[i].resetDice();
 		}
+		
 		for(int i=0; i<2; i++){
+			
 			dices[i].rollDice(diceRes[i]);
 			result[i] = dices[i].getNum();
+			System.out.println("result[" + i + "]: " + result[i]);
 		}
 		resetElem();
 	}
@@ -598,14 +606,6 @@ public class DicePanel extends JPanel{
 			numOfDoublesInRow = 0;
 		}
 		
-		
-		if (SERVER_DEBUG){
-			sum = DEBUG_MOVEMENT_VALUE;
-		}
-		if (!overrideDiceRoll.getText().isEmpty()){ // DEBUG
-			sum = Integer.parseInt(overrideDiceRoll.getText());
-
-		}
 		
 		if (movementAllowed){
 			board.movePiece(isSame ? previous : current, sum, turnLabel);
@@ -768,7 +768,7 @@ public class DicePanel extends JPanel{
 		double earlyGameScale = 0.025;
 		double midGameScale = 0.1;
 		double lateGameScale = 0.5;
-		double endGameScale = 1.0;
+		double endGameScale = 3.0 + 0.1 * (turn - endGameThreshold);
 		
 		if (turn < earlyGameThreshold) {
 			return 1.0;
