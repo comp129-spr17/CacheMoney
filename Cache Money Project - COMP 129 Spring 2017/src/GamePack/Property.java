@@ -75,7 +75,7 @@ public abstract class Property {
 	}
 	
 	public int getUtilityRentPrice(){
-		return (int) (rentValues.get(rentValues.size() - 1)*scale);
+		return (int) (rentValues.get(rentValues.size() - 1));
 	}
 
 	public int getBuyingPrice() {
