@@ -2,6 +2,8 @@ package ScreenPack;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import GamePack.Player;
@@ -28,7 +31,7 @@ public class AuctionPanel extends JPanel{
 	private int auctionPrice;
 	private JLabel curAuctionPrice;
 	private ArrayList<JButton> bidButtons;
-	private ArrayList<JComboBox> bidPrice;
+	private ArrayList<JTextField> bidPrice;
 	private JPanel pricePanel;
 	private AuctionTimer auctionTimer;
 	private Player curBuyer;
@@ -39,18 +42,19 @@ public class AuctionPanel extends JPanel{
 	private boolean isDone;
 	private ArrayList<Boolean> isDelay;
 	private ArrayList<Color> colList;
+	private int numBids = 0;
 	public AuctionPanel(Property property, Player player[], PropertyInfoPanel propertyInfoPanel)
 	{
 		bidButtons = new ArrayList<JButton>(4);
-		bidPrice = new ArrayList<JComboBox>(4);
+		bidPrice = new ArrayList<JTextField>(4);
 		colList = new ArrayList<>();
-		
 		pInfo = PlayingInfo.getInstance();
+		
 		this.property = property;
 		this.player = player;
 		this.propertyPanel = propertyInfoPanel;
-		auctionPrice = 1;
-		curAuctionPrice = new JLabel(Integer.toString(auctionPrice));
+		auctionPrice = 0;
+		curAuctionPrice = new JLabel();
 		mPack = MBytePack.getInstance();
 		unicode = UnicodeForServer.getInstance();
 		init();
@@ -66,15 +70,21 @@ public class AuctionPanel extends JPanel{
 		this.setLocation(propertyPanel.getLocation());
 		this.setLayout(null);
 		isDelay = new ArrayList<>();
-		for(int i=0; i<pInfo.getNumberOfPlayer(); i++)
+		for(int i=0; i<pInfo.getNumberOfPlayer(); i++) {
 			isDelay.add(false);
+		}
 		pricePanel = new JPanel();
 		pricePanel.setSize(this.getWidth()/2, this.getHeight()/2);
 		pricePanel.setLocation(this.getWidth()/2 - pricePanel.getWidth()/2, this.getHeight()/2-pricePanel.getHeight()/2);
 		pricePanel.setBackground(Color.GREEN);
 		pricePanel.setLayout(null);
 		playerLocation = new Point[4];
-		curAuctionPrice.setBounds(pricePanel.getWidth()/2,pricePanel.getHeight()/2,100,(int)curAuctionPrice.getPreferredSize().getHeight());
+		curAuctionPrice.setBounds(pricePanel.getWidth()/2,pricePanel.getHeight()/2,800,50);
+		if (pInfo.isSingle()) {
+			curAuctionPrice.setText("Discuss (in person)!");
+		} else {
+			curAuctionPrice.setText("Start the bidding!");
+		}
 		setPlayerLocation();
 		add(pricePanel);
 		for(int i=0; i<pInfo.getNumberOfPlayer(); i++){
@@ -86,17 +96,14 @@ public class AuctionPanel extends JPanel{
 	private void addBidInterface(Color c, final int p)
 	{		
 		
-		final JButton temp = new JButton("ADD\nBID");
+		final JButton temp = new JButton(pInfo.isSingle() ? "Buy" : "Add Bid");
+		final JTextField jtf = new JTextField("");
 		temp.setBackground(c);
-		temp.setSize(60, 20);	
-		
-		
-		String bids[] = {"5", "10", "15", "25", "50", "100", "200"};
-		final JComboBox bidList = new JComboBox(bids); 
-		bidList.setSize(80, 20);
+		temp.setSize(60, 20);
+		jtf.setSize(60, 20);
 		if(!pInfo.isSingle() && !pInfo.isMyPlayerNum(p)){
 			temp.setEnabled(false);
-			bidList.setEnabled(false);
+			jtf.setEnabled(false);
 		}
 			
 		temp.addMouseListener(new MouseListener() {
@@ -107,26 +114,9 @@ public class AuctionPanel extends JPanel{
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if(temp.isEnabled() && SwingUtilities.isLeftMouseButton(e) && !isDelay.get(p)){
-					int bid = Integer.parseInt((String)bidList.getSelectedItem());
-					if(pInfo.isSingle())
-						actionToAuction(bid, p);
-					else
-						pInfo.sendMessageToServer(mPack.packIntArray(unicode.PROPERTY_BIDDING, new int[]{bid,pInfo.getMyPlayerNum()}));
-					
-					isDelay.set(p, true);
-					Timer aT = new Timer();
-					aT.schedule(new TimerTask() {
-						
-						@Override
-						public void run() {
-							isDelay.set(p, false);
-							
-						}
-					}, 2000);
+				if(temp.isEnabled() && SwingUtilities.isLeftMouseButton(e)){
+					attemptToAddBid(p);
 				}
-				
-
 			}
 
 			@Override
@@ -141,31 +131,99 @@ public class AuctionPanel extends JPanel{
 
 			}
 		});
+		jtf.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent key) {
+				if(key.getKeyCode() == KeyEvent.VK_ENTER && bidPrice.get(p).isEnabled()){
+					attemptToAddBid(p);
+				}
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		
 
 		bidButtons.add(temp);
-		bidPrice.add(bidList);
+		bidPrice.add(jtf);
 
+	}
+	private void attemptToAddBid(final int p) {
+			int bid = getSelectedNum(p);
+			if (bid < 0) {
+				return;
+			}
+			if(pInfo.isSingle())
+				actionToAuction(bid, p);
+			else
+				pInfo.sendMessageToServer(mPack.packIntArray(unicode.PROPERTY_BIDDING, new int[]{bid,pInfo.getMyPlayerNum()}));
+			
+			isDelay.set(p, true);
+			Timer aT = new Timer();
+			aT.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					isDelay.set(p, false);
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}, 2000);
 	}
 	class CheckPlayerMoney extends Thread{
 		public void run(){
 			if(!pInfo.isSingle()){
 				while(!isDone){
 					setEnabling(pInfo.getMyPlayerNum());
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}else{
 				while(!isDone){
 					for(int i=0;i<pInfo.getNumberOfPlayer(); i++){
 						setEnabling(i);
 					}
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			
 		}
 		private void setEnabling(int pNum){
-			bidButtons.get(pNum).setEnabled((player[pNum].getTotalMonies() > getSelectedNum(pNum)));
+			bidButtons.get(pNum).setEnabled((player[pNum].getTotalMonies() > getSelectedNum(pNum) + auctionPrice));
 		}
-		private int getSelectedNum(int pNum){
-			return Integer.parseInt((String)bidPrice.get(pNum).getSelectedItem()) + auctionPrice;
+	}
+	
+	private int getSelectedNum(int pNum){
+		try {
+			return Integer.parseInt((String)bidPrice.get(pNum).getText());
+		} catch (Exception e) {
+			System.out.println("Couldn't get bid.");
+			return -1; 
 		}
 	}
 	
@@ -174,7 +232,13 @@ public class AuctionPanel extends JPanel{
 			pricePanel.remove(auctionTimer.getLabel());
 			auctionTimer.resetTimer();
 		}
-
+		int timeCounter = 0;
+		if (!pInfo.isSingle()) {
+			timeCounter = 7 - (numBids/4);
+			if (timeCounter < 1) {
+				timeCounter = 1;
+			}
+		}
 
 		auctionTimer = new AuctionTimer(new TimerTask() {
 
@@ -192,13 +256,14 @@ public class AuctionPanel extends JPanel{
 				pricePanel.repaint();
 			}
 
-		}, 0, pricePanel.getWidth()/2, pricePanel.getHeight()/2);
+		}, 0, pricePanel.getWidth()/2, pricePanel.getHeight()/2, timeCounter);
 
 		
 		if(player[playerNum].getTotalMonies() >= bid)
 		{
 			pricePanel.add(auctionTimer.getLabel());
 			auctionTimer.startTimer();
+			numBids++;
 
 			addAuctionPrice(bid, playerNum);
 			curBuyer = player[playerNum];
@@ -206,8 +271,6 @@ public class AuctionPanel extends JPanel{
 	}
 	private void addAuctionPrice(int cost, int playerNum)
 	{
-		if(!pInfo.isSingle() && !pInfo.isMyPlayerNum(playerNum))
-			bidPrice.get(playerNum).setSelectedItem(cost+"");
 		auctionPrice += cost;
 		curAuctionPrice.setText(Integer.toString(auctionPrice));
 		updateLocation();
@@ -231,9 +294,6 @@ public class AuctionPanel extends JPanel{
 	public void switchtoAP()
 	{
 		this.setBackground(Color.white);
-		for(int i=0; i<pInfo.getNumberOfPlayer(); i++){
-			bidPrice.get(i).setSelectedIndex(0);
-		}
 		isDone = false;
 		System.out.println("Player tot num : " + pInfo.getNumberOfPlayer());
 		(new CheckPlayerMoney()).start();
@@ -251,7 +311,9 @@ public class AuctionPanel extends JPanel{
 
 	private void renderInterface()
 	{
+		curAuctionPrice.setLocation(playerLocation[0]);
 		pricePanel.add(curAuctionPrice);
+		numBids = 0;
 
 	}
 	private void addElements(){

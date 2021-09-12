@@ -170,7 +170,8 @@ public class PropertyInfoPanel extends JPanel{
 		if (property.isOwned()){
 			rentValues.get(property.getMultiplier()).setText("<html><b>" + rentValues.get(property.getMultiplier()).getText() + "</b></html>");
 			if (property instanceof UtilityProperty && rentValues.size() > 2){
-				rentValues.get(2).setText("<html><b>" + rentValues.get(2).getText() + "</b></html>");
+				int displayedPrice = info.getRent() * utilitiesModifier;
+				rentValues.get(2).setText("<html><b>" + rentValueText(2) + displayedPrice + "</b></html>");
 			}
 		}
 		else{

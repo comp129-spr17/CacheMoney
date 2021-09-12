@@ -439,6 +439,7 @@ public class GameScreen extends JFrame{
 			e.printStackTrace();
 			System.exit(1);
 		} catch (Exception e){
+			e.printStackTrace();
 			System.out.println("THE FILE IS CORRUPTED; UNABLE TO LOAD DATA.");
 			System.exit(1);
 		}
